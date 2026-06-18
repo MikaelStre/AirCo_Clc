@@ -12,39 +12,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-/* ── RESET & TOKENS ───────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#1a2744; --navy2:#243350; --navy3:#2e4168;
-  --gold:#c9a96e; --gold2:#e0c899; --gold-bg:#fdf6ec;
-  --white:#fff; --bg:#f4f5f8;
-  --g100:#f0f2f5; --g200:#e4e7ec; --g300:#d0d5dd;
-  --g500:#667085; --g700:#344054; --text:#1d2939;
-  --green:#12b76a; --green-bg:#d1fae5; --green-dark:#065f46;
-  --red:#f04438; --red-bg:#fee2e2; --red-dark:#991b1b;
-  --amber:#f79009; --amber-bg:#fef3c7;
-  --r:8px; --r2:4px;
+  --navy:#1a2744;--navy2:#243350;--navy3:#2e4168;
+  --gold:#c9a96e;--gold2:#e0c899;--gold-bg:#fdf6ec;
+  --white:#fff;--bg:#f4f5f8;
+  --g100:#f0f2f5;--g200:#e4e7ec;--g300:#d0d5dd;
+  --g500:#667085;--g700:#344054;--text:#1d2939;
+  --green:#12b76a;--green-bg:#d1fae5;--green-dark:#065f46;
+  --red:#f04438;--red-bg:#fee2e2;--red-dark:#991b1b;
+  --r:8px;--r2:4px;
   --sh:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.07);
   --sh2:0 4px 20px rgba(26,39,68,.14);
+  --sat:env(safe-area-inset-top,0px);
+  --sab:env(safe-area-inset-bottom,0px);
 }
-body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg);min-height:100vh}
-header{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg);min-height:100vh;min-height:100dvh}
+header{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3);padding-top:var(--sat)}
 .hdr{max-width:1440px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .logo-wrap{display:flex;align-items:center;gap:16px}
 .hdr-title h1{font-size:15px;font-weight:600;color:#fff;letter-spacing:.3px}
 .hdr-btns{display:flex;gap:6px}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--r2);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.btn-gold{background:var(--gold);color:var(--navy)}
-.btn-gold:hover{background:var(--gold2)}
-.btn-ghost{background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.25)}
-.btn-ghost:hover{background:rgba(255,255,255,.1)}
-.btn-primary{background:var(--navy);color:#fff}
-.btn-primary:hover{background:var(--navy3)}
+.btn-gold{background:var(--gold);color:var(--navy)}.btn-gold:hover{background:var(--gold2)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.25)}.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy3)}
 .btn-sm{padding:5px 10px;font-size:12px}
 .btn-xs{padding:3px 8px;font-size:11px}
-.btn-link{background:none;border:none;color:var(--g500);font-size:12px;padding:4px 8px;cursor:pointer}
-.btn-link:hover{color:var(--navy)}
-.settings-bar{background:var(--white);border-bottom:1px solid var(--g200);position:sticky;top:68px;z-index:150}
+.btn-link{background:none;border:none;color:var(--g500);font-size:12px;padding:4px 8px;cursor:pointer}.btn-link:hover{color:var(--navy)}
+.settings-bar{background:var(--white);border-bottom:1px solid var(--g200);position:sticky;top:calc(68px + var(--sat));z-index:150}
 .sb-inner{max-width:1440px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .sb-group{display:flex;flex-direction:column;gap:4px}
 .sb-group label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500)}
@@ -58,27 +54,26 @@ header{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px
 .cop-inp{width:64px;padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;font-weight:500;text-align:center}
 .cop-inp:focus{outline:none;border-color:var(--navy)}
 .sb-sep{width:1px;height:32px;background:var(--g200)}
-.proj-toggle-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);background:var(--white);font-size:12px;cursor:pointer;color:var(--g700)}
+.proj-toggle-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);background:var(--white);font-size:12px;cursor:pointer;color:var(--g700);transition:all .15s}
 .proj-toggle-btn:hover{border-color:var(--navy);color:var(--navy)}
 input[type=number]{-moz-appearance:textfield}
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .proj-panel{background:var(--white);border-bottom:1px solid var(--g200);overflow:hidden;max-height:0;transition:max-height .35s ease}
-.proj-panel.open{max-height:350px}
+.proj-panel.open{max-height:380px}
 .proj-grid{max-width:1440px;margin:0 auto;padding:16px 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
 .proj-actions{max-width:1440px;margin:0 auto;padding:12px 24px 16px;display:flex;gap:10px;border-top:1px solid var(--g200);flex-wrap:wrap}
 .field{display:flex;flex-direction:column;gap:3px}
 .field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500)}
 .field input,.field select{padding:7px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;color:var(--text);transition:border-color .15s;width:100%;background:#fff}
 .field input:focus,.field select:focus{outline:none;border-color:var(--navy)}
-main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}
+main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px;padding-bottom:calc(20px + var(--sab))}
 .card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
 .card-hdr{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200)}
 .card-hdr h2{font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.8px}
 .card-hdr-right{display:flex;align-items:center;gap:8px}
 .badge{background:var(--navy);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}
 .badge-gold{background:var(--gold);color:var(--navy)}
-.tbl-wrap{overflow-x:auto}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:var(--g100);padding:9px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);white-space:nowrap}
 td{padding:7px 10px;border-bottom:1px solid var(--g100);vertical-align:middle}
@@ -86,9 +81,7 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(26,39,68,.02)}
 .ti{padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;background:#fff;transition:border-color .15s;width:100%}
 .ti:focus{outline:none;border-color:var(--navy)}
-.ti-name{min-width:140px}
-.ti-type{min-width:160px}
-.ti-num{max-width:58px;text-align:right}
+.ti-name{min-width:140px}.ti-type{min-width:160px}.ti-num{max-width:58px;text-align:right}
 .tc{text-align:center}
 .tc input[type=checkbox]{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
 .pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap}
@@ -96,16 +89,16 @@ tr:hover td{background:rgba(26,39,68,.02)}
 .p-warn{background:#fef3c7;color:#92400e}
 .p-err{background:var(--red-bg);color:var(--red-dark)}
 .p-dim{background:var(--g100);color:var(--g500)}
-.tbl-footer{padding:10px 16px;background:var(--g100);border-top:1px solid var(--g200);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tbl-footer{padding:10px 16px;background:var(--g100);border-top:1px solid var(--g200);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .icon-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;color:var(--g500);border-radius:var(--r2);display:inline-flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
 .icon-btn:hover{background:var(--red-bg);color:var(--red)}
 .humidity-section{padding:16px;background:var(--g100);border-radius:var(--r2);margin:12px 16px}
-.humidity-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:10px}
+.humidity-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}
 .humidity-cell{padding:12px;background:var(--white);border-radius:var(--r2);border-left:3px solid var(--gold)}
 .humidity-label{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g500);margin-bottom:4px}
 .humidity-val{font-size:18px;font-weight:700;color:var(--navy)}
 .humidity-unit{font-size:11px;color:var(--g500);margin-top:2px}
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:16px}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;padding:16px}
 .kpi{padding:12px 16px;background:var(--bg);border-radius:var(--r2);border-left:3px solid var(--gold)}
 .kpi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);margin-bottom:4px}
 .kpi-v{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
@@ -122,9 +115,7 @@ tr:hover td{background:rgba(26,39,68,.02)}
 .e-bar-track{height:20px;background:var(--g200);border-radius:3px;overflow:hidden;position:relative}
 .e-bar-fill{height:100%;border-radius:3px;position:relative;transition:width .4s ease}
 .e-bar-fill::after{content:attr(data-label);position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;color:#fff;white-space:nowrap}
-.e-bar-day{background:var(--navy)}
-.e-bar-sil{background:var(--gold)}
-.e-bar-red{background:var(--g300)}
+.e-bar-day{background:var(--navy)}.e-bar-sil{background:var(--gold)}.e-bar-red{background:var(--g300)}
 .e-bar-val{font-size:13px;font-weight:600;color:var(--navy);text-align:right}
 .acc-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;cursor:pointer;user-select:none;border-top:1px solid var(--g200)}
 .acc-hdr:hover{background:var(--g100)}
@@ -138,12 +129,13 @@ tr:hover td{background:rgba(26,39,68,.02)}
 .overlay.show{display:block}
 .modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:var(--r);box-shadow:var(--sh2);z-index:600;width:min(720px,95vw);max-height:85vh;flex-direction:column}
 .modal.show{display:flex}
-.modal-hdr{padding:16px 20px;background:var(--navy);display:flex;align-items:center;justify-content:space-between}
+.modal-hdr{padding:16px 20px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .modal-hdr h2{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px}
-.modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;transition:all .15s}
+.modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px}
 .modal-close:hover{background:rgba(255,255,255,.1);color:#fff}
+.modal-tabs{display:flex;gap:5px;padding:12px 20px 0;flex-shrink:0;flex-wrap:wrap}
 .modal-body{flex:1;overflow-y:auto;padding:16px 20px}
-.modal-footer{padding:12px 20px;border-top:1px solid var(--g200);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--g200);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;flex-shrink:0}
 .sup-table{width:100%;border-collapse:collapse;font-size:13px}
 .sup-table th{padding:8px 10px;background:var(--g100);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);text-align:left}
 .sup-table td{padding:7px 10px;border-bottom:1px solid var(--g100)}
@@ -158,19 +150,19 @@ tr:hover td{background:rgba(26,39,68,.02)}
 .section-sep{padding:12px 20px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);border-top:1px solid var(--g200);background:var(--white)}
 @media print{
   .settings-bar,.hdr-btns,.tbl-footer,.icon-btn,.no-print,.overlay,.modal{display:none!important}
-  header{position:static!important}
+  header{position:static!important;padding-top:0!important}
   .proj-panel{max-height:none!important}
-  main{padding:20px!important}
-  .card{box-shadow:none!important;border:1px solid #ccc!important;page-break-inside:avoid;margin-bottom:20px}
-  .card-hdr{background:var(--navy)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  .card-hdr h2{color:white!important}
+  main{padding:16px!important}
+  .card{box-shadow:none!important;border:1px solid #ccc!important;page-break-inside:avoid;margin-bottom:16px}
+  .card-hdr{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   .acc-body{max-height:none!important}
   th,.result-table th{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   .result-table tfoot td{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   @page{margin:1.5cm;size:A4 landscape}
 }
-@media (max-width:900px){
-  .hdr-title p{display:none}
+@media(max-width:900px){
+  .hdr{padding:0 14px;height:58px}
+  .settings-bar{top:calc(58px + var(--sat))}
   .sb-inner{padding:8px 12px;gap:10px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
   .sb-group{flex-shrink:0}
   .sb-sep{display:none}
@@ -179,19 +171,25 @@ tr:hover td{background:rgba(26,39,68,.02)}
   .kpi-row{grid-template-columns:1fr 1fr;padding:12px;gap:8px}
   .kpi-v{font-size:18px}
   .modal{width:96vw;max-height:88vh}
+  .e-bar-row{grid-template-columns:90px 1fr 58px;gap:8px}
 }
-@media (max-width:600px){
+@media(max-width:600px){
   .hdr{height:52px}
   .hdr-title h1{font-size:13px}
   .hdr-btns .btn-ghost{display:none}
+  .settings-bar{top:calc(52px + var(--sat))}
   main{padding:10px;gap:10px}
   .kpi-row{grid-template-columns:1fr 1fr;padding:10px;gap:7px}
   .kpi{padding:10px 12px}
   .kpi-v{font-size:16px}
   th,td{padding:6px 7px;font-size:12px}
-  .modal{width:98vw;max-height:92vh;top:4%}
+  .modal{width:98vw;max-height:92vh;top:4%;transform:translateX(-50%)}
   .ti,.ti-name,.ti-type{font-size:16px}
   select.ti{font-size:16px}
+  input[type=checkbox]{width:18px;height:18px}
+  .e-bar-row{grid-template-columns:80px 1fr 50px;gap:6px}
+  .e-bar-label{font-size:11px}
+  .humidity-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -200,7 +198,7 @@ tr:hover td{background:rgba(26,39,68,.02)}
 <header>
 <div class="hdr">
   <div class="logo-wrap">
-    <svg viewBox="0 0 130 44" xmlns="http://www.w3.org/2000/svg" style="width:130px;height:44px">
+    <svg viewBox="0 0 130 44" xmlns="http://www.w3.org/2000/svg" style="width:130px;height:44px;flex-shrink:0">
       <text x="0" y="28" font-family="Georgia,'Times New Roman',serif" font-size="24" font-weight="700" fill="#c9a96e" letter-spacing="3.5">BALTIC</text>
       <line x1="0" y1="33" x2="126" y2="33" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/>
       <text x="2" y="43" font-family="Georgia,'Times New Roman',serif" font-size="11" fill="rgba(255,255,255,0.8)" letter-spacing="9">YACHTS</text>
@@ -208,16 +206,16 @@ tr:hover td{background:rgba(26,39,68,.02)}
     <div class="hdr-title"><h1>AC Cooling Calculator</h1></div>
   </div>
   <div class="hdr-btns no-print">
-    <button class="btn btn-ghost btn-sm" onclick="exportExcel()">⬇ Excel</button>
-    <button class="btn btn-ghost btn-sm" onclick="exportPDF()">📄 PDF</button>
-    <button class="btn btn-gold btn-sm" onclick="window.print()">🖨 Print</button>
+    <button class="btn btn-ghost btn-sm" onclick="exportExcel()">&#11015; Excel</button>
+    <button class="btn btn-ghost btn-sm" onclick="exportPDF()">&#128196; PDF</button>
+    <button class="btn btn-gold btn-sm" onclick="window.print()">&#128438; Print</button>
   </div>
 </div>
 </header>
 
 <div class="settings-bar no-print">
 <div class="sb-inner">
-  <button class="proj-toggle-btn" id="proj-btn" onclick="toggleProj()">📋 Project <span id="proj-chevron">▾</span></button>
+  <button class="proj-toggle-btn" id="proj-btn" onclick="toggleProj()">&#128203; Project <span id="proj-chevron">&#9662;</span></button>
   <div class="sb-sep"></div>
   <div class="sb-group">
     <label>Climate</label>
@@ -234,7 +232,7 @@ tr:hover td{background:rgba(26,39,68,.02)}
     </div>
   </div>
   <div class="sb-group">
-    <label>Supplier <button class="btn-link btn-xs" onclick="openSupplierModal()">⚙ Edit</button></label>
+    <label>Supplier <button class="btn-link btn-xs" onclick="openSupplierModal()">&#9881; Edit</button></label>
     <div class="sup-pick" id="sup-pick"></div>
   </div>
   <div class="sb-group">
@@ -247,33 +245,33 @@ tr:hover td{background:rgba(26,39,68,.02)}
 <div class="proj-panel" id="proj-panel">
   <div class="proj-grid" id="proj-grid"></div>
   <div class="proj-actions">
-    <button class="btn btn-primary btn-sm" onclick="saveProject()">💾 Save</button>
-    <button class="btn btn-ghost btn-sm" onclick="openProjectModal()">📂 Load</button>
-    <button class="btn btn-ghost btn-sm" onclick="newProject()">🆕 New</button>
+    <button class="btn btn-primary btn-sm" onclick="saveProject()">&#128190; Save</button>
+    <button class="btn btn-ghost btn-sm" onclick="openProjectModal()">&#128194; Load</button>
+    <button class="btn btn-ghost btn-sm" onclick="newProject()">&#128196; New</button>
   </div>
 </div>
 
 <main id="main-content"></main>
 
-<!-- Project modal -->
 <div class="overlay" id="proj-overlay" onclick="closeProjectModal()"></div>
 <div class="modal" id="proj-modal">
-  <div class="modal-hdr"><h2>📂 Load Project</h2><button class="modal-close" onclick="closeProjectModal()">✕</button></div>
+  <div class="modal-hdr"><h2>&#128194; Saved Projects</h2><button class="modal-close" onclick="closeProjectModal()">&#10005;</button></div>
   <div class="modal-body"><div id="projects-list" style="display:grid;gap:10px"></div></div>
   <div class="modal-footer"><button class="btn btn-ghost btn-sm" onclick="closeProjectModal()">Close</button></div>
 </div>
 
-<!-- Supplier modal -->
 <div class="overlay" id="sup-overlay" onclick="closeSupplierModal()"></div>
 <div class="modal" id="sup-modal">
-  <div class="modal-hdr"><h2>⚙ Supplier Catalog — <span id="modal-sup-name">—</span></h2><button class="modal-close" onclick="closeSupplierModal()">✕</button></div>
+  <div class="modal-hdr"><h2>&#9881; Supplier Catalog</h2><button class="modal-close" onclick="closeSupplierModal()">&#10005;</button></div>
+  <div class="modal-tabs" id="sup-modal-tabs"></div>
   <div class="modal-body">
-    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="modal-sup-tabs"></div>
-    <div style="margin-bottom:12px;display:flex;gap:10px">
-      <button class="btn btn-sm" style="background:var(--g100)" onclick="document.getElementById('csv-upload').click()">📤 Import CSV/JSON</button>
+    <p style="font-size:12px;color:var(--g500);margin-bottom:12px">Edit model names, BTU and weights. Supplier: <strong id="modal-sup-name">—</strong></p>
+    <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sm" style="background:var(--g100)" onclick="document.getElementById('csv-upload').click()">&#8679; Import CSV/JSON</button>
+      <button class="btn btn-sm" style="background:var(--g100)" onclick="exportSupplierCSV()">&#11015; Export CSV</button>
       <input type="file" id="csv-upload" style="display:none" accept=".csv,.json" onchange="importSupplierData(event)">
     </div>
-    <table class="sup-table" id="sup-edit-tbl">
+    <table class="sup-table">
       <thead><tr><th>Model</th><th>BTU/h</th><th>Weight kg</th><th class="no-print" style="width:50px"></th></tr></thead>
       <tbody id="sup-edit-body"></tbody>
     </table>
@@ -285,435 +283,451 @@ tr:hover td{background:rgba(26,39,68,.02)}
     </div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-ghost btn-sm" onclick="exportSupplierCSV()">⬇ Export CSV</button>
+    <button class="btn btn-ghost btn-sm" onclick="closeSupplierModal()">Cancel</button>
     <button class="btn btn-primary btn-sm" onclick="closeSupplierModal()">Done</button>
   </div>
 </div>
 
-<footer style="background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;font-size:11px;margin-top:24px">
-  <strong style="color:var(--gold)">Baltic Yachts Ltd</strong> — Engineering Department · AC Cooling Calculator v3.1 · ISO 7547
+<footer style="background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;padding-bottom:calc(14px + var(--sab));font-size:11px;margin-top:24px">
+  <strong style="color:var(--gold)">Baltic Yachts Ltd</strong> &mdash; Engineering Department &middot; AC Cooling Calculator v3.2 &middot; ISO 7547
 </footer>
 
 <script>
-// ═══════════════════════════════════════════════
-// AC COOLING CALCULATOR v3.1  (bug-fix release)
-// Key fix: addCabin no longer duplicates rows
-// ═══════════════════════════════════════════════
+// ==========================================================
+// AC COOLING CALCULATOR v3.2
+// Fix: appendRow guards against duplicates with ID check
+// ==========================================================
 
-// ── DATA ────────────────────────────────────────
-const TYPES = {
-  owners:    {l:"Owner's Cabin",       med:80,  trop:250, ach:1.5},
-  captains:  {l:"Captain's Cabin",     med:100, trop:270, ach:2.0},
-  guest:     {l:"Guest Stateroom",     med:120, trop:290, ach:2.0},
-  guest_l:   {l:"Guest Stateroom (Lrg)",med:150,trop:310, ach:2.0},
-  crew:      {l:"Crew Cabin",          med:120, trop:250, ach:2.5},
-  crew_mess: {l:"Crew Mess",           med:150, trop:290, ach:3.0},
-  salon:     {l:"Salon",               med:150, trop:310, ach:2.0},
-  wheelhouse:{l:"Wheelhouse",          med:180, trop:330, ach:3.0},
-  galley:    {l:"Galley",              med:220, trop:330, ach:8.0},
-  laundry:   {l:"Laundry",            med:250, trop:350, ach:5.0},
-  engine:    {l:"Engine Room",         med:300, trop:350, ach:0  },
-  technical: {l:"Technical",           med:200, trop:310, ach:3.0},
-  other:     {l:"Other",              med:130, trop:290, ach:2.0}
+// ── CONSTANTS ──────────────────────────────────────────────
+
+var TYPES = {
+  owners:    {l:"Owner's Cabin",        med:80,  trop:250, ach:1.5},
+  captains:  {l:"Captain's Cabin",      med:100, trop:270, ach:2.0},
+  guest:     {l:"Guest Stateroom",      med:120, trop:290, ach:2.0},
+  guest_l:   {l:"Guest Stateroom (Lrg)",med:150, trop:310, ach:2.0},
+  crew:      {l:"Crew Cabin",           med:120, trop:250, ach:2.5},
+  crew_mess: {l:"Crew Mess",            med:150, trop:290, ach:3.0},
+  salon:     {l:"Salon / Saloon",       med:150, trop:310, ach:2.0},
+  wheelhouse:{l:"Wheelhouse / Bridge",  med:180, trop:330, ach:3.0},
+  galley:    {l:"Galley / Pantry",      med:220, trop:330, ach:8.0},
+  laundry:   {l:"Laundry",             med:250, trop:350, ach:5.0},
+  engine:    {l:"Engine Room",          med:300, trop:350, ach:0  },
+  technical: {l:"Technical / Workshop", med:200, trop:310, ach:3.0},
+  other:     {l:"Other",               med:130, trop:290, ach:2.0}
 };
 
-const CLIMATE = {
+var CLIMATE = {
   med: {
-    label:'Mediterranean',
-    day:{dH:36.0, desc:'35→27°C'},
-    sil:{dH:25.4, desc:'28→20°C'},
-    red:{dH:8.0,  desc:'Standby'},
+    label:"Mediterranean",
+    day:{dH:36.0, desc:"35-27C"},
+    sil:{dH:25.4, desc:"28-20C"},
+    red:{dH:8.0,  desc:"Standby"},
     famu:{cabin_dH:23.0, central_dH:36.0},
     humidity:{day:{min:45,max:55}, sil:{min:50,max:60}, red:{min:55,max:70}}
   },
   trop: {
-    label:'Tropical',
-    day:{dH:66.3, desc:'40→27°C'},
-    sil:{dH:44.7, desc:'35→24°C'},
-    red:{dH:15.0, desc:'Standby'},
+    label:"Tropical",
+    day:{dH:66.3, desc:"40-27C"},
+    sil:{dH:44.7, desc:"35-24C"},
+    red:{dH:15.0, desc:"Standby"},
     famu:{cabin_dH:36.0, central_dH:66.3},
     humidity:{day:{min:40,max:50}, sil:{min:45,max:55}, red:{min:50,max:65}}
   }
 };
 
-let SUPS = {
-  VECO:    {n:'VECO',    u:[{m:'MFC2',b:2000,w:7.5},{m:'MFC4',b:4000,w:9.3},{m:'MFC6',b:6000,w:10.3},{m:'MFC8',b:8000,w:12.3},{m:'MFC12',b:12000,w:13.8},{m:'MFC16',b:16000,w:16.3},{m:'EVA3',b:3000,w:6.0},{m:'EVA7',b:7000,w:7.6},{m:'EVA13',b:13000,w:8.7},{m:'EVA24',b:24000,w:18.0}]},
-  DOMETIC: {n:'Dometic', u:[{m:'AU6DC',b:6000,w:10.9},{m:'AU9DC',b:9000,w:12.1},{m:'AU12DC',b:12000,w:15.1},{m:'AU18DC',b:18000,w:19.1},{m:'AU24DC',b:24000,w:20.9}]},
-  WEBASTO: {n:'Webasto', u:[{m:'AH-CO05',b:4500,w:5.0},{m:'AH-CO06',b:6000,w:7.5},{m:'AH-CO09',b:9000,w:9.0},{m:'AH-CO12',b:12000,w:9.5},{m:'AH-CO16',b:16000,w:12.5},{m:'AH-CO24',b:24000,w:25.0},{m:'AH-CO30',b:30000,w:24.0}]},
-  OTHER:   {n:'Other',   u:[{m:'Custom-3k',b:3000,w:0},{m:'Custom-6k',b:6000,w:0},{m:'Custom-12k',b:12000,w:0},{m:'Custom-24k',b:24000,w:0},{m:'Custom-36k',b:36000,w:0}]}
+var SUPS = {
+  VECO:    {n:"VECO",    u:[{m:"MFC2",b:2000,w:7.5},{m:"MFC4",b:4000,w:9.3},{m:"MFC6",b:6000,w:10.3},{m:"MFC8",b:8000,w:12.3},{m:"MFC12",b:12000,w:13.8},{m:"MFC16",b:16000,w:16.3},{m:"EVA3",b:3000,w:6.0},{m:"EVA4.5",b:4500,w:6.4},{m:"EVA7",b:7000,w:7.6},{m:"EVA9",b:9000,w:8.0},{m:"EVA13",b:13000,w:8.7},{m:"EVA15",b:15000,w:15.3},{m:"EVA17",b:17000,w:18.5},{m:"EVA24",b:24000,w:18.0}]},
+  DOMETIC: {n:"Dometic", u:[{m:"AU6DC",b:6000,w:10.9},{m:"AU9DC",b:9000,w:12.1},{m:"AU12DC",b:12000,w:15.1},{m:"AU18DC",b:18000,w:19.1},{m:"AU24DC",b:24000,w:20.9}]},
+  WEBASTO: {n:"Webasto", u:[{m:"AH-CO05",b:4500,w:5.0},{m:"AH-CO06",b:6000,w:7.5},{m:"AH-CO09",b:9000,w:9.0},{m:"AH-CO12",b:12000,w:9.5},{m:"AH-CO16",b:16000,w:12.5},{m:"AH-CO20",b:20000,w:14.0},{m:"AH-CO24",b:24000,w:25.0},{m:"AH-CO30",b:30000,w:24.0},{m:"AH-CO48",b:48000,w:40.0}]},
+  OTHER:   {n:"Other",   u:[{m:"Custom-3k",b:3000,w:0},{m:"Custom-6k",b:6000,w:0},{m:"Custom-9k",b:9000,w:0},{m:"Custom-12k",b:12000,w:0},{m:"Custom-24k",b:24000,w:0},{m:"Custom-36k",b:36000,w:0},{m:"Custom-48k",b:48000,w:0}]}
 };
 
-const PRESETS = {
-  owners:   {name:"Owner's Cabin",   type:'owners',   area:27, h:2.1, p:2, wc:true},
-  captains: {name:"Captain's Cabin", type:'captains', area:9,  h:2.1, p:1, wc:true},
-  guest:    {name:"Guest",           type:'guest',    area:12, h:2.1, p:2, wc:true},
-  crew:     {name:"Crew",            type:'crew',     area:7,  h:2.1, p:2, wc:false},
-  salon:    {name:"Salon",           type:'salon',    area:35, h:2.2, p:0, wc:false},
-  galley:   {name:"Galley",          type:'galley',   area:15, h:2.1, p:1, wc:false}
+var PRESETS = {
+  owners:   {name:"Owner's Cabin",   type:"owners",   area:27, h:2.1, p:2, wc:true},
+  captains: {name:"Captain's Cabin", type:"captains", area:9,  h:2.1, p:1, wc:true},
+  guest:    {name:"Guest Stateroom", type:"guest",    area:12, h:2.1, p:2, wc:true},
+  crew:     {name:"Crew Cabin",      type:"crew",     area:7,  h:2.1, p:2, wc:false},
+  salon:    {name:"Salon",           type:"salon",    area:35, h:2.2, p:0, wc:false},
+  galley:   {name:"Galley",          type:"galley",   area:15, h:2.1, p:1, wc:false}
 };
 
-let S = {
-  climate:'med', famu:false, sup:'VECO', cabins:[], nid:1,
-  project:{yacht:'',proj:'',by:'Mikael Strengell',date:'',rev:'',client:'',cls:'Lloyd\'s Register (LRS)'}
+var S = {
+  climate:"med", famu:false, sup:"VECO", cabins:[], nid:1,
+  project:{yacht:"",proj:"",by:"Mikael Strengell",date:"",rev:"",client:"",cls:"Lloyd's Register (LRS)"}
 };
 
-// ── UTILITIES ────────────────────────────────────
-function f0(n){return Math.round(+n).toLocaleString('en-GB');}
-function f1(n){return (+n).toFixed(1);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// ── HELPERS ────────────────────────────────────────────────
 
-// ── INIT ─────────────────────────────────────────
-function init() {
-  S.project.date = new Date().toISOString().split('T')[0];
+function f0(n){ return Math.round(Number(n)).toLocaleString("en-GB"); }
+function f1(n){ return Number(n).toFixed(1); }
+function f2(n){ return Number(n).toFixed(2); }
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function el(id){ return document.getElementById(id); }
+
+// ── INIT ───────────────────────────────────────────────────
+
+function init(){
+  S.project.date = new Date().toISOString().split("T")[0];
   loadSuppliersFromStorage();
   renderProjectFields();
   renderSupplierButtons();
   renderMainContent();
 }
 
-// ── PROJECT ──────────────────────────────────────
-function renderProjectFields() {
-  document.getElementById('proj-grid').innerHTML = `
-    <div class="field"><label>Yacht Name</label><input type="text" id="f-yacht" placeholder="e.g. B107C ZETEO" value="${esc(S.project.yacht)}" oninput="S.project.yacht=this.value"></div>
-    <div class="field"><label>Project No.</label><input type="text" id="f-proj" placeholder="B107C-AC-001" value="${esc(S.project.proj)}" oninput="S.project.proj=this.value"></div>
-    <div class="field"><label>Calculated By</label><input type="text" id="f-by" value="${esc(S.project.by)}" oninput="S.project.by=this.value"></div>
-    <div class="field"><label>Date</label><input type="date" id="f-date" value="${S.project.date}" oninput="S.project.date=this.value"></div>
-    <div class="field"><label>Revision</label><input type="text" id="f-rev" placeholder="Rev. A" value="${esc(S.project.rev)}" oninput="S.project.rev=this.value"></div>
-    <div class="field"><label>Client / Owner</label><input type="text" id="f-client" placeholder="Owner" value="${esc(S.project.client)}" oninput="S.project.client=this.value"></div>
-    <div class="field"><label>Class Society</label>
-      <select id="f-cls" onchange="S.project.cls=this.value">
-        ${['Lloyd\'s Register (LRS)','DNV','Bureau Veritas (BV)','MCA','RCD (EU)'].map(c=>`<option${S.project.cls===c?' selected':''}>${c}</option>`).join('')}
-      </select>
-    </div>`;
+// ── PROJECT ────────────────────────────────────────────────
+
+function renderProjectFields(){
+  var classes = ["Lloyd's Register (LRS)","DNV","Bureau Veritas (BV)","MCA","RCD (EU)"];
+  var clsOpts = classes.map(function(c){
+    return "<option" + (S.project.cls===c?" selected":"") + ">" + c + "</option>";
+  }).join("");
+  el("proj-grid").innerHTML =
+    "<div class='field'><label>Yacht Name</label><input type='text' id='f-yacht' placeholder='e.g. B107C ZETEO' value='" + esc(S.project.yacht) + "' oninput=\"S.project.yacht=this.value\"></div>" +
+    "<div class='field'><label>Project No.</label><input type='text' id='f-proj' placeholder='B107C-AC-001' value='" + esc(S.project.proj) + "' oninput=\"S.project.proj=this.value\"></div>" +
+    "<div class='field'><label>Calculated By</label><input type='text' id='f-by' value='" + esc(S.project.by) + "' oninput=\"S.project.by=this.value\"></div>" +
+    "<div class='field'><label>Date</label><input type='date' id='f-date' value='" + S.project.date + "' oninput=\"S.project.date=this.value\"></div>" +
+    "<div class='field'><label>Revision</label><input type='text' id='f-rev' placeholder='Rev. A' value='" + esc(S.project.rev) + "' oninput=\"S.project.rev=this.value\"></div>" +
+    "<div class='field'><label>Client / Owner</label><input type='text' id='f-client' placeholder='Owner' value='" + esc(S.project.client) + "' oninput=\"S.project.client=this.value\"></div>" +
+    "<div class='field'><label>Class Society</label><select id='f-cls' onchange=\"S.project.cls=this.value\">" + clsOpts + "</select></div>";
 }
 
-function toggleProj() {
-  const p = document.getElementById('proj-panel');
-  p.classList.toggle('open');
-  document.getElementById('proj-chevron').textContent = p.classList.contains('open') ? '▴' : '▾';
+function toggleProj(){
+  var p = el("proj-panel");
+  p.classList.toggle("open");
+  el("proj-chevron").textContent = p.classList.contains("open") ? "\u25b4" : "\u25be";
 }
 
-function saveProject() {
-  if (!S.project.yacht) { alert('Please enter a yacht name first.'); return; }
-  const proj = {id:Date.now().toString(), ...S.project, cabins:JSON.parse(JSON.stringify(S.cabins)), sup:S.sup, climate:S.climate, famu:S.famu, cop:document.getElementById('cop').value};
-  let projects = JSON.parse(localStorage.getItem('ac_projects') || '[]');
-  // Replace if same yacht+proj combo exists
-  const idx = projects.findIndex(p => p.yacht === proj.yacht && p.proj === proj.proj);
-  if (idx >= 0) projects[idx] = proj; else projects.push(proj);
-  localStorage.setItem('ac_projects', JSON.stringify(projects));
-  alert(`Project "${S.project.yacht}" saved!`);
+function saveProject(){
+  if(!S.project.yacht){ alert("Please enter a yacht name first."); return; }
+  var proj = JSON.parse(JSON.stringify(S));
+  proj.cop = el("cop").value;
+  proj.id = Date.now().toString();
+  var projects = JSON.parse(localStorage.getItem("ac_projects")||"[]");
+  var idx = projects.findIndex(function(p){ return p.project.yacht===S.project.yacht && p.project.proj===S.project.proj; });
+  if(idx>=0) projects[idx]=proj; else projects.push(proj);
+  localStorage.setItem("ac_projects", JSON.stringify(projects));
+  alert("Project \"" + S.project.yacht + "\" saved!");
 }
 
-function openProjectModal() {
-  const projects = JSON.parse(localStorage.getItem('ac_projects') || '[]');
-  document.getElementById('projects-list').innerHTML = projects.length === 0
-    ? '<p style="color:var(--g500)">No saved projects yet.</p>'
-    : projects.map((p,i) => `<div style="padding:12px;background:var(--g100);border-radius:var(--r2);cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="loadProject(${i})">
-        <div><strong>${esc(p.yacht)}</strong><br><span style="font-size:11px;color:var(--g500)">${esc(p.proj)} · ${p.date} · ${p.cabins.length} spaces</span></div>
-        <button class="icon-btn" onclick="event.stopPropagation();deleteProject(${i})">🗑</button>
-      </div>`).join('');
-  document.getElementById('proj-overlay').classList.add('show');
-  document.getElementById('proj-modal').classList.add('show');
+function openProjectModal(){
+  var projects = JSON.parse(localStorage.getItem("ac_projects")||"[]");
+  if(!projects.length){
+    el("projects-list").innerHTML = "<p style='color:var(--g500)'>No saved projects yet.</p>";
+  } else {
+    el("projects-list").innerHTML = projects.map(function(p,i){
+      var name = p.project ? p.project.yacht : (p.yacht||"");
+      var proj = p.project ? p.project.proj : (p.proj||"");
+      var date = p.project ? p.project.date : (p.date||"");
+      var count = (p.cabins||[]).length;
+      return "<div style='padding:12px;background:var(--g100);border-radius:var(--r2);display:flex;justify-content:space-between;align-items:center;cursor:pointer' onclick='loadProject(" + i + ")'>" +
+        "<div><strong>" + esc(name) + "</strong><br><span style='font-size:11px;color:var(--g500)'>" + esc(proj) + " \u00b7 " + date + " \u00b7 " + count + " spaces</span></div>" +
+        "<button class='icon-btn' onclick='event.stopPropagation();deleteProject(" + i + ")'>&#128465;</button></div>";
+    }).join("");
+  }
+  el("proj-overlay").classList.add("show");
+  el("proj-modal").classList.add("show");
 }
 
-function closeProjectModal() {
-  document.getElementById('proj-overlay').classList.remove('show');
-  document.getElementById('proj-modal').classList.remove('show');
+function closeProjectModal(){
+  el("proj-overlay").classList.remove("show");
+  el("proj-modal").classList.remove("show");
 }
 
-function loadProject(i) {
-  const projects = JSON.parse(localStorage.getItem('ac_projects') || '[]');
-  const p = projects[i];
-  S.project = {yacht:p.yacht, proj:p.proj, by:p.by, date:p.date, rev:p.rev||'', client:p.client||'', cls:p.cls||p.class||'Lloyd\'s Register (LRS)'};
-  S.cabins = p.cabins || [];
-  S.nid = S.cabins.reduce((mx,c) => Math.max(mx, c.id||0), 0) + 1;
-  S.sup = p.sup || 'VECO';
-  S.climate = p.climate || 'med';
-  S.famu = p.famu || false;
-  document.getElementById('cop').value = p.cop || '3.0';
+function loadProject(i){
+  var projects = JSON.parse(localStorage.getItem("ac_projects")||"[]");
+  var p = projects[i];
+  if(!p) return;
+  // Support both old and new save formats
+  if(p.project){
+    S.project = p.project;
+    S.cabins  = p.cabins || [];
+    S.sup     = p.sup || "VECO";
+    S.climate = p.climate || "med";
+    S.famu    = p.famu || false;
+    el("cop").value = p.cop || "3.0";
+  } else {
+    S.project = {yacht:p.yacht||"",proj:p.proj||"",by:p.by||"",date:p.date||"",rev:p.rev||"",client:p.client||"",cls:p.cls||p.class||"Lloyd's Register (LRS)"};
+    S.cabins  = p.cabins || [];
+    S.sup     = p.sup || "VECO";
+    S.climate = p.climate || "med";
+    S.famu    = p.famu || false;
+    el("cop").value = p.cop || "3.0";
+  }
+  S.nid = S.cabins.reduce(function(mx,c){ return Math.max(mx, c.id||0); }, 0) + 1;
   closeProjectModal();
   setClimate(S.climate);
   setFAMU(S.famu);
   renderProjectFields();
   renderSupplierButtons();
   renderMainContent();
+  renderCabins();   // ← restores cabin rows from loaded data
   recalc();
 }
 
-function deleteProject(i) {
-  let projects = JSON.parse(localStorage.getItem('ac_projects') || '[]');
-  if (!confirm(`Delete "${projects[i].yacht}"?`)) return;
-  projects.splice(i, 1);
-  localStorage.setItem('ac_projects', JSON.stringify(projects));
+function deleteProject(i){
+  var projects = JSON.parse(localStorage.getItem("ac_projects")||"[]");
+  if(!confirm("Delete \"" + (projects[i].project ? projects[i].project.yacht : projects[i].yacht) + "\"?")) return;
+  projects.splice(i,1);
+  localStorage.setItem("ac_projects", JSON.stringify(projects));
   openProjectModal();
 }
 
-function newProject() {
-  if (S.cabins.length && !confirm('Start a new project? Unsaved changes will be lost.')) return;
-  S = {climate:'med', famu:false, sup:'VECO', cabins:[], nid:1,
-    project:{yacht:'',proj:'',by:'Mikael Strengell',date:new Date().toISOString().split('T')[0],rev:'',client:'',cls:'Lloyd\'s Register (LRS)'}};
-  document.getElementById('cop').value = '3.0';
-  setClimate('med');
-  setFAMU(false);
-  renderProjectFields();
-  renderSupplierButtons();
-  renderMainContent();
+function newProject(){
+  if(S.cabins.length && !confirm("Start a new project? Unsaved changes will be lost.")) return;
+  S = {climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,
+    project:{yacht:"",proj:"",by:"Mikael Strengell",date:new Date().toISOString().split("T")[0],rev:"",client:"",cls:"Lloyd's Register (LRS)"}};
+  el("cop").value = "3.0";
+  setClimate("med"); setFAMU(false);
+  renderProjectFields(); renderSupplierButtons(); renderMainContent();
 }
 
-// ── CALCULATIONS ─────────────────────────────────
-function calcCabin(c) {
-  const area=+c.area||0, h=+c.h||2.1, p=+c.p||0, ach=+c.ach||2, wc=!!c.wc;
-  const t = TYPES[c.type] || TYPES.other;
-  const cli = CLIMATE[S.climate];
-  const wm2 = S.climate === 'med' ? t.med : t.trop;
-  const vol = area * h;
-  const fv = Math.max((vol * ach) / 3.6, p * 7, area > 0 ? 3 : 0);
-  const wcExt = wc ? Math.max(area * 4.5, 15) : 0;
-  const dH_d = S.famu ? cli.famu.cabin_dH : cli.day.dH;
-  const vH_d = 1.29 * 1.01 * fv * dH_d;
-  const base_d = wm2 * area;
-  const pers = p * 150;
-  const inst = 10 * area;
-  const totW_d = base_d + vH_d + pers + inst;
-  const totB_d = totW_d * 3.41214;
-  const classMin = Math.max(p * 7, vol * 0.5 / 3.6);
-  return {area, h, p, ach, wc, wm2, vol, fv, wcExt, base_d, vH_d, pers, inst, totW_d, totB_d, classMin};
+// ── CALCULATION ────────────────────────────────────────────
+
+function calcCabin(c){
+  var area=Number(c.area)||0, h=Number(c.h)||2.1, p=Number(c.p)||0, ach=Number(c.ach)||2, wc=!!c.wc;
+  var t   = TYPES[c.type] || TYPES.other;
+  var cli = CLIMATE[S.climate];
+  var wm2 = S.climate==="med" ? t.med : t.trop;
+  var vol = area * h;
+  var fv  = Math.max((vol*ach)/3.6, p*7, area>0?3:0);
+  var wcExt = wc ? Math.max(area*4.5, 15) : 0;
+  var dH_d = S.famu ? cli.famu.cabin_dH : cli.day.dH;
+  var vH_d = 1.29 * 1.01 * fv * dH_d;
+  var base_d = wm2 * area, pers = p*150, inst = 10*area;
+  var totW_d = base_d + vH_d + pers + inst;
+  var totB_d = totW_d * 3.41214;
+  var classMin = Math.max(p*7, vol*0.5/3.6);
+  return {area:area, h:h, p:p, ach:ach, wc:wc, wm2:wm2, vol:vol, fv:fv, wcExt:wcExt,
+          base_d:base_d, vH_d:vH_d, pers:pers, inst:inst, totW_d:totW_d, totB_d:totB_d, classMin:classMin};
 }
 
-function calcEnergy(unitBTU) {
-  const cop = +document.getElementById('cop').value || 3;
-  const eKW = (unitBTU / 3412) / cop;
-  return { eKW, day: eKW*12, sil: eKW*0.55*8, red: eKW*0.05*4, get tot(){ return this.day+this.sil+this.red; } };
+function calcEnergy(unitBTU){
+  var cop = Number(el("cop").value) || 3;
+  var eKW = (unitBTU/3412) / cop;
+  return {eKW:eKW, day:eKW*12, sil:eKW*0.55*8, red:eKW*0.05*4,
+          get tot(){ return this.day+this.sil+this.red; }};
 }
 
-function recUnit(btu) {
-  const units = [...SUPS[S.sup].u].sort((a,b) => a.b - b.b);
-  return units.find(u => u.b >= btu) || units[units.length-1] || {m:'—', b:0, w:0};
+function recUnit(btu){
+  var units = SUPS[S.sup].u.slice().sort(function(a,b){ return a.b-b.b; });
+  var found = units.filter(function(u){ return u.b>=btu; });
+  return found.length ? found[0] : units[units.length-1] || {m:"—",b:0,w:0};
 }
 
-// ── MAIN CONTENT RENDER ──────────────────────────
-function renderMainContent() {
-  document.getElementById('main-content').innerHTML = `
-    <div class="card">
-      <div class="card-hdr">
-        <h2>Spaces &amp; Cabins</h2>
-        <div class="card-hdr-right">
-          <span class="badge" id="cabin-badge">0 spaces</span>
-          <button class="btn btn-primary btn-sm no-print" onclick="addCabin()">+ Add Space</button>
-        </div>
-      </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr>
-            <th style="width:32px">#</th>
-            <th>Name</th><th>Type</th><th>Area m²</th><th>H m</th>
-            <th>👤</th><th class="tc">🚿</th><th>ACH</th>
-            <th>Cooling</th><th class="tc">OK</th>
-            <th class="no-print" style="width:36px"></th>
-          </tr></thead>
-          <tbody id="cabin-body">
-            <tr id="empty-row"><td colspan="11">
-              <div class="empty"><div class="icon">🚢</div><p>Click <strong>+ Add Space</strong> or use a quick preset below</p></div>
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="tbl-footer no-print">
-        <span style="font-size:12px;color:var(--g500)">Quick add:</span>
-        <div id="quick-btns"></div>
-      </div>
-    </div>
+// ── MAIN STRUCTURE ─────────────────────────────────────────
 
-    <div class="card" id="results-card" style="display:none">
-      <div class="card-hdr" style="background:var(--navy)">
-        <h2 style="color:#fff">Results</h2>
-        <span class="badge badge-gold" id="res-badge">—</span>
-      </div>
-      <div class="kpi-row" id="kpi-row"></div>
-      <div class="section-sep">Equipment Selection</div>
-      <div class="tbl-wrap">
-        <table class="result-table">
-          <thead><tr><th>#</th><th>Space</th><th>Type</th><th>Area</th><th>Cooling Need</th><th>Unit</th><th>Unit BTU</th><th>Weight</th></tr></thead>
-          <tbody id="equip-body"></tbody>
-          <tfoot id="equip-foot"></tfoot>
-        </table>
-      </div>
-      <div class="section-sep">Humidity (ISO 7547)</div>
-      <div id="humidity-section"></div>
-      <div class="section-sep">Energy Consumption</div>
-      <div class="energy-section">
-        <div class="energy-total" id="energy-total">—</div>
-        <div class="energy-sub">Daily estimate · COP <span id="cop-display">3.0</span></div>
-        <div class="energy-bars" id="energy-bars"></div>
-      </div>
-      <div class="acc-hdr" onclick="toggleAcc(this)"><h3>Technical Details (ISO 7547)</h3><span class="chevron">▾</span></div>
-      <div class="acc-body"><div class="inner">
-        <div class="tbl-wrap"><table class="result-table">
-          <thead><tr><th>#</th><th>Space</th><th>W/m²</th><th>Base W</th><th>Vent W</th><th>Persons W</th><th>Install W</th><th>Total W</th><th>Total BTU</th></tr></thead>
-          <tbody id="tech-body"></tbody>
-          <tfoot id="tech-foot"></tfoot>
-        </table></div>
-      </div></div>
-      <div class="acc-hdr" onclick="toggleAcc(this)"><h3>Ventilation Compliance</h3><span class="chevron">▾</span></div>
-      <div class="acc-body"><div class="inner">
-        <div class="tbl-wrap"><table class="result-table">
-          <thead><tr><th>#</th><th>Space</th><th>Vol m³</th><th>ACH</th><th>Flow l/s</th><th>Class Min l/s</th><th>WC Ext l/s</th><th>Status</th></tr></thead>
-          <tbody id="vent-body"></tbody>
-        </table></div>
-      </div></div>
-      <div class="acc-hdr" onclick="toggleAcc(this)"><h3>Design Conditions</h3><span class="chevron">▾</span></div>
-      <div class="acc-body"><div class="inner">
-        <div class="tbl-wrap"><table class="result-table" style="max-width:600px">
-          <thead><tr><th>Parameter</th><th>Value</th><th>Source</th></tr></thead>
-          <tbody id="cond-body"></tbody>
-        </table></div>
-      </div></div>
-    </div>`;
+function renderMainContent(){
+  el("main-content").innerHTML =
+    "<div class='card'>" +
+      "<div class='card-hdr'>" +
+        "<h2>Spaces &amp; Cabins</h2>" +
+        "<div class='card-hdr-right'>" +
+          "<span class='badge' id='cabin-badge'>0 spaces</span>" +
+          "<button class='btn btn-primary btn-sm no-print' onclick='addCabin()'>+ Add Space</button>" +
+        "</div>" +
+      "</div>" +
+      "<div class='tbl-wrap'><table>" +
+        "<thead><tr>" +
+          "<th style='width:32px'>#</th>" +
+          "<th>Name</th><th>Type</th><th>Area m\u00b2</th><th>H m</th>" +
+          "<th>\uD83D\uDC64</th><th class='tc'>\uD83D\uDEBF</th><th>ACH</th>" +
+          "<th>Cooling</th><th class='tc'>OK</th>" +
+          "<th class='no-print' style='width:36px'></th>" +
+        "</tr></thead>" +
+        "<tbody id='cabin-body'>" +
+          "<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>\uD83D\uDEA2</div><p>Click <strong>+ Add Space</strong> or use a quick preset below</p></div></td></tr>" +
+        "</tbody>" +
+      "</table></div>" +
+      "<div class='tbl-footer no-print' id='quick-footer'></div>" +
+    "</div>" +
+
+    "<div class='card' id='results-card' style='display:none'>" +
+      "<div class='card-hdr' style='background:var(--navy)'>" +
+        "<h2 style='color:#fff'>Results</h2>" +
+        "<span class='badge badge-gold' id='res-badge'>&mdash;</span>" +
+      "</div>" +
+      "<div class='kpi-row' id='kpi-row'></div>" +
+      "<div class='section-sep'>Equipment Selection</div>" +
+      "<div class='tbl-wrap'><table class='result-table'>" +
+        "<thead><tr><th>#</th><th>Space</th><th>Type</th><th>Area</th><th>Cooling Need</th><th>Unit</th><th>Unit BTU</th><th>Weight</th></tr></thead>" +
+        "<tbody id='equip-body'></tbody><tfoot id='equip-foot'></tfoot>" +
+      "</table></div>" +
+      "<div class='section-sep'>Humidity (ISO 7547)</div>" +
+      "<div id='humidity-section'></div>" +
+      "<div class='section-sep'>Energy Consumption</div>" +
+      "<div class='energy-section'>" +
+        "<div class='energy-total' id='energy-total'>&mdash;</div>" +
+        "<div class='energy-sub'>Daily estimate &middot; COP <span id='cop-display'>3.0</span></div>" +
+        "<div class='energy-bars' id='energy-bars'></div>" +
+      "</div>" +
+      "<div class='acc-hdr' onclick='toggleAcc(this)'><h3>Technical Details (ISO 7547)</h3><span class='chevron'>&#9662;</span></div>" +
+      "<div class='acc-body'><div class='inner'><div class='tbl-wrap'><table class='result-table'>" +
+        "<thead><tr><th>#</th><th>Space</th><th>W/m\u00b2</th><th>Base W</th><th>Vent W</th><th>Persons W</th><th>Install W</th><th>Total W</th><th>Total BTU</th></tr></thead>" +
+        "<tbody id='tech-body'></tbody><tfoot id='tech-foot'></tfoot>" +
+      "</table></div></div></div>" +
+      "<div class='acc-hdr' onclick='toggleAcc(this)'><h3>Ventilation Compliance</h3><span class='chevron'>&#9662;</span></div>" +
+      "<div class='acc-body'><div class='inner'><div class='tbl-wrap'><table class='result-table'>" +
+        "<thead><tr><th>#</th><th>Space</th><th>Vol m\u00b3</th><th>ACH</th><th>Flow l/s</th><th>Class Min l/s</th><th>WC Ext l/s</th><th>Status</th></tr></thead>" +
+        "<tbody id='vent-body'></tbody>" +
+      "</table></div></div></div>" +
+      "<div class='acc-hdr' onclick='toggleAcc(this)'><h3>Design Conditions (ISO 7547)</h3><span class='chevron'>&#9662;</span></div>" +
+      "<div class='acc-body'><div class='inner'><div class='tbl-wrap'><table class='result-table' style='max-width:640px'>" +
+        "<thead><tr><th>Parameter</th><th>Value</th><th>Reference</th></tr></thead>" +
+        "<tbody id='cond-body'></tbody>" +
+      "</table></div></div></div>" +
+    "</div>";
 
   // Quick add buttons
-  document.getElementById('quick-btns').innerHTML = Object.entries(PRESETS)
-    .map(([k,v]) => `<button class="btn btn-sm" style="background:var(--g100)" onclick="addPreset('${k}')">${v.name}</button>`).join('');
+  var qhtml = "<span style='font-size:12px;color:var(--g500)'>Quick add:</span>";
+  Object.keys(PRESETS).forEach(function(k){
+    qhtml += "<button class='btn btn-sm' style='background:var(--g100)' onclick=\"addPreset('" + k + "')\">" + PRESETS[k].name + "</button>";
+  });
+  el("quick-footer").innerHTML = qhtml;
 }
 
-// ── CABIN TABLE — FIXED ──────────────────────────
-// appendRow: adds ONE new cabin row (no duplicates)
-function appendRow(c) {
-  const er = document.getElementById('empty-row');
-  if (er) er.remove();
+// ── CABIN ROWS ─────────────────────────────────────────────
 
-  const typeOpts = Object.entries(TYPES)
-    .map(([k,v]) => `<option value="${k}"${c.type===k?' selected':''}>${v.l}</option>`).join('');
-
-  const tr = document.createElement('tr');
-  tr.id = 'r' + c.id;
-  tr.innerHTML = `
-    <td style="color:var(--g500);font-weight:600" class="row-num">—</td>
-    <td><input class="ti ti-name" type="text" value="${esc(c.name||'')}" placeholder="e.g. Owner's Cabin"
-        oninput="upd(${c.id},'name',this.value)"></td>
-    <td><select class="ti ti-type" onchange="updType(${c.id},this.value)">${typeOpts}</select></td>
-    <td><input class="ti ti-num" type="number" value="${c.area||''}" min="1" max="500" step="0.5"
-        oninput="upd(${c.id},'area',+this.value)"></td>
-    <td><input class="ti ti-num" type="number" value="${c.h||2.1}" min="1.5" max="4" step="0.1"
-        oninput="upd(${c.id},'h',+this.value)"></td>
-    <td><input class="ti ti-num" type="number" value="${c.p||0}" min="0" max="30"
-        oninput="upd(${c.id},'p',+this.value)"></td>
-    <td class="tc"><input type="checkbox" ${c.wc?'checked':''} onchange="upd(${c.id},'wc',this.checked)"></td>
-    <td><input class="ti ti-num" type="number" value="${c.ach||2}" min="0" max="20" step="0.5"
-        id="ach${c.id}" oninput="upd(${c.id},'ach',+this.value)"></td>
-    <td id="cn${c.id}" style="font-weight:600;white-space:nowrap">—</td>
-    <td class="tc" id="st${c.id}"><span class="pill p-dim">—</span></td>
-    <td class="no-print"><button class="icon-btn" onclick="removeRow(${c.id})" title="Remove">✕</button></td>`;
-  document.getElementById('cabin-body').appendChild(tr);
+function typeOptions(selected){
+  return Object.keys(TYPES).map(function(k){
+    return "<option value='" + k + "'" + (selected===k?" selected":"") + ">" + TYPES[k].l + "</option>";
+  }).join("");
 }
 
-// renderCabins: full re-render (used by loadProject / newProject)
-function renderCabins() {
-  const tbody = document.getElementById('cabin-body');
-  tbody.innerHTML = '';
-  if (!S.cabins.length) {
-    tbody.innerHTML = '<tr id="empty-row"><td colspan="11"><div class="empty"><div class="icon">🚢</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>';
+// THE KEY FIX: guard at top prevents any row ever being added twice
+function appendRow(c){
+  // If this cabin already has a row in the table, do nothing
+  if(el("r" + c.id)) return;
+
+  var er = el("empty-row");
+  if(er) er.remove();
+
+  var tr = document.createElement("tr");
+  tr.id = "r" + c.id;
+  tr.innerHTML =
+    "<td class='rn' style='color:var(--g500);font-weight:600'>-</td>" +
+    "<td><input class='ti ti-name' type='text' value='" + esc(c.name||"") + "' placeholder=\"e.g. Owner's Cabin\" oninput=\"upd(" + c.id + ",'name',this.value)\"></td>" +
+    "<td><select class='ti ti-type' onchange='updType(" + c.id + ",this.value)'>" + typeOptions(c.type) + "</select></td>" +
+    "<td><input class='ti ti-num' type='number' value='" + (c.area||"") + "' min='1' max='500' step='0.5' oninput=\"upd(" + c.id + ",'area',+this.value)\"></td>" +
+    "<td><input class='ti ti-num' type='number' value='" + (c.h||2.1) + "' min='1.5' max='4' step='0.1' oninput=\"upd(" + c.id + ",'h',+this.value)\"></td>" +
+    "<td><input class='ti ti-num' type='number' value='" + (c.p||0) + "' min='0' max='30' oninput=\"upd(" + c.id + ",'p',+this.value)\"></td>" +
+    "<td class='tc'><input type='checkbox' " + (c.wc?"checked":"") + " onchange=\"upd(" + c.id + ",'wc',this.checked)\"></td>" +
+    "<td><input class='ti ti-num' type='number' value='" + (c.ach||2) + "' id='ach" + c.id + "' min='0' max='20' step='0.5' oninput=\"upd(" + c.id + ",'ach',+this.value)\"></td>" +
+    "<td id='cn" + c.id + "' style='font-weight:600;white-space:nowrap;color:var(--navy)'>-</td>" +
+    "<td class='tc' id='st" + c.id + "'><span class='pill p-dim'>-</span></td>" +
+    "<td class='no-print'><button class='icon-btn' onclick='removeRow(" + c.id + ")'>&#10005;</button></td>";
+  el("cabin-body").appendChild(tr);
+}
+
+// Full re-render — clears first, then draws all cabins (used by loadProject)
+function renderCabins(){
+  var tbody = el("cabin-body");
+  tbody.innerHTML = "";
+  if(!S.cabins.length){
+    tbody.innerHTML = "<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>\uD83D\uDEA2</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";
   } else {
-    S.cabins.forEach(c => appendRow(c));
-    updateRowNumbers();
+    S.cabins.forEach(function(c){ appendRow(c); });
+    updateRowNums();
   }
-  updateCabinBadge();
+  updateBadge();
 }
 
-// addCabin: push to array, append ONE row — no more duplicates
-function addCabin(data) {
-  const id = S.nid++;
-  const c = data ? {...data, id} : {id, name:'', type:'guest', area:'', h:2.1, p:2, wc:true, ach:2.0};
+// Add one cabin — pushes to array, appends ONE row
+function addCabin(data){
+  var id = S.nid++;
+  var c = data ? Object.assign({}, data, {id:id}) : {id:id, name:"", type:"guest", area:"", h:2.1, p:2, wc:true, ach:2.0};
   S.cabins.push(c);
-  appendRow(c);         // ← only adds the new row
-  updateRowNumbers();
-  updateCabinBadge();
+  appendRow(c);
+  updateRowNums();
+  updateBadge();
   recalc();
 }
 
-function addPreset(key) {
-  addCabin({...PRESETS[key]});
-}
+function addPreset(key){ addCabin(Object.assign({}, PRESETS[key])); }
 
-function removeRow(id) {
-  S.cabins = S.cabins.filter(c => c.id !== id);
-  document.getElementById('r' + id)?.remove();
-  if (!S.cabins.length) {
-    const tbody = document.getElementById('cabin-body');
-    tbody.innerHTML = '<tr id="empty-row"><td colspan="11"><div class="empty"><div class="icon">🚢</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>';
-    document.getElementById('results-card').style.display = 'none';
+function removeRow(id){
+  S.cabins = S.cabins.filter(function(c){ return c.id!==id; });
+  var row = el("r"+id);
+  if(row) row.remove();
+  if(!S.cabins.length){
+    el("cabin-body").innerHTML = "<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>\uD83D\uDEA2</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";
+    el("results-card").style.display = "none";
   }
-  updateRowNumbers();
-  updateCabinBadge();
+  updateRowNums();
+  updateBadge();
   recalc();
 }
 
-function updateRowNumbers() {
-  S.cabins.forEach((c, i) => {
-    const cell = document.querySelector(`#r${c.id} .row-num`);
-    if (cell) cell.textContent = i + 1;
+function updateRowNums(){
+  S.cabins.forEach(function(c,i){
+    var cell = document.querySelector("#r"+c.id+" .rn");
+    if(cell) cell.textContent = i+1;
   });
 }
 
-function updateCabinBadge() {
-  const n = S.cabins.length;
-  const el = document.getElementById('cabin-badge');
-  if (el) el.textContent = n + (n === 1 ? ' space' : ' spaces');
+function updateBadge(){
+  var n = S.cabins.length;
+  var b = el("cabin-badge");
+  if(b) b.textContent = n + (n===1?" space":" spaces");
 }
 
-function upd(id, field, val) {
-  const c = S.cabins.find(c => c.id === id);
-  if (c) { c[field] = val; recalc(); }
+function upd(id, field, val){
+  var c = S.cabins.find(function(c){ return c.id===id; });
+  if(c){ c[field]=val; recalc(); }
 }
 
-function updType(id, type) {
-  const c = S.cabins.find(c => c.id === id);
-  if (!c) return;
+function updType(id, type){
+  var c = S.cabins.find(function(c){ return c.id===id; });
+  if(!c) return;
   c.type = type;
-  // Auto-update ACH to type default
-  const achEl = document.getElementById('ach' + id);
-  if (achEl && TYPES[type]) { achEl.value = TYPES[type].ach; c.ach = TYPES[type].ach; }
+  var achEl = el("ach"+id);
+  if(achEl && TYPES[type]){ achEl.value = TYPES[type].ach; c.ach = TYPES[type].ach; }
   recalc();
 }
 
-// ── MAIN RECALCULATE ─────────────────────────────
-function recalc() {
-  if (!S.cabins.length) {
-    document.getElementById('results-card').style.display = 'none';
+// ── RECALCULATE ────────────────────────────────────────────
+
+function recalc(){
+  if(!S.cabins.length){
+    el("results-card").style.display = "none";
     return;
   }
 
-  const rows = S.cabins.map((c, i) => {
-    const cr = calcCabin(c);
-    const unit = recUnit(cr.totB_d);
-    const e = calcEnergy(unit.b);
-    const ok = unit.b >= cr.totB_d;
-    const margin = unit.b ? ((unit.b - cr.totB_d) / cr.totB_d * 100) : 0;
+  var rows = S.cabins.map(function(c,i){
+    var cr   = calcCabin(c);
+    var unit = recUnit(cr.totB_d);
+    var e    = calcEnergy(unit.b);
+    var ok   = unit.b >= cr.totB_d;
+    var margin = unit.b ? (unit.b - cr.totB_d) / cr.totB_d * 100 : 0;
 
-    // Update cabin table cells
-    const cnEl = document.getElementById('cn' + c.id);
-    if (cnEl) cnEl.textContent = f1(cr.totW_d / 1000) + ' kW';
-    const stEl = document.getElementById('st' + c.id);
-    if (stEl) stEl.innerHTML = unit.b
-      ? (ok ? `<span class="pill p-ok">✓ +${Math.round(margin)}%</span>`
-             : `<span class="pill p-err">✗ ${Math.round(margin)}%</span>`)
-      : '<span class="pill p-dim">—</span>';
+    var cnEl = el("cn"+c.id);
+    if(cnEl) cnEl.textContent = f1(cr.totW_d/1000) + " kW";
 
-    return {c, cr, unit, e, ok, margin, idx: i};
+    var stEl = el("st"+c.id);
+    if(stEl){
+      if(unit.b){
+        stEl.innerHTML = ok
+          ? "<span class='pill p-ok'>\u2713 +" + Math.round(margin) + "%</span>"
+          : "<span class='pill p-err'>\u2717 " + Math.round(margin) + "%</span>";
+      } else {
+        stEl.innerHTML = "<span class='pill p-dim'>-</span>";
+      }
+    }
+    return {c:c, cr:cr, unit:unit, e:e, ok:ok, margin:margin};
   });
 
-  const totW    = rows.reduce((s,r) => s + r.cr.totW_d, 0);
-  const totB    = rows.reduce((s,r) => s + r.cr.totB_d, 0);
-  const totInst = rows.reduce((s,r) => s + r.unit.b, 0);
-  const totKg   = rows.reduce((s,r) => s + r.unit.w, 0);
-  const totEd   = rows.reduce((s,r) => s + r.e.day, 0);
-  const totEs   = rows.reduce((s,r) => s + r.e.sil, 0);
-  const totEr   = rows.reduce((s,r) => s + r.e.red, 0);
-  const totEt   = totEd + totEs + totEr;
-  const cop     = +document.getElementById('cop').value || 3;
-  const totEkW  = (totInst / 3412) / cop;
+  var totW    = rows.reduce(function(s,r){ return s+r.cr.totW_d; }, 0);
+  var totB    = rows.reduce(function(s,r){ return s+r.cr.totB_d; }, 0);
+  var totInst = rows.reduce(function(s,r){ return s+r.unit.b; }, 0);
+  var totKg   = rows.reduce(function(s,r){ return s+r.unit.w; }, 0);
+  var totEd   = rows.reduce(function(s,r){ return s+r.e.day; }, 0);
+  var totEs   = rows.reduce(function(s,r){ return s+r.e.sil; }, 0);
+  var totEr   = rows.reduce(function(s,r){ return s+r.e.red; }, 0);
+  var totEt   = totEd + totEs + totEr;
+  var cop     = Number(el("cop").value) || 3;
+  var totEkW  = (totInst/3412) / cop;
 
-  document.getElementById('results-card').style.display = '';
-  document.getElementById('res-badge').textContent = f0(Math.round(totB)) + ' BTU · ' + f1(totW/1000) + ' kW';
+  el("results-card").style.display = "";
+  el("res-badge").textContent = f0(Math.round(totB)) + " BTU \u00b7 " + f1(totW/1000) + " kW";
 
   renderKPIs(totW, totB, totInst, totKg, totEt, totEkW, rows.length);
   renderEquip(rows, totB, totInst, totKg);
@@ -724,329 +738,311 @@ function recalc() {
   renderConditions();
 }
 
-// ── RESULT RENDERERS ─────────────────────────────
-function renderKPIs(totW, totB, totInst, totKg, totEt, totEkW, n) {
-  document.getElementById('kpi-row').innerHTML = `
-    <div class="kpi"><div class="kpi-l">Cooling Need</div><div class="kpi-v">${f1(totW/1000)}</div><div class="kpi-u">kW</div></div>
-    <div class="kpi"><div class="kpi-l">BTU/h needed</div><div class="kpi-v">${f0(Math.round(totB/1000))}k</div><div class="kpi-u">BTU/h</div></div>
-    <div class="kpi"><div class="kpi-l">Installed</div><div class="kpi-v">${f0(Math.round(totInst/1000))}k</div><div class="kpi-u">BTU/h</div></div>
-    <div class="kpi"><div class="kpi-l">Electrical</div><div class="kpi-v">${f1(totEkW)}</div><div class="kpi-u">kW full load</div></div>
-    <div class="kpi"><div class="kpi-l">Weight</div><div class="kpi-v">${f1(totKg)}</div><div class="kpi-u">kg</div></div>
-    <div class="kpi"><div class="kpi-l">Daily Energy</div><div class="kpi-v">${f1(totEt)}</div><div class="kpi-u">kWh/day</div></div>
-    <div class="kpi"><div class="kpi-l">Spaces</div><div class="kpi-v">${n}</div><div class="kpi-u">AC zones</div></div>
-    <div class="kpi"><div class="kpi-l">Supplier</div><div class="kpi-v" style="font-size:16px">${SUPS[S.sup].n}</div><div class="kpi-u">selected</div></div>`;
+// ── RESULT RENDERERS ───────────────────────────────────────
+
+function renderKPIs(totW, totB, totInst, totKg, totEt, totEkW, n){
+  el("kpi-row").innerHTML =
+    kpi("Cooling Need",   f1(totW/1000),              "kW") +
+    kpi("BTU/h Needed",   f0(Math.round(totB/1000))+"k", "BTU/h") +
+    kpi("Installed",      f0(Math.round(totInst/1000))+"k","BTU/h") +
+    kpi("Electrical",     f1(totEkW),                 "kW full load") +
+    kpi("Weight",         f1(totKg),                  "kg total") +
+    kpi("Daily Energy",   f1(totEt),                  "kWh/day") +
+    kpi("AC Zones",       String(n),                  "spaces") +
+    kpi("Supplier",       SUPS[S.sup].n,              "selected");
+}
+function kpi(label, val, unit){
+  return "<div class='kpi'><div class='kpi-l'>" + label + "</div><div class='kpi-v'>" + val + "</div><div class='kpi-u'>" + unit + "</div></div>";
 }
 
-function renderEquip(rows, totB, totInst, totKg) {
-  document.getElementById('equip-body').innerHTML = rows.map(({c,cr,unit,ok,margin},i) => `
-    <tr>
-      <td>${i+1}</td>
-      <td><strong>${esc(c.name||(TYPES[c.type]?.l||c.type))}</strong></td>
-      <td>${TYPES[c.type]?.l||c.type}</td>
-      <td>${f1(cr.area)} m²</td>
-      <td>${f1(cr.totW_d/1000)} kW<br><span style="font-size:11px;color:var(--g500)">${f0(Math.round(cr.totB_d))} BTU</span></td>
-      <td><strong>${unit.m}</strong></td>
-      <td>${unit.b ? f0(unit.b)+' BTU' : '—'}</td>
-      <td>${unit.w ? unit.w+' kg' : '—'}</td>
-    </tr>`).join('');
-
-  const allOk = rows.every(r => r.ok);
-  document.getElementById('equip-foot').innerHTML = `<tr>
-    <td colspan="4"><strong>TOTAL</strong></td>
-    <td><strong>${f1(totB/1000)} kW</strong></td>
-    <td></td>
-    <td><strong>${f0(totInst)} BTU</strong></td>
-    <td><strong>${f1(totKg)} kg</strong></td>
-  </tr>`;
+function renderEquip(rows, totB, totInst, totKg){
+  el("equip-body").innerHTML = rows.map(function(r,i){
+    var c=r.c, cr=r.cr, unit=r.unit, ok=r.ok, margin=r.margin;
+    var pill = unit.b
+      ? (ok ? "<span class='pill p-ok'>\u2713 +" + Math.round(margin) + "%</span>"
+            : "<span class='pill p-err'>\u2717 undersize</span>")
+      : "<span class='pill p-dim'>-</span>";
+    return "<tr>" +
+      "<td>" + (i+1) + "</td>" +
+      "<td><strong>" + esc(c.name || (TYPES[c.type] ? TYPES[c.type].l : c.type)) + "</strong></td>" +
+      "<td>" + (TYPES[c.type] ? TYPES[c.type].l : c.type) + "</td>" +
+      "<td>" + f1(cr.area) + " m\u00b2</td>" +
+      "<td>" + f1(cr.totW_d/1000) + " kW<br><span style='font-size:11px;color:var(--g500)'>" + f0(Math.round(cr.totB_d)) + " BTU</span></td>" +
+      "<td><strong>" + unit.m + "</strong></td>" +
+      "<td>" + (unit.b ? f0(unit.b)+" BTU" : "-") + "</td>" +
+      "<td>" + (unit.w ? unit.w+" kg" : "-") + "</td>" +
+      "</tr>";
+  }).join("");
+  el("equip-foot").innerHTML =
+    "<tr><td colspan='4'><strong>TOTAL</strong></td>" +
+    "<td><strong>" + f1(totB/1000) + " kW / " + f0(Math.round(totB)) + " BTU</strong></td>" +
+    "<td></td><td><strong>" + f0(totInst) + " BTU</strong></td>" +
+    "<td><strong>" + f1(totKg) + " kg</strong></td></tr>";
 }
 
-function renderHumidity() {
-  const cli = CLIMATE[S.climate];
-  const dH = S.famu ? cli.famu.cabin_dH : cli.day.dH;
-  const h = cli.humidity;
-  document.getElementById('humidity-section').innerHTML = `
-    <div class="humidity-section">
-      <strong>Relative Humidity Ranges (ISO 7547) — ${cli.label}</strong>
-      <div class="humidity-row">
-        <div class="humidity-cell"><div class="humidity-label">Daytime</div>
-          <div class="humidity-val">${h.day.min}–${h.day.max}% RH</div>
-          <div class="humidity-unit">ΔH = ${f1(dH)} kJ/kg</div></div>
-        <div class="humidity-cell"><div class="humidity-label">Silent / Night</div>
-          <div class="humidity-val">${h.sil.min}–${h.sil.max}% RH</div>
-          <div class="humidity-unit">ΔH = ${f1(cli.sil.dH)} kJ/kg</div></div>
-        <div class="humidity-cell"><div class="humidity-label">Standby</div>
-          <div class="humidity-val">${h.red.min}–${h.red.max}% RH</div>
-          <div class="humidity-unit">Minimal load</div></div>
-      </div>
-    </div>`;
+function renderHumidity(){
+  var cli = CLIMATE[S.climate];
+  var dH  = S.famu ? cli.famu.cabin_dH : cli.day.dH;
+  var h   = cli.humidity;
+  el("humidity-section").innerHTML =
+    "<div class='humidity-section'>" +
+    "<strong>Humidity Targets (ISO 7547) \u2014 " + cli.label + "</strong>" +
+    "<div class='humidity-row'>" +
+      hcell("Daytime",     h.day.min+"\u2013"+h.day.max+"% RH", "\u0394H = "+f1(dH)+" kJ/kg") +
+      hcell("Silent/Night",h.sil.min+"\u2013"+h.sil.max+"% RH", "\u0394H = "+f1(cli.sil.dH)+" kJ/kg") +
+      hcell("Standby",     h.red.min+"\u2013"+h.red.max+"% RH", "Minimal load") +
+    "</div></div>";
+}
+function hcell(label, val, unit){
+  return "<div class='humidity-cell'><div class='humidity-label'>" + label + "</div><div class='humidity-val'>" + val + "</div><div class='humidity-unit'>" + unit + "</div></div>";
 }
 
-function renderEnergy(totEd, totEs, totEr, totEt) {
-  const maxBar = Math.max(totEd, 1);
-  document.getElementById('energy-total').textContent = f1(totEt) + ' kWh / day';
-  document.getElementById('cop-display').textContent = document.getElementById('cop').value || 3;
-  document.getElementById('energy-bars').innerHTML = `
-    <div class="e-bar-row"><div class="e-bar-label">Daytime (12h)</div>
-      <div class="e-bar-track"><div class="e-bar-fill e-bar-day" style="width:100%" data-label="${f1(totEd)} kWh · 100%"></div></div>
-      <div class="e-bar-val">${f1(totEd)} kWh</div></div>
-    <div class="e-bar-row"><div class="e-bar-label">Silent (8h)</div>
-      <div class="e-bar-track"><div class="e-bar-fill e-bar-sil" style="width:${Math.round(totEs/maxBar*100)}%" data-label="${f1(totEs)} kWh · 55%"></div></div>
-      <div class="e-bar-val">${f1(totEs)} kWh</div></div>
-    <div class="e-bar-row"><div class="e-bar-label">Reduced (4h)</div>
-      <div class="e-bar-track"><div class="e-bar-fill e-bar-red" style="width:${Math.round(totEr/maxBar*100)}%" data-label="${f1(totEr)} kWh · 5%"></div></div>
-      <div class="e-bar-val">${f1(totEr)} kWh</div></div>
-    <div class="e-bar-row" style="margin-top:8px;border-top:1px solid var(--g200);padding-top:8px">
-      <div class="e-bar-label" style="font-weight:700">Daily Total</div>
-      <div></div>
-      <div class="e-bar-val" style="font-weight:700;color:var(--navy)">${f1(totEt)} kWh</div></div>`;
+function renderEnergy(totEd, totEs, totEr, totEt){
+  var maxBar = Math.max(totEd, 1);
+  el("energy-total").textContent = f1(totEt) + " kWh / day";
+  el("cop-display").textContent  = el("cop").value || 3;
+  el("energy-bars").innerHTML =
+    ebar("Daytime (12h)", "e-bar-day", 100,                          f1(totEd)+" kWh \u00b7 100%", f1(totEd)) +
+    ebar("Silent (8h)",   "e-bar-sil", Math.round(totEs/maxBar*100), f1(totEs)+" kWh \u00b7 55%",  f1(totEs)) +
+    ebar("Reduced (4h)",  "e-bar-red", Math.round(totEr/maxBar*100), f1(totEr)+" kWh \u00b7 5%",   f1(totEr)) +
+    "<div class='e-bar-row' style='margin-top:8px;border-top:1px solid var(--g200);padding-top:8px'>" +
+      "<div class='e-bar-label' style='font-weight:700'>Daily Total</div><div></div>" +
+      "<div class='e-bar-val' style='font-weight:700;color:var(--navy)'>" + f1(totEt) + " kWh</div></div>";
+}
+function ebar(label, cls, pct, dataLabel, val){
+  return "<div class='e-bar-row'><div class='e-bar-label'>" + label + "</div>" +
+    "<div class='e-bar-track'><div class='" + cls + " e-bar-fill' style='width:" + pct + "%' data-label='" + dataLabel + "'></div></div>" +
+    "<div class='e-bar-val'>" + val + " kWh</div></div>";
 }
 
-function renderTech(rows, totW, totB) {
-  document.getElementById('tech-body').innerHTML = rows.map(({c,cr},i) => `
-    <tr><td>${i+1}</td><td>${esc(c.name||(TYPES[c.type]?.l||'Space'))}</td>
-      <td>${cr.wm2} W/m²</td><td>${f0(Math.round(cr.base_d))}</td><td>${f0(Math.round(cr.vH_d))}</td>
-      <td>${f0(cr.pers)}</td><td>${f0(cr.inst)}</td>
-      <td><strong>${f0(Math.round(cr.totW_d))}</strong></td>
-      <td>${f0(Math.round(cr.totB_d))}</td></tr>`).join('');
-  document.getElementById('tech-foot').innerHTML = `<tr>
-    <td colspan="7">TOTAL</td><td>${f0(Math.round(totW))} W</td><td>${f0(Math.round(totB))} BTU</td></tr>`;
+function renderTech(rows, totW, totB){
+  el("tech-body").innerHTML = rows.map(function(r,i){
+    var c=r.c, cr=r.cr;
+    return "<tr><td>"+(i+1)+"</td><td>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:"Space"))+"</td>" +
+      "<td>"+cr.wm2+" W/m\u00b2</td><td>"+f0(Math.round(cr.base_d))+"</td><td>"+f0(Math.round(cr.vH_d))+"</td>" +
+      "<td>"+f0(cr.pers)+"</td><td>"+f0(cr.inst)+"</td>" +
+      "<td><strong>"+f0(Math.round(cr.totW_d))+"</strong></td><td>"+f0(Math.round(cr.totB_d))+"</td></tr>";
+  }).join("");
+  el("tech-foot").innerHTML = "<tr><td colspan='7'>TOTAL</td><td>"+f0(Math.round(totW))+" W</td><td>"+f0(Math.round(totB))+" BTU</td></tr>";
 }
 
-function renderVent(rows) {
-  document.getElementById('vent-body').innerHTML = rows.map(({c,cr},i) => {
-    const ok = cr.fv >= cr.classMin;
-    return `<tr><td>${i+1}</td><td>${esc(c.name||(TYPES[c.type]?.l||'Space'))}</td>
-      <td>${f1(cr.vol)}</td><td>${c.ach||2}</td>
-      <td><strong>${f1(cr.fv)}</strong></td><td>${f1(cr.classMin)}</td>
-      <td>${cr.wcExt ? f1(cr.wcExt) : '—'}</td>
-      <td>${ok ? '<span class="pill p-ok">✓ OK</span>' : '<span class="pill p-err">✗ FAIL</span>'}</td></tr>`;
-  }).join('');
+function renderVent(rows){
+  el("vent-body").innerHTML = rows.map(function(r,i){
+    var c=r.c, cr=r.cr, ok=cr.fv>=cr.classMin;
+    return "<tr><td>"+(i+1)+"</td><td>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:"Space"))+"</td>" +
+      "<td>"+f1(cr.vol)+"</td><td>"+(c.ach||2)+"</td>" +
+      "<td><strong>"+f1(cr.fv)+"</strong></td><td>"+f1(cr.classMin)+"</td>" +
+      "<td>"+(cr.wcExt?f1(cr.wcExt):"-")+"</td>" +
+      "<td>"+(ok?"<span class='pill p-ok'>\u2713 OK</span>":"<span class='pill p-err'>\u2717 FAIL</span>")+"</td></tr>";
+  }).join("");
 }
 
-function renderConditions() {
-  const cli = CLIMATE[S.climate];
-  const cop = document.getElementById('cop').value || 3;
-  document.getElementById('cond-body').innerHTML = `
-    <tr><td>Climate zone</td><td>${cli.label}</td><td>ISO 7547</td></tr>
-    <tr><td>Daytime</td><td>${cli.day.desc}, ΔH=${cli.day.dH} kJ/kg</td><td>ISO 7547</td></tr>
-    <tr><td>Silent</td><td>${cli.sil.desc}, ΔH=${cli.sil.dH} kJ/kg</td><td>ISO 7547</td></tr>
-    <tr><td>FAMU</td><td>${S.famu ? `Yes — cabin ΔH=${cli.famu.cabin_dH}, central ΔH=${cli.famu.central_dH} kJ/kg` : 'No — full outdoor load on fan-coils'}</td><td>Design</td></tr>
-    <tr><td>Person heat</td><td>150 W/person</td><td>ISO 7547</td></tr>
-    <tr><td>Installation heat</td><td>10 W/m²</td><td>ISO 7547</td></tr>
-    <tr><td>Min. fresh air</td><td>7 l/s/person</td><td>Class rules</td></tr>
-    <tr><td>WC extraction</td><td>4.5 l/s/m² (min 15 l/s)</td><td>ISO 7547</td></tr>
-    <tr><td>COP</td><td>${cop}</td><td>Input</td></tr>`;
+function renderConditions(){
+  var cli = CLIMATE[S.climate];
+  var cop = el("cop").value || 3;
+  el("cond-body").innerHTML =
+    "<tr><td>Climate zone</td><td>" + cli.label + "</td><td>ISO 7547</td></tr>" +
+    "<tr><td>Daytime design</td><td>" + cli.day.desc + ", \u0394H=" + cli.day.dH + " kJ/kg</td><td>ISO 7547</td></tr>" +
+    "<tr><td>Silent design</td><td>" + cli.sil.desc + ", \u0394H=" + cli.sil.dH + " kJ/kg</td><td>ISO 7547</td></tr>" +
+    "<tr><td>FAMU</td><td>" + (S.famu ? "Yes \u2014 cabin \u0394H="+cli.famu.cabin_dH+", central \u0394H="+cli.famu.central_dH+" kJ/kg" : "No \u2014 fan-coil handles full outdoor load") + "</td><td>Design</td></tr>" +
+    "<tr><td>Person heat</td><td>150 W/person</td><td>ISO 7547</td></tr>" +
+    "<tr><td>Installation heat</td><td>10 W/m\u00b2</td><td>ISO 7547</td></tr>" +
+    "<tr><td>Min fresh air</td><td>7 l/s/person</td><td>Class rules</td></tr>" +
+    "<tr><td>WC extraction</td><td>4.5 l/s/m\u00b2 (min 15 l/s)</td><td>ISO 7547</td></tr>" +
+    "<tr><td>Mode hours</td><td>Daytime 12h \u00b7 Silent 8h \u00b7 Reduced 4h</td><td>Design</td></tr>" +
+    "<tr><td>Load factors</td><td>100% / 55% / 5%</td><td>ISO 7547</td></tr>" +
+    "<tr><td>COP</td><td>" + cop + "</td><td>Input</td></tr>";
 }
 
-function toggleAcc(el) {
-  el.classList.toggle('open');
-  el.nextElementSibling?.classList.toggle('open');
+function toggleAcc(hdr){
+  hdr.classList.toggle("open");
+  if(hdr.nextElementSibling) hdr.nextElementSibling.classList.toggle("open");
 }
 
-// ── CONTROLS ─────────────────────────────────────
-function setClimate(c) {
+// ── CONTROLS ───────────────────────────────────────────────
+
+function setClimate(c){
   S.climate = c;
-  document.getElementById('btn-med').classList.toggle('on', c === 'med');
-  document.getElementById('btn-trop').classList.toggle('on', c === 'trop');
+  el("btn-med").classList.toggle("on", c==="med");
+  el("btn-trop").classList.toggle("on", c==="trop");
   recalc();
 }
-
-function setFAMU(v) {
+function setFAMU(v){
   S.famu = v;
-  document.getElementById('btn-famu-n').classList.toggle('on', !v);
-  document.getElementById('btn-famu-y').classList.toggle('on',  v);
+  el("btn-famu-n").classList.toggle("on", !v);
+  el("btn-famu-y").classList.toggle("on",  v);
   recalc();
 }
-
-function setSup(sup) {
-  S.sup = sup;
-  renderSupplierButtons();
-  recalc();
+function setSup(sup){ S.sup=sup; renderSupplierButtons(); recalc(); }
+function renderSupplierButtons(){
+  el("sup-pick").innerHTML = Object.keys(SUPS).map(function(k){
+    return "<button class='sup-btn" + (S.sup===k?" on":"") + "' onclick=\"setSup('" + k + "')\">" + SUPS[k].n + "</button>";
+  }).join("");
 }
 
-function renderSupplierButtons() {
-  document.getElementById('sup-pick').innerHTML = Object.keys(SUPS)
-    .map(k => `<button class="sup-btn${S.sup===k?' on':''}" onclick="setSup('${k}')">${SUPS[k].n}</button>`).join('');
-}
+// ── SUPPLIER MODAL ─────────────────────────────────────────
 
-// ── SUPPLIER MODAL ────────────────────────────────
-let modalSup = 'VECO';
+var modalSup = "VECO";
 
-function openSupplierModal() {
+function openSupplierModal(){
   modalSup = S.sup;
-  renderSupplierModalTabs();
+  renderSupModalTabs();
   renderSupplierEditor();
-  document.getElementById('sup-overlay').classList.add('show');
-  document.getElementById('sup-modal').classList.add('show');
+  el("sup-overlay").classList.add("show");
+  el("sup-modal").classList.add("show");
 }
-
-function closeSupplierModal() {
-  document.getElementById('sup-overlay').classList.remove('show');
-  document.getElementById('sup-modal').classList.remove('show');
+function closeSupplierModal(){
+  el("sup-overlay").classList.remove("show");
+  el("sup-modal").classList.remove("show");
   saveSuppliersToStorage();
   renderSupplierButtons();
   recalc();
 }
-
-function renderSupplierModalTabs() {
-  document.getElementById('modal-sup-tabs').innerHTML = Object.keys(SUPS)
-    .map(k => `<button class="sup-btn${k===modalSup?' on':''}" onclick="switchSupplierTab('${k}')">${SUPS[k].n}</button>`).join('');
-  document.getElementById('modal-sup-name').textContent = SUPS[modalSup].n;
+function renderSupModalTabs(){
+  el("sup-modal-tabs").innerHTML = Object.keys(SUPS).map(function(k){
+    return "<button class='sup-btn" + (k===modalSup?" on":"") + "' onclick=\"switchSupTab('" + k + "')\">" + SUPS[k].n + "</button>";
+  }).join("");
+  el("modal-sup-name").textContent = SUPS[modalSup].n;
 }
-
-function switchSupplierTab(k) {
-  modalSup = k;
-  renderSupplierModalTabs();
+function switchSupTab(k){ modalSup=k; renderSupModalTabs(); renderSupplierEditor(); }
+function renderSupplierEditor(){
+  var units = SUPS[modalSup].u.slice().sort(function(a,b){ return a.b-b.b; });
+  el("sup-edit-body").innerHTML = units.map(function(u,i){
+    return "<tr>" +
+      "<td><input type='text' value='" + esc(u.m) + "' class='sup-inp' onchange=\"SUPS['" + modalSup + "'].u[" + i + "].m=this.value\"></td>" +
+      "<td><input type='number' value='" + u.b + "' class='sup-inp' onchange=\"SUPS['" + modalSup + "'].u[" + i + "].b=+this.value\"></td>" +
+      "<td><input type='number' value='" + u.w + "' class='sup-inp' onchange=\"SUPS['" + modalSup + "'].u[" + i + "].w=+this.value\"></td>" +
+      "<td class='no-print'><button class='icon-btn' onclick=\"SUPS['" + modalSup + "'].u.splice(" + i + ",1);renderSupplierEditor()\">&#10005;</button></td>" +
+      "</tr>";
+  }).join("");
+}
+function addSupplierUnit(){
+  var m=el("new-model").value.trim(), b=Number(el("new-btu").value), w=Number(el("new-kg").value);
+  if(!m||!b){ alert("Enter model name and BTU/h"); return; }
+  SUPS[modalSup].u.push({m:m,b:b,w:w});
+  SUPS[modalSup].u.sort(function(a,b){ return a.b-b.b; });
+  ["new-model","new-btu","new-kg"].forEach(function(id){ el(id).value=""; });
   renderSupplierEditor();
 }
-
-function renderSupplierEditor() {
-  const units = [...SUPS[modalSup].u].sort((a,b) => a.b - b.b);
-  document.getElementById('sup-edit-body').innerHTML = units.map((u,i) => `
-    <tr>
-      <td><input type="text" value="${esc(u.m)}" class="sup-inp" onchange="SUPS['${modalSup}'].u[${i}].m=this.value"></td>
-      <td><input type="number" value="${u.b}" class="sup-inp" onchange="SUPS['${modalSup}'].u[${i}].b=+this.value"></td>
-      <td><input type="number" value="${u.w}" class="sup-inp" onchange="SUPS['${modalSup}'].u[${i}].w=+this.value"></td>
-      <td class="no-print"><button class="icon-btn" onclick="SUPS['${modalSup}'].u.splice(${i},1);renderSupplierEditor()">✕</button></td>
-    </tr>`).join('');
-}
-
-function addSupplierUnit() {
-  const m = document.getElementById('new-model').value.trim();
-  const b = +document.getElementById('new-btu').value;
-  const w = +document.getElementById('new-kg').value;
-  if (!m || !b) { alert('Enter model name and BTU/h'); return; }
-  SUPS[modalSup].u.push({m, b, w});
-  SUPS[modalSup].u.sort((a,b) => a.b - b.b);
-  ['new-model','new-btu','new-kg'].forEach(id => document.getElementById(id).value = '');
-  renderSupplierEditor();
-}
-
-function exportSupplierCSV() {
-  const rows = ['model,btu,weight', ...SUPS[modalSup].u.map(u => `${u.m},${u.b},${u.w}`)];
-  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `${SUPS[modalSup].n}_catalog.csv`;
+function exportSupplierCSV(){
+  var rows = ["model,btu,weight"].concat(SUPS[modalSup].u.map(function(u){ return u.m+","+u.b+","+u.w; }));
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([rows.join("\n")],{type:"text/csv"}));
+  a.download = SUPS[modalSup].n + "_catalog.csv";
   a.click();
 }
-
-function importSupplierData(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = evt => {
-    try {
-      let data;
-      if (file.name.endsWith('.json')) {
+function importSupplierData(e){
+  var file = e.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      var data;
+      if(file.name.endsWith(".json")){
         data = JSON.parse(evt.target.result);
       } else {
-        const lines = evt.target.result.trim().split('\n');
-        const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
-        data = lines.slice(1).map(line => {
-          const vals = line.split(',').map(v => v.trim());
-          const obj = {};
-          headers.forEach((h,i) => obj[h] = vals[i]);
-          return obj;
+        var lines = evt.target.result.trim().split("\n");
+        var hdr = lines[0].toLowerCase().split(",").map(function(h){ return h.trim(); });
+        data = lines.slice(1).map(function(ln){
+          var v=ln.split(",").map(function(x){ return x.trim(); });
+          var o={};
+          hdr.forEach(function(h,i){ o[h]=v[i]; });
+          return o;
         });
       }
-      if (Array.isArray(data)) {
-        SUPS[modalSup].u = data.map(r => ({m:r.model||r.name||r.m||'', b:+(r.btu||r.capacity||r.b)||0, w:+(r.weight||r.w)||0}));
-        SUPS[modalSup].u.sort((a,b) => a.b - b.b);
+      if(Array.isArray(data)){
+        SUPS[modalSup].u = data.map(function(r){ return {m:r.model||r.name||r.m||"", b:Number(r.btu||r.capacity||r.b)||0, w:Number(r.weight||r.w)||0}; });
+        SUPS[modalSup].u.sort(function(a,b){ return a.b-b.b; });
         renderSupplierEditor();
-        alert('Imported ' + SUPS[modalSup].u.length + ' units successfully!');
+        alert("Imported " + SUPS[modalSup].u.length + " units successfully!");
       }
-    } catch(err) { alert('Import error: ' + err.message); }
+    }catch(err){ alert("Import error: " + err.message); }
   };
   reader.readAsText(file);
-  e.target.value = '';
+  e.target.value = "";
+}
+function saveSuppliersToStorage(){ localStorage.setItem("ac_suppliers", JSON.stringify(SUPS)); }
+function loadSuppliersFromStorage(){
+  var s = localStorage.getItem("ac_suppliers");
+  if(s){ try{ SUPS=JSON.parse(s); }catch(e){} }
 }
 
-function saveSuppliersToStorage() { localStorage.setItem('ac_suppliers', JSON.stringify(SUPS)); }
-function loadSuppliersFromStorage() {
-  const s = localStorage.getItem('ac_suppliers');
-  if (s) { try { SUPS = JSON.parse(s); } catch(e){} }
-}
+// ── EXPORT ─────────────────────────────────────────────────
 
-// ── EXPORTS ───────────────────────────────────────
-function exportExcel() {
-  if (!window.XLSX) { alert('Excel library still loading, please wait.'); return; }
-  const wb = XLSX.utils.book_new();
-  const m = S.project;
-  const cli = CLIMATE[S.climate];
-  const cop = +document.getElementById('cop').value || 3;
+function exportExcel(){
+  if(!window.XLSX){ alert("Excel library loading, please wait."); return; }
+  var wb = XLSX.utils.book_new();
+  var m = S.project, cli = CLIMATE[S.climate], cop = Number(el("cop").value)||3;
 
-  const info = [
-    ['Baltic Yachts — AC Cooling Calculator v3.1 (ISO 7547)'],
-    ['Yacht', m.yacht, '', 'Date', m.date],
-    ['Project', m.proj, '', 'By', m.by],
-    ['Revision', m.rev, '', 'Client', m.client],
-    ['Climate', cli.label, '', 'FAMU', S.famu?'Yes':'No'],
-    ['Supplier', SUPS[S.sup].n, '', 'COP', cop], [],
-    ['#','Space','Type','Area m²','Persons','W/m²','Cooling W','BTU/h','Unit','Unit BTU','Weight kg']
+  var info = [
+    ["Baltic Yachts — AC Cooling Calculator v3.2 (ISO 7547)"],
+    ["Yacht",m.yacht,"","Date",m.date],
+    ["Project",m.proj,"","By",m.by],
+    ["Revision",m.rev,"","Client",m.client],
+    ["Climate",cli.label,"","FAMU",S.famu?"Yes":"No"],
+    ["Supplier",SUPS[S.sup].n,"","COP",cop],[],
+    ["#","Space","Type","Area m2","Persons","W/m2","Cooling W","BTU/h","Unit","Unit BTU","Weight kg","OK?"]
   ];
-
-  const dataRows = S.cabins.map((c,i) => {
-    const cr = calcCabin(c);
-    const u = recUnit(cr.totB_d);
-    return [i+1, c.name||(TYPES[c.type]?.l||c.type), TYPES[c.type]?.l||c.type,
-      cr.area, cr.p, cr.wm2, Math.round(cr.totW_d), Math.round(cr.totB_d), u.m, u.b, u.w];
+  var dataRows = S.cabins.map(function(c,i){
+    var cr=calcCabin(c), u=recUnit(cr.totB_d);
+    return [i+1, c.name||(TYPES[c.type]?TYPES[c.type].l:c.type), TYPES[c.type]?TYPES[c.type].l:c.type,
+      cr.area, cr.p, cr.wm2, Math.round(cr.totW_d), Math.round(cr.totB_d), u.m, u.b||0, u.w||0, u.b>=cr.totB_d?"OK":"FAIL"];
   });
+  var totW=S.cabins.reduce(function(s,c){return s+calcCabin(c).totW_d;},0);
+  var totB=S.cabins.reduce(function(s,c){return s+calcCabin(c).totB_d;},0);
+  dataRows.push([],["","","TOTAL","","","",Math.round(totW),Math.round(totB)]);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(info.concat(dataRows)), "Cooling Loads");
 
-  const totW = S.cabins.reduce((s,c) => s + calcCabin(c).totW_d, 0);
-  const totB = S.cabins.reduce((s,c) => s + calcCabin(c).totB_d, 0);
-  dataRows.push([], ['','','TOTAL','','','', Math.round(totW), Math.round(totB)]);
-
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([...info, ...dataRows]), 'Cooling Loads');
-
-   const eh=[['#','Space','Unit BTU','Installed kW','Elec kW','Day kWh','Silent kWh','Reduced kWh','Daily kWh']];
-  S.cabins.forEach((c,i)=>{
-    const cr=calcCabin(c); const u=recUnit(cr.totB_d); const e=calcEnergy(u.b);
-    eh.push([i+1,c.name||(TYPES[c.type]?.l||c.type),u.b,+(u.b/3412).toFixed(2),+e.eKW.toFixed(2),+e.day.toFixed(2),+e.sil.toFixed(2),+e.red.toFixed(2),+e.tot.toFixed(2)]);
+  var eh=[["#","Space","Unit BTU","Installed kW","Elec kW","Day kWh","Silent kWh","Reduced kWh","Daily kWh"]];
+  S.cabins.forEach(function(c,i){
+    var cr=calcCabin(c), u=recUnit(cr.totB_d), e=calcEnergy(u.b);
+    eh.push([i+1, c.name||(TYPES[c.type]?TYPES[c.type].l:c.type), u.b,
+      Number((u.b/3412).toFixed(2)), Number(e.eKW.toFixed(2)),
+      Number(e.day.toFixed(2)), Number(e.sil.toFixed(2)), Number(e.red.toFixed(2)), Number(e.tot.toFixed(2))]);
   });
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(eh),'Energy');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eh), "Energy");
 
-  const vh=[['#','Space','Vol m³','ACH','Flow l/s','Class Min l/s','WC Ext l/s','OK?']];
-  S.cabins.forEach((c,i)=>{
-    const cr=calcCabin(c);
-    vh.push([i+1,c.name||(TYPES[c.type]?.l||c.type),+cr.vol.toFixed(1),c.ach||2,+cr.fv.toFixed(1),+cr.classMin.toFixed(1),cr.wcExt?+cr.wcExt.toFixed(1):'N/A',cr.fv>=cr.classMin?'OK':'FAIL']);
+  var vh=[["#","Space","Vol m3","ACH","Flow l/s","Class Min l/s","WC Ext l/s","OK?"]];
+  S.cabins.forEach(function(c,i){
+    var cr=calcCabin(c);
+    vh.push([i+1, c.name||(TYPES[c.type]?TYPES[c.type].l:c.type),
+      Number(cr.vol.toFixed(1)), c.ach||2, Number(cr.fv.toFixed(1)),
+      Number(cr.classMin.toFixed(1)), cr.wcExt?Number(cr.wcExt.toFixed(1)):"N/A",
+      cr.fv>=cr.classMin?"OK":"FAIL"]);
   });
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(vh),'Ventilation');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(vh), "Ventilation");
 
-  const yacht=m.yacht||'AC_Calc';
-  try {
-    XLSX.writeFile(wb,`Baltic_AC_${yacht.replace(/[^a-z0-9]/gi,'_')}.xlsx`);
-  } catch(e) {
-    const out=XLSX.write(wb,{bookType:'xlsx',type:'array'});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([out],{type:'application/octet-stream'}));
-    a.download=`Baltic_AC_${yacht.replace(/[^a-z0-9]/gi,'_')}.xlsx`;
+  var yacht = m.yacht || "AC_Calc";
+  try{
+    XLSX.writeFile(wb, "Baltic_AC_" + yacht.replace(/[^a-z0-9]/gi,"_") + ".xlsx");
+  } catch(err){
+    var out = XLSX.write(wb,{bookType:"xlsx",type:"array"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([out],{type:"application/octet-stream"}));
+    a.download = "Baltic_AC_" + yacht.replace(/[^a-z0-9]/gi,"_") + ".xlsx";
     a.click();
   }
 }
 
-function exportPDF() {
-  if (!window.html2pdf) { window.print(); return; }
-  const el = document.getElementById('results-card');
-  // Temporarily open all accordions for export
-  const bodies = el.querySelectorAll('.acc-body');
-  const hdrs   = el.querySelectorAll('.acc-hdr');
-  bodies.forEach(b => b.classList.add('open'));
-  hdrs.forEach(h => h.classList.add('open'));
+function exportPDF(){
+  if(!window.html2pdf){ window.print(); return; }
+  var resultEl = el("results-card");
+  var bodies = resultEl.querySelectorAll(".acc-body");
+  var hdrs   = resultEl.querySelectorAll(".acc-hdr");
+  bodies.forEach(function(b){ b.classList.add("open"); });
+  hdrs.forEach(function(h){ h.classList.add("open"); });
   html2pdf().set({
     margin: 10,
-    filename: `Baltic_AC_${(S.project.yacht||'report').replace(/[^a-z0-9]/gi,'_')}_${S.project.date||''}.pdf`,
-    image: {type:'jpeg', quality:0.98},
+    filename: "Baltic_AC_" + ((S.project.yacht||"report").replace(/[^a-z0-9]/gi,"_")) + "_" + (S.project.date||"") + ".pdf",
+    image: {type:"jpeg", quality:0.98},
     html2canvas: {scale:2, useCORS:true, logging:false},
-    jsPDF: {orientation:'landscape', unit:'mm', format:'a4'}
-  }).from(el).save().then(()=>{
-    // Restore accordion state
-    bodies.forEach(b => b.classList.remove('open'));
-    hdrs.forEach(h => h.classList.remove('open'));
+    jsPDF: {orientation:"landscape", unit:"mm", format:"a4"}
+  }).from(resultEl).save().then(function(){
+    bodies.forEach(function(b){ b.classList.remove("open"); });
+    hdrs.forEach(function(h){ h.classList.remove("open"); });
   });
 }
 
-window.addEventListener('DOMContentLoaded', init);
+window.addEventListener("DOMContentLoaded", init);
 </script>
 </body>
 </html>
