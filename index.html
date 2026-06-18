@@ -1313,9 +1313,7 @@ function exportWord() {
   const blob = new Blob(['﻿', doc], {type:'application/msword'});
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  a.href=url; a.download=`Baltic_AC_${(m.yacht||'Calc').replace(/[^a-z0-9]/gi,'_')}.doc`;
-  ;
-}
+  a.href=url; a.download=`Baltic_AC_${(m.yacht||'Calc').replace(/[^a-z0-9]/gi,'_')}.doc`;}
 
 // ── UTILITIES ──────────────────────────────────────────────────────────────
 const f0  = n => Math.round(+n).toLocaleString('en-GB');
