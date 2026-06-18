@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AC Calc">
 <meta name="theme-color" content="#1a2744">
+<link rel="manifest" id="pwa-manifest">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
@@ -179,8 +180,23 @@ tr:hover td{background:rgba(26,39,68,.02)}
 .e-bar-day{background:var(--navy)}.e-bar-sil{background:var(--gold)}.e-bar-red{background:var(--g300)}
 .e-bar-val{font-size:13px;font-weight:600;color:var(--navy);text-align:right}
 .energy-section{padding:16px}
+#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:var(--navy);color:#fff;align-items:center;gap:12px;
+  padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -4px 20px rgba(0,0,0,.3);flex-direction:row}
+#pwa-banner canvas{width:40px;height:40px;border-radius:8px;flex-shrink:0}
+.pwa-txt{flex:1}
+.pwa-txt strong{display:block;font-size:14px;margin-bottom:2px}
+.pwa-txt span{font-size:11px;opacity:.7}
+.pwa-dismiss{background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;padding:4px 8px;line-height:1}
+#ios-hint{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:var(--navy);color:#fff;padding:14px 20px;
+  padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+#ios-hint p{font-size:13px;line-height:1.6}
+#ios-hint button{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;position:absolute;top:10px;right:14px}
 @media print{
-  .settings-bar,.hdr-btns,.tbl-footer,.icon-btn,.no-print,.overlay,.modal{display:none!important}
+  .settings-bar,.hdr-btns,.tbl-footer,.icon-btn,.no-print,.overlay,.modal,#pwa-banner,#ios-hint{display:none!important}
   header{position:static!important;padding-top:0!important}
   .proj-panel{max-height:none!important}
   main{padding:16px!important}
@@ -306,6 +322,19 @@ tr:hover td{background:rgba(26,39,68,.02)}
     <button class="btn btn-ghost btn-sm" onclick="closeSupplierModal()">Cancel</button>
     <button class="btn btn-primary btn-sm" onclick="closeSupplierModal()">Done</button>
   </div>
+</div>
+<div id="pwa-banner">
+  <canvas id="pwa-icon" width="40" height="40"></canvas>
+  <div class="pwa-txt">
+    <strong>Install AC Cooling Calculator</strong>
+    <span>Add to home screen for quick access</span>
+  </div>
+  <button class="btn btn-gold btn-sm" onclick="installPWA()">Install</button>
+  <button class="pwa-dismiss" onclick="dismissPWA()">&#10005;</button>
+</div>
+<div id="ios-hint">
+  <button onclick="dismissIOS()">&#10005;</button>
+  <p>To install on iPhone: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p>
 </div>
 <footer style="background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;padding-bottom:calc(14px + var(--sab));font-size:11px;margin-top:24px">
   <strong style="color:var(--gold)">Baltic Yachts Ltd</strong> &mdash; Engineering Department &middot; AC Cooling Calculator v4.0 &middot; ISO 7547
@@ -593,7 +622,7 @@ function appendRow(c){
 }
 function renderCabins(){
   var tbody=el("cabin-body");tbody.innerHTML="";
-  if(!S.cabins.length){tbody.innerHTML="<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>&#128674;</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";}
+  if(!S.cabins.length){tbody.innerHTML="<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>🚢</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";}
   else{S.cabins.forEach(function(c){appendRow(c);});updateRowNums();}
   updateBadge();
 }
@@ -608,7 +637,7 @@ function removeRow(id){
   S.cabins=S.cabins.filter(function(c){return c.id!==id;});
   var row=el("r"+id);if(row)row.remove();
   if(!S.cabins.length){
-    el("cabin-body").innerHTML="<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>&#128674;</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";
+    el("cabin-body").innerHTML="<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>🚢</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";
     el("results-card").style.display="none";el("energy-cfg-card").style.display="none";
   }
   updateRowNums();updateBadge();recalc();
@@ -820,7 +849,62 @@ function exportPDF(){
   var yacht=(S.project.yacht||"report").replace(/[^a-z0-9]/gi,"_");
   html2pdf().set({margin:10,filename:"Baltic_AC_"+yacht+"_"+S.project.date+".pdf",image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true,logging:false},jsPDF:{orientation:"landscape",unit:"mm",format:"a4"}}).from(resultEl).save().then(function(){bodies.forEach(function(b){b.classList.remove("open");});hdrs.forEach(function(h){h.classList.remove("open");});});
 }
-window.addEventListener("DOMContentLoaded",init);
+function makeIcon(sz){
+  var c=document.createElement("canvas");c.width=c.height=sz;
+  var g=c.getContext("2d"),s=sz,r=s/5;
+  g.fillStyle="#1a2744";
+  g.beginPath();g.moveTo(r,0);g.lineTo(s-r,0);g.quadraticCurveTo(s,0,s,r);
+  g.lineTo(s,s-r);g.quadraticCurveTo(s,s,s-r,s);
+  g.lineTo(r,s);g.quadraticCurveTo(0,s,0,s-r);
+  g.lineTo(0,r);g.quadraticCurveTo(0,0,r,0);g.closePath();g.fill();
+  g.fillStyle="#0d1b2a";g.fillRect(0,s*0.61,s,s);
+  g.strokeStyle="rgba(201,169,110,0.5)";g.lineWidth=Math.max(1,s/80);
+  for(var w=0;w<3;w++){g.beginPath();for(var x=0;x<=s;x+=2){var y=s*0.64+w*s*0.04+Math.sin((x/s*6+w*2)*Math.PI)*s*0.015;x===0?g.moveTo(x,y):g.lineTo(x,y);}g.stroke();}
+  g.fillStyle="#c9a96e";g.beginPath();g.ellipse(s*0.5,s*0.625,s*0.24,s*0.036,0,0,Math.PI*2);g.fill();
+  var mx=s*0.475,mw=Math.max(2,s/55);g.fillStyle="#c9a96e";g.fillRect(mx,s*0.17,mw,s*0.45);
+  g.beginPath();g.moveTo(mx+mw/2,s*0.18);g.lineTo(mx+mw/2,s*0.62);g.lineTo(s*0.18,s*0.62);g.closePath();g.fillStyle="#c9a96e";g.fill();
+  g.beginPath();g.moveTo(mx+mw/2,s*0.27);g.lineTo(mx+mw/2,s*0.62);g.lineTo(s*0.80,s*0.62);g.closePath();g.fillStyle="#e0c899";g.fill();
+  return c;
+}
+var _deferredPrompt=null;
+function setupPWA(){
+  var ic=document.getElementById("pwa-icon");
+  if(ic){var ctx=ic.getContext("2d");ctx.drawImage(makeIcon(40),0,0);}
+  var al=document.querySelector("link[rel='apple-touch-icon']")||document.createElement("link");
+  al.rel="apple-touch-icon";al.href=makeIcon(192).toDataURL("image/png");
+  document.head.appendChild(al);
+  var i192=makeIcon(192).toDataURL("image/png");
+  var i512=makeIcon(512).toDataURL("image/png");
+  var mfst={name:"AC Cooling Calculator",short_name:"AC Calc",description:"Baltic Yachts Engineering",
+    start_url:"./",display:"standalone",orientation:"any",
+    background_color:"#1a2744",theme_color:"#1a2744",
+    icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any maskable"},
+           {src:i512,sizes:"512x512",type:"image/png",purpose:"any maskable"}]};
+  var ml=document.getElementById("pwa-manifest")||document.createElement("link");
+  ml.rel="manifest";ml.id="pwa-manifest";
+  ml.href=URL.createObjectURL(new Blob([JSON.stringify(mfst)],{type:"application/manifest+json"}));
+  if(!document.getElementById("pwa-manifest"))document.head.appendChild(ml);
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(function(){});
+  }
+  window.addEventListener("beforeinstallprompt",function(e){
+    e.preventDefault();_deferredPrompt=e;
+    if(!localStorage.getItem("pwa-dismissed")){
+      var b=document.getElementById("pwa-banner");
+      if(b)b.style.display="flex";
+    }
+  });
+  window.addEventListener("appinstalled",function(){_deferredPrompt=null;dismissPWA();});
+  var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  var isStandalone=("standalone" in navigator)&&navigator.standalone;
+  if(isIOS&&!isStandalone&&!localStorage.getItem("ios-dismissed")){
+    document.getElementById("ios-hint").style.display="block";
+  }
+}
+function installPWA(){if(_deferredPrompt){_deferredPrompt.prompt();_deferredPrompt.userChoice.then(function(){_deferredPrompt=null;dismissPWA();});}}
+function dismissPWA(){localStorage.setItem("pwa-dismissed","1");var b=document.getElementById("pwa-banner");if(b)b.style.display="none";}
+function dismissIOS(){localStorage.setItem("ios-dismissed","1");document.getElementById("ios-hint").style.display="none";}
+window.addEventListener("DOMContentLoaded",function(){ init(); setupPWA(); });
 </script>
 </body>
 </html>
