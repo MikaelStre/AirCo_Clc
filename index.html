@@ -381,29 +381,14 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div class="modal" id="proj-modal">
   <div class="modal-hdr"><h2>&#128203; Project</h2><button class="modal-close" onclick="closeProjModal()">&#10005;</button></div>
   <div class="modal-body">
-    <div class="field-row">
-      <div class="field"><label>Yacht Name</label><input id="pm-yacht" placeholder="e.g. B107C ZETEO"></div>
-      <div class="field"><label>Project No.</label><input id="pm-proj" placeholder="B121-01"></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Type</label><input id="pm-type" placeholder="Sailing Yacht"></div>
-      <div class="field"><label>Class Society</label>
-        <select id="pm-cls"><option>DNV GL</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>ABS</option><option>Other</option></select></div>
-    </div>
-    <div class="field-row"><div class="field"><label>Flag State (additional rule book)</label><select id="pm-flag"><option value="">&mdash; select &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div><div class="field"></div></div>
-    <div class="field-row">
-      <div class="field"><label>Calculated By</label><input id="pm-by" placeholder="Engineer"></div>
-      <div class="field"><label>Revision</label><input id="pm-rev" placeholder="Rev. A"></div>
-    </div>
-    <div style="margin-top:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Saved projects</div>
+    <div class="proj-grid" id="pm-ro" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px"></div>
+    <div style="margin-top:14px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Saved projects (tap to open)</div>
     <div id="pm-list" style="display:grid;gap:8px;margin-top:8px"></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--g500)">Project details are read-only. To create, copy or edit a project, use the Home page.</div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-line btn-sm" onclick="newProjectShell()">&#128196; New</button>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-line btn-sm" onclick="saveProjectShell()">&#128190; Save</button>
-      <button class="btn btn-primary btn-sm" onclick="applyProjMeta();closeProjModal()">Apply</button>
-    </div>
+    <button class="btn btn-line btn-sm" onclick="go('home');closeProjModal()">&#127968; Manage on Home</button>
+    <button class="btn btn-primary btn-sm" onclick="closeProjModal()">Close</button>
   </div>
 </div>
 
@@ -433,7 +418,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
   <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
 
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.19 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.20 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
 
 <script>
 /* ================================================================
@@ -456,7 +441,7 @@ function loadActive(){
   if(!PROJECT.meta.date)PROJECT.meta.date=new Date().toISOString().split("T")[0];
   if(!PROJECT.consumers)PROJECT.consumers=[];
 }
-function saveActive(){localStorage.setItem("by_active",JSON.stringify(PROJECT));updateChip();}
+function saveActive(){localStorage.setItem("by_active",JSON.stringify(PROJECT));updateChip();if(typeof autosaveProject==="function")autosaveProject();}
 function updateChip(){
   var n=PROJECT.meta.yacht||PROJECT.meta.proj;
   var c=el("chip-name");
@@ -509,9 +494,12 @@ window.addEventListener("hashchange",renderRoute);
 
 /* ---------- Project modal ---------- */
 function openProjModal(){
-  var m=PROJECT.meta;
-  el("pm-yacht").value=m.yacht||"";el("pm-proj").value=m.proj||"";el("pm-type").value=m.type||"";
-  el("pm-by").value=m.by||"";el("pm-rev").value=m.rev||"";el("pm-cls").value=m.cls||"Lloyd's Register (LRS)";
+  var m=PROJECT.meta||{};
+  var fg=(typeof flagGroup==="function")?flagGroup(m.flag):"";
+  function rf(l,v){return "<div class='field'><label>"+l+"</label><div style='font-size:14px;color:var(--text);font-weight:600;padding:4px 0'>"+(v?esc(String(v)):"&mdash;")+"</div></div>";}
+  el("pm-ro").innerHTML=rf("Yacht",m.yacht)+rf("Project No.",m.proj)+rf("Type",m.type)+rf("Class Society",m.cls)+
+    rf("Flag",(m.flag?m.flag+(fg&&typeof flagGroupLabel==="function"?" ("+flagGroupLabel(fg)+")":""):""))+
+    rf("Calculated By",m.by)+rf("Revision",m.rev);
   renderProjList();
   el("proj-overlay").classList.add("show");el("proj-modal").classList.add("show");
 }
@@ -548,9 +536,13 @@ function loadProjectShell(i){
   if(!list[i])return;
   PROJECT=JSON.parse(JSON.stringify(list[i]));
   if(!PROJECT.consumers)PROJECT.consumers=[];
+  if(typeof restoreACState==="function")restoreACState();
+  if(typeof AC_MOUNTED!=="undefined")AC_MOUNTED=false;
   saveActive();
   if(typeof acSyncFromProject==="function")acSyncFromProject();
   closeProjModal();
+  if(typeof renderHomeProjects==="function")renderHomeProjects();
+  if(typeof renderHomeRules==="function")renderHomeRules();
   alert("Loaded \""+PROJECT.meta.yacht+"\".");
 }
 function delProjectShell(i){
@@ -674,23 +666,8 @@ function acHTML(){ return `<main>
 
 <!-- ─── PROJECT PANEL ─── -->
 <div class="proj-panel" id="proj-panel">
-<div class="proj-grid">
-  <div class="field"><label>Yacht Name</label><input type="text" id="f-yacht" placeholder="e.g. B107C ZETEO" oninput="updateTitle()"></div>
-  <div class="field"><label>Project No.</label><input type="text" id="f-proj" placeholder="e.g. B107C-AC-001"></div>
-  <div class="field"><label>Calculated By</label><input type="text" id="f-by" value="Mikael Strengell"></div>
-  <div class="field"><label>Date</label><input type="date" id="f-date"></div>
-  <div class="field"><label>Revision</label><input type="text" id="f-rev" placeholder="Rev. A"></div>
-  <div class="field"><label>Client / Owner</label><input type="text" id="f-client" placeholder="Owner name"></div>
-  <div class="field"><label>Class Society</label>
-    <select id="f-class">
-      <option>Lloyd's Register (LRS)</option>
-      <option>DNV</option>
-      <option>Bureau Veritas (BV)</option>
-      <option>MCA</option>
-      <option>RCD (EU)</option>
-    </select>
-  </div>
-</div>
+<div class="proj-grid" id="ac-proj-ro" style="font-size:12px;color:var(--g500)"></div>
+<div style="padding:0 24px 14px;font-size:11px;color:var(--g500)">Project details are read-only here &mdash; edit them on the Home page (Create / Open a project).</div>
 </div>
 
 <!-- ─── MAIN CONTENT ─── -->
@@ -1204,6 +1181,7 @@ function recalc() {
   renderChiller(totB);
 
   document.getElementById('res-badge').textContent = f0(totB)+' BTU · '+f1(totW/1000)+' kW';
+  if(typeof syncACState==="function"){ syncACState(); if(typeof saveActive==="function") saveActive(); }
 }
 
 // ── RENDER FUNCTIONS ───────────────────────────────────────────────────────
@@ -1415,8 +1393,8 @@ function toggleAcc(hdr) {
 }
 
 function updateTitle() {
-  const n = document.getElementById('f-yacht').value;
-  document.title = n ? `AC Calc – ${n} – Baltic Yachts` : 'AC Cooling – Baltic Yachts';
+  var m=(typeof PROJECT!=="undefined"&&PROJECT.meta)?PROJECT.meta:{};
+  document.title = m.yacht ? 'AC Calc – '+m.yacht+' – Baltic Yachts' : 'AC Cooling – Baltic Yachts';
 }
 
 // ── SUPPLIER EDITOR ────────────────────────────────────────────────────────
@@ -1506,14 +1484,12 @@ function addUnit() {
 
 // ── EXPORT ─────────────────────────────────────────────────────────────────
 function projectMeta() {
+  var m=(typeof PROJECT!=="undefined"&&PROJECT.meta)?PROJECT.meta:{};
   return {
-    yacht:  document.getElementById('f-yacht').value||'—',
-    proj:   document.getElementById('f-proj').value||'—',
-    by:     document.getElementById('f-by').value||'—',
-    date:   document.getElementById('f-date').value||new Date().toISOString().slice(0,10),
-    rev:    document.getElementById('f-rev').value||'—',
-    client: document.getElementById('f-client').value||'—',
-    cls:    document.getElementById('f-class').value,
+    yacht:  m.yacht||'—', proj: m.proj||'—', by: m.by||'—',
+    date:   m.date||new Date().toISOString().slice(0,10),
+    rev:    m.rev||'—', client: '—',
+    cls:    (m.cls||'—')+(m.flag?' + Flag '+m.flag:''),
   };
 }
 
@@ -1772,9 +1748,11 @@ function mountAC(){
   if(AC_MOUNTED){ recalc(); return; }
   el("view-ac").innerHTML = acHTML();
   AC_MOUNTED = true;
-  var d=el("f-date"); if(d) d.value=new Date().toISOString().slice(0,10);
-  var y=el("f-yacht"); if(y && !y.value) y.value=PROJECT.meta.yacht||"";
+  var ro=el("ac-proj-ro");
+  if(ro){ var m=PROJECT.meta||{}; function rf(l,v){return "<div class='field'><label>"+l+"</label><div style='font-size:13px;color:var(--text);font-weight:600;padding:4px 0'>"+(v?esc(String(v)):"&mdash;")+"</div></div>";}
+    ro.innerHTML=rf("Yacht",m.yacht)+rf("Project No.",m.proj)+rf("Type",m.type)+rf("Class",m.cls)+rf("Flag",m.flag)+rf("By",m.by)+rf("Date",m.date)+rf("Revision",m.rev); }
   if(typeof renderConditions==="function") renderConditions();
+  if(S.cabins && S.cabins.length){ S.cabins.forEach(function(c){ renderRow(c); }); }
   updateCabinCount();
   recalc();
 }
@@ -2621,10 +2599,14 @@ function renderHomeRules(){
   var bySys={};
   rs.forEach(function(r){ (bySys[r.sys]=bySys[r.sys]||[]).push(r); });
   var order=["ac","ervent","bilge","seawater","water","thruster","electrical","*"];
-  var html="<div class='card-hdr'><h2>Project Compliance &mdash; Applicable Rules</h2>"+
+  var ynm=PROJECT.meta.yacht||"";
+  var title=ynm?("&#9875; Active Project &mdash; "+esc(ynm)):"No active project";
+  var sub=ynm
+    ?(esc(PROJECT.meta.proj||"")+(PROJECT.meta.type?" &middot; "+esc(PROJECT.meta.type):"")+" &nbsp;|&nbsp; Class <strong style='color:var(--navy)'>"+esc(cls)+"</strong> &nbsp;|&nbsp; Flag <strong style='color:var(--navy)'>"+esc(flag)+"</strong> ("+flagGroupLabel(fg)+")")
+    :"Create or open a project below to set the class &amp; flag and apply the rules.";
+  var html="<div class='card-hdr'><h2>"+title+"</h2>"+
     "<button class='btn btn-line btn-sm no-print' onclick='openRulesEditor()'>&#9881; Manage Rules</button></div>"+
-    "<div style='padding:10px 20px 4px;font-size:12px;color:var(--g500)'>Class <strong style='color:var(--navy)'>"+esc(cls)+
-    "</strong> &nbsp;|&nbsp; Flag <strong style='color:var(--navy)'>"+esc(flag)+"</strong> ("+flagGroupLabel(fg)+")</div>"+
+    "<div style='padding:10px 20px 4px;font-size:12px;color:var(--g500)'>"+sub+"</div>"+
     "<div style='padding:8px 20px 16px'>";
   order.forEach(function(s){ if(!bySys[s])return;
     html+="<div style='margin:8px 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold)'>"+esc(SYS_LABEL[s]||s)+"</div>";
@@ -2762,6 +2744,15 @@ function flagOptionsHTML(sel){
   return h;
 }
 
+function autosaveProject(){
+  if(!PROJECT.meta || !PROJECT.meta.yacht) return;
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  var idx=list.findIndex(function(p){return p.meta.yacht===PROJECT.meta.yacht && (p.meta.proj||"")===(PROJECT.meta.proj||"");});
+  if(idx<0) return;                 // only auto-update an existing saved project
+  var snap=JSON.parse(JSON.stringify(PROJECT)); snap.savedAt=list[idx].savedAt||PROJECT.meta.date||"";
+  list[idx]=snap; localStorage.setItem("by_projects",JSON.stringify(list));
+}
+
 /* ---------- PWA ---------- */
 function makeIcon(sz){
   var c=document.createElement("canvas");c.width=c.height=sz;
@@ -2802,31 +2793,9 @@ window.addEventListener("DOMContentLoaded",function(){
   renderRoute();
 });
 </script>
-
-  <!-- ===== Mobile back button ===== -->
-<style>
-#back-btn{display:none;position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
-  z-index:9999;width:50px;height:50px;border:none;border-radius:50%;background:var(--navy);color:#fff;
-  font-size:26px;line-height:1;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(26,39,68,.4);cursor:pointer;-webkit-tap-highlight-color:transparent}
-@media (max-width:820px){ #back-btn.show{display:flex} }
-</style>
+<!-- ===== Mobile back button ===== -->
+<style>#back-btn{display:none;position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:9999;width:50px;height:50px;border:none;border-radius:50%;background:var(--navy);color:#fff;font-size:26px;line-height:1;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(26,39,68,.4);cursor:pointer;-webkit-tap-highlight-color:transparent}@media (max-width:820px){#back-btn.show{display:flex}}</style>
 <button id="back-btn" onclick="goBack()" aria-label="Back">&#8592;</button>
-<script>
-function goBack(){
-  var r=(location.hash||"#/home").replace("#/","")||"home";
-  if(r==="home")return;
-  var def=(typeof ROUTES!=="undefined")?ROUTES[r]:null;
-  if(def&&def.crumb&&def.crumb.length>1){ go(def.crumb[def.crumb.length-2][1]||"home"); }
-  else history.back();
-}
-function updateBackBtn(){
-  var r=(location.hash||"#/home").replace("#/","")||"home";
-  var b=document.getElementById("back-btn"); if(b) b.classList.toggle("show", r!=="home");
-}
-window.addEventListener("hashchange",updateBackBtn);
-updateBackBtn();
-  
-</script>
+<script>function goBack(){var r=(location.hash||"#/home").replace("#/","")||"home";if(r==="home")return;var def=(typeof ROUTES!=="undefined")?ROUTES[r]:null;if(def&&def.crumb&&def.crumb.length>1){go(def.crumb[def.crumb.length-2][1]||"home");}else history.back();}function updateBackBtn(){var r=(location.hash||"#/home").replace("#/","")||"home";var b=document.getElementById("back-btn");if(b)b.classList.toggle("show",r!=="home");}window.addEventListener("hashchange",updateBackBtn);updateBackBtn();</script>
 </body>
 </html>
