@@ -2802,5 +2802,31 @@ window.addEventListener("DOMContentLoaded",function(){
   renderRoute();
 });
 </script>
+
+  <!-- ===== Mobile back button ===== -->
+<style>
+#back-btn{display:none;position:fixed;left:14px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  z-index:9999;width:50px;height:50px;border:none;border-radius:50%;background:var(--navy);color:#fff;
+  font-size:26px;line-height:1;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(26,39,68,.4);cursor:pointer;-webkit-tap-highlight-color:transparent}
+@media (max-width:820px){ #back-btn.show{display:flex} }
+</style>
+<button id="back-btn" onclick="goBack()" aria-label="Back">&#8592;</button>
+<script>
+function goBack(){
+  var r=(location.hash||"#/home").replace("#/","")||"home";
+  if(r==="home")return;
+  var def=(typeof ROUTES!=="undefined")?ROUTES[r]:null;
+  if(def&&def.crumb&&def.crumb.length>1){ go(def.crumb[def.crumb.length-2][1]||"home"); }
+  else history.back();
+}
+function updateBackBtn(){
+  var r=(location.hash||"#/home").replace("#/","")||"home";
+  var b=document.getElementById("back-btn"); if(b) b.classList.toggle("show", r!=="home");
+}
+window.addEventListener("hashchange",updateBackBtn);
+updateBackBtn();
+  
+</script>
 </body>
 </html>
