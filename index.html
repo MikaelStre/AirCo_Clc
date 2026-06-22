@@ -421,7 +421,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
   <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
 
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.21 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.23 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
 
 <script>
 /* ================================================================
@@ -1896,7 +1896,8 @@ function ervCalc(){
     row("Duct hydraulic diameter","Ø",f0(r.Dduct),"mm","√(Q<sub>in</sub>/v<sub>duct</sub>/π)×2")+
     row("Fire damper cross section","A<sub>fd</sub>",f3(r.Afd)+" / "+f0(r.Afd*10000),"m² / cm²","Q<sub>in</sub> / v<sub>damper</sub>")+
     row("Supply fan electrical","P<sub>sup</sub>",f2(r.fanIn),"kW","Q<sub>in</sub>·Δp / η")+
-    (efan?row("Suggested blower (Gianneschi)",esc(efan.m),"axial · "+efan.kw+" kW","ELL, "+f0(efan.qmax)+" m³/h free; verify duty pt vs curve at system Δp"):"")+
+    (typeof equipSelRow==="function"?equipSelRow("Supply blower (Gianneschi)",GIANNESCHI_FANS,(ervState().supFan||""),r.Qin*3600,"fan","ervSupFanSet",3):"")+
+    (typeof equipSelRow==="function"?equipSelRow("Exhaust blower (Gianneschi)",GIANNESCHI_FANS,(ervState().exhFan||""),r.Qout*3600,"fan","ervExhFanSet",3):"")+
     row("Exhaust fan electrical","P<sub>exh</sub>",f2(r.fanOut),"kW","Q<sub>out</sub>·Δp / η");
 }
 function f3(n){return Number(n).toFixed(3);}
@@ -2003,7 +2004,8 @@ function bilCompute(){
 function bilCalc(){
   if(!el("bil-results"))return;
   var s=bilState(),r=bilCompute();
-  var bpump=(typeof suggestPumpByBore==="function"&&typeof GIANNESCHI_BILGE!=="undefined")?suggestPumpByBore(GIANNESCHI_BILGE,r.d):null;
+  var bpsel=(typeof bilState==="function")?(bilState().pumpSel||""):"";
+  var bpump=(typeof GIANNESCHI_BILGE!=="undefined")?(bpsel?GIANNESCHI_BILGE.filter(function(x){return x.m===bpsel;})[0]:(typeof suggestPumpByBore==="function"?suggestPumpByBore(GIANNESCHI_BILGE,r.d):null)):null;
   el("bil-badge").textContent=f1(r.d)+" mm main pipe";
   el("bil-kpi").innerHTML=
     "<div class='kpi'><div class='kpi-l'>Main Pipe d</div><div class='kpi-v'>"+f1(r.d)+"</div><div class='kpi-u'>mm inner</div></div>"+
@@ -2020,7 +2022,7 @@ function bilCalc(){
     row("Pump capacity",f0(r.Qlmin),"l/min","Q × 1000 / 60")+
     row("Pump capacity",f2(r.Qls),"l/s","Q / 3.6")+
     row("Bilge pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)")+
-    (bpump?row("Suggested pump (Gianneschi)",esc(bpump.m),"DN"+bpump.dn+" · "+bpump.kw+" kW · "+bpump.w+" kg","self-priming, bore ≥ d; verify "+f1(r.Qm3h)+" m³/h vs curve"):"");
+    (typeof equipSelRow==="function"?equipSelRow("Bilge pump (Gianneschi)",GIANNESCHI_BILGE,bpsel,r.d,"pump","bilPumpSet",2):"");
 }
 function bilToElectrical(){
   var r=bilCompute();
@@ -2108,7 +2110,8 @@ function swCalc(){
     row("Total flow",f3(r.Qm3s),"m³/s","qtot / 60 / 1000")+
     row("Seawater inlet pipe dia","di = "+f1(r.di),"mm","√(4Q / (π·Vmax)) × 1000")+
     row("Max velocity",f2(s.vmax),"m/s","pipe & inlet strainer")+
-    row("Seawater pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)");
+    row("Seawater pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)")+
+    "<tr><td colspan='4' style='color:var(--g500);font-size:12px;padding-top:10px;line-height:1.5'>&#9432; Main engine &amp; generator(s) are cooled by their <strong>own engine-driven seawater pumps</strong> &mdash; they do not require a separate seawater pump. No pump is selected on the seawater side at this stage.</td></tr>";
 }
 function swToElectrical(){
   var r=swCompute();
@@ -2350,7 +2353,7 @@ function watCalc(){
     row("Suggested holding/buffer tank",f0(r.wasteTankSuggest),"l","inflow during "+f1(24-w.treatRun)+" idle h &times; "+f1(w.wasteSF))+
     row("Holding tank installed",f0(w.wasteTank),"l",(r.wasteOK?"OK":"below suggested"))+
     row("Treatment unit power",f2(w.elec.stp)+" / "+f0(w.elec.stp*1000),"kW / W","documented HLCC-0125 components")+
-    ((typeof GIANNESCHI_FW!=="undefined"&&GIANNESCHI_FW.length)?row("Fresh-water pump (Gianneschi CP)",esc(GIANNESCHI_FW[0].m)+" … "+esc(GIANNESCHI_FW[GIANNESCHI_FW.length-1].m),"CP series","select model per peak flow &amp; head from pump curve (demand "+f0(r.usage)+" l/day)"):"")+
+    ((typeof equipSelRow==="function"&&typeof GIANNESCHI_FW!=="undefined")?equipSelRow("Fresh-water pump (Gianneschi CP)",GIANNESCHI_FW,(w.fwPump||""),0,"pump","watFwPumpSet",2):"")+
     row("Flocculant consumption",f2(r.floc),"l/day","40 ml/h nominal (manual 9.4)")+
     row("Sludge production",f1(r.sludgeDay),"l/day",f1(w.sludgePct)+"% of treated wastewater")+
     row("Recommended sludge tank",f0(r.sludgeReq),"l",f1(r.sludgeDay)+" l/d &times; "+f0(w.sludgeDays)+" d &times; "+f1(w.sludgeSF))+
@@ -2829,6 +2832,24 @@ function suggestPumpByBore(db, reqDia){
   for(var i=0;i<list.length;i++){ if(list[i].dn>=reqDia) return list[i]; }
   return list.length?list[list.length-1]:null;
 }
+
+
+/* ---- Manual / auto equipment selection rows (pumps & fans) ---- */
+function equipSelRow(label, db, selModel, req, kind, setterName, midColspan){
+  var sorted=db.slice().sort(function(a,z){return (kind==="fan"?a.qmax-z.qmax:a.dn-z.dn);});
+  var chosen = selModel ? db.filter(function(x){return x.m===selModel;})[0] : (kind==="fan"?suggestFan(db,req):suggestPumpByBore(db,req));
+  var hasReq = req>0;
+  var covers = (chosen&&hasReq) ? (kind==="fan"? chosen.qmax>=req-1e-6 : chosen.dn>=req-1e-6) : true;
+  var opts="<option value=''>Auto"+(hasReq?" (smallest covering)":"")+"</option>"+sorted.map(function(x){return "<option"+(x.m===selModel?" selected":"")+">"+esc(x.m)+"</option>";}).join("");
+  var spec = chosen ? (kind==="fan"? (f0(chosen.qmax)+" m³/h · "+chosen.kw+" kW") : ("DN"+chosen.dn+" · "+chosen.kw+" kW")) : "";
+  var sel="<select onchange=\""+setterName+"(this.value)\" class='no-print' style='padding:4px 6px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px;max-width:190px'>"+opts+"</select>";
+  var status=(chosen&&hasReq)?(covers?"<span class='pill p-ok'>OK</span>":"<span class='pill p-err'>under</span>"):"";
+  return "<tr><td>"+label+"</td><td colspan='"+midColspan+"'>"+sel+" <strong>"+(chosen?esc(chosen.m):"—")+"</strong> <span style='color:var(--g500);font-size:12px'>"+spec+"</span></td><td>"+status+"</td></tr>";
+}
+function bilPumpSet(v){ if(typeof bilState==="function"){bilState().pumpSel=v; if(typeof saveActive==="function")saveActive(); if(typeof bilCalc==="function")bilCalc();} }
+function ervSupFanSet(v){ if(typeof ervState==="function"){ervState().supFan=v; if(typeof ervSave==="function")ervSave(); if(typeof ervCalc==="function")ervCalc();} }
+function ervExhFanSet(v){ if(typeof ervState==="function"){ervState().exhFan=v; if(typeof ervSave==="function")ervSave(); if(typeof ervCalc==="function")ervCalc();} }
+function watFwPumpSet(v){ if(typeof watState==="function"){watState().fwPump=v; if(typeof saveActive==="function")saveActive(); if(typeof watCalc==="function")watCalc();} }
 
 /* ---------- PWA ---------- */
 function makeIcon(sz){
