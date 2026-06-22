@@ -582,7 +582,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.47 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.48 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -4236,25 +4236,88 @@ function intOrderRender(){
   });
   el("int-ord-body").innerHTML=html;
 }
+/* Styled export matching the original "Interior materials.xlsm" look & colouring */
+var INT_XL_NAVY="1A2744",INT_XL_GOLD="C9A96E",INT_XL_WHITE="FFFFFF",INT_XL_HAIR="D7DCE3",INT_XL_SOFT="F4F6F9";
+var INT_XL_CATFILL={H:"A9CD90",L:"FFFFCC",M:"F4B083",S:"BDD6EE"}; /* exact colours from the original file */
+function intXlThin(col){col=col||INT_XL_HAIR;var s={style:"thin",color:{rgb:col}};return {top:s,bottom:s,left:s,right:s};}
 function intMatExcel(){
   if(!window.XLSX){alert("Excel library loading.");return;}
-  var m=PROJECT.meta, all=intMatItems(), wb=XLSX.utils.book_new();
+  var XL=XLSX, m=PROJECT.meta||{}, all=intMatItems(), wb=XL.utils.book_new();
+  var today=intToday();
   var catOrder={H:0,L:1,M:2,S:3};
-  var sorted=all.slice().sort(function(a,b){var ca=(catOrder[a.cat]==null?9:catOrder[a.cat]),cb=(catOrder[b.cat]==null?9:catOrder[b.cat]);if(ca!==cb)return ca-cb;return (a.supplier||"").localeCompare(b.supplier||"");});
-  var head=["Key","Cat","Cabin","Qty","Supplier","Part No","Description","Art No","Status","Added","Approved","Order No","Notes"];
-  var a=[["Baltic Yachts - Interior Materials, Order Summary"],["Yacht",m.yacht,"Project",m.proj],[],head];
-  sorted.forEach(function(it){a.push([it.key||"",it.cat||"",intCabName(it.cabinId),it.qty||"",it.supplier||"",it.part||"",it.desc||"",it.art||"",it.stat||"",it.added||"",it.approved||"",it.ordNo||"",it.notes||""]);});
-  a.push([],[disclaimerLine()]);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Order Summary");
-  // one sheet per cabin that has items
+  // ----- style presets -----
+  var F_TITLE={fill:{patternType:"solid",fgColor:{rgb:INT_XL_NAVY}},font:{bold:true,color:{rgb:INT_XL_WHITE},sz:13,name:"Calibri"},alignment:{vertical:"center"}};
+  var F_SUB={fill:{patternType:"solid",fgColor:{rgb:INT_XL_NAVY}},font:{bold:false,color:{rgb:INT_XL_GOLD},sz:9,name:"Calibri"},alignment:{vertical:"center"}};
+  var F_LBL={font:{bold:true,sz:9,name:"Calibri",color:{rgb:INT_XL_NAVY}}};
+  var F_VAL={font:{sz:9,name:"Calibri",color:{rgb:"222222"}}};
+  var F_KEYW={font:{bold:true,sz:9,name:"Calibri"},alignment:{horizontal:"left"}};
+  var F_HEAD={fill:{patternType:"solid",fgColor:{rgb:INT_XL_NAVY}},font:{bold:true,color:{rgb:INT_XL_WHITE},sz:9,name:"Calibri"},alignment:{horizontal:"left",vertical:"center",wrapText:true},border:intXlThin(INT_XL_NAVY)};
+  var F_DISC={font:{italic:true,sz:8,name:"Calibri",color:{rgb:"6B7280"}},alignment:{wrapText:true,vertical:"top"}};
+  function catCellStyle(cat){return {fill:{patternType:"solid",fgColor:{rgb:INT_XL_CATFILL[cat]||"EEEEEE"}},font:{bold:true,sz:9,name:"Calibri",color:{rgb:"222222"}},alignment:{horizontal:"center"},border:intXlThin()};}
+  function dataStyle(){return {font:{sz:9,name:"Calibri",color:{rgb:"222222"}},alignment:{vertical:"top",wrapText:true},border:intXlThin()};}
+  function groupStyle(cat){return {fill:{patternType:"solid",fgColor:{rgb:INT_XL_CATFILL[cat]||"EEEEEE"}},font:{bold:true,sz:9,name:"Calibri",color:{rgb:INT_XL_NAVY}},alignment:{horizontal:"left",vertical:"center"}};}
+  function C(v,s){return {v:(v==null?"":v),s:s};}
+  // ----- sheet builder -----
+  function buildSheet(headerTitle,contentLabel,items,includeCabin){
+    var cols=includeCabin
+      ? ["Key","Qty","Cabin","Supplier","Part No.","Description","Art. No.","Stat","Added","Approved","Ord.No.","Notes"]
+      : ["Key","Qty","Supplier","Part No.","Description","Art. No.","Stat","Added","Approved","Ord.No.","Notes"];
+    var nc=cols.length, M=[], merges=[];
+    function pad(row){while(row.length<nc)row.push(C("",row===rowRef?F_VAL:undefined));return row;}
+    var rowRef=null;
+    // title band (row 0)
+    var t=[C("INTERIOR MATERIALS LIST",F_TITLE)];for(var i=1;i<nc;i++)t.push(C("",F_TITLE));M.push(t);merges.push({s:{r:0,c:0},e:{r:0,c:nc-1}});
+    // sub band (row 1) — yacht / project / IFS
+    var sub="Baltic Yachts"+(m.yacht?("  ·  "+m.yacht):"")+(m.proj?("  ·  Project "+m.proj):"");
+    var sr=[C(sub,F_SUB)];for(i=1;i<nc;i++)sr.push(C("",F_SUB));M.push(sr);merges.push({s:{r:1,c:0},e:{r:1,c:nc-1}});
+    M.push([]); // row2 spacer
+    // header block rows 3-5
+    M.push([C("NAME",F_LBL),C("",F_VAL),C("IFS ID:",F_LBL),C(m.proj||"",F_VAL)]);
+    M.push([C("CONTENT",F_LBL),C("",F_VAL),C(contentLabel,F_VAL)]);
+    M.push([C("UPDATED",F_LBL),C("",F_VAL),C(today,F_VAL)]);
+    M.push([]); // spacer
+    // KEY legend (rows 7..)
+    M.push([C("KEY",F_LBL)]);
+    var legend=[["H","HARDWARE & APPLIANCES"],["L","ELECTRICAL & LIGHTS"],["M","MATERIALS & FABRICS"],["S","SURFACE FINISHES"]];
+    legend.forEach(function(lg){
+      M.push([C(lg[0],catCellStyle(lg[0])),C(lg[1],{font:{bold:true,sz:9,name:"Calibri",color:{rgb:"222222"}}}),C("All "+lg[0]+"-coded items are highlighted in this colour.",F_VAL)]);
+    });
+    M.push([]); // spacer
+    // column header row
+    M.push(cols.map(function(h){return C(h,F_HEAD);}));
+    // data, grouped by category
+    var sorted=items.slice().sort(function(a,b){var ca=(catOrder[a.cat]==null?9:catOrder[a.cat]),cb=(catOrder[b.cat]==null?9:catOrder[b.cat]);if(ca!==cb)return ca-cb;var s1=(a.supplier||"").toLowerCase(),s2=(b.supplier||"").toLowerCase();if(s1<s2)return -1;if(s1>s2)return 1;return (a.key||"").localeCompare(b.key||"");});
+    var lastCat=null;
+    sorted.forEach(function(it){
+      if(it.cat!==lastCat){lastCat=it.cat;var gm=intCatMeta(it.cat);var gr=[C(gm.k+" — "+gm.l,groupStyle(it.cat))];for(var j=1;j<nc;j++)gr.push(C("",groupStyle(it.cat)));M.push(gr);merges.push({s:{r:M.length-1,c:0},e:{r:M.length-1,c:nc-1}});}
+      var keyCell=C(it.key||"",catCellStyle(it.cat));
+      var row=includeCabin
+        ? [keyCell,C(it.qty||"",dataStyle()),C(intCabName(it.cabinId),dataStyle()),C(it.supplier||"",dataStyle()),C(it.part||"",dataStyle()),C(it.desc||"",dataStyle()),C(it.art||"",dataStyle()),C(it.stat||"",dataStyle()),C(it.added||"",dataStyle()),C(it.approved||"",dataStyle()),C(it.ordNo||"",dataStyle()),C(it.notes||"",dataStyle())]
+        : [keyCell,C(it.qty||"",dataStyle()),C(it.supplier||"",dataStyle()),C(it.part||"",dataStyle()),C(it.desc||"",dataStyle()),C(it.art||"",dataStyle()),C(it.stat||"",dataStyle()),C(it.added||"",dataStyle()),C(it.approved||"",dataStyle()),C(it.ordNo||"",dataStyle()),C(it.notes||"",dataStyle())];
+      M.push(row);
+    });
+    if(!sorted.length){var er=[C("No items",F_VAL)];M.push(er);}
+    M.push([]);
+    M.push([C(disclaimerLine(),F_DISC)]);merges.push({s:{r:M.length-1,c:0},e:{r:M.length-1,c:nc-1}});
+    // encode
+    var ws={},maxC=0;
+    for(var r=0;r<M.length;r++){var row=M[r]||[];if(row.length>maxC)maxC=row.length;
+      for(var c=0;c<row.length;c++){var cell=row[c];if(cell==null)continue;var ref=XL.utils.encode_cell({r:r,c:c});var isNum=(typeof cell.v==="number");ws[ref]={v:(cell.v==null?"":cell.v),t:isNum?"n":"s"};if(cell.s)ws[ref].s=cell.s;}}
+    ws["!ref"]=XL.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(0,M.length-1),c:Math.max(0,Math.max(maxC,nc)-1)}});
+    var widths=includeCabin?[9,6,22,18,14,46,14,7,13,13,10,24]:[9,6,18,14,46,14,7,13,13,10,24];
+    ws["!cols"]=widths.map(function(w){return {wch:w};});
+    ws["!merges"]=merges;
+    ws["!rows"]=[{hpt:20},{hpt:15}];
+    return ws;
+  }
+  XL.utils.book_append_sheet(wb,buildSheet("INTERIOR MATERIALS LIST","Order Summary",all,true),"Order Summary");
   intMatCabins().forEach(function(c){
     var its=intCabItems(c.id); if(!its.length)return;
-    var s=[["Cabin",c.name],["Yacht",m.yacht,"Project",m.proj],[],head.filter(function(h){return h!=="Cabin";})];
-    its.forEach(function(it){s.push([it.key||"",it.cat||"",it.qty||"",it.supplier||"",it.part||"",it.desc||"",it.art||"",it.stat||"",it.added||"",it.approved||"",it.ordNo||"",it.notes||""]);});
-    var nm=c.name.replace(/[\\\/\?\*\[\]:]/g,"").slice(0,31)||("Cabin");
-    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(s),nm);
+    var nm=c.name.replace(/[\\\/\?\*\[\]:]/g,"").slice(0,31)||"Cabin";
+    XL.utils.book_append_sheet(wb,buildSheet("INTERIOR MATERIALS LIST",c.name,its,false),nm);
   });
-  XLSX.writeFile(wb,"Baltic_Interior_Materials_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+  var fn="Baltic_Interior_Materials_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
+  try{XL.writeFile(wb,fn);}catch(e){var o=XL.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
 }
 
 /* ---------- PWA ---------- */
