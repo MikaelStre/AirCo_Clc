@@ -387,8 +387,11 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
     <div style="margin-top:10px;font-size:11px;color:var(--g500)">Project details are read-only. To create, copy or edit a project, use the Home page.</div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-line btn-sm" onclick="go('home');closeProjModal()">&#127968; Manage on Home</button>
-    <button class="btn btn-primary btn-sm" onclick="closeProjModal()">Close</button>
+    <button class="btn btn-gold btn-sm" onclick="saveCurrentProject()">&#128190; Save to active project</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-line btn-sm" onclick="go('home');closeProjModal()">&#127968; Manage on Home</button>
+      <button class="btn btn-primary btn-sm" onclick="closeProjModal()">Close</button>
+    </div>
   </div>
 </div>
 
@@ -418,7 +421,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
   <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
 
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.20 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.21 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
 
 <script>
 /* ================================================================
@@ -499,7 +502,7 @@ function openProjModal(){
   function rf(l,v){return "<div class='field'><label>"+l+"</label><div style='font-size:14px;color:var(--text);font-weight:600;padding:4px 0'>"+(v?esc(String(v)):"&mdash;")+"</div></div>";}
   el("pm-ro").innerHTML=rf("Yacht",m.yacht)+rf("Project No.",m.proj)+rf("Type",m.type)+rf("Class Society",m.cls)+
     rf("Flag",(m.flag?m.flag+(fg&&typeof flagGroupLabel==="function"?" ("+flagGroupLabel(fg)+")":""):""))+
-    rf("Calculated By",m.by)+rf("Revision",m.rev);
+    rf("Calculated By",m.by)+rf("Revision",m.rev)+rf("Saved version",m.version?("v"+m.version):"&mdash;");
   renderProjList();
   el("proj-overlay").classList.add("show");el("proj-modal").classList.add("show");
 }
@@ -1865,6 +1868,7 @@ function ervCompute(){
 function ervCalc(){
   if(!E("results"))return;
   var r=ervCompute();
+  var efan=(typeof suggestFan==="function"&&typeof GIANNESCHI_FANS!=="undefined")?suggestFan(GIANNESCHI_FANS,r.Qin*3600):null;
   if(E("ertemp"))E("ertemp").textContent=f1(r.ertemp)+" °C";
   E("badge").textContent=f1(r.Qin*3600)+" m³/h supply";
   E("kpi").innerHTML=
@@ -1892,6 +1896,7 @@ function ervCalc(){
     row("Duct hydraulic diameter","Ø",f0(r.Dduct),"mm","√(Q<sub>in</sub>/v<sub>duct</sub>/π)×2")+
     row("Fire damper cross section","A<sub>fd</sub>",f3(r.Afd)+" / "+f0(r.Afd*10000),"m² / cm²","Q<sub>in</sub> / v<sub>damper</sub>")+
     row("Supply fan electrical","P<sub>sup</sub>",f2(r.fanIn),"kW","Q<sub>in</sub>·Δp / η")+
+    (efan?row("Suggested blower (Gianneschi)",esc(efan.m),"axial · "+efan.kw+" kW","ELL, "+f0(efan.qmax)+" m³/h free; verify duty pt vs curve at system Δp"):"")+
     row("Exhaust fan electrical","P<sub>exh</sub>",f2(r.fanOut),"kW","Q<sub>out</sub>·Δp / η");
 }
 function f3(n){return Number(n).toFixed(3);}
@@ -1998,13 +2003,15 @@ function bilCompute(){
 function bilCalc(){
   if(!el("bil-results"))return;
   var s=bilState(),r=bilCompute();
+  var bpump=(typeof suggestPumpByBore==="function"&&typeof GIANNESCHI_BILGE!=="undefined")?suggestPumpByBore(GIANNESCHI_BILGE,r.d):null;
   el("bil-badge").textContent=f1(r.d)+" mm main pipe";
   el("bil-kpi").innerHTML=
     "<div class='kpi'><div class='kpi-l'>Main Pipe d</div><div class='kpi-v'>"+f1(r.d)+"</div><div class='kpi-u'>mm inner</div></div>"+
     "<div class='kpi'><div class='kpi-l'>Pump Capacity</div><div class='kpi-v'>"+f1(r.Qm3h)+"</div><div class='kpi-u'>m³/h</div></div>"+
     "<div class='kpi'><div class='kpi-l'>Pump Capacity</div><div class='kpi-v'>"+f0(r.Qlmin)+"</div><div class='kpi-u'>l/min</div></div>"+
     "<div class='kpi'><div class='kpi-l'>Pump Capacity</div><div class='kpi-v'>"+f1(r.Qls)+"</div><div class='kpi-u'>l/s</div></div>"+
-    "<div class='kpi'><div class='kpi-l'>Pump Electrical</div><div class='kpi-v'>"+f2(r.pumpKW)+"</div><div class='kpi-u'>kW</div></div>";
+    "<div class='kpi'><div class='kpi-l'>Pump Electrical</div><div class='kpi-v'>"+f2(r.pumpKW)+"</div><div class='kpi-u'>kW</div></div>"+
+    (bpump?"<div class='kpi'><div class='kpi-l'>Suggested pump</div><div class='kpi-v' style='font-size:16px'>"+esc(bpump.m)+"</div><div class='kpi-u'>DN"+bpump.dn+" · "+bpump.kw+" kW</div></div>":"");
   function row(q,v,u,ref){return "<tr><td>"+q+"</td><td><strong>"+v+"</strong></td><td>"+u+"</td><td style='color:var(--g500)'>"+ref+"</td></tr>";}
   el("bil-tbl").innerHTML=
     row("Rule applied",s.rule,"","RINA Pt C Ch1 Sec9 / DNV")+
@@ -2012,7 +2019,8 @@ function bilCalc(){
     row("Pump minimum capacity",f2(r.Qm3h),"m³/h",(s.rule==="RINA"?"0.0058·d²":"0.00575·d²"))+
     row("Pump capacity",f0(r.Qlmin),"l/min","Q × 1000 / 60")+
     row("Pump capacity",f2(r.Qls),"l/s","Q / 3.6")+
-    row("Bilge pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)");
+    row("Bilge pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)")+
+    (bpump?row("Suggested pump (Gianneschi)",esc(bpump.m),"DN"+bpump.dn+" · "+bpump.kw+" kW · "+bpump.w+" kg","self-priming, bore ≥ d; verify "+f1(r.Qm3h)+" m³/h vs curve"):"");
 }
 function bilToElectrical(){
   var r=bilCompute();
@@ -2342,6 +2350,7 @@ function watCalc(){
     row("Suggested holding/buffer tank",f0(r.wasteTankSuggest),"l","inflow during "+f1(24-w.treatRun)+" idle h &times; "+f1(w.wasteSF))+
     row("Holding tank installed",f0(w.wasteTank),"l",(r.wasteOK?"OK":"below suggested"))+
     row("Treatment unit power",f2(w.elec.stp)+" / "+f0(w.elec.stp*1000),"kW / W","documented HLCC-0125 components")+
+    ((typeof GIANNESCHI_FW!=="undefined"&&GIANNESCHI_FW.length)?row("Fresh-water pump (Gianneschi CP)",esc(GIANNESCHI_FW[0].m)+" … "+esc(GIANNESCHI_FW[GIANNESCHI_FW.length-1].m),"CP series","select model per peak flow &amp; head from pump curve (demand "+f0(r.usage)+" l/day)"):"")+
     row("Flocculant consumption",f2(r.floc),"l/day","40 ml/h nominal (manual 9.4)")+
     row("Sludge production",f1(r.sludgeDay),"l/day",f1(w.sludgePct)+"% of treated wastewater")+
     row("Recommended sludge tank",f0(r.sludgeReq),"l",f1(r.sludgeDay)+" l/d &times; "+f0(w.sludgeDays)+" d &times; "+f1(w.sludgeSF))+
@@ -2605,7 +2614,7 @@ function renderHomeRules(){
     ?(esc(PROJECT.meta.proj||"")+(PROJECT.meta.type?" &middot; "+esc(PROJECT.meta.type):"")+" &nbsp;|&nbsp; Class <strong style='color:var(--navy)'>"+esc(cls)+"</strong> &nbsp;|&nbsp; Flag <strong style='color:var(--navy)'>"+esc(flag)+"</strong> ("+flagGroupLabel(fg)+")")
     :"Create or open a project below to set the class &amp; flag and apply the rules.";
   var html="<div class='card-hdr'><h2>"+title+"</h2>"+
-    "<button class='btn btn-line btn-sm no-print' onclick='openRulesEditor()'>&#9881; Manage Rules</button></div>"+
+    "<div style='display:flex;gap:6px' class='no-print'>"+(ynm?"<button class='btn btn-gold btn-sm' onclick='saveCurrentProject()'>&#128190; Save version</button>":"")+"<button class='btn btn-line btn-sm' onclick='openRulesEditor()'>&#9881; Manage Rules</button></div></div>"+
     "<div style='padding:10px 20px 4px;font-size:12px;color:var(--g500)'>"+sub+"</div>"+
     "<div style='padding:8px 20px 16px'>";
   order.forEach(function(s){ if(!bySys[s])return;
@@ -2691,14 +2700,36 @@ function createProjectFromHome(){
   alert('Project "'+y+'" created. Class '+PROJECT.meta.cls+(PROJECT.meta.flag?' + Flag '+PROJECT.meta.flag:'')+'.');
 }
 function saveCurrentProject(){
-  if(!PROJECT.meta.yacht){ alert("Open or create a project first."); return; }
+  if(!PROJECT.meta||!PROJECT.meta.yacht){ alert("Open or create a project first."); return; }
   syncACState();
+  PROJECT.meta.version=(+PROJECT.meta.version||0)+1;     // bump version on explicit save
   var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
-  var snap=JSON.parse(JSON.stringify(PROJECT)); snap.savedAt=new Date().toISOString().split("T")[0];
-  var idx=list.findIndex(function(p){return p.meta.yacht===PROJECT.meta.yacht&&p.meta.proj===PROJECT.meta.proj;});
+  var idx=list.findIndex(function(p){return p.meta.yacht===PROJECT.meta.yacht&&(p.meta.proj||"")===(PROJECT.meta.proj||"");});
+  var hist=(idx>=0&&list[idx].versions)?list[idx].versions.slice():[];
+  hist.push({version:PROJECT.meta.version, at:(PROJECT.meta.date||""), data:JSON.parse(JSON.stringify(PROJECT))});
+  if(hist.length>12)hist=hist.slice(hist.length-12);
+  var snap=JSON.parse(JSON.stringify(PROJECT)); snap.savedAt=(PROJECT.meta.date||""); snap.versions=hist;
   if(idx>=0)list[idx]=snap; else list.push(snap);
   localStorage.setItem("by_projects",JSON.stringify(list));
-  renderHomeProjects(); alert('Saved "'+PROJECT.meta.yacht+'".');
+  saveActive();
+  if(typeof renderHomeProjects==="function")renderHomeProjects();
+  if(typeof renderHomeRules==="function")renderHomeRules();
+  if(typeof renderProjList==="function")renderProjList();
+  alert('Saved "'+PROJECT.meta.yacht+'" as version v'+PROJECT.meta.version+'.');
+}
+function restoreVersion(projIdx, vIdx){
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  if(!list[projIdx]||!list[projIdx].versions||!list[projIdx].versions[vIdx])return;
+  var v=list[projIdx].versions[vIdx];
+  if(!confirm("Restore version v"+v.version+"? Current unsaved changes will be replaced."))return;
+  PROJECT=JSON.parse(JSON.stringify(v.data));
+  if(!PROJECT.consumers)PROJECT.consumers=[];
+  if(typeof restoreACState==="function")restoreACState();
+  if(typeof AC_MOUNTED!=="undefined")AC_MOUNTED=false;
+  saveActive();
+  if(typeof renderHomeProjects==="function")renderHomeProjects();
+  if(typeof renderHomeRules==="function")renderHomeRules();
+  alert("Restored v"+v.version+" of \""+PROJECT.meta.yacht+"\".");
 }
 function openProjectHome(i){
   var list=JSON.parse(localStorage.getItem("by_projects")||"[]"); if(!list[i])return;
@@ -2725,7 +2756,7 @@ function renderHomeProjects(){
   box.innerHTML=list.map(function(p,i){
     var fg=flagGroup(p.meta.flag), isA=(p.meta.yacht===active);
     return "<div style='padding:12px;border:1px solid "+(isA?"var(--gold)":"var(--g200)")+";border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:"+(isA?"var(--gold-bg)":"#fff")+"'>"+
-      "<div style='cursor:pointer;flex:1' onclick='openProjectHome("+i+")'><strong>"+esc(p.meta.yacht||"(unnamed)")+"</strong> <span style='font-size:12px;color:var(--g500)'>"+esc(p.meta.proj||"")+"</span>"+(isA?" <span class='pill p-ok'>active</span>":"")+"<br>"+
+      "<div style='cursor:pointer;flex:1' onclick='openProjectHome("+i+")'><strong>"+esc(p.meta.yacht||"(unnamed)")+"</strong> <span style='font-size:12px;color:var(--g500)'>"+esc(p.meta.proj||"")+(p.meta.version?" · v"+p.meta.version:"")+"</span>"+(isA?" <span class='pill p-ok'>active</span>":"")+"<br>"+
       "<span style='font-size:11px;color:var(--g500)'>"+esc(p.meta.type||"")+" &middot; Class "+esc(p.meta.cls||"—")+" &middot; Flag "+esc(p.meta.flag||"—")+" ("+flagGroupLabel(fg)+") &middot; "+(p.savedAt||"")+"</span></div>"+
       "<div style='display:flex;gap:6px' class='no-print'>"+
         "<button class='btn btn-line btn-xs' onclick='openProjectHome("+i+")'>Open</button>"+
@@ -2748,9 +2779,55 @@ function autosaveProject(){
   if(!PROJECT.meta || !PROJECT.meta.yacht) return;
   var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
   var idx=list.findIndex(function(p){return p.meta.yacht===PROJECT.meta.yacht && (p.meta.proj||"")===(PROJECT.meta.proj||"");});
-  if(idx<0) return;                 // only auto-update an existing saved project
+  if(idx<0) return;
   var snap=JSON.parse(JSON.stringify(PROJECT)); snap.savedAt=list[idx].savedAt||PROJECT.meta.date||"";
+  snap.versions=list[idx].versions||[];                                   // preserve version history
+  if(list[idx].meta&&list[idx].meta.version) snap.meta.version=list[idx].meta.version;  // do not bump on autosave
   list[idx]=snap; localStorage.setItem("by_projects",JSON.stringify(list));
+}
+
+
+/* ================================================================
+   GIANNESCHI EQUIPMENT (from Gianneschi Pumps & Blowers catalogues)
+   Pump data = model, power kW, connection bore DN mm, weight kg.
+   (Flow/head are in the catalogue curves — match by bore DN to the
+   calculated pipe size, then verify duty point against the curve.)
+   ================================================================ */
+var GIANNESCHI_BILGE=[  /* self-priming (bilge / general service) — BMA-S + ACB */
+  {m:"BMA-S 32/110 B1",kw:0.55,dn:32,w:19},{m:"BMA-S 32/110 A1",kw:0.75,dn:32,w:20},
+  {m:"BMA-S 32/125 A1",kw:1.1,dn:32,w:22},{m:"BMA-S 40/160",kw:1.5,dn:40,w:35},
+  {m:"BMA-S 50/160 B1",kw:3,dn:50,w:41},{m:"BMA-S 50/160 A1",kw:4,dn:50,w:46},
+  {m:"BMA-S 65/190",kw:7.5,dn:65,w:130},{m:"BMA-S 65/220",kw:11,dn:65,w:160},
+  {m:"ACB 331/2",kw:1.1,dn:32,w:35},{m:"ACB 431",kw:1.5,dn:40,w:45},
+  {m:"ACB 531/A",kw:4,dn:50,w:63},{m:"ACB 531/C",kw:7.5,dn:50,w:85},
+  {m:"ACB 631/A",kw:7.5,dn:65,w:95},{m:"ACB 631/D",kw:15,dn:65,w:140}
+];
+var GIANNESCHI_FW=[  /* fresh-water / general centrifugal — CP series */
+  {m:"CP 20/A1",kw:0.18,dn:20,w:6},{m:"CP 20/G",kw:0.37,dn:20,w:6.5},
+  {m:"CP 26/A1",kw:0.37,dn:25,w:12},{m:"CP 30/A2",kw:0.55,dn:25,w:16},
+  {m:"CP 30/C2",kw:0.75,dn:25,w:19},{m:"CP 36/C1",kw:0.6,dn:32,w:22},
+  {m:"CP 40",kw:1.5,dn:40,w:28},{m:"CP 40/140",kw:2.2,dn:40,w:51},
+  {m:"CP 65/150",kw:5.5,dn:65,w:95},{m:"CP 65/250",kw:7.5,dn:65,w:110}
+];
+var GIANNESCHI_FANS=[  /* ER ventilation axial blowers — ELL series; qmax = free-delivery m³/h (verify duty pt vs curve at system pressure) */
+  {m:"ELL 215/2",kw:0.2,qmax:1620},{m:"ELL 250/2",kw:0.37,qmax:2580},
+  {m:"ELL/R 315/2",kw:0.55,qmax:4560},{m:"ELL/R 355/2",kw:1.1,qmax:5760},
+  {m:"ELL/R 400/2",kw:1.1,qmax:7620},{m:"ELL/R 500",kw:0.55,qmax:8520},
+  {m:"ELL/R 450/2",kw:2.2,qmax:10860},{m:"ELL/R 560",kw:0.75,qmax:11400},
+  {m:"ELL 710/d",kw:2.2,qmax:20100},{m:"ELL 710/f",kw:4,qmax:28500},
+  {m:"ELL 800/f",kw:5.5,qmax:36900},{m:"ELL 800/g",kw:7.5,qmax:40200},
+  {m:"ELL 900/d",kw:7.5,qmax:47400}
+];
+function suggestFan(db, reqM3h){
+  var list=db.slice().sort(function(a,z){return a.qmax-z.qmax;});
+  for(var i=0;i<list.length;i++){ if(list[i].qmax>=reqM3h) return list[i]; }
+  return list.length?list[list.length-1]:null;
+}
+
+function suggestPumpByBore(db, reqDia){
+  var list=db.slice().sort(function(a,z){return a.dn-z.dn;});
+  for(var i=0;i<list.length;i++){ if(list[i].dn>=reqDia) return list[i]; }
+  return list.length?list[list.length-1]:null;
 }
 
 /* ---------- PWA ---------- */
