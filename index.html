@@ -1,5 +1,7 @@
 **index.html**
 
+**index.html**
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -249,9 +251,8 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
       <p>AC, seawater, bilge, ventilation, water &amp; waste, engine</p>
     </div>
     <div class="cat" onclick="go('interior')">
-      <span class="tag tag-soon">Soon</span>
       <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M3 13a2 2 0 0 1 2 2v2h14v-2a2 2 0 0 1 4 0v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a2 2 0 0 1 2-2z"/><line x1="6" y1="18" x2="6" y2="20"/><line x1="18" y1="18" x2="18" y2="20"/></svg></div><h3>Interior</h3>
-      <p>Joinery, weights, furnishing calculations</p>
+      <p>Cabin materials, procurement &amp; weight schedule</p>
     </div>
     <div class="cat" onclick="go('mechanical')">
       <span class="tag tag-soon">Soon</span>
@@ -340,10 +341,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div class="view" id="view-electrical"></div>
 
 <!-- ===== VIEW: INTERIOR ===== -->
-<div class="view" id="view-interior"><main>
-  <div class="empty"><div class="icon">&#128719;</div><h3>Interior &mdash; coming soon</h3>
-  <p>Joinery weights, furnishing and interior calculations will live here. Tell us which calculation to build first.</p></div>
-</main></div>
+<div class="view" id="view-interior"></div>
 
 <!-- ===== VIEW: MECHANICAL ===== -->
 <div class="view" id="view-mechanical"><main>
@@ -436,9 +434,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
         <li><strong>Preliminary estimates only.</strong> Results, equipment selections and rule compliance must be
         independently checked by a qualified engineer against the applicable class society, flag administration and
         manufacturer documentation before use.</li>
-        <li><strong>Not every discipline is built yet.</strong> Interior (joinery, weights, furnishing) and
-        Mechanical (steering, hydraulics, deck machinery) are placeholders. The Propeller calculation currently
-        opens an external Excel workbook rather than running in-app.</li>
+        <li><strong>Not every discipline is built yet.</strong> Interior now includes a joinery &amp; furnishing
+        weight schedule with LCG; Mechanical (steering, hydraulics, deck machinery) is still a placeholder. The
+        Propeller calculation currently opens an external Excel workbook rather than running in-app.</li>
         <li><strong>The electrical supplier library is still being expanded.</strong> AC consumers feed the load
         balance automatically; charger / inverter / combi units, 24 V&ndash;48 V and high-voltage (800 V) battery
         options are being added.</li>
@@ -584,7 +582,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.42 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.45 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -1011,6 +1009,7 @@ function renderRoute(){
   if(r==="water"){mountWater();}
   if(r==="thruster"){mountThr();}
   if(r==="electrical"){mountElec();}
+  if(r==="interior"){mountInterior();}
   if(r==="summary"){renderSummary();}
   if(r==="home"){if(typeof renderHomeProjects==="function")renderHomeProjects();if(typeof renderHomeRules==="function")renderHomeRules();}
   if(typeof renderPageNotes==="function")renderPageNotes(r);
@@ -3687,6 +3686,425 @@ function elecExcel(){
   XLSX.writeFile(wb,"Baltic_LoadBalance_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 function renderElectrical(){ var v=el("view-electrical"); if(!v)return; if(v.querySelector("#elec-body")){ elecRenderConsumers(); elecCalc(); } else { mountElec(); } }
+
+/* ===================== INTERIOR — Weight & LCG schedule ===================== */
+/* item = {id, zone, cat, desc, qty, unit(kg), lcg(m)} ; weight = qty*unit ; moment = weight*lcg */
+var INT_ZONES=["Owner","VIP / Guest","Saloon","Galley","Heads","Crew","Nav / Other"];
+var INT_CATS=["Joinery","Panel / lining","Furnishing","Soft furnishing","Appliance","Finish / hardware"];
+/* Reference finished-panel areal densities (kg/m2) — preliminary, verify against build spec */
+var INT_PANELS=[
+  {m:"Solid timber joinery",d:16},
+  {m:"Veneered marine ply 12 mm",d:9},
+  {m:"Veneered marine ply 18 mm",d:13},
+  {m:"Foam-cored composite panel (veneered)",d:5},
+  {m:"Nomex honeycomb panel (veneered)",d:3.8},
+  {m:"Carbon-skinned cored panel (ultralight)",d:3.0}
+];
+/* Reference furnishing weights (kg) — editable */
+var INT_FURN=[
+  {m:"Double mattress + base",w:45},
+  {m:"Single berth mattress",w:18},
+  {m:"Saloon sofa (3-seat)",w:60},
+  {m:"Armchair",w:22},
+  {m:"Dining chair",w:6},
+  {m:"Loose table",w:25}
+];
+function intState(){
+  if(!PROJECT.interior) PROJECT.interior={ref:"midships",target:0,items:[]};
+  var d={ref:"midships",target:0,items:[]};
+  for(var k in d){ if(PROJECT.interior[k]===undefined)PROJECT.interior[k]=d[k]; }
+  if(!Array.isArray(PROJECT.interior.items))PROJECT.interior.items=[];
+  return PROJECT.interior;
+}
+function intItems(){ return intState().items; }
+function intNewId(){ return "i"+intItems().length+"_"+Math.round(performance.now()); }
+function intSet(k,v){ intState()[k]=(k==="ref")?v:(Number(v)||0); saveActive(); intCalc(); }
+function intItemSet(id,k,v){ var it=intItems().filter(function(x){return x.id===id;})[0]; if(!it)return; it[k]=(k==="desc"||k==="zone"||k==="cat")?v:Number(v); saveActive(); intCalc(); }
+function intAddItem(seed){ var base={id:intNewId(),zone:INT_ZONES[0],cat:INT_CATS[0],desc:"New item",qty:1,unit:0,lcg:0}; if(seed){for(var k in seed)base[k]=seed[k];} intItems().push(base); saveActive(); intRenderItems(); intCalc(); }
+function intDelItem(id){ intState().items=intItems().filter(function(x){return x.id!==id;}); saveActive(); intRenderItems(); intCalc(); }
+function intClear(){ if(!confirm("Remove ALL interior items from the schedule?"))return; intState().items=[]; saveActive(); intRenderItems(); intCalc(); }
+function intAddFurn(i){ var f=INT_FURN[i]; if(!f)return; intAddItem({cat:"Furnishing",desc:f.m,qty:1,unit:f.w}); }
+function intJoineryAdd(){
+  var pi=+el("int-panel").value||0, area=+el("int-area").value||0, zone=el("int-jzone").value, lcg=+el("int-jlcg").value||0;
+  var p=INT_PANELS[pi]; if(!p||area<=0){alert("Enter a panel area first.");return;}
+  intAddItem({zone:zone,cat:"Joinery",desc:p.m+" — "+f1(area)+" m²",qty:1,unit:+(area*p.d).toFixed(1),lcg:lcg});
+  el("int-area").value="";
+}
+function intZoneOpts(sel){ return INT_ZONES.map(function(z){return "<option"+(z===sel?" selected":"")+">"+z+"</option>";}).join(""); }
+function intCatOpts(sel){ return INT_CATS.map(function(c){return "<option"+(c===sel?" selected":"")+">"+c+"</option>";}).join(""); }
+function intPanelOptsHTML(sel){ return INT_PANELS.map(function(p,i){return "<option value='"+i+"'"+(i===sel?" selected":"")+">"+esc(p.m)+" ("+p.d+" kg/m²)</option>";}).join(""); }
+function intPanelCatHTML(){
+  var rows=INT_PANELS.map(function(p){return "<tr><td style='padding:4px 8px;border-bottom:1px solid var(--g100)'>"+esc(p.m)+"</td><td style='padding:4px 8px;border-bottom:1px solid var(--g100)'>"+p.d+" kg/m²</td></tr>";}).join("");
+  return "<details style='margin-top:6px'><summary style='cursor:pointer;font-size:12px;font-weight:600;color:var(--navy)'>Construction areal densities (reference)</summary><table style='width:100%;border-collapse:collapse;font-size:12px;margin-top:8px'><tr><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Construction</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Areal density</th></tr>"+rows+"</table><div style='font-size:11px;color:var(--g500);margin-top:8px'>Indicative finished-panel weights including veneer, core, adhesive and edge treatment &mdash; verify against the actual build specification and supplier data. Carbon-skinned and Nomex-cored panels reflect Baltic&rsquo;s lightweight construction; solid timber is shown for refit/comparison.</div></details>";
+}
+function intFurnCatHTML(){
+  var rows=INT_FURN.map(function(f,i){return "<tr><td style='padding:4px 8px;border-bottom:1px solid var(--g100)'>"+esc(f.m)+"</td><td style='padding:4px 8px;border-bottom:1px solid var(--g100)'>"+f.w+" kg</td><td style='padding:4px 8px;border-bottom:1px solid var(--g100)' class='no-print'><button class='btn btn-line btn-xs' onclick=\"intAddFurn("+i+")\">+ Add</button></td></tr>";}).join("");
+  return "<details style='margin-top:6px'><summary style='cursor:pointer;font-size:12px;font-weight:600;color:var(--navy)'>Furnishing reference weights</summary><table style='width:100%;border-collapse:collapse;font-size:12px;margin-top:8px'><tr><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Item</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Ref. weight</th><th class='no-print'></th></tr>"+rows+"</table><div style='font-size:11px;color:var(--g500);margin-top:8px'>Reference figures only &mdash; replace with actual supplier weights. Soft furnishings, appliances and finishes vary widely by specification.</div></details>";
+}
+function mountInterior(){
+  el("view-interior").innerHTML="<style>"+
+    ".int-tabs{display:flex;gap:6px;padding:16px 28px 0}"+
+    ".int-tab{padding:8px 16px;border:1.5px solid var(--g300);background:#fff;border-radius:8px;font-size:13px;font-weight:600;color:var(--g700);cursor:pointer}"+
+    ".int-tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}"+
+    ".int-tab .n{opacity:.7;font-weight:700;margin-left:5px;font-size:11px}"+
+    ".ip{display:inline-block;padding:1px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.3px;white-space:nowrap}"+
+    ".ip-ok{background:#e7f5ec;color:#1b7f44}.ip-warn{background:#fdf3e3;color:#9a6a12}.ip-mut{background:#eef0f3;color:#5a6472}.ip-err{background:#fdecec;color:#b3261e}"+
+    ".idot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:middle}"+
+    ".mci{padding:4px 6px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px;background:#fff}.mci:focus{outline:none;border-color:var(--navy)}"+
+    ".cabrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;border:1.5px solid transparent}"+
+    ".cabrow:hover{background:var(--g100)}.cabrow.on{background:var(--navy);color:#fff}.cabrow.on .cabn{color:#cdd6e6}"+
+    ".cabn{font-size:11px;color:var(--g500);font-weight:600}"+
+    ".fchip{padding:5px 11px;border:1.5px solid var(--g300);background:#fff;border-radius:20px;font-size:12px;font-weight:600;color:var(--g700);cursor:pointer}.fchip.on{background:var(--navy);color:#fff;border-color:var(--navy)}"+
+    "</style><div id='int-shell'></div>";
+  if(PROJECT.intMat&&PROJECT.intMat.tab)INT_TAB=PROJECT.intMat.tab;
+  intRenderTab();
+}
+function intHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Interior Weight Schedule</h2><p>Joinery, panelling and furnishing weights by zone, with longitudinal centre of gravity (LCG) for the interior package.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:840px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> each line&rsquo;s weight = quantity &times; unit weight; moment = weight &times; LCG. The combined interior LCG = &Sigma;moment &divide; &Sigma;weight. The joinery estimator sizes panel weight from area &times; an areal density (kg/m&sup2;) for the chosen construction.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='intExcel()'>&#11015; Excel</button><button class='btn btn-line btn-sm' onclick='intClear()'>&#128465; Clear</button></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Reference &amp; target</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end'>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>LCG reference</label><select id='int-ref' onchange=\"intSet('ref',this.value)\" style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'><option value='midships'>From midships (&plusmn;)</option><option value='bow'>From bow (aft +)</option></select></div>"+
+       mef("int","target","Target weight","kg")+
+       "<div style='font-size:11px;color:var(--g500);max-width:360px;line-height:1.5'>Set an optional interior weight target to track the schedule against the weight budget. LCG is reported in metres from your chosen reference.</div>"+
+     "</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Joinery estimator</h2></div>"+
+     "<div style='padding:16px 20px'>"+
+       "<div style='display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end'>"+
+         "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Construction</label><select id='int-panel' style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:280px'></select></div>"+
+         "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Panel area</label><div style='display:flex;align-items:center;gap:6px'><input id='int-area' type='number' step='any' style='width:90px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>m&sup2;</span></div></div>"+
+         "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Zone</label><select id='int-jzone' style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></select></div>"+
+         "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>LCG</label><div style='display:flex;align-items:center;gap:6px'><input id='int-jlcg' type='number' step='any' value='0' style='width:80px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>m</span></div></div>"+
+         "<button class='btn btn-primary btn-sm no-print' onclick='intJoineryAdd()'>+ Add to schedule</button>"+
+       "</div>"+
+       "<div style='margin-top:12px'>"+intPanelCatHTML()+"</div>"+
+     "</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Schedule</h2><button class='btn btn-primary btn-sm no-print' onclick='intAddItem()'>+ Add line</button></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Zone</th><th>Category</th><th>Description</th><th>Qty</th><th>Unit kg</th><th>Weight kg</th><th>LCG m</th><th>Moment kg&middot;m</th><th class='no-print'></th></tr></thead><tbody id='int-body'></tbody></table></div>"+
+     "<div style='padding:0 20px 14px'>"+intFurnCatHTML()+"</div></div>"+
+
+   "<div class='card' id='int-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Interior Weight Summary</h2><span class='badge badge-gold' id='int-badge'>-</span></div>"+
+     "<div class='kpi-row' id='int-kpi'></div>"+
+     "<div style='display:flex;gap:24px;flex-wrap:wrap;padding:0 20px 8px'>"+
+       "<div style='flex:1;min-width:280px'><div style='font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin:14px 0 6px'>By category</div><table class='result-table' style='font-size:12px'><thead><tr><th>Category</th><th>Weight kg</th><th>%</th></tr></thead><tbody id='int-cat'></tbody></table></div>"+
+       "<div style='flex:1;min-width:280px'><div style='font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin:14px 0 6px'>By zone</div><table class='result-table' style='font-size:12px'><thead><tr><th>Zone</th><th>Weight kg</th><th>%</th></tr></thead><tbody id='int-zone'></tbody></table></div>"+
+     "</div>"+
+     "<div id='int-checks' style='padding:14px 20px'></div>"+
+   "</div></main>"+
+   "<style>.ici{padding:4px 6px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px}.ici:focus{outline:none;border-color:var(--navy)}</style>";
+}
+function intFill(){ var s=intState();
+  var r=el("int-ref"); if(r)r.value=s.ref;
+  var t=el("int-target"); if(t)t.value=s.target||"";
+  var p=el("int-panel"); if(p)p.innerHTML=intPanelOptsHTML(0);
+  var jz=el("int-jzone"); if(jz)jz.innerHTML=intZoneOpts(INT_ZONES[0]);
+}
+function intRenderItems(){
+  var body=el("int-body"); if(!body)return;
+  var items=intItems();
+  if(!items.length){ body.innerHTML="<tr><td colspan='9'><div class='empty'><div class='icon'>&#128715;</div><h3>No interior items yet</h3><p>Size joinery from the estimator above, pull a furnishing item from the reference list, or add a blank line.</p></div></td></tr>"; return; }
+  body.innerHTML=items.map(function(it){
+    return "<tr>"+
+      "<td><select class='ici' onchange=\"intItemSet('"+it.id+"','zone',this.value)\">"+intZoneOpts(it.zone)+"</select></td>"+
+      "<td><select class='ici' onchange=\"intItemSet('"+it.id+"','cat',this.value)\">"+intCatOpts(it.cat)+"</select></td>"+
+      "<td><input class='ici' value='"+esc(it.desc||"")+"' oninput=\"intItemSet('"+it.id+"','desc',this.value)\" style='min-width:180px'></td>"+
+      "<td><input class='ici' type='number' value='"+(it.qty||0)+"' oninput=\"intItemSet('"+it.id+"','qty',+this.value)\" style='width:52px'></td>"+
+      "<td><input class='ici' type='number' value='"+(it.unit||0)+"' oninput=\"intItemSet('"+it.id+"','unit',+this.value)\" style='width:72px'></td>"+
+      "<td id='iw"+it.id+"'>&mdash;</td>"+
+      "<td><input class='ici' type='number' value='"+(it.lcg||0)+"' oninput=\"intItemSet('"+it.id+"','lcg',+this.value)\" style='width:64px'></td>"+
+      "<td id='im"+it.id+"'>&mdash;</td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' onclick=\"intDelItem('"+it.id+"')\">&#10005;</button></td></tr>";
+  }).join("");
+}
+function intCalc(){
+  if(!el("int-results"))return;
+  var s=intState(), items=intItems();
+  var totW=0, totM=0, byCat={}, byZone={};
+  INT_CATS.forEach(function(c){byCat[c]=0;}); INT_ZONES.forEach(function(z){byZone[z]=0;});
+  items.forEach(function(it){
+    var w=(+it.qty||0)*(+it.unit||0), mo=w*(+it.lcg||0);
+    totW+=w; totM+=mo;
+    byCat[it.cat]=(byCat[it.cat]||0)+w; byZone[it.zone]=(byZone[it.zone]||0)+w;
+    var wc=el("iw"+it.id); if(wc)wc.textContent=f1(w);
+    var mc=el("im"+it.id); if(mc)mc.textContent=f1(mo);
+  });
+  var lcg=totW>0?totM/totW:0;
+  var hz="—",hzw=0; Object.keys(byZone).forEach(function(z){if(byZone[z]>hzw){hzw=byZone[z];hz=z;}});
+  el("int-badge").textContent=f0(totW)+" kg interior";
+  el("int-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Total interior weight</div><div class='kpi-v'>"+f0(totW)+"</div><div class='kpi-u'>kg</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>In tonnes</div><div class='kpi-v'>"+f2(totW/1000)+"</div><div class='kpi-u'>t</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Combined LCG</div><div class='kpi-v'>"+f2(lcg)+"</div><div class='kpi-u'>m from "+(s.ref==="bow"?"bow":"midships")+"</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Schedule lines</div><div class='kpi-v'>"+items.length+"</div><div class='kpi-u'>items</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Heaviest zone</div><div class='kpi-v' style='font-size:17px'>"+esc(hz)+"</div><div class='kpi-u'>"+f0(hzw)+" kg</div></div>"+
+    (s.target>0?("<div class='kpi'><div class='kpi-l'>Of target</div><div class='kpi-v'>"+f0(totW/s.target*100)+"</div><div class='kpi-u'>% of "+f0(s.target)+" kg</div></div>"):"");
+  var catRows=INT_CATS.map(function(c){var w=byCat[c]||0; if(w<=0)return ""; return "<tr><td>"+c+"</td><td>"+f1(w)+"</td><td>"+(totW>0?f0(w/totW*100):0)+"%</td></tr>";}).join("");
+  el("int-cat").innerHTML=(catRows||"<tr><td colspan='3' style='color:var(--g500)'>No items yet</td></tr>")+(totW>0?"<tr style='background:var(--navy2);color:#fff;font-weight:600'><td>TOTAL</td><td>"+f1(totW)+"</td><td>100%</td></tr>":"");
+  var zoneRows=INT_ZONES.map(function(z){var w=byZone[z]||0; if(w<=0)return ""; return "<tr><td>"+z+"</td><td>"+f1(w)+"</td><td>"+(totW>0?f0(w/totW*100):0)+"%</td></tr>";}).join("");
+  el("int-zone").innerHTML=(zoneRows||"<tr><td colspan='3' style='color:var(--g500)'>No items yet</td></tr>")+(totW>0?"<tr style='background:var(--navy2);color:#fff;font-weight:600'><td>TOTAL</td><td>"+f1(totW)+"</td><td>100%</td></tr>":"");
+  var ck="";
+  if(s.target>0){ var ok=totW<=s.target, spare=s.target-totW;
+    ck+="<div style='padding:6px 0;border-bottom:1px solid var(--g100);font-size:13px;display:flex;justify-content:space-between'><span>Interior weight vs target</span><span><strong>"+f0(totW)+"</strong> / "+f0(s.target)+" kg "+(ok?"<span class='pill p-ok'>"+f0(spare)+" kg under</span>":"<span class='pill p-err'>"+f0(-spare)+" kg over</span>")+"</span></div>"; }
+  ck+="<div style='font-size:11px;color:var(--g500);margin-top:8px'>Combined LCG = &Sigma;(weight &times; LCG) &divide; &Sigma;weight, reported from "+(s.ref==="bow"?"the bow (aft positive)":"midships (&plusmn;)")+". Weights are preliminary estimates &mdash; verify joinery, furnishing and appliance weights against the build specification and supplier data before use.</div>";
+  el("int-checks").innerHTML=ck;
+}
+function intExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=intState(), items=intItems(), m=PROJECT.meta, wb=XLSX.utils.book_new(), totW=0, totM=0;
+  var a=[["Baltic Yachts - Interior Weight Schedule"],["Yacht",m.yacht,"Project",m.proj],["LCG reference","from "+s.ref],[],
+    ["Zone","Category","Description","Qty","Unit kg","Weight kg","LCG m","Moment kg.m"]];
+  items.forEach(function(it){var w=(+it.qty||0)*(+it.unit||0),mo=w*(+it.lcg||0);totW+=w;totM+=mo;a.push([it.zone,it.cat,it.desc,+it.qty||0,+it.unit||0,+w.toFixed(1),+it.lcg||0,+mo.toFixed(1)]);});
+  a.push([],["TOTAL","","","","",+totW.toFixed(1),(totW>0?+(totM/totW).toFixed(2):0),+totM.toFixed(1)]);
+  if(s.target>0)a.push(["Target",s.target,"kg","Variance",+(s.target-totW).toFixed(1),"kg"]);
+  a.push([],[disclaimerLine()]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Interior Weights");
+  XLSX.writeFile(wb,"Baltic_Interior_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
+
+/* ===================== INTERIOR — Materials & Procurement ===================== */
+/* item = {id,cabinId,cat(H/L/M/S),key,qty,supplier,part,desc,art,stat,added,approved,ordNo,notes} */
+var INT_TAB="cabin", INT_Q="", INT_FCAT="ALL", INT_FSTAT="ALL";
+var INT_CABINS_DEFAULT=["#0 - Mock-up","#1 - Owner's Bedroom","#2 - Owner's Bathroom","#3 - VIP Cabin","#4 - VIP Bathroom","#5 - Snug / Study","#6 - Saloon","#7 - Guest Lobby","#8 - Port Guest Cabin","#9 - Port Guest Bathroom","#10 - Stb Guest Cabin","#11 - Stb Guest Bathroom","#12 - Crew Corridor","#13 - Crew Mess","#14 - Crew Entrance & Nav","#15 - Galley","#16 - Laundry","#17 - Single Crew Cabin","#18 - Single Crew Bathroom","#19 - Port Double Crew Cabin","#20 - Port Double Crew Bathroom","#21 - Stb Double Crew Cabin","#22 - Stb Double Crew Bathroom"];
+var INT_MCATS=[{k:"H",l:"Hardware & Appliances",c:"#1a2744"},{k:"L",l:"Electrical & Lights",c:"#c9a96e"},{k:"M",l:"Materials & Fabrics",c:"#2f8f7a"},{k:"S",l:"Surface Finishes",c:"#7a5cb0"}];
+var INT_STATS=[{k:"AFC",l:"Approved for Construction",p:"ok"},{k:"TBC",l:"To Be Confirmed",p:"warn"},{k:"UI",l:"Under Investigation",p:"warn"},{k:"RE",l:"Revise / Re-issue",p:"err"},{k:"TBD",l:"To Be Decided",p:"mut"}];
+/* Materials & Fabrics master catalogue (project B1220, Issue B) — M = materials/fabrics, S = surface finishes */
+var INT_MATCAT=[
+  {k:"M1A",c:"M",w:"FLOOR",s:"Shotten & Hansen",d:"Schotten & Hansen Brushed Oak. Medium Oyset Colour. 300mm wide boards.",st:"AFC"},
+  {k:"M1B",c:"M",w:"FLOOR",s:"AMTICO Marine",d:"Manor Oak - AM5W7970 - Xtra 184 x 1219.2 mm",st:"AFC"},
+  {k:"M1C",c:"M",w:"FLOOR",s:"Caesarstone",d:"Caesarstone. Shitake. (shower tray, basin, countertop, splashback, showerfloor)",st:"AFC"},
+  {k:"S286",c:"S",w:"FLOOR",s:"BY",d:"Shower Drainage Tray - To match the stone surface NCS S 3005-Y20R High Gloss",st:"AFC"},
+  {k:"S51/115",c:"S",w:"FLOOR",s:"",d:"RAL 9010 - High gloss / Painted high gloss non-skid Fine",st:"AFC"},
+  {k:"M2A",c:"M",w:"FURNITURE",s:"SPINNEYBECK",d:"Leather. Desk skiver. Spinneybeck Belting Leather. Color? TBC",st:"TBC"},
+  {k:"M2B",c:"M",w:"FURNITURE",s:"MAJILITE",d:"Fabric. Crew Mess Seating. Leather. Majilite Destiny Truffle JHK1.",st:"AFC"},
+  {k:"M2C",c:"M",w:"FURNITURE",s:"ZIMMER-ROHDE",d:"Sofa fabric. Zimmer & Rhode Travers Oakley 44214 983",st:"AFC"},
+  {k:"M2D",c:"M",w:"FURNITURE",s:"DEDAR",d:"Sofa fabric. Dedar Bucaneve T23062 Col. 002 naturale",st:"AFC"},
+  {k:"M2E",c:"M",w:"FURNITURE",s:"CORIAN",d:"Clam shell satin matt",st:"AFC"},
+  {k:"M2F",c:"M",w:"FURNITURE",s:"",d:"Mirror. 4mm",st:"AFC"},
+  {k:"M2G",c:"M",w:"FURNITURE",s:"BY",d:"Lee-Boards Fabric. Sunbrella Dune",st:"AFC"},
+  {k:"M2H",c:"M",w:"FURNITURE",s:"STARON",d:"Staron Collina Mirage PM879",st:"AFC"},
+  {k:"M2I",c:"M",w:"FURNITURE",s:"STAINLESS STEEL",d:"Brushed Stainless Steel - AISI 316",st:"AFC"},
+  {k:"M2J",c:"M",w:"FURNITURE",s:"DEDAR",d:"Sofas and daybeds fabric. Dedar Bucaneve T23062 Col. 004 nocce di cocco",st:"AFC"},
+  {k:"S264",c:"S",w:"FURNITURE/DOORS/WALL",s:"ALPI",d:"Balanced American Walnut - 10.18 - 2+2 x SteelBrushing & 1 x Nylonbrushing - Satin Matt finish",st:"AFC"},
+  {k:"S265",c:"S",w:"FURNITURE",s:"Holz in Form",d:"2252 Schilf in Light Oak. Inlays on Locker Drawers & Doors.",st:"AFC"},
+  {k:"S263",c:"S",w:"FURNITURE/DOORS/WALL",s:"ALPI",d:"Oak - 10.61 - 2x2 x SteelBrushing & 1 x Nylonbrushing - Satin Matt finish (No Brushing needed inside lockers / drawers)",st:"AFC"},
+  {k:"S48",c:"S",w:"FURNITURE/WALL/CEILING",s:"",d:"RAL 9010 - Satin matt",st:"AFC"},
+  {k:"M3A",c:"M",w:"DOORS",s:"",d:"8mm - Hardened Glass",st:"AFC"},
+  {k:"M4A",c:"M",w:"WALL",s:"MAJILITE",d:"Fabric.. Majilite PDR  17500 - Without Foam",st:"AFC"},
+  {k:"M4B",c:"M",w:"WALL",s:"JAB ANSTOETZ",d:"Copenhagen 9-7785-020. With 4mm foam.",st:"AFC"},
+  {k:"M4C",c:"M",w:"WALL",s:"MAJILITE",d:"Fabric. Majilite Destiny Truffle JHK1 4 mm foam",st:"AFC"},
+  {k:"M4D",c:"M",w:"WALL",s:"Caesarstone",d:"Caesarstone. Riverlet. (shower walls)",st:"AFC"},
+  {k:"S51",c:"S",w:"WALL",s:"",d:"RAL 9010 - High gloss",st:"AFC"},
+  {k:"M5A",c:"M",w:"CEILING",s:"MAJILITE",d:"Fabric. Majilite PDR 17270 - With 4mm Foam",st:"AFC"},
+  {k:"M5B",c:"M",w:"CEILING",s:"MAJILITE",d:"Fabric.",st:"AFC"},
+  {k:"M6A",c:"M",w:"BLINDS",s:"SeaView",d:"Blackout Roller Blinds -  Seaview - Mermet Flocke 11201 in Coraline 625",st:"AFC"}
+];
+function intCatLookup(key){ key=(key||"").trim().toUpperCase(); for(var i=0;i<INT_MATCAT.length;i++)if(INT_MATCAT[i].k.toUpperCase()===key)return INT_MATCAT[i]; return null; }
+function intMatPickHTML(){
+  var groups={M:[],S:[]};
+  INT_MATCAT.forEach(function(e,i){ if(!groups[e.c])groups[e.c]=[]; groups[e.c].push({i:i,e:e}); });
+  function grp(c,label){ if(!groups[c]||!groups[c].length)return ""; return "<optgroup label='"+label+"'>"+groups[c].map(function(o){var t=o.e.k+" — "+o.e.d; if(o.e.s)t+=" ("+o.e.s+")"; return "<option value='"+o.i+"'>"+esc(t.length>70?t.slice(0,70)+"…":t)+"</option>";}).join("")+"</optgroup>"; }
+  return "<select class='mci no-print' style='max-width:240px' onchange='intAddFromCat(this.value);this.value=\"\"'><option value=''>+ From catalogue&hellip;</option>"+grp("M","M — Materials & Fabrics")+grp("S","S — Surface Finishes")+"</select>";
+}
+function intCodeDatalist(){ return "<datalist id='int-codes'>"+INT_MATCAT.map(function(e){return "<option value='"+esc(e.k)+"'>"+esc(e.d.slice(0,40))+"</option>";}).join("")+"</datalist>"; }
+function intAddFromCat(v){
+  if(v===""||v==null)return; var e=INT_MATCAT[+v]; if(!e)return; var c=intActiveCab(); if(!c)return;
+  intMatItems().push({id:intMatNewId(),cabinId:c.id,cat:e.c,key:e.k,qty:"1",supplier:e.s||"",part:"",desc:e.d,art:"",stat:e.st||"TBD",added:intToday(),approved:(e.st==="AFC"?intToday():""),ordNo:"",notes:(e.w?("Where: "+e.w):"")});
+  saveActive(); intCabinRender();
+}
+function intKeyChanged(id,v){
+  var e=intCatLookup(v); if(!e)return;
+  var it=intMatItems().filter(function(x){return x.id===id;})[0]; if(!it)return;
+  it.cat=e.c; if(!it.supplier)it.supplier=e.s||""; if(!it.desc||it.desc==="New item")it.desc=e.d; if(it.stat==="TBD")it.stat=e.st||"TBD"; if(it.stat==="AFC"&&!it.approved)it.approved=intToday();
+  saveActive(); intCabinRender();
+}
+function intCatMeta(k){for(var i=0;i<INT_MCATS.length;i++)if(INT_MCATS[i].k===k)return INT_MCATS[i];return {k:k||"M",l:k||"",c:"#5a6472"};}
+function intStatMeta(k){for(var i=0;i<INT_STATS.length;i++)if(INT_STATS[i].k===k)return INT_STATS[i];return {k:k||"",l:k||"",p:"mut"};}
+function intToday(){return (PROJECT.meta&&PROJECT.meta.date)||new Date().toISOString().split("T")[0];}
+function intMatState(){
+  if(!PROJECT.intMat)PROJECT.intMat={cabins:[],items:[],activeCabin:0,tab:"cabin"};
+  if(!Array.isArray(PROJECT.intMat.cabins))PROJECT.intMat.cabins=[];
+  if(!Array.isArray(PROJECT.intMat.items))PROJECT.intMat.items=[];
+  if(PROJECT.intMat.activeCabin==null)PROJECT.intMat.activeCabin=0;
+  return PROJECT.intMat;
+}
+function intMatCabins(){return intMatState().cabins;}
+function intMatItems(){return intMatState().items;}
+function intCabItems(cid){return intMatItems().filter(function(x){return x.cabinId===cid;});}
+function intActiveCab(){var s=intMatState();return s.cabins[Math.min(s.activeCabin,s.cabins.length-1)]||s.cabins[0];}
+function intMatNewId(){return "m"+intMatItems().length+"_"+Math.round(performance.now());}
+function intMatAdd(cid){intMatItems().push({id:intMatNewId(),cabinId:cid,cat:"H",key:"",qty:"1",supplier:"",part:"",desc:"New item",art:"",stat:"TBD",added:intToday(),approved:"",ordNo:"",notes:""});saveActive();intCabinRender();}
+function intMatSet(id,k,v){var it=intMatItems().filter(function(x){return x.id===id;})[0];if(!it)return;it[k]=v;if(k==="stat"&&v==="AFC"&&!it.approved)it.approved=intToday();saveActive();if(INT_TAB==="order")intOrderRender();}
+function intMatDel(id){intMatState().items=intMatItems().filter(function(x){return x.id!==id;});saveActive();intCabinRender();}
+function intSelCab(i){intMatState().activeCabin=i;saveActive();intCabinRender();}
+function intAddSpace(name){var n=name||prompt("Name of the new space / cabin:");if(!n)return;var s=intMatState();s.cabins.push({id:"cab"+Date.now()+"_"+Math.round(Math.random()*1e5),name:n});s.activeCabin=s.cabins.length-1;saveActive();intCabinRender();}
+function intCommonPickHTML(){
+  var have={}; intMatCabins().forEach(function(c){have[c.name]=1;});
+  var opts=INT_CABINS_DEFAULT.filter(function(n){return !have[n];});
+  if(!opts.length)return "";
+  return "<select class='mci' style='width:100%;margin-top:10px' onchange='if(this.value){intAddSpace(this.value);this.value=\"\"}'><option value=''>+ Add a standard space&hellip;</option>"+opts.map(function(n){return "<option>"+esc(n)+"</option>";}).join("")+"</select>";
+}
+function intAddStandardLayout(){var s=intMatState(),have={};s.cabins.forEach(function(c){have[c.name]=1;});INT_CABINS_DEFAULT.forEach(function(n,j){if(!have[n])s.cabins.push({id:"cab"+Date.now()+"_"+j,name:n});});s.activeCabin=0;saveActive();intCabinRender();}
+function intDelSpace(){var s=intMatState(),c=intActiveCab();if(!c)return;if(intCabItems(c.id).length){alert("Remove this space's items first.");return;}if(!confirm("Remove space \""+c.name+"\"?"))return;s.cabins=s.cabins.filter(function(x){return x.id!==c.id;});s.activeCabin=0;saveActive();intCabinRender();}
+function intTabTo(k){INT_TAB=k;if(PROJECT.intMat)PROJECT.intMat.tab=k;saveActive();intRenderTab();window.scrollTo(0,0);}
+function intRenderTab(){
+  var bar=intTabBar();
+  if(INT_TAB==="weight"){el("int-shell").innerHTML=bar+intHTML();intFill();intRenderItems();intCalc();}
+  else if(INT_TAB==="order"){el("int-shell").innerHTML=bar+intOrderHTML();intOrderRender();}
+  else {el("int-shell").innerHTML=bar+intCabinHTML();intCabinRender();}
+}
+function intTabBar(){
+  var n=intMatItems().length;
+  function t(k,l,c){return "<button class='int-tab"+(INT_TAB===k?" on":"")+"' onclick=\"intTabTo('"+k+"')\">"+l+(c!=null?"<span class='n'>"+c+"</span>":"")+"</button>";}
+  return "<div class='int-tabs no-print'>"+t("cabin","By cabin",n)+t("order","Order summary",null)+t("weight","Weight schedule",null)+"</div>";
+}
+/* ---- statuses / categories helpers ---- */
+function intCatOptsHTML(sel){return INT_MCATS.map(function(c){return "<option value='"+c.k+"'"+(c.k===sel?" selected":"")+">"+c.k+" — "+esc(c.l)+"</option>";}).join("");}
+function intStatOptsHTML(sel){return INT_STATS.map(function(s){return "<option value='"+s.k+"'"+(s.k===sel?" selected":"")+">"+s.k+"</option>";}).join("");}
+function intStatPill(k){var m=intStatMeta(k);return k?("<span class='ip ip-"+m.p+"' title='"+esc(m.l)+"'>"+esc(k)+"</span>"):"<span class='ip ip-mut'>—</span>";}
+function intCatDot(k){var m=intCatMeta(k);return "<span class='idot' style='background:"+m.c+"'></span>";}
+/* ---- BY CABIN view ---- */
+function intCabinHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Materials &amp; Procurement</h2><p>Specify interior hardware, lighting, materials and finishes cabin by cabin. Everything you add rolls straight into the Order Summary for procurement.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='intMatExcel()'>&#11015; Excel</button></div></div>"+
+   "<div style='display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap'>"+
+     "<div style='flex:0 0 250px;min-width:230px' class='card'><div class='card-hdr'><h2>Spaces</h2><button class='btn btn-line btn-xs no-print' onclick='intAddSpace()'>+ Add</button></div><div id='int-cab-side' style='padding:8px 10px;max-height:620px;overflow:auto'></div></div>"+
+     "<div style='flex:1;min-width:520px' id='int-cab-main'></div>"+
+   "</div></main>";
+}
+function intCabinRender(){
+  if(!el("int-cab-side"))return;
+  var s=intMatState();
+  // sidebar
+  el("int-cab-side").innerHTML=(s.cabins.length?s.cabins.map(function(c,i){
+    var items=intCabItems(c.id),tot=items.length,afc=items.filter(function(x){return x.stat==="AFC";}).length;
+    var sub=tot?(afc+"/"+tot+" approved"):"empty";
+    return "<div class='cabrow"+(i===s.activeCabin?" on":"")+"' onclick='intSelCab("+i+")'><span>"+esc(c.name)+"<br><span class='cabn'>"+sub+"</span></span>"+(tot?"<span class='ip ip-"+(afc===tot?"ok":(afc?"warn":"mut"))+"'>"+tot+"</span>":"")+"</div>";
+  }).join(""):"<p style='font-size:12px;color:var(--g500);padding:6px 4px'>No spaces yet — add the ones this project has.</p>")+intCommonPickHTML();
+  // main panel
+  var c=intActiveCab();
+  if(!c){ el("int-cab-main").innerHTML="<div class='card'><div class='empty' style='padding:48px 24px'><div class='icon'>&#128682;</div><h3>No spaces added yet</h3><p>Add the cabins and spaces this project actually has &mdash; one at a time as needed, or start from Baltic&rsquo;s standard layout and trim it down.</p><div style='display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap' class='no-print'><button class='btn btn-primary btn-sm' onclick='intAddSpace()'>+ Add a space</button><button class='btn btn-line btn-sm' onclick='intAddStandardLayout()'>Add standard 23-space layout</button></div></div></div>"; return; }
+  var items=intCabItems(c.id);
+  var rows=items.length?items.map(function(it){
+    return "<tr>"+
+      "<td><input class='mci' list='int-codes' value='"+esc(it.key||"")+"' oninput=\"intMatSet('"+it.id+"','key',this.value)\" onchange=\"intKeyChanged('"+it.id+"',this.value)\" style='width:64px' placeholder='code…'></td>"+
+      "<td><select class='mci' onchange=\"intMatSet('"+it.id+"','cat',this.value);intCabinRender()\">"+intCatOptsHTML(it.cat)+"</select></td>"+
+      "<td><input class='mci' value='"+esc(it.qty||"")+"' oninput=\"intMatSet('"+it.id+"','qty',this.value)\" style='width:52px'></td>"+
+      "<td><input class='mci' value='"+esc(it.supplier||"")+"' oninput=\"intMatSet('"+it.id+"','supplier',this.value)\" style='min-width:120px'></td>"+
+      "<td><input class='mci' value='"+esc(it.desc||"")+"' oninput=\"intMatSet('"+it.id+"','desc',this.value)\" style='min-width:200px'></td>"+
+      "<td><input class='mci' value='"+esc(it.part||"")+"' oninput=\"intMatSet('"+it.id+"','part',this.value)\" style='width:90px'></td>"+
+      "<td><input class='mci' value='"+esc(it.art||"")+"' oninput=\"intMatSet('"+it.id+"','art',this.value)\" style='width:90px'></td>"+
+      "<td><select class='mci' onchange=\"intMatSet('"+it.id+"','stat',this.value);intCabinRender()\">"+intStatOptsHTML(it.stat)+"</select></td>"+
+      "<td><input class='mci' value='"+esc(it.ordNo||"")+"' oninput=\"intMatSet('"+it.id+"','ordNo',this.value)\" style='width:74px'></td>"+
+      "<td><input class='mci' value='"+esc(it.notes||"")+"' oninput=\"intMatSet('"+it.id+"','notes',this.value)\" style='min-width:120px'></td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' onclick=\"intMatDel('"+it.id+"')\">&#10005;</button></td></tr>";
+  }).join(""):"<tr><td colspan='11'><div class='empty'><div class='icon'>&#128230;</div><h3>No items in "+esc(c.name)+"</h3><p>Add the hardware, lighting, materials and finishes specified for this space. They&rsquo;ll appear in the Order Summary automatically.</p></div></td></tr>";
+  el("int-cab-main").innerHTML="<div class='card'>"+intCodeDatalist()+"<div class='card-hdr'><h2>"+esc(c.name)+"</h2><div style='display:flex;gap:6px;align-items:center' class='no-print'>"+(intCabItems(c.id).length?"":"<button class='btn btn-line btn-xs' onclick='intDelSpace()'>&#128465; Space</button>")+intMatPickHTML()+"<button class='btn btn-primary btn-sm' onclick=\"intMatAdd('"+c.id+"')\">+ Blank item</button></div></div>"+
+    "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Key</th><th>Cat</th><th>Qty</th><th>Supplier</th><th>Description</th><th>Part No</th><th>Art No</th><th>Status</th><th>Order No</th><th>Notes</th><th class='no-print'></th></tr></thead><tbody>"+rows+"</tbody></table></div>"+
+    "<div style='padding:10px 20px;font-size:11px;color:var(--g500)'><strong>Tip:</strong> pick a coded material from <em>+ From catalogue</em>, or type a known code (e.g. M2J, S264) in the Key field to auto-fill it. &nbsp;Status: "+INT_STATS.map(function(s){return "<strong>"+s.k+"</strong> "+esc(s.l);}).join(" &middot; ")+"</div></div>";
+}
+/* ---- ORDER SUMMARY view ---- */
+function intMatFiltered(){
+  var q=(INT_Q||"").toLowerCase();
+  return intMatItems().filter(function(it){
+    if(INT_FCAT!=="ALL"&&it.cat!==INT_FCAT)return false;
+    if(INT_FSTAT!=="ALL"&&it.stat!==INT_FSTAT)return false;
+    if(q){var hay=((it.key||"")+" "+(it.supplier||"")+" "+(it.desc||"")+" "+(it.part||"")+" "+(it.art||"")+" "+(it.ordNo||"")).toLowerCase();if(hay.indexOf(q)<0)return false;}
+    return true;
+  });
+}
+function intCabName(cid){var c=intMatCabins().filter(function(x){return x.id===cid;})[0];return c?c.name:"";}
+function intSetQ(v){INT_Q=v;intOrderRender();}
+function intSetFCat(k){INT_FCAT=k;intOrderRender();}
+function intSetFStat(k){INT_FSTAT=k;intOrderRender();}
+function intOrderHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Order Summary</h2><p>Every item across all spaces, consolidated for procurement and grouped by category and supplier. Filter, then export to Excel for ordering.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='intMatExcel()'>&#11015; Excel</button></div></div>"+
+   "<div class='kpi-row' id='int-ord-kpi'></div>"+
+   "<div class='card no-print'><div style='padding:14px 20px;display:flex;gap:14px;flex-wrap:wrap;align-items:center'>"+
+     "<input id='int-ord-q' class='mci' style='flex:1;min-width:220px;padding:8px 10px' placeholder='Search key, supplier, description, part/art no, order no…' oninput='intSetQ(this.value)'>"+
+     "<div id='int-ord-fcat' style='display:flex;gap:6px;flex-wrap:wrap'></div>"+
+     "<div id='int-ord-fstat' style='display:flex;gap:6px;flex-wrap:wrap'></div>"+
+   "</div></div>"+
+   "<div class='card'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Procurement list</h2><span class='badge badge-gold' id='int-ord-badge'>-</span></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Key</th><th>Cat</th><th>Cabin</th><th>Qty</th><th>Supplier</th><th>Part No</th><th>Art No</th><th>Description</th><th>Status</th><th>Order No</th></tr></thead><tbody id='int-ord-body'></tbody></table></div>"+
+   "</div></main>";
+}
+function intOrderRender(){
+  if(!el("int-ord-body"))return;
+  var all=intMatItems(), shown=intMatFiltered();
+  // filter chips
+  function chip(id,key,cur,label,count){return "<button class='fchip"+(cur===key?" on":"")+"' onclick=\""+id+"('"+key+"')\">"+label+(count!=null?" "+count:"")+"</button>";}
+  var fc="<button class='fchip"+(INT_FCAT==="ALL"?" on":"")+"' onclick=\"intSetFCat('ALL')\">All</button>"+INT_MCATS.map(function(c){var n=all.filter(function(x){return x.cat===c.k;}).length;return "<button class='fchip"+(INT_FCAT===c.k?" on":"")+"' onclick=\"intSetFCat('"+c.k+"')\">"+intCatDot(c.k)+c.k+" "+n+"</button>";}).join("");
+  el("int-ord-fcat").innerHTML=fc;
+  var fs="<button class='fchip"+(INT_FSTAT==="ALL"?" on":"")+"' onclick=\"intSetFStat('ALL')\">Any status</button>"+INT_STATS.map(function(s){var n=all.filter(function(x){return x.stat===s.k;}).length;return n?("<button class='fchip"+(INT_FSTAT===s.k?" on":"")+"' onclick=\"intSetFStat('"+s.k+"')\">"+s.k+" "+n+"</button>"):"";}).join("");
+  el("int-ord-fstat").innerHTML=fs;
+  // KPIs
+  var tot=all.length, afc=all.filter(function(x){return x.stat==="AFC";}).length, pend=tot-afc;
+  var ordered=all.filter(function(x){return (x.ordNo||"").trim()!=="";}).length;
+  var sups={}; all.forEach(function(x){if((x.supplier||"").trim())sups[x.supplier.trim()]=1;});
+  var supN=Object.keys(sups).length;
+  var cabsUsed={}; all.forEach(function(x){cabsUsed[x.cabinId]=1;});
+  el("int-ord-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Total items</div><div class='kpi-v'>"+tot+"</div><div class='kpi-u'>lines</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Approved (AFC)</div><div class='kpi-v'>"+(tot?f0(afc/tot*100):0)+"</div><div class='kpi-u'>% ("+afc+"/"+tot+")</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Pending</div><div class='kpi-v'>"+pend+"</div><div class='kpi-u'>not AFC</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>With order no.</div><div class='kpi-v'>"+ordered+"</div><div class='kpi-u'>lines</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Suppliers</div><div class='kpi-v'>"+supN+"</div><div class='kpi-u'>distinct</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Spaces used</div><div class='kpi-v'>"+Object.keys(cabsUsed).length+"</div><div class='kpi-u'>of "+intMatCabins().length+"</div></div>";
+  el("int-ord-badge").textContent=shown.length+(shown.length===all.length?" items":" of "+all.length);
+  // sort by cat order, supplier, key
+  var catOrder={H:0,L:1,M:2,S:3};
+  shown.sort(function(a,b){
+    var ca=(catOrder[a.cat]==null?9:catOrder[a.cat]), cb=(catOrder[b.cat]==null?9:catOrder[b.cat]);
+    if(ca!==cb)return ca-cb;
+    var sa=(a.supplier||"").toLowerCase(), sb=(b.supplier||"").toLowerCase();
+    if(sa<sb)return -1; if(sa>sb)return 1;
+    return (a.key||"").localeCompare(b.key||"");
+  });
+  if(!shown.length){el("int-ord-body").innerHTML="<tr><td colspan='10'><div class='empty'><div class='icon'>&#128203;</div><h3>Nothing to order yet</h3><p>"+(all.length?"No items match the current filter.":"Add items under <strong>By cabin</strong> and they will be consolidated here for procurement.")+"</p></div></td></tr>";return;}
+  var lastCat=null,html="";
+  shown.forEach(function(it){
+    if(it.cat!==lastCat){lastCat=it.cat;var m=intCatMeta(it.cat);html+="<tr style='background:var(--g100)'><td colspan='10' style='font-weight:700;color:"+m.c+";font-size:11px;text-transform:uppercase;letter-spacing:.5px'>"+intCatDot(it.cat)+m.k+" — "+esc(m.l)+"</td></tr>";}
+    html+="<tr>"+
+      "<td style='font-weight:600'>"+esc(it.key||"—")+"</td>"+
+      "<td>"+intCatDot(it.cat)+esc(it.cat||"")+"</td>"+
+      "<td style='color:var(--g500)'>"+esc(intCabName(it.cabinId))+"</td>"+
+      "<td>"+esc(it.qty||"")+"</td>"+
+      "<td>"+esc(it.supplier||"")+"</td>"+
+      "<td>"+esc(it.part||"")+"</td>"+
+      "<td>"+esc(it.art||"")+"</td>"+
+      "<td>"+esc(it.desc||"")+"</td>"+
+      "<td>"+intStatPill(it.stat)+"</td>"+
+      "<td>"+esc(it.ordNo||"")+"</td></tr>";
+  });
+  el("int-ord-body").innerHTML=html;
+}
+function intMatExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var m=PROJECT.meta, all=intMatItems(), wb=XLSX.utils.book_new();
+  var catOrder={H:0,L:1,M:2,S:3};
+  var sorted=all.slice().sort(function(a,b){var ca=(catOrder[a.cat]==null?9:catOrder[a.cat]),cb=(catOrder[b.cat]==null?9:catOrder[b.cat]);if(ca!==cb)return ca-cb;return (a.supplier||"").localeCompare(b.supplier||"");});
+  var head=["Key","Cat","Cabin","Qty","Supplier","Part No","Description","Art No","Status","Added","Approved","Order No","Notes"];
+  var a=[["Baltic Yachts - Interior Materials, Order Summary"],["Yacht",m.yacht,"Project",m.proj],[],head];
+  sorted.forEach(function(it){a.push([it.key||"",it.cat||"",intCabName(it.cabinId),it.qty||"",it.supplier||"",it.part||"",it.desc||"",it.art||"",it.stat||"",it.added||"",it.approved||"",it.ordNo||"",it.notes||""]);});
+  a.push([],[disclaimerLine()]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Order Summary");
+  // one sheet per cabin that has items
+  intMatCabins().forEach(function(c){
+    var its=intCabItems(c.id); if(!its.length)return;
+    var s=[["Cabin",c.name],["Yacht",m.yacht,"Project",m.proj],[],head.filter(function(h){return h!=="Cabin";})];
+    its.forEach(function(it){s.push([it.key||"",it.cat||"",it.qty||"",it.supplier||"",it.part||"",it.desc||"",it.art||"",it.stat||"",it.added||"",it.approved||"",it.ordNo||"",it.notes||""]);});
+    var nm=c.name.replace(/[\\\/\?\*\[\]:]/g,"").slice(0,31)||("Cabin");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(s),nm);
+  });
+  XLSX.writeFile(wb,"Baltic_Interior_Materials_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
 
 /* ---------- PWA ---------- */
 function makeIcon(sz){
