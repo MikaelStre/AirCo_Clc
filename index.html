@@ -582,7 +582,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.45 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.47 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -3900,26 +3900,176 @@ var INT_MATCAT=[
   {k:"S51",c:"S",w:"WALL",s:"",d:"RAL 9010 - High gloss",st:"AFC"},
   {k:"M5A",c:"M",w:"CEILING",s:"MAJILITE",d:"Fabric. Majilite PDR 17270 - With 4mm Foam",st:"AFC"},
   {k:"M5B",c:"M",w:"CEILING",s:"MAJILITE",d:"Fabric.",st:"AFC"},
-  {k:"M6A",c:"M",w:"BLINDS",s:"SeaView",d:"Blackout Roller Blinds -  Seaview - Mermet Flocke 11201 in Coraline 625",st:"AFC"}
+  {k:"M6A",c:"M",w:"BLINDS",s:"SeaView",d:"Blackout Roller Blinds -  Seaview - Mermet Flocke 11201 in Coraline 625",st:"AFC"},
+  {k:"L26",c:"L",w:"",s:"Cantalupi",d:"Desk task light - Venere 60VENER01. Red/white, 1,5W",st:"AFC"},
+  {k:"L47",c:"L",w:"",s:"BCM",d:"Reading Light - Tina Touch. Burnished brass matt p. 37 - 2700K",st:"AFC"},
+  {k:"L204",c:"L",w:"",s:"Savage Lighting",d:"Downlight - San Remo. Fixed. RAL 9010 Satin. 88mm LED Interior Range. 3000K. Clear. (inboard)",st:"AFC"},
+  {k:"L205",c:"L",w:"",s:"Savage Lighting",d:"Downlight - San Remo. Adjustable. RAL 9010 Satin. 88mm LED Interior Range. 3000K. Clear pattern. (outboard)",st:"AFC"},
+  {k:"L208",c:"L",w:"",s:"Vimar",d:"Blind switches - 2M. Eikon Exe Traditional Coverplate + 2 Switchplates. Brushed Dark Bronze (coverplate) and Anthracite grey (switches).",st:"AFC"},
+  {k:"L209",c:"L",w:"",s:"Vimar",d:"Lights switches. 3M. Eikon Exe Traditional Coverplate + 3  Switchplates. Brushed Dark Bronze (Frame) & Antrahcite Grey (Switches.",st:"AFC"},
+  {k:"L210",c:"L",w:"",s:"Vimar",d:"Lights / Blind Switches - 4M. Eikon Exe Traditional Coverplate + 4 Switchplates. Brushed Dark Bronze  (Frame) & Anthracite Grey (Switches)",st:"AFC"},
+  {k:"L211",c:"L",w:"",s:"Vimar",d:"Outlet - 2M. Eikon Exe Traditional Coverplate. 1 Outlet. Brushed Dark Bronze  (Frame) & Anthracite Grey (Outlet)",st:"AFC"},
+  {k:"L213",c:"L",w:"",s:"Vimar",d:"Outlet - 4M. Eikon Exe Traditional Coverplate. Universal Outlet + USB-C. Brushed Dark Bronze (Frame) & Anthracite Grey (Outlet)",st:"AFC"},
+  {k:"L224",c:"L",w:"",s:"BCM",d:"Ropelight - Wave Neonflex Side. 3404/00G3 SIDE. (Use of Red night lights in the floor kicker TBC)",st:"AFC"},
+  {k:"L225",c:"L",w:"",s:"Savage Lighting",d:"Mast Lights - Nano 1W, 22mm Brushed SS",st:"AFC"},
+  {k:"L226",c:"L",w:"",s:"Visual Comfort",d:"Wall Lamp. Bowen Medium Sconce. Bronze.",st:"UI"},
+  {k:"L230",c:"L",w:"",s:"Eichholtz",d:"Wall Lamp - Syracuse",st:"RE"},
+  {k:"L231",c:"L",w:"",s:"Savage Lighting",d:"Downlight - San Remo. Fixed. RAL 9010. 63mm LED Interior Range. 3000K. Frosted Lens.",st:"AFC"},
+  {k:"L232",c:"L",w:"",s:"Savage Lighting",d:"Downlight - San Remo. Adjustable. RAL 9010. 63mm LED Interior Range. 3000K. Frosted Lens.",st:"AFC"},
+  {k:"L233",c:"L",w:"",s:"BCM",d:"Reading Light - Sirio - Satin Black Nickel Matt - 44 - 2700K",st:"AFC"},
+  {k:"L235",c:"L",w:"",s:"Bircher",d:"CleanSwitch - Foot operated",st:"AFC"},
+  {k:"L236",c:"L",w:"",s:"Vimar",d:"Outlet - 5M. Eikon Exe Traditional Coverplate + 2 Outlets + Network outlet. Brushed Dark Bronze (Frame) and Antrahcite (Outlet)",st:"AFC"},
+  {k:"L252",c:"L",w:"",s:"Vimar",d:"Outlet - 7M. Eikon Exe Traditional Coverplate + 1 Outlets + 2 USB-C + Blank spare. Brushed Dark Bronze  (Frame) & Anthracite Grey (Switches)",st:"AFC"},
+  {k:"L253",c:"L",w:"",s:"Vimar",d:"Toilet control panel - 2M. Eikon Exe Traditional Coverplate for Toilet control panel. Brushed Dark Bronze (coverplate) and Anthracite grey (switches).",st:"AFC"},
+  {k:"L254",c:"L",w:"",s:"Aliseo",d:"Magnifying mirror. LED Lunatec 020601",st:"AFC"},
+  {k:"L256",c:"L",w:"",s:"BCM",d:"Ropelight: mini flex led one 240-TOP",st:"AFC"},
+  {k:"L257",c:"L",w:"",s:"BCM",d:"List for Ropelight :blade three A",st:"AFC"},
+  {k:"L265",c:"L",w:"",s:"Vimar",d:"Light switch - 5M. Eikon Exe Traditional Coverplate + 5 Switchplates. Brushed Dark Bronze  (Frame) & Anthracite Grey (Switches)",st:"RE"},
+  {k:"L271",c:"L",w:"",s:"Objet Insolit",d:"Wall light - Applique Ramure in Brown Bronze",st:"RE"},
+  {k:"L272",c:"L",w:"",s:"Bowers & Wilkins",d:"Ceiling Speakers - Bowers & Wilkins CCM663RD",st:"AFC"},
+  {k:"L277",c:"L",w:"",s:"Guaxs",d:"Table Lamp - Yong Table lamp 30cmh",st:"AFC"},
+{k:"H1",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 250",a:"9181288",st:"AFC"},
+  {k:"H2",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 280",a:"9181289",st:"AFC"},
+  {k:"H3",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 300",a:"9181290",st:"AFC"},
+  {k:"H4",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 320",a:"9181291",st:"AFC"},
+  {k:"H5",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 350",a:"9181292",st:"AFC"},
+  {k:"H6",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 380",a:"9181293",st:"AFC"},
+  {k:"H7",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 400",a:"9181294",st:"AFC"},
+  {k:"H8",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 420",a:"9181295",st:"AFC"},
+  {k:"H9",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 450",a:"9181296",st:"AFC"},
+  {k:"H11",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 500",a:"9181298",st:"AFC"},
+  {k:"H13",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner, Quadro V6 550",a:"9181300",st:"AFC"},
+  {k:"H15",c:"H",w:"",s:"Hettich",p:"",d:"Drawer runner - Quadro V6 600",a:"9181302",st:"AFC"},
+  {k:"H23",c:"H",w:"",s:"Grass",p:"",d:"Cabinet hinge. Tiomos 110 - Inset K19. Cabinet Hinge",a:"",st:"AFC"},
+  {k:"H24",c:"H",w:"",s:"Grass",p:"",d:"Cabinet hinge. Tiomos 110 - Half overlay K9.5. Cabinet Hinge",a:"",st:"AFC"},
+  {k:"H53",c:"H",w:"",s:"Sugatsune",p:"",d:"Desk lid hinge - Soft-closing damped hinge",a:"HG-JHM16-34BL",st:"AFC"},
+  {k:"H61",c:"H",w:"",s:"Tecma",p:"",d:"Tecma Silent plus 2G",a:"",st:"AFC"},
+  {k:"H104",c:"H",w:"",s:"Sugatsune",p:"",d:"Hidden hinge. R-45",a:"",st:"AFC"},
+  {k:"H192",c:"H",w:"",s:"Bailey Marine",p:"",d:"Stairs latch - Security lock",a:"BML25SM",st:"AFC"},
+  {k:"H271",c:"H",w:"",s:"Reisinger",p:"",d:"Automatic Sliding door rail. S5000",a:"S5000",st:"AFC"},
+  {k:"H278",c:"H",w:"",s:"Sugatsune",p:"",d:"Hidden hinge. R-43",a:"",st:"AFC"},
+  {k:"H354",c:"H",w:"",s:"Sugatsune",p:"",d:"Stair hinge - Hidden hinge. R-70",a:"",st:"AFC"},
+  {k:"H380",c:"H",w:"",s:"Vitris",p:"",d:"Sliding door rail - Aquant 40 – profile sets, Aquant 40 – accessory kits",a:"",st:"AFC"},
+  {k:"H459",c:"H",w:"",s:"Grass",p:"",d:"Cabinet Hinge - Tiomos 110/90E",a:"F028138536",st:"AFC"},
+  {k:"H469",c:"H",w:"",s:"Turnstyle",p:"",d:"Sliding door lock - Round Revolving Flush  Pull",a:"S1954-VP",st:"AFC"},
+  {k:"H597",c:"H",w:"",s:"Brunner",p:"",d:"ESCAPE LADDER (telescopic)",a:"T03-104A",st:"AFC"},
+  {k:"H620",c:"H",w:"",s:"Southco",p:"",d:"T-Handle fort Southco Troller latch. LeeBoard ceiling fix.",a:"E3-13-4",st:"AFC"},
+  {k:"H629",c:"H",w:"",s:"Onmar",p:"",d:"Freezer seat lock - Griffin Actuator Model 9",a:"O4-54-100-24",st:"AFC"},
+  {k:"H656",c:"H",w:"",s:"Alrose",p:"",d:"Freezer seat gas spring - MOUNTING BRACKET - STAINLESS STEEL",a:"BESAUG0800306",st:"AFC"},
+  {k:"H674",c:"H",w:"",s:"Grass",p:"",d:"Cabinet Hinge - Tiomos 110 - Inset K19. . Night",a:"",st:"AFC"},
+  {k:"H680",c:"H",w:"",s:"Serdaneli",p:"",d:"Door stop. Magnetic Door Seafastener. Lignes Butoirs Magnetiques TM. C2-Matt Antique Bronze (to match Turnstyle Fixtures)",a:"H000-C2-9MDS",st:"AFC"},
+  {k:"H681",c:"H",w:"",s:"Turnstyle",p:"",d:"Door Handle. Barrel Stitch Out Recess Chocolate Leather and Vintage Patina. 52mm Round Rose: 06",a:"R1024-CT-VP",st:"AFC"},
+  {k:"H682",c:"H",w:"",s:"Turnstyle",p:"",d:"Door snibs. Snib Turn & Release Set Round. 42/52mm. Vintage Patina. Round Rose: 06. TBC?",a:"S1041-VP",st:"FA"},
+  {k:"H683",c:"H",w:"",s:"Turnstyle",p:"",d:"Drawer knobs. Latching handle. Savile. Chocolate leather. Square.                                                                      IS",a:"H2009-CT",st:"AFC"},
+  {k:"H685",c:"H",w:"",s:"Turnstyle",p:"",d:"Lock Chest, Cabin Door - Euro Profile Lock. Centre measure 75/92mm.",a:"",st:"FA"},
+  {k:"H686",c:"H",w:"",s:"SeaView",p:"",d:"Venetian Blinds -  Seavenetian Leather - Guide wire at both ends. Majilite Leather PDR 17500. Majilite covered hem bar. Lugs  on every slat. Somfy Sonesse motor.",a:"",st:"FA"},
+  {k:"H687",c:"H",w:"",s:"SeaView",p:"",d:"Blackout Roller Blinds -  Seaview - Mermet Flocke 11201 in Coraline 625. Hem bar painted RAL 9010.",a:"",st:"FA"},
+  {k:"H696",c:"H",w:"",s:"Sugatsune",p:"",d:"Damper hinge for desk lid - BLACK - HG-JHM16-34BL",a:"170-092-221",st:"AFC"},
+  {k:"H698",c:"H",w:"",s:"Sugatsune",p:"42307",d:"Rotary damper. URD8-3.  Side table top - charging lid.",a:"170-026-907",st:"AFC"},
+  {k:"H699",c:"H",w:"",s:"Simonswerk",p:"",d:"Door Hinge - Tectus TE 240 3D. Bronze Finish dark (SW 176)",a:"",st:"AFC"},
+  {k:"H700",c:"H",w:"",s:"Miele",p:"",d:"Induction hob. Miele. KM 7897-1 FL Diamond",a:"",st:"AFC"},
+  {k:"H701",c:"H",w:"",s:"Miele",p:"",d:"Oven. Miele. H 7890 BP",a:"",st:"AFC"},
+  {k:"H702",c:"H",w:"",s:"Miele",p:"",d:"Microvawe. Miele. M7140 TC Clean Steel",a:"",st:"AFC"},
+  {k:"H703",c:"H",w:"",s:"Miele",p:"",d:"Dishwasher. Miele. PFD 103 SCi XXL",a:"",st:"AFC"},
+  {k:"H704",c:"H",w:"",s:"Miele",p:"",d:"Washing machine. Miele. WEB385 WCS 125 edition.",a:"",st:"AFC"},
+  {k:"H705",c:"H",w:"",s:"Miele",p:"",d:"Tumble dryer. Miele. TED275WP.",a:"",st:"AFC"},
+  {k:"H708",c:"H",w:"",s:"Hoshizaki",p:"",d:"Ice maker - IM-30CNE-HC",a:"M062",st:"AFC"},
+  {k:"H709",c:"H",w:"",s:"Jura",p:"",d:"Coffee Machine. Jura ENA 4. Full Metropolian Black 15501",a:"",st:"AFC"},
+  {k:"H711",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA  Wall-mounted basin mixer without pop-up waste. Chrome.",a:"36 707 892-00",st:"AFC"},
+  {k:"H712",c:"H",w:"",s:"Dornbracht",p:"",d:"Concealed wall-mounted mixer centred spout.",a:"35 707 970 90",st:"AFC"},
+  {k:"H713",c:"H",w:"",s:"Dornbracht",p:"",d:"Basin Waste with push fastening. Chrome.",a:"10 125 970-00",st:"AFC"},
+  {k:"H714",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA Bath grip. Chrome.",a:"83 030 892-00",st:"AFC"},
+  {k:"H715",c:"H",w:"",s:"Dornbracht",p:"",d:"Robe hooks. Chrome.",a:"83 251  979-00",st:"AFC"},
+  {k:"H716",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA. Dispenser wall model. Chrome.",a:"83 435 892-00",st:"AFC"},
+  {k:"H717",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA. Tissue holder without cover. Chrome.",a:"83 500 892-00",st:"AFC"},
+  {k:"H718",c:"H",w:"",s:"Dornbracht",p:"",d:"Tumbler holder wall model. Chrome with frosted glass.",a:"83 401 979-00",st:"AFC"},
+  {k:"H719",c:"H",w:"",s:"Dornbracht",p:"",d:"Toilet brush set wall model. Chrome.",a:"83 910 979-00",st:"AFC"},
+  {k:"H720",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA Shower set 26 413 892-00. Chrome. + Hand shower FlowReduce. 28 018 979-00. Chrome.",a:"",st:"AFC"},
+  {k:"H723",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA xTOOL Thermostat module with 1 valve. Chrome.",a:"st0601149892-00",st:"AFC"},
+  {k:"H724",c:"H",w:"",s:"Dornbracht",p:"",d:"xTOOL Concealed thermostat module with 1 valve.",a:"35 511 970 90",st:"AFC"},
+  {k:"H725",c:"H",w:"",s:"Dornbracht",p:"",d:"xGRID  Installation track 555mm. // Not used",a:"12 360 970 90",st:"AFC"},
+  {k:"H726",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA xTOOL Thermostat module with 2 valve. Chrome.",a:"st0601153892-00",st:"AFC"},
+  {k:"H727",c:"H",w:"",s:"Dornbracht",p:"",d:"xTOOL Concealed thermostat module with 2 valve.",a:"35 521 970 90",st:"AFC"},
+  {k:"H730",c:"H",w:"",s:"Assa Abloy",p:"",d:"Shower door handle. Stremler Bastille. Bright chrome .4501.30.0+ patch keep 4509.30.0",a:"4501.30.0 + 4509.30.0",st:"AFC"},
+  {k:"H731",c:"H",w:"",s:"Dornbracht",p:"",d:"TARA Towel ring round. Chrome.",a:"83 200 892-00",st:"AFC"},
+  {k:"H733",c:"H",w:"",s:"Turnstyle",p:"",d:"Fiddle Rail - Barrel stepped solid. Vintage Patina - 1870MM LOA - 5 LEGS - BOLT THROUGH",a:"CBS5599-xxxx-VP",st:"AFC"},
+  {k:"H735",c:"H",w:"",s:"Dornbracht",p:"",d:"Rain shower with ceiling fixing 220 mm - Chrome",a:"28 669 970-00",st:"AFC"},
+  {k:"H736",c:"H",w:"",s:"Kingston Brass",p:"",d:"Kitchen faucet. Concord GS8281DL Two-Handle 2-Hole Wall Mount Pull-Down Sprayer Kitchen Faucet, Polished Chrome",a:"",st:"AFC"},
+  {k:"H737",c:"H",w:"",s:"Quooker",p:"",d:"TAP - FLEX, CUBE & PRO3",a:"",st:"AFC"},
+  {k:"H738",c:"H",w:"",s:"Dornbracht",p:"",d:"Robe Hooks. Brushed Dark Platinum.",a:"83 251  979-99",st:"AFC"},
+  {k:"H739",c:"H",w:"",s:"Dornbracht",p:"",d:"Towel Bar. Chrome. 450mm",a:"83 070 780-00",st:"AFC"},
+  {k:"H741",c:"H",w:"",s:"Tecma",p:"",d:"Tecma Silent plus 2G. Custom control panel (Vimar)",a:"",st:"AFC"},
+  {k:"H742",c:"H",w:"",s:"Tecma",p:"",d:"Tecma Silent plus 2G. Short. Custom control panel",a:"",st:"AFC"},
+  {k:"H743",c:"H",w:"",s:"Häfele",p:"",d:"Extending wardrobe rail. 300mm. White/zinc.",a:"805.12.303",st:"AFC"},
+  {k:"H744",c:"H",w:"",s:"Turnstyle",p:"",d:"Door Handle. Barrel Stitch Out Recess Chocolate Leather and Vintage Patina. 52MM ROUND ROSE: 06",a:"R1024-CT-VP",st:"AFC"},
+  {k:"H745",c:"H",w:"",s:"ThermoSphere",p:"",d:"Heated Towel Rail - Round",a:"HTR-R-0700530",st:"AFC"},
+  {k:"H746",c:"H",w:"",s:"Dornbracht",p:"",d:"Wall elbow. Chrome.",a:"28 450 625-00",st:"AFC"},
+  {k:"H747",c:"H",w:"",s:"Dornbracht",p:"",d:"Concealed wall elbow.",a:"35 085 970 90",st:"AFC"},
+  {k:"H748",c:"H",w:"",s:"Turnstyle",p:"",d:"Solid pocket edge door pull - Vintage patina",a:"S1407-VP",st:"AFC"},
+  {k:"H750",c:"H",w:"",s:"Turnstyle",p:"",d:"Drawer knobs. Latching handle. Savile. Square. Polished Stainless Steel. H2009             Korrigerat 27.02.2025  IS",a:"H2009",st:"AFC"},
+  {k:"H754",c:"H",w:"",s:"Seaview",p:"",d:"Deck Hatch Blinds. SEASCREEN. Manual",a:"",st:"AFC"},
+  {k:"H756",c:"H",w:"",s:"Turnstyle",p:"",d:"Latching handle. Solid, round on round. Vintage patina. Ändras till square on square",a:"S3049-VP",st:"AFC"},
+  {k:"H757",c:"H",w:"",s:"Sugatsune",p:"",d:"Freezer seat hinge - CONCEALED HINGE 2000-150",a:"170-042-046",st:"AFC"},
+  {k:"H758",c:"H",w:"",s:"Turnstyle",p:"",d:"Sliding door security lock - Flush Lever Bolt",a:"X1121-203-VP",st:"AFC"},
+  {k:"H759",c:"H",w:"",s:"Alrose",p:"",d:"Freezer seat gas spring - MARILINE GS8-18-P-200-445 - 2x(AS1900 - rod/body end) - 50-1250N(adjustable)",a:"",st:"AFC"},
+  {k:"H760",c:"H",w:"",s:"Alrose",p:"",d:"Freezer seat gas spring - STAINLESS STEEL BRACKETS - 8mm Mounting",a:"64255",st:"AFC"},
+  {k:"H761",c:"H",w:"",s:"Häfele",p:"",d:"Single waste bin, 5 litres, Hailo Pico, model 3505-00",a:"502.63.726",st:"AFC"},
+  {k:"H762",c:"H",w:"",s:"Serdaneli",p:"",d:"Wall mounted door stopper, A1 polished crome",a:"H000-D1-9WDS",st:"AFC"},
+  {k:"H763",c:"H",w:"",s:"Metalglas",p:"",d:"Shower door hinges B-100, wall mounted, polished chrome",a:"",st:"AFC"},
+  {k:"H764",c:"H",w:"",s:"Metalglas",p:"",d:"Shower door hinges B-102, glass to glass, polished chrome",a:"",st:"AFC"},
+  {k:"H765",c:"H",w:"",s:"Turnstyle",p:"",d:"Sliding door lock - Push Button Edge Pull Lock",a:"K2692-VP",st:"AFC"},
+  {k:"H766",c:"H",w:"",s:"Fitlock",p:"",d:"Door  stop for Lockerdoors. Fitlimiter 150mm (Satin nickel)",a:"AF150NS",st:"AFC"},
+  {k:"H767",c:"H",w:"",s:"Fitlock",p:"",d:"Door  stop for Lockerdoors. Fitlimiter 200mm (Satin nickel)",a:"AF200NS",st:"AFC"},
+  {k:"H768",c:"H",w:"",s:"Fitlock",p:"",d:"Stop for lockerdoors. Fitlimiter 250mm (Nickel satin)",a:"AF250NS",st:"AFC"},
+  {k:"H772",c:"H",w:"",s:"Stala",p:"",d:"Sink - LAGOM - 34",a:"",st:"AFC"},
+  {k:"H773",c:"H",w:"",s:"Chambrelan",p:"",d:"Ball bearing slide for drawer, aluminium, full extension, 400mm. D444. Ändrat till LAMP full extension ,400 mm.",a:"",st:"AFC"},
+  {k:"H774",c:"H",w:"",s:"Halder",p:"",d:"Index plunger with pull ring, eingerastet.",a:"22120.1444",st:"AFC"},
+  {k:"H778",c:"H",w:"",s:"Smedbo",p:"",d:"Retractable clothes line. Polished crome.",a:"FK480",st:"AFC"},
+  {k:"H779",c:"H",w:"",s:"Häfele",p:"",d:"Ironing board, Ironfix, wall installation.",a:"568.66.723",st:"AFC"},
+  {k:"H780",c:"H",w:"",s:"Metalglas",p:"",d:"Shower door hinges B-101, glass to wall, polished crome",a:"",st:"AFC"},
+  {k:"H781",c:"H",w:"",s:"Assa Abloy",p:"",d:"Shower hinges. Stremler Melora. Glass to glass mounted. Bright crome",a:"3562.30.0RCV",st:"AFC"},
+  {k:"H782",c:"H",w:"",s:"Tecma",p:"",d:"Tecma Silent plus 2G with bidet function",a:"T-S2G230NW/SB2C00",st:"AFC"},
+  {k:"H783",c:"H",w:"",s:"Fjäråskupan",p:"",d:"Kitchen extractor. Fjäråskupan Vinjett. 90cm",a:"",st:"AFC"},
+  {k:"H784",c:"H",w:"",s:"Stala",p:"",d:"Kitchen sink. Stala LAGOM 50-18",a:"",st:"AFC"},
+  {k:"H785",c:"H",w:"",s:"Sugatsune",p:"",d:"Magnetic touch latch. MC-U60",a:"140-050-016",st:"AFC"},
+  {k:"H788",c:"H",w:"",s:"Turnstyle",p:"",d:"Latching handle - SQUARE BUTTON ON SQUARE - Bright Chrome + Lux push button latch.",a:"S3049-BC + PLK0210",st:"AFC"},
+  {k:"H789",c:"H",w:"",s:"Sugatsune",p:"",d:"BUTT HINGE - WELD ON - REMOVABLE PIN - Stainless Steel",a:"OLYA-128S",st:"AFC"},
+  {k:"H790",c:"H",w:"",s:"Sugatsune",p:"",d:"Lid stay. 290mm",a:"LB-290",st:"AFC"},
+  {k:"H791",c:"H",w:"",s:"Wichard",p:"",d:"Eye bolt. M6*100 Lenght 40mm.",a:"6490",st:"RE"},
+  {k:"H792",c:"H",w:"",s:"West Engineering",p:"",d:"Pipe cot. Open ended. Dismountable carbon/aluminium (hard black anodising) with internal purchase system, heavier net cover, storage bag.",a:"",st:"AFC"},
+  {k:"H840",c:"H",w:"",s:"LAMP",p:"",d:"Concealed hinge HES3D-70DC",a:"170-035-441",st:"AFC"},
+  {k:"H841",c:"H",w:"",s:"Future Automation",p:"",d:"TV lift LSM-BE-RM 5 Box Enclosure",a:"",st:"AFC"},
+  {k:"H846",c:"H",w:"",s:"Giorgetti",p:"",d:"Selene, small armchair 7310, Upholstery: Pelle bianco polvere ( 9108 ), Leather cover Pelle avana ( 9119 )",a:"",st:"AFC"},
+  {k:"H863",c:"H",w:"",s:"Turnstyle",p:"",d:"Drawer knobs. Latching handle. Savile. Chocolate leather. Square.",a:"H2009-CT",st:"AFC"},
+  {k:"H864",c:"H",w:"",s:"Glyn Peter Machin",p:"",d:"Dining Chair - TYC-001R - Dedar FR Sparks T17054 Colour 003",a:"",st:"AFC"},
+  {k:"H876",c:"H",w:"",s:"mQuvée",p:"",d:"WineCooler WineKeeper 25D Anthracite Black",a:"",st:"AFC"},
+  {k:"H880",c:"H",w:"",s:"Grass",p:"",d:"Cabinet Hinge - Grass Tiomos 155 - Half Overlay K9.5",a:"",st:"AFC"},
+  {k:"H881",c:"H",w:"",s:"Turnstyle",p:"",d:"Fiddle Rails - Change to: Turnstyle R1073 Vintage Patina with inset Chocolate Leather. 12mm horiz tube, 10mm upstand tube x length as required. Height 30mm.",a:"R1073-200-CT-VP",st:"RE"}
 ];
 function intCatLookup(key){ key=(key||"").trim().toUpperCase(); for(var i=0;i<INT_MATCAT.length;i++)if(INT_MATCAT[i].k.toUpperCase()===key)return INT_MATCAT[i]; return null; }
 function intMatPickHTML(){
   var groups={M:[],S:[]};
   INT_MATCAT.forEach(function(e,i){ if(!groups[e.c])groups[e.c]=[]; groups[e.c].push({i:i,e:e}); });
   function grp(c,label){ if(!groups[c]||!groups[c].length)return ""; return "<optgroup label='"+label+"'>"+groups[c].map(function(o){var t=o.e.k+" — "+o.e.d; if(o.e.s)t+=" ("+o.e.s+")"; return "<option value='"+o.i+"'>"+esc(t.length>70?t.slice(0,70)+"…":t)+"</option>";}).join("")+"</optgroup>"; }
-  return "<select class='mci no-print' style='max-width:240px' onchange='intAddFromCat(this.value);this.value=\"\"'><option value=''>+ From catalogue&hellip;</option>"+grp("M","M — Materials & Fabrics")+grp("S","S — Surface Finishes")+"</select>";
+  return "<select class='mci no-print' style='max-width:240px' onchange='intAddFromCat(this.value);this.value=\"\"'><option value=''>+ From catalogue&hellip;</option>"+grp("H","H — Hardware & Appliances")+grp("L","L — Electrical & Lights")+grp("M","M — Materials & Fabrics")+grp("S","S — Surface Finishes")+"</select>";
 }
 function intCodeDatalist(){ return "<datalist id='int-codes'>"+INT_MATCAT.map(function(e){return "<option value='"+esc(e.k)+"'>"+esc(e.d.slice(0,40))+"</option>";}).join("")+"</datalist>"; }
 function intAddFromCat(v){
   if(v===""||v==null)return; var e=INT_MATCAT[+v]; if(!e)return; var c=intActiveCab(); if(!c)return;
-  intMatItems().push({id:intMatNewId(),cabinId:c.id,cat:e.c,key:e.k,qty:"1",supplier:e.s||"",part:"",desc:e.d,art:"",stat:e.st||"TBD",added:intToday(),approved:(e.st==="AFC"?intToday():""),ordNo:"",notes:(e.w?("Where: "+e.w):"")});
+  intMatItems().push({id:intMatNewId(),cabinId:c.id,cat:e.c,key:e.k,qty:"1",supplier:e.s||"",part:e.p||"",desc:e.d,art:e.a||"",stat:e.st||"TBD",added:intToday(),approved:(e.st==="AFC"?intToday():""),ordNo:"",notes:(e.w?("Where: "+e.w):"")});
   saveActive(); intCabinRender();
 }
 function intKeyChanged(id,v){
   var e=intCatLookup(v); if(!e)return;
   var it=intMatItems().filter(function(x){return x.id===id;})[0]; if(!it)return;
-  it.cat=e.c; if(!it.supplier)it.supplier=e.s||""; if(!it.desc||it.desc==="New item")it.desc=e.d; if(it.stat==="TBD")it.stat=e.st||"TBD"; if(it.stat==="AFC"&&!it.approved)it.approved=intToday();
+  it.cat=e.c; if(!it.supplier)it.supplier=e.s||""; if(!it.desc||it.desc==="New item")it.desc=e.d; if(!it.part&&e.p)it.part=e.p; if(!it.art&&e.a)it.art=e.a; if(it.stat==="TBD")it.stat=e.st||"TBD"; if(it.stat==="AFC"&&!it.approved)it.approved=intToday();
   saveActive(); intCabinRender();
+}
+function intWebSearch(id){
+  var it=intMatItems().filter(function(x){return x.id===id;})[0]; if(!it)return;
+  var q=[it.supplier,it.part||it.art,it.desc].filter(function(x){return x&&String(x).trim();}).join(" ");
+  if(!q){alert("Add a supplier, part number or description first.");return;}
+  window.open("https://www.google.com/search?q="+encodeURIComponent(q),"_blank","noopener");
 }
 function intCatMeta(k){for(var i=0;i<INT_MCATS.length;i++)if(INT_MCATS[i].k===k)return INT_MCATS[i];return {k:k||"M",l:k||"",c:"#5a6472"};}
 function intStatMeta(k){for(var i=0;i<INT_STATS.length;i++)if(INT_STATS[i].k===k)return INT_STATS[i];return {k:k||"",l:k||"",p:"mut"};}
@@ -4001,7 +4151,7 @@ function intCabinRender(){
       "<td><select class='mci' onchange=\"intMatSet('"+it.id+"','stat',this.value);intCabinRender()\">"+intStatOptsHTML(it.stat)+"</select></td>"+
       "<td><input class='mci' value='"+esc(it.ordNo||"")+"' oninput=\"intMatSet('"+it.id+"','ordNo',this.value)\" style='width:74px'></td>"+
       "<td><input class='mci' value='"+esc(it.notes||"")+"' oninput=\"intMatSet('"+it.id+"','notes',this.value)\" style='min-width:120px'></td>"+
-      "<td class='no-print'><button class='btn btn-line btn-xs' onclick=\"intMatDel('"+it.id+"')\">&#10005;</button></td></tr>";
+      "<td class='no-print' style='white-space:nowrap'><button class='btn btn-line btn-xs' title='Web search this item' onclick=\"intWebSearch('"+it.id+"')\">&#128269;</button> <button class='btn btn-line btn-xs' title='Remove' onclick=\"intMatDel('"+it.id+"')\">&#10005;</button></td></tr>";
   }).join(""):"<tr><td colspan='11'><div class='empty'><div class='icon'>&#128230;</div><h3>No items in "+esc(c.name)+"</h3><p>Add the hardware, lighting, materials and finishes specified for this space. They&rsquo;ll appear in the Order Summary automatically.</p></div></td></tr>";
   el("int-cab-main").innerHTML="<div class='card'>"+intCodeDatalist()+"<div class='card-hdr'><h2>"+esc(c.name)+"</h2><div style='display:flex;gap:6px;align-items:center' class='no-print'>"+(intCabItems(c.id).length?"":"<button class='btn btn-line btn-xs' onclick='intDelSpace()'>&#128465; Space</button>")+intMatPickHTML()+"<button class='btn btn-primary btn-sm' onclick=\"intMatAdd('"+c.id+"')\">+ Blank item</button></div></div>"+
     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Key</th><th>Cat</th><th>Qty</th><th>Supplier</th><th>Description</th><th>Part No</th><th>Art No</th><th>Status</th><th>Order No</th><th>Notes</th><th class='no-print'></th></tr></thead><tbody>"+rows+"</tbody></table></div>"+
@@ -4032,7 +4182,7 @@ function intOrderHTML(){
      "<div id='int-ord-fstat' style='display:flex;gap:6px;flex-wrap:wrap'></div>"+
    "</div></div>"+
    "<div class='card'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Procurement list</h2><span class='badge badge-gold' id='int-ord-badge'>-</span></div>"+
-     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Key</th><th>Cat</th><th>Cabin</th><th>Qty</th><th>Supplier</th><th>Part No</th><th>Art No</th><th>Description</th><th>Status</th><th>Order No</th></tr></thead><tbody id='int-ord-body'></tbody></table></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Key</th><th>Cat</th><th>Cabin</th><th>Qty</th><th>Supplier</th><th>Part No</th><th>Art No</th><th>Description</th><th>Status</th><th>Order No</th><th class='no-print'></th></tr></thead><tbody id='int-ord-body'></tbody></table></div>"+
    "</div></main>";
 }
 function intOrderRender(){
@@ -4067,10 +4217,10 @@ function intOrderRender(){
     if(sa<sb)return -1; if(sa>sb)return 1;
     return (a.key||"").localeCompare(b.key||"");
   });
-  if(!shown.length){el("int-ord-body").innerHTML="<tr><td colspan='10'><div class='empty'><div class='icon'>&#128203;</div><h3>Nothing to order yet</h3><p>"+(all.length?"No items match the current filter.":"Add items under <strong>By cabin</strong> and they will be consolidated here for procurement.")+"</p></div></td></tr>";return;}
+  if(!shown.length){el("int-ord-body").innerHTML="<tr><td colspan='11'><div class='empty'><div class='icon'>&#128203;</div><h3>Nothing to order yet</h3><p>"+(all.length?"No items match the current filter.":"Add items under <strong>By cabin</strong> and they will be consolidated here for procurement.")+"</p></div></td></tr>";return;}
   var lastCat=null,html="";
   shown.forEach(function(it){
-    if(it.cat!==lastCat){lastCat=it.cat;var m=intCatMeta(it.cat);html+="<tr style='background:var(--g100)'><td colspan='10' style='font-weight:700;color:"+m.c+";font-size:11px;text-transform:uppercase;letter-spacing:.5px'>"+intCatDot(it.cat)+m.k+" — "+esc(m.l)+"</td></tr>";}
+    if(it.cat!==lastCat){lastCat=it.cat;var m=intCatMeta(it.cat);html+="<tr style='background:var(--g100)'><td colspan='11' style='font-weight:700;color:"+m.c+";font-size:11px;text-transform:uppercase;letter-spacing:.5px'>"+intCatDot(it.cat)+m.k+" — "+esc(m.l)+"</td></tr>";}
     html+="<tr>"+
       "<td style='font-weight:600'>"+esc(it.key||"—")+"</td>"+
       "<td>"+intCatDot(it.cat)+esc(it.cat||"")+"</td>"+
@@ -4081,7 +4231,8 @@ function intOrderRender(){
       "<td>"+esc(it.art||"")+"</td>"+
       "<td>"+esc(it.desc||"")+"</td>"+
       "<td>"+intStatPill(it.stat)+"</td>"+
-      "<td>"+esc(it.ordNo||"")+"</td></tr>";
+      "<td>"+esc(it.ordNo||"")+"</td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' title='Web search this item' onclick=\"intWebSearch('"+it.id+"')\">&#128269;</button></td></tr>";
   });
   el("int-ord-body").innerHTML=html;
 }
