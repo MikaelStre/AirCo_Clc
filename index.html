@@ -28,6 +28,8 @@
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
 }
 body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg);min-height:100dvh}
+
+/* ===== SHELL TOP NAV ===== */
 .shell-nav{background:var(--navy);position:sticky;top:0;z-index:300;box-shadow:0 2px 16px rgba(0,0,0,.3);padding-top:var(--sat)}
 .shell-nav-in{max-width:1440px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:14px;cursor:pointer;flex-shrink:0}
@@ -49,9 +51,13 @@ body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(
 .btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy3)}
 .btn-sm{padding:5px 10px;font-size:12px}.btn-xs{padding:3px 8px;font-size:11px}
 .btn-line{background:#fff;color:var(--navy);border:1.5px solid var(--g300)}.btn-line:hover{border-color:var(--navy)}
+
+/* ===== VIEWS ===== */
 .view{display:none}
 .view.active{display:block}
 main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px + var(--sab))}
+
+/* ===== HERO (home) ===== */
 .hero{text-align:center;padding:26px 0 22px}
 .hero h1{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:.3px}
 .hero p{font-size:14px;color:var(--g500);margin-top:6px}
@@ -64,6 +70,8 @@ main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px +
 .cat .tag{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:99px}
 .tag-live{background:var(--green-bg);color:var(--green-dark)}
 .tag-soon{background:var(--g100);color:var(--g500)}
+
+/* ===== SUB GRID (systems landing / engine) ===== */
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
 .page-head h2{font-size:21px;font-weight:700;color:var(--navy)}
 .page-head p{font-size:13px;color:var(--g500);margin-top:3px}
@@ -77,6 +85,8 @@ main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px +
 .tile p{font-size:12px;color:var(--g500);line-height:1.45}
 .tile .ref{font-size:10px;color:var(--gold);font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.4px}
 .tile .tag{position:absolute;top:12px;right:12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:99px}
+
+/* ===== CARD / TABLE (shared) ===== */
 .card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
 .card-hdr{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200)}
 .card-hdr h2{font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.8px}
@@ -93,15 +103,21 @@ tr:last-child td{border-bottom:none}
 .pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap}
 .p-24{background:#eef2ff;color:#3730a3}.p-ac{background:#ecfdf5;color:#065f46}.p-inv{background:#fef3c7;color:#92400e}
 .p-dim{background:var(--g100);color:var(--g500)}
+
+/* ===== KPI ===== */
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;padding:16px}
 .kpi{padding:12px 16px;background:var(--bg);border-radius:var(--r2);border-left:3px solid var(--gold)}
 .kpi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);margin-bottom:4px}
 .kpi-v{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
 .kpi-u{font-size:11px;color:var(--g500);margin-top:2px}
+
+/* ===== EMPTY / SOON ===== */
 .empty{text-align:center;padding:56px 20px;color:var(--g500)}
 .empty .icon{font-size:46px;margin-bottom:14px}
 .empty h3{font-size:17px;color:var(--navy);margin-bottom:6px}
 .empty p{font-size:13px;max-width:440px;margin:0 auto;line-height:1.6}
+
+/* ===== MODAL ===== */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;backdrop-filter:blur(2px)}
 .overlay.show{display:block}
 .modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:var(--r);box-shadow:var(--sh2);z-index:600;width:min(560px,95vw);max-height:85vh;flex-direction:column}
@@ -117,6 +133,8 @@ tr:last-child td{border-bottom:none}
 .field input,.field select{padding:8px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;width:100%;background:#fff}
 .field input:focus,.field select:focus{outline:none;border-color:var(--navy)}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ===== PWA banners ===== */
 #pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--navy);color:#fff;align-items:center;gap:12px;padding:12px 20px;padding-bottom:calc(12px + var(--sab));box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 #pwa-banner canvas{width:40px;height:40px;border-radius:8px;flex-shrink:0}
 .pwa-txt{flex:1}.pwa-txt strong{display:block;font-size:14px}.pwa-txt span{font-size:11px;opacity:.7}
@@ -124,8 +142,10 @@ tr:last-child td{border-bottom:none}
 #ios-hint{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--navy);color:#fff;padding:14px 20px;padding-bottom:calc(14px + var(--sab));text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 #ios-hint p{font-size:13px;line-height:1.6}
 #ios-hint button{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;position:absolute;top:10px;right:14px}
+
 footer{background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;padding-bottom:calc(14px + var(--sab));font-size:11px;margin-top:28px}
 footer strong{color:var(--gold)}
+
 @media print{
   .shell-nav,.nav-right,#pwa-banner,#ios-hint,.no-print{display:none!important}
   main{padding:10px!important;max-width:100%}
@@ -148,10 +168,51 @@ footer strong{color:var(--gold)}
   .hero h1{font-size:21px}
   .kpi-row{grid-template-columns:1fr 1fr}
 }
+
+/* restored AC styles (scoped) */
+#view-ac /* ── RESET & TOKENS ───────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}#view-ac /* ── HEADER ─────────────────────────────────────────  */
+header{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}#view-ac .hdr{max-width:1440px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}#view-ac .logo-wrap{display:flex;align-items:center;gap:16px}#view-ac .logo svg{width:130px;height:44px}#view-ac .vline{width:1px;height:32px;background:rgba(201,169,110,.35)}#view-ac .hdr-title h1{font-size:15px;font-weight:600;color:#fff;letter-spacing:.3px}#view-ac .hdr-title p{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase;margin-top:2px}#view-ac .hdr-btns{display:flex;gap:6px}#view-ac .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--r2);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}#view-ac .btn-gold{background:var(--gold);color:var(--navy)}#view-ac .btn-gold:hover{background:var(--gold2)}#view-ac .btn-ghost{background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.25)}#view-ac .btn-ghost:hover{background:rgba(255,255,255,.1)}#view-ac .btn-primary{background:var(--navy);color:#fff}#view-ac .btn-primary:hover{background:var(--navy3)}#view-ac .btn-danger{background:#fee2e2;color:var(--red)}#view-ac .btn-danger:hover{background:#fecdca}#view-ac .btn-link{background:none;color:var(--g500);font-size:12px;padding:4px 8px}#view-ac .btn-link:hover{color:var(--navy);background:var(--g100)}#view-ac .btn-sm{padding:5px 10px;font-size:12px}#view-ac .btn-xs{padding:3px 8px;font-size:11px}#view-ac /* ── SETTINGS BAR ───────────────────────────────────  */
+.settings-bar{background:var(--white);border-bottom:1px solid var(--g200);position:sticky;top:68px;z-index:150}#view-ac .sb-inner{max-width:1440px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}#view-ac .sb-group{display:flex;flex-direction:column;gap:4px}#view-ac .sb-group label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500)}#view-ac .toggle{display:flex;border:1.5px solid var(--g300);border-radius:var(--r2);overflow:hidden;height:32px}#view-ac .toggle button{padding:0 14px;border:none;background:var(--white);color:var(--g700);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}#view-ac .toggle button.on{background:var(--navy);color:#fff}#view-ac .toggle button:not(:last-child){border-right:1.5px solid var(--g300)}#view-ac .sup-pick{display:flex;gap:5px;height:32px}#view-ac .sup-btn{padding:0 12px;border:1.5px solid var(--g300);border-radius:var(--r2);background:var(--white);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--g700)}#view-ac .sup-btn.on{border-color:var(--gold);background:var(--gold-bg);color:var(--navy)}#view-ac .cop-inp{width:64px;padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;font-weight:500;text-align:center}#view-ac .cop-inp:focus{outline:none;border-color:var(--navy)}#view-ac .sb-sep{width:1px;height:32px;background:var(--g200)}#view-ac .proj-toggle-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);background:var(--white);font-size:12px;cursor:pointer;color:var(--g700);transition:all .15s;height:32px}#view-ac .proj-toggle-btn:hover{border-color:var(--navy);color:var(--navy)}#view-ac input[type=number]{-moz-appearance:textfield}#view-ac input[type=number]::-webkit-outer-spin-button,#view-ac input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}#view-ac /* ── PROJECT PANEL (collapsible) ────────────────────  */
+.proj-panel{background:var(--white);border-bottom:1px solid var(--g200);overflow:hidden;max-height:0;transition:max-height .3s ease}#view-ac .proj-panel.open{max-height:200px}#view-ac .proj-grid{max-width:1440px;margin:0 auto;padding:16px 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}#view-ac .field{display:flex;flex-direction:column;gap:3px}#view-ac .field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500)}#view-ac .field input,#view-ac .field select{padding:7px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;color:var(--text);transition:border-color .15s;width:100%;background:#fff}#view-ac .field input:focus,#view-ac .field select:focus{outline:none;border-color:var(--navy)}#view-ac /* ── MAIN ────────────────────────────────────────────  */
+main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#view-ac /* ── SECTION CARD ────────────────────────────────────  */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}#view-ac .card-hdr{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200)}#view-ac .card-hdr h2{font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.8px}#view-ac .card-hdr-right{display:flex;align-items:center;gap:8px}#view-ac .badge{background:var(--navy);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}#view-ac .badge-gold{background:var(--gold);color:var(--navy)}#view-ac /* ── CABIN TABLE ─────────────────────────────────────  */
+.tbl-wrap{overflow-x:auto}#view-ac table{width:100%;border-collapse:collapse;font-size:13px}#view-ac th{background:var(--g100);padding:9px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);white-space:nowrap}#view-ac td{padding:7px 10px;border-bottom:1px solid var(--g100);vertical-align:middle}#view-ac tr:last-child td{border-bottom:none}#view-ac tr:hover td{background:rgba(26,39,68,.02)}#view-ac .ti{padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;background:#fff;transition:border-color .15s;width:100%}#view-ac .ti:focus{outline:none;border-color:var(--navy)}#view-ac .ti-name{min-width:140px}#view-ac .ti-type{min-width:160px}#view-ac .ti-num{max-width:58px;text-align:right}#view-ac .tc{text-align:center}#view-ac .tc input[type=checkbox]{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}#view-ac .pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap}#view-ac .p-ok{background:var(--green-bg);color:var(--green-dark)}#view-ac .p-warn{background:#fef3c7;color:#92400e}#view-ac .p-err{background:var(--red-bg);color:var(--red-dark)}#view-ac .p-dim{background:var(--g100);color:var(--g500)}#view-ac .tbl-footer{padding:10px 16px;background:var(--g100);border-top:1px solid var(--g200);display:flex;align-items:center;gap:10px}#view-ac .icon-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;color:var(--g500);border-radius:var(--r2);display:inline-flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}#view-ac .icon-btn:hover{background:var(--red-bg);color:var(--red)}#view-ac /* ── FAMU BANNER ─────────────────────────────────────  */
+.banner{padding:10px 16px;border-radius:var(--r2);border:1px solid;display:flex;gap:10px;align-items:flex-start;font-size:12px}#view-ac .banner-blue{background:#eff8ff;border-color:#b2ddff;color:#026aa2}#view-ac .banner-gold{background:var(--gold-bg);border-color:var(--gold2);color:#7a5c1e}#view-ac .banner i{font-style:normal;font-size:15px;flex-shrink:0}#view-ac /* ── RESULTS ─────────────────────────────────────────  */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:16px}#view-ac .kpi{padding:12px 16px;background:var(--bg);border-radius:var(--r2);border-left:3px solid var(--gold)}#view-ac .kpi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);margin-bottom:4px}#view-ac .kpi-v{font-size:22px;font-weight:700;color:var(--navy);line-height:1}#view-ac .kpi-u{font-size:11px;color:var(--g500);margin-top:2px}#view-ac .result-table th{background:var(--navy);color:#fff}#view-ac .result-table th:first-child{border-radius:0}#view-ac .result-table tbody tr:nth-child(even) td{background:rgba(26,39,68,.025)}#view-ac .result-table tfoot td{background:var(--navy);color:#fff;font-weight:600;padding:9px 10px}#view-ac /* ── ENERGY BAR CHART ────────────────────────────────  */
+.energy-section{padding:16px}#view-ac .energy-total{font-size:28px;font-weight:700;color:var(--navy);margin-bottom:4px}#view-ac .energy-sub{font-size:12px;color:var(--g500);margin-bottom:16px}#view-ac .energy-bars{display:grid;gap:10px}#view-ac .e-bar-row{display:grid;grid-template-columns:120px 1fr 70px;align-items:center;gap:12px}#view-ac .e-bar-label{font-size:12px;color:var(--g700);font-weight:500}#view-ac .e-bar-track{height:20px;background:var(--g200);border-radius:3px;overflow:hidden;position:relative}#view-ac .e-bar-fill{height:100%;border-radius:3px;position:relative;transition:width .4s ease}#view-ac .e-bar-fill::after{content:attr(data-label);position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;color:#fff;white-space:nowrap}#view-ac .e-bar-day{background:var(--navy)}#view-ac .e-bar-sil{background:var(--gold)}#view-ac .e-bar-red{background:var(--g300)}#view-ac .e-bar-val{font-size:13px;font-weight:600;color:var(--navy);text-align:right}#view-ac /* ── ACCORDION / TECHNICAL DETAILS ──────────────────  */
+.acc-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;cursor:pointer;user-select:none;border-top:1px solid var(--g200)}#view-ac .acc-hdr:hover{background:var(--g100)}#view-ac .acc-hdr h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500)}#view-ac .acc-hdr .chevron{font-size:12px;color:var(--g500);transition:transform .2s}#view-ac .acc-body{overflow:hidden;max-height:0;transition:max-height .3s ease}#view-ac .acc-body.open{max-height:4000px}#view-ac .acc-body .inner{padding:0 0 16px}#view-ac .acc-hdr.open .chevron{transform:rotate(180deg)}#view-ac /* ── SUPPLIER MODAL ──────────────────────────────────  */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;backdrop-filter:blur(2px)}#view-ac .overlay.show{display:block}#view-ac .modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:var(--r);box-shadow:var(--sh2);z-index:600;width:min(720px,95vw);max-height:85vh;flex-direction:column;overflow:hidden}#view-ac .modal.show{display:flex}#view-ac .modal-hdr{padding:16px 20px;background:var(--navy);display:flex;align-items:center;justify-content:space-between}#view-ac .modal-hdr h2{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px}#view-ac .modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px;transition:all .15s}#view-ac .modal-close:hover{background:rgba(255,255,255,.1);color:#fff}#view-ac .modal-tabs{display:flex;padding:12px 20px 0;border-bottom:1px solid var(--g200);gap:4px}#view-ac .modal-tab{padding:7px 16px;border:none;background:none;font-size:13px;font-weight:500;cursor:pointer;color:var(--g500);border-bottom:2px solid transparent;transition:all .15s;border-radius:var(--r2) var(--r2) 0 0}#view-ac .modal-tab.on{color:var(--navy);border-bottom-color:var(--gold);background:var(--g100)}#view-ac .modal-body{flex:1;overflow-y:auto;padding:16px 20px}#view-ac .modal-footer{padding:12px 20px;border-top:1px solid var(--g200);display:flex;justify-content:space-between;align-items:center}#view-ac .sup-table{width:100%;border-collapse:collapse;font-size:13px}#view-ac .sup-table th{padding:8px 10px;background:var(--g100);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);text-align:left}#view-ac .sup-table td{padding:7px 10px;border-bottom:1px solid var(--g100)}#view-ac .sup-table tr:hover td{background:var(--g100)}#view-ac .sup-inp{padding:4px 7px;border:1.5px solid var(--g300);border-radius:3px;font-size:12px;width:100%}#view-ac .sup-inp:focus{outline:none;border-color:var(--navy)}#view-ac .add-unit-row{display:flex;gap:8px;padding:10px 0 0;align-items:flex-end}#view-ac .add-unit-row .field{flex:1}#view-ac /* ── PRINT ────────────────────────────────────────────  */
+@media print{
+  .settings-bar,.hdr-btns,.tbl-footer,.icon-btn,.no-print,
+  .overlay,.modal,header .hdr-btns{display:none!important}
+  header{position:static!important}
+  .settings-bar{display:none!important}
+  .proj-panel{max-height:none!important}
+  main{padding:8px!important}
+  .card{box-shadow:none!important;border:1px solid #ddd!important;page-break-inside:avoid}
+  .acc-body{max-height:none!important}
+  th,.result-table th{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .result-table tfoot td{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  @page{margin:1.5cm;size:A4 landscape}
+}#view-ac /* ── EMPTY STATE ─────────────────────────────────────  */
+.empty{text-align:center;padding:40px 20px;color:var(--g500)}#view-ac .empty .icon{font-size:40px;margin-bottom:12px}#view-ac .empty p{font-size:14px}#view-ac .section-sep{padding:12px 20px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);border-top:1px solid var(--g200)}@media (max-width:900px){#view-ac .hdr{padding:0 14px;height:58px}#view-ac .hdr-title p{display:none}#view-ac .vline{display:none}#view-ac .logo svg{width:110px;height:36px}#view-ac .sb-inner{padding:8px 12px;gap:10px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}#view-ac .sb-group{flex-shrink:0}#view-ac .sb-sep{display:none}#view-ac .proj-grid{grid-template-columns:1fr 1fr;padding:12px;gap:10px}#view-ac main{padding:12px;gap:12px}#view-ac .kpi-row{grid-template-columns:1fr 1fr;padding:12px;gap:8px}#view-ac .kpi-v{font-size:18px}#view-ac .card-hdr{padding:10px 14px}#view-ac .card-hdr h2{font-size:12px}#view-ac .tbl-wrap{-webkit-overflow-scrolling:touch}#view-ac th,#view-ac td{padding:7px 8px;font-size:12px}#view-ac .energy-section{padding:12px}#view-ac .energy-total{font-size:22px}#view-ac .e-bar-row{grid-template-columns:90px 1fr 58px;gap:8px}#view-ac .e-bar-label{font-size:11px}#view-ac .acc-hdr{padding:10px 14px}#view-ac .modal{width:96vw;max-height:88vh}#view-ac .tbl-footer{flex-wrap:wrap;gap:6px;padding:8px 12px}#view-ac .section-sep{padding:10px 14px 3px}
+}@media (max-width:600px){#view-ac .hdr{height:52px}#view-ac .hdr-title h1{font-size:13px}#view-ac .hdr-btns .btn-ghost{display:none}#view-ac .hdr-btns .btn-gold{padding:6px 12px;font-size:12px}#view-ac .sb-inner{padding:6px 10px;gap:8px}#view-ac .toggle button{padding:0 10px;font-size:11px}#view-ac .sup-btn{padding:0 9px;font-size:11px}#view-ac .cop-inp{width:52px;font-size:12px}#view-ac .proj-toggle-btn{font-size:11px;padding:4px 8px}#view-ac .proj-grid{grid-template-columns:1fr;padding:10px}#view-ac main{padding:10px;gap:10px}#view-ac .kpi-row{grid-template-columns:1fr 1fr;padding:10px;gap:7px}#view-ac .kpi{padding:10px 12px}#view-ac .kpi-v{font-size:16px}#view-ac .kpi-l{font-size:9px}#view-ac .kpi-u{font-size:10px}#view-ac th,#view-ac td{padding:6px 7px;font-size:12px}#view-ac .ti-name{min-width:110px}#view-ac .ti-type{min-width:130px}#view-ac .ti-num{max-width:48px;font-size:12px}#view-ac .energy-section{padding:10px}#view-ac .energy-total{font-size:20px}#view-ac .energy-sub{font-size:11px}#view-ac .e-bar-row{grid-template-columns:80px 1fr 50px;gap:6px}#view-ac .e-bar-fill::after{font-size:9px}#view-ac .result-table th,#view-ac .result-table td{font-size:11px;padding:5px 7px}#view-ac .modal{width:98vw;max-height:92vh;top:4%}#view-ac .modal-hdr{padding:12px 14px}#view-ac .modal-body{padding:12px 14px}#view-ac .modal-footer{padding:10px 14px}#view-ac .acc-hdr h3{font-size:11px}#view-ac .tbl-footer{gap:5px;padding:8px 10px}#view-ac .tbl-footer .btn-sm{font-size:11px;padding:5px 8px}#view-ac .ti,#view-ac .cabin-input{font-size:16px}#view-ac select.ti{font-size:16px}#view-ac input[type=checkbox]{width:18px;height:18px}#view-ac .icon-btn{width:32px;height:32px;font-size:16px}#view-ac .btn-sm{min-height:34px}
+}@media (max-width:380px){#view-ac .hdr-btns{gap:2px}#view-ac .btn-gold{padding:5px 10px;font-size:11px}#view-ac .kpi-v{font-size:15px}#view-ac .e-bar-row{grid-template-columns:70px 1fr 46px}
+}#view-ac /* ── PWA / SAFE AREA ─────────────────────────────────── */
+:root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);--sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px)}#view-ac header{padding-top:var(--sat)}#view-ac .settings-bar{top:calc(68px + var(--sat))}@media(max-width:900px){#view-ac .settings-bar{top:calc(58px + var(--sat))}}@media(max-width:600px){#view-ac .settings-bar{top:calc(52px + var(--sat))}}#view-ac main{padding-bottom:calc(20px + var(--sab))}#view-ac footer{padding-bottom:calc(14px + var(--sab))}#view-ac /* Install banner */
+#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:var(--navy);color:#fff;padding:12px 20px calc(12px + var(--sab));
+  flex-direction:row;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,.3)}#view-ac #pwa-banner img{width:40px;height:40px;border-radius:8px}#view-ac #pwa-banner .pb-text{flex:1;font-size:13px}#view-ac #pwa-banner .pb-text strong{display:block;font-size:14px;margin-bottom:2px}#view-ac #pwa-banner .pb-text span{font-size:11px;opacity:.7}#view-ac .btn-install{background:var(--gold);color:var(--navy);border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;font-size:13px;white-space:nowrap}#view-ac .btn-dismiss{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;padding:4px 8px;line-height:1}
+
+#view-ac #preset-bar .btn{color:var(--navy);background:#fff}
+#view-ac #preset-bar .btn:hover{background:var(--g100)}
+
 </style>
 </head>
 <body>
 
+<!-- ===== SHELL TOP NAV ===== -->
 <div class="shell-nav">
 <div class="shell-nav-in">
   <div class="brand" onclick="go('home')">
@@ -169,6 +230,7 @@ footer strong{color:var(--gold)}
 </div>
 </div>
 
+<!-- ===== VIEW: HOME ===== -->
 <div class="view" id="view-home">
 <main>
   <div class="hero">
@@ -197,9 +259,12 @@ footer strong{color:var(--gold)}
       <p>Load balance &mdash; aggregates consumers from every calculation</p>
     </div>
   </div>
+  <div class="card" id="home-projects" style="margin-top:22px"><div class="card-hdr"><h2>Projects</h2><div style="display:flex;gap:8px" class="no-print"><button class="btn btn-line btn-sm" onclick="saveCurrentProject()">&#128190; Save current</button><button class="btn btn-gold btn-sm" onclick="toggleNewProject()">+ Create Project</button></div></div><div id="new-project-form" style="display:none;padding:16px 20px;border-bottom:1px solid var(--g200)"><div class="field-row"><div class="field"><label>Yacht Name</label><input id="np-yacht" placeholder="e.g. B175"></div><div class="field"><label>Project No.</label><input id="np-proj" placeholder="B175-01"></div></div><div class="field-row"><div class="field"><label>Type</label><select id="np-type"><option>Sailing Yacht</option><option>Motor Yacht</option></select></div><div class="field"><label>Class Society</label><select id="np-cls"><option>DNV GL</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>ABS</option><option>Other</option></select></div><div class="field"><label>Flag (additional rule book)</label><select id="np-flag"><option value="">&mdash; none &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div></div><div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="createProjectFromHome()">Create Project</button></div></div><div id="home-proj-list" style="padding:14px 20px"></div></div>
+  <div class="card" id="home-rules" style="margin-top:22px"></div>
 </main>
 </div>
 
+<!-- ===== VIEW: SYSTEMS ===== -->
 <div class="view" id="view-systems">
 <main>
   <div class="page-head">
@@ -226,10 +291,10 @@ footer strong{color:var(--gold)}
       <div class="t-ic">&#127786;</div>
       <div><h3>Engine Room Ventilation</h3><p>Combustion + heat-loss airflow, fan sizing</p><div class="ref">ISO 8861</div></div>
     </div>
-    <div class="tile disabled">
-      <span class="tag tag-soon">Soon</span>
+    <div class="tile" onclick="go('water')">
+      <span class="tag tag-live">Live</span>
       <div class="t-ic">&#128688;</div>
-      <div><h3>Water &amp; Waste Water</h3><p>Tank balance, fresh / grey / black pumps</p><div class="ref">Class rules</div></div>
+      <div><h3>Water &amp; Waste Water</h3><p>Tank balance, fresh water &amp; discharge rate</p><div class="ref">MEPC 157(55)</div></div>
     </div>
     <div class="tile" onclick="go('engine')">
       <span class="tag tag-soon">Subpage</span>
@@ -240,26 +305,28 @@ footer strong{color:var(--gold)}
 </main>
 </div>
 
+<!-- ===== VIEW: ENGINE (subpage) ===== -->
 <div class="view" id="view-engine">
 <main>
   <div class="page-head">
     <div><h2>Engine</h2><p>Propulsion-related calculations under Systems.</p></div>
   </div>
   <div class="tile-grid">
-    <div class="tile disabled">
-      <span class="tag tag-soon">Soon</span>
+    <div class="tile" onclick="go('thruster')">
+      <span class="tag tag-live">Live</span>
       <div class="t-ic">&#129517;</div>
-      <div><h3>Thruster</h3><p>Bow / stern thruster sizing &amp; power</p><div class="ref">Class rules</div></div>
+      <div><h3>Thruster</h3><p>Bow / stern thruster sizing &amp; power</p><div class="ref">Wind + accel balance</div></div>
     </div>
-    <div class="tile disabled">
+    <div class="tile" onclick="window.open('https://balticyachts-my.sharepoint.com/personal/mikael_strengell_balticyachts_fi/_layouts/15/Doc.aspx?sourcedoc=%7BE7D4B8E7-1A7D-46EE-BE0D-60EEACADF937%7D&file=Propeller%20calculation.xlsm&action=default&mobileredirect=true','_blank')">
       <span class="tag tag-soon">Soon</span>
       <div class="t-ic">&#9763;</div>
-      <div><h3>Propeller</h3><p>Propeller sizing (displacement / planing)</p><div class="ref">Baltic method</div></div>
+      <div><h3>Propeller</h3><p>Propeller sizing (displacement / planing)</p><div class="ref">Open workbook &#8594;</div></div>
     </div>
   </div>
 </main>
 </div>
 
+<!-- ===== VIEW: ELECTRICAL ===== -->
 <div class="view" id="view-electrical">
 <main>
   <div class="page-head">
@@ -283,21 +350,33 @@ footer strong{color:var(--gold)}
 </main>
 </div>
 
+<!-- ===== VIEW: INTERIOR ===== -->
 <div class="view" id="view-interior"><main>
   <div class="empty"><div class="icon">&#128719;</div><h3>Interior &mdash; coming soon</h3>
   <p>Joinery weights, furnishing and interior calculations will live here. Tell us which calculation to build first.</p></div>
 </main></div>
 
+<!-- ===== VIEW: MECHANICAL ===== -->
 <div class="view" id="view-mechanical"><main>
   <div class="empty"><div class="icon">&#128295;</div><h3>Mechanical &mdash; coming soon</h3>
   <p>Steering, hydraulics and deck machinery calculations will live here.</p></div>
 </main></div>
 
+<!-- ===== VIEW: AC (the full calculator module) ===== -->
 <div class="view" id="view-ac"></div>
-<div class="view" id="view-ervent"></div>
-<div class="view" id="view-bilge"></div>
-<div class="view" id="view-seawater"></div>
 
+<!-- ===== VIEW: ENGINE ROOM VENTILATION ===== -->
+<div class="view" id="view-ervent"></div>
+
+<!-- ===== VIEW: BILGE ===== -->
+<div class="view" id="view-bilge"></div>
+
+<!-- ===== VIEW: SEAWATER ===== -->
+<div class="view" id="view-seawater"></div>
+<div class="view" id="view-water"></div>
+<div class="view" id="view-thruster"></div>
+
+<!-- ===== PROJECT MODAL ===== -->
 <div class="overlay" id="proj-overlay" onclick="closeProjModal()"></div>
 <div class="modal" id="proj-modal">
   <div class="modal-hdr"><h2>&#128203; Project</h2><button class="modal-close" onclick="closeProjModal()">&#10005;</button></div>
@@ -309,8 +388,9 @@ footer strong{color:var(--gold)}
     <div class="field-row">
       <div class="field"><label>Type</label><input id="pm-type" placeholder="Sailing Yacht"></div>
       <div class="field"><label>Class Society</label>
-        <select id="pm-cls"><option>Lloyd's Register (LRS)</option><option>DNV</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>MCA</option><option>RCD (EU)</option></select></div>
+        <select id="pm-cls"><option>DNV GL</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>ABS</option><option>Other</option></select></div>
     </div>
+    <div class="field-row"><div class="field"><label>Flag State (additional rule book)</label><select id="pm-flag"><option value="">&mdash; select &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div><div class="field"></div></div>
     <div class="field-row">
       <div class="field"><label>Calculated By</label><input id="pm-by" placeholder="Engineer"></div>
       <div class="field"><label>Revision</label><input id="pm-rev" placeholder="Rev. A"></div>
@@ -327,6 +407,24 @@ footer strong{color:var(--gold)}
   </div>
 </div>
 
+<div class="overlay" id="rules-overlay" onclick="closeRulesEditor()"></div>
+<div class="modal" id="rules-modal" style="max-width:900px">
+<div class="modal-hdr"><h2>&#9881; Class &amp; Flag Rules</h2><button class="modal-close" onclick="closeRulesEditor()">&#10005;</button></div>
+<div class="modal-body">
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><button class="btn btn-line btn-xs" onclick="document.getElementById('rules-import').click()">&#11014; Import</button><button class="btn btn-line btn-xs" onclick="exportRules()">&#11015; Export</button><input type="file" id="rules-import" accept=".json" style="display:none" onchange="importRules(this.files[0])"></div>
+<div class="tbl-wrap"><table class="sup-table"><thead><tr><th>Scope</th><th>Key</th><th>System</th><th>Reference</th><th>Requirement</th><th class="no-print"></th></tr></thead><tbody id="rules-edit-body"></tbody></table></div>
+<div class="add-unit-row" style="flex-wrap:wrap;gap:8px;margin-top:10px">
+<div class="field"><label>Scope</label><select class="sup-inp" id="nr-bucket"><option value="class">class</option><option value="flag">flag</option><option value="always">always</option></select></div>
+<div class="field"><label>Key (class name / REG·MALTA·OTHER)</label><input class="sup-inp" id="nr-key" placeholder="DNV  or  REG"></div>
+<div class="field"><label>System</label><select class="sup-inp" id="nr-sys"><option value="ac">Air Conditioning</option><option value="ervent">ER Ventilation</option><option value="bilge">Bilge</option><option value="seawater">Seawater</option><option value="water">Water &amp; Waste</option><option value="thruster">Thruster</option><option value="electrical">Electrical</option><option value="*">All</option></select></div>
+<div class="field"><label>Reference</label><input class="sup-inp" id="nr-code" placeholder="DNV-RU-... §x"></div>
+<div class="field" style="flex:1"><label>Requirement</label><input class="sup-inp" id="nr-req" placeholder="describe the requirement"></div>
+<button class="btn btn-primary btn-sm" onclick="addRule()">+ Add Rule</button>
+</div></div>
+<div class="modal-footer"><button class="btn btn-primary btn-sm" onclick="closeRulesEditor()">Done</button></div>
+</div>
+
+<!-- PWA banners -->
 <div id="pwa-banner"><canvas id="pwa-icon" width="40" height="40"></canvas>
   <div class="pwa-txt"><strong>Install Engineering Suite</strong><span>Add to home screen</span></div>
   <button class="btn btn-gold btn-sm" onclick="installPWA()">Install</button>
@@ -335,16 +433,22 @@ footer strong{color:var(--gold)}
 <div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
   <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
 
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.7 &middot; ISO 7547 / 8861 &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.19 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
 
 <script>
+/* ================================================================
+   BALTIC YACHTS ENGINEERING SUITE  v0.5 (shell)
+   Single-file SPA. Shared PROJECT + CONSUMERS store.
+   Modules: AC (live) + placeholders. Electrical aggregates consumers.
+   ================================================================ */
+
 function el(id){return document.getElementById(id);}
 function f0(n){return Math.round(Number(n)).toLocaleString("en-GB");}
 function f1(n){return Number(n).toFixed(1);}
 function f2(n){return Number(n).toFixed(2);}
-function f3(n){return Number(n).toFixed(3);}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
+/* ---------- Shared project + consumers ---------- */
 var PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:""},consumers:[]};
 
 function loadActive(){
@@ -360,6 +464,7 @@ function updateChip(){
   c.className=n?"":"muted";
 }
 
+/* ---------- Router ---------- */
 var ROUTES={
   home:{view:"view-home",crumb:[["Home",null]]},
   systems:{view:"view-systems",crumb:[["Home","home"],["Systems",null]]},
@@ -370,7 +475,9 @@ var ROUTES={
   ac:{view:"view-ac",crumb:[["Home","home"],["Systems","systems"],["Air Conditioning",null]]},
   ervent:{view:"view-ervent",crumb:[["Home","home"],["Systems","systems"],["Engine Room Ventilation",null]]},
   bilge:{view:"view-bilge",crumb:[["Home","home"],["Systems","systems"],["Bilge",null]]},
-  seawater:{view:"view-seawater",crumb:[["Home","home"],["Systems","systems"],["Seawater Cooling",null]]}
+  seawater:{view:"view-seawater",crumb:[["Home","home"],["Systems","systems"],["Seawater Cooling",null]]},
+  water:{view:"view-water",crumb:[["Home","home"],["Systems","systems"],["Water & Waste Water",null]]},
+  thruster:{view:"view-thruster",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Thruster",null]]}
 };
 function go(r){location.hash="#/"+r;}
 function renderRoute(){
@@ -380,6 +487,7 @@ function renderRoute(){
   var vs=document.querySelectorAll(".view");
   for(var i=0;i<vs.length;i++)vs[i].classList.remove("active");
   el(def.view).classList.add("active");
+  // crumbs
   var ch="";
   for(var j=0;j<def.crumb.length;j++){
     var c=def.crumb[j];
@@ -391,11 +499,15 @@ function renderRoute(){
   if(r==="ervent"){mountERV();}
   if(r==="bilge"){mountBilge();}
   if(r==="seawater"){mountSW();}
+  if(r==="water"){mountWater();}
+  if(r==="thruster"){mountThr();}
   if(r==="electrical"){renderElectrical();}
+  if(r==="home"){if(typeof renderHomeProjects==="function")renderHomeProjects();if(typeof renderHomeRules==="function")renderHomeRules();}
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",renderRoute);
 
+/* ---------- Project modal ---------- */
 function openProjModal(){
   var m=PROJECT.meta;
   el("pm-yacht").value=m.yacht||"";el("pm-proj").value=m.proj||"";el("pm-type").value=m.type||"";
@@ -407,7 +519,7 @@ function closeProjModal(){el("proj-overlay").classList.remove("show");el("proj-m
 function applyProjMeta(){
   PROJECT.meta.yacht=el("pm-yacht").value;PROJECT.meta.proj=el("pm-proj").value;
   PROJECT.meta.type=el("pm-type").value;PROJECT.meta.by=el("pm-by").value;
-  PROJECT.meta.rev=el("pm-rev").value;PROJECT.meta.cls=el("pm-cls").value;
+  PROJECT.meta.rev=el("pm-rev").value;PROJECT.meta.cls=el("pm-cls").value;PROJECT.meta.flag=(el("pm-flag")?el("pm-flag").value:"");if(typeof renderHomeRules==="function")renderHomeRules();
   saveActive();
   if(typeof acSyncFromProject==="function")acSyncFromProject();
 }
@@ -438,9 +550,6 @@ function loadProjectShell(i){
   if(!PROJECT.consumers)PROJECT.consumers=[];
   saveActive();
   if(typeof acSyncFromProject==="function")acSyncFromProject();
-  if(typeof ERV_MOUNTED!=="undefined"&&ERV_MOUNTED){ervFill();ervCalc();}
-  if(typeof BIL_MOUNTED!=="undefined"&&BIL_MOUNTED){bilFill();renderBranches();bilCalc();}
-  if(typeof SW_MOUNTED!=="undefined"&&SW_MOUNTED){swFill();renderSWItems();swCalc();}
   closeProjModal();
   alert("Loaded \""+PROJECT.meta.yacht+"\".");
 }
@@ -451,16 +560,16 @@ function delProjectShell(i){
 }
 function newProjectShell(){
   if(!confirm("Start a new project? Unsaved changes are lost."))return;
-  PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:new Date().toISOString().split("T")[0]},consumers:[]};
+  PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"DNV GL",date:new Date().toISOString().split("T")[0]},consumers:[]};
   saveActive();
   if(typeof acResetModule==="function")acResetModule();
-  if(typeof ERV_MOUNTED!=="undefined"&&ERV_MOUNTED){ervFill();ervCalc();}
-  if(typeof BIL_MOUNTED!=="undefined"&&BIL_MOUNTED){bilFill();renderBranches();bilCalc();}
-  if(typeof SW_MOUNTED!=="undefined"&&SW_MOUNTED){swFill();renderSWItems();swCalc();}
   openProjModal();
 }
 
+/* ---------- Electrical consumers store ---------- */
+/* consumer = {id, source, name, bus, pcs, kw, day, eve, night}  (day/eve/night = % load 0-100) */
 function addConsumers(list){
+  // remove existing consumers from same source, then add fresh
   if(list.length){
     var src=list[0].source;
     PROJECT.consumers=PROJECT.consumers.filter(function(c){return c.source!==src;});
@@ -482,7 +591,7 @@ function renderElectrical(){
   el("elec-count").textContent=cs.length;
   if(!cs.length){
     body.innerHTML="";foot.innerHTML="";
-    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Each module has a Send to Electrical button.</p></div>";
+    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Try the Air Conditioning module &mdash; it can push the seawater pump, circulation pump and fan-coils into this load balance.</p></div>";
     el("elec-kpi").innerHTML="";
     return;
   }
@@ -508,159 +617,1197 @@ function renderElectrical(){
     "<div class='kpi'><div class='kpi-l'>Night</div><div class='kpi-v'>"+f1(tN)+"</div><div class='kpi-u'>kW demand</div></div>";
 }
 
-/* ===== AC MODULE ===== */
-var AC_MOUNTED=false;
-var TYPES={owners:{l:"Owner's Cabin",med:80,trop:250,ach:1.5},captains:{l:"Captain's Cabin",med:100,trop:270,ach:2.0},guest:{l:"Guest Stateroom",med:120,trop:290,ach:2.0},guest_l:{l:"Guest Stateroom (Lrg)",med:150,trop:310,ach:2.0},crew:{l:"Crew Cabin",med:120,trop:250,ach:2.5},crew_mess:{l:"Crew Mess",med:150,trop:290,ach:3.0},salon:{l:"Salon / Saloon",med:150,trop:310,ach:2.0},wheelhouse:{l:"Wheelhouse / Bridge",med:180,trop:330,ach:3.0},galley:{l:"Galley / Pantry",med:220,trop:330,ach:8.0},laundry:{l:"Laundry",med:250,trop:350,ach:5.0},engine:{l:"Engine Room",med:300,trop:350,ach:0},technical:{l:"Technical / Workshop",med:200,trop:310,ach:3.0},other:{l:"Other",med:130,trop:290,ach:2.0}};
-var CLIMATE={med:{label:"Mediterranean",day:{dH:36.0,desc:"35-27C"},sil:{dH:25.4,desc:"28-20C"},red:{dH:8.0,desc:"Standby"},famu:{cabin_dH:23.0,central_dH:36.0},humidity:{day:{min:45,max:55},sil:{min:50,max:60},red:{min:55,max:70}}},trop:{label:"Tropical",day:{dH:66.3,desc:"40-27C"},sil:{dH:44.7,desc:"35-24C"},red:{dH:15.0,desc:"Standby"},famu:{cabin_dH:36.0,central_dH:66.3},humidity:{day:{min:40,max:50},sil:{min:45,max:55},red:{min:50,max:65}}}};
-var SUPS={VECO:{n:"VECO",u:[{m:"MFC2",b:2000,w:7.5},{m:"MFC4",b:4000,w:9.3},{m:"MFC6",b:6000,w:10.3},{m:"MFC8",b:8000,w:12.3},{m:"MFC12",b:12000,w:13.8},{m:"MFC16",b:16000,w:16.3},{m:"EVA3",b:3000,w:6.0},{m:"EVA4.5",b:4500,w:6.4},{m:"EVA7",b:7000,w:7.6},{m:"EVA9",b:9000,w:8.0},{m:"EVA13",b:13000,w:8.7},{m:"EVA15",b:15000,w:15.3},{m:"EVA17",b:17000,w:18.5},{m:"EVA24",b:24000,w:18.0}]},DOMETIC:{n:"Dometic",u:[{m:"AU6DC",b:6000,w:10.9},{m:"AU9DC",b:9000,w:12.1},{m:"AU12DC",b:12000,w:15.1},{m:"AU18DC",b:18000,w:19.1},{m:"AU24DC",b:24000,w:20.9}]},WEBASTO:{n:"Webasto",u:[{m:"AH-CO05",b:4500,w:5.0},{m:"AH-CO06",b:6000,w:7.5},{m:"AH-CO09",b:9000,w:9.0},{m:"AH-CO12",b:12000,w:9.5},{m:"AH-CO16",b:16000,w:12.5},{m:"AH-CO20",b:20000,w:14.0},{m:"AH-CO24",b:24000,w:25.0},{m:"AH-CO30",b:30000,w:24.0},{m:"AH-CO48",b:48000,w:40.0}]},OTHER:{n:"Other",u:[{m:"Custom-6k",b:6000,w:0},{m:"Custom-12k",b:12000,w:0},{m:"Custom-24k",b:24000,w:0},{m:"Custom-36k",b:36000,w:0},{m:"Custom-48k",b:48000,w:0}]}};
-var ACP={owners:{name:"Owner's Cabin",type:"owners",area:27,h:2.1,p:2,wc:true},captains:{name:"Captain's Cabin",type:"captains",area:9,h:2.1,p:1,wc:true},guest:{name:"Guest Stateroom",type:"guest",area:12,h:2.1,p:2,wc:true},crew:{name:"Crew Cabin",type:"crew",area:7,h:2.1,p:2,wc:false},salon:{name:"Salon",type:"salon",area:35,h:2.2,p:0,wc:false},galley:{name:"Galley",type:"galley",area:15,h:2.1,p:1,wc:false}};
-var S={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,cop:3.0};
+/* ================================================================
+   AC MODULE  (mounted into #view-ac on demand)
+   ================================================================ */
 
-function acState(){ if(!PROJECT.ac)PROJECT.ac={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,cop:3.0}; return PROJECT.ac; }
-function acSave(){ PROJECT.ac=S; saveActive(); }
-function acSyncFromProject(){ var a=acState(); S={climate:a.climate||"med",famu:a.famu||false,sup:a.sup||"VECO",cabins:a.cabins||[],nid:a.nid||1,cop:a.cop||3.0}; if(AC_MOUNTED){ el("ac-cop").value=S.cop; setClimate(S.climate,1); setFAMU(S.famu,1); renderSupBtns(); renderCabins(); recalc(); } }
-function acResetModule(){ S={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,cop:3.0}; if(AC_MOUNTED){renderCabins();recalc();} }
+var AC_MOUNTED=false;
+/* ===== AC MODULE (restored full engine from v2.0, 18 June) ===== */
+function acHTML(){ return `<main>
+  <div class="page-head"><div><h2>Air Conditioning</h2><p>ISO 7547 cooling load, unit selection, ventilation compliance &amp; energy.</p></div>
+    <div style="display:flex;gap:8px" class="no-print">
+      <button class="btn btn-line btn-sm" onclick="exportWord()">&#11015; Word</button>
+      <button class="btn btn-line btn-sm" onclick="exportExcel()">&#11015; Excel</button>
+      <button class="btn btn-gold btn-sm" onclick="sendACtoElectrical()">&#9889; Send to Electrical</button>
+    </div></div>
+` + `<div class="settings-bar no-print">
+<div class="sb-inner">
+
+  <button class="proj-toggle-btn" onclick="toggleProj()" id="proj-btn">
+    📋 Project Info <span id="proj-chevron">▾</span>
+  </button>
+  <div class="sb-sep"></div>
+
+  <div class="sb-group">
+    <label>Climate Zone</label>
+    <div class="toggle">
+      <button id="btn-med" class="on" onclick="setClimate('med')">Mediterranean</button>
+      <button id="btn-trop" onclick="setClimate('trop')">Tropical</button>
+    </div>
+  </div>
+
+  <div class="sb-group">
+    <label>Fresh Air Make-up (FAMU)</label>
+    <div class="toggle">
+      <button id="btn-famu-n" class="on" onclick="setFAMU(false)">No FAMU</button>
+      <button id="btn-famu-y" onclick="setFAMU(true)">With FAMU</button>
+    </div>
+  </div>
+
+  <div class="sb-group">
+    <label>Supplier <button class="btn btn-link btn-xs" onclick="openModal()" style="margin-left:4px">⚙ Edit Catalog</button></label>
+    <div class="sup-pick" id="sup-pick">
+      <button class="sup-btn on" onclick="setSup('VECO',this)">VECO</button>
+      <button class="sup-btn" onclick="setSup('DOMETIC',this)">Dometic</button>
+      <button class="sup-btn" onclick="setSup('WEBASTO',this)">Webasto</button>
+      <button class="sup-btn" onclick="setSup('OTHER',this)">Other</button>
+    </div>
+  </div>
+
+  <div class="sb-group">
+    <label>COP</label>
+    <input type="number" class="cop-inp" id="cop" value="3.0" min="1.5" max="6" step="0.1" oninput="recalc()">
+  </div>
+
+</div>
+</div>
+
+<!-- ─── PROJECT PANEL ─── -->
+<div class="proj-panel" id="proj-panel">
+<div class="proj-grid">
+  <div class="field"><label>Yacht Name</label><input type="text" id="f-yacht" placeholder="e.g. B107C ZETEO" oninput="updateTitle()"></div>
+  <div class="field"><label>Project No.</label><input type="text" id="f-proj" placeholder="e.g. B107C-AC-001"></div>
+  <div class="field"><label>Calculated By</label><input type="text" id="f-by" value="Mikael Strengell"></div>
+  <div class="field"><label>Date</label><input type="date" id="f-date"></div>
+  <div class="field"><label>Revision</label><input type="text" id="f-rev" placeholder="Rev. A"></div>
+  <div class="field"><label>Client / Owner</label><input type="text" id="f-client" placeholder="Owner name"></div>
+  <div class="field"><label>Class Society</label>
+    <select id="f-class">
+      <option>Lloyd's Register (LRS)</option>
+      <option>DNV</option>
+      <option>Bureau Veritas (BV)</option>
+      <option>MCA</option>
+      <option>RCD (EU)</option>
+    </select>
+  </div>
+</div>
+</div>
+
+<!-- ─── MAIN CONTENT ─── -->
+<main>
+
+<!-- ─── FAMU BANNER ─── -->
+<div id="famu-banner" class="banner banner-gold" style="display:none">
+  <i>ℹ</i>
+  <div><strong>FAMU active:</strong> Cabin fan-coils handle pre-treated air only (reduced ΔH). A separate central air handler is required and sized automatically in the results.</div>
+</div>
+
+<!-- ─── CABIN INPUT ─── -->
+<div class="card">
+  <div class="card-hdr">
+    <h2>Spaces &amp; Cabins</h2>
+    <div class="card-hdr-right">
+      <span class="badge" id="cabin-badge">0 spaces</span>
+      <button class="btn btn-primary btn-sm no-print" onclick="addCabin()">+ Add Space</button>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table id="cabin-tbl">
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th title="Floor area m²">Area m²</th>
+          <th title="Ceiling height m">H m</th>
+          <th title="Number of occupants">👤</th>
+          <th class="tc" title="Has toilet/shower">🚿</th>
+          <th title="Air changes per hour">ACH</th>
+          <th title="Cooling needed (calculated)">Cooling</th>
+          <th title="Select unit from supplier catalog">Unit</th>
+          <th class="tc">Status</th>
+          <th class="no-print" style="width:36px"></th>
+        </tr>
+      </thead>
+      <tbody id="cabin-body">
+        <tr id="empty-row"><td colspan="12">
+          <div class="empty"><div class="icon">🚢</div><p>No spaces added yet. Click <strong>+ Add Space</strong> to begin.</p></div>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-footer no-print" id="preset-bar">
+    <span style="font-size:12px;color:var(--g500)">Quick add:</span>
+    <button class="btn btn-line btn-sm" onclick="addPreset('owners')">Owner's Cabin</button>
+    <button class="btn btn-line btn-sm" onclick="addPreset('captains')">Captain's Cabin</button>
+    <button class="btn btn-line btn-sm" onclick="addPreset('guest')">Guest Stateroom</button>
+    <button class="btn btn-line btn-sm" onclick="addPreset('crew')">Crew Cabin</button>
+    <button class="btn btn-line btn-sm" onclick="addPreset('salon')">Salon</button>
+    <button class="btn btn-line btn-sm" onclick="addPreset('galley')">Galley</button>
+  </div>
+</div>
+
+<!-- ─── RESULTS ─── -->
+<div class="card" id="results-card" style="display:none">
+  <div class="card-hdr">
+    <h2>Results</h2>
+    <span class="badge badge-gold" id="res-badge">—</span>
+  </div>
+
+  <!-- KPI bar -->
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <!-- Equipment selection table -->
+  <div class="section-sep">Unit Selection by Space</div>
+  <div class="tbl-wrap">
+    <table class="result-table" id="equip-tbl">
+      <thead>
+        <tr>
+          <th>#</th><th>Space</th><th>Type</th><th>Area m²</th>
+          <th>Cooling Need</th><th>Unit Model</th><th>Capacity</th><th>Weight</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="equip-body"></tbody>
+      <tfoot id="equip-foot"></tfoot>
+    </table>
+  </div>
+
+  <!-- Energy consumption -->
+  <div class="section-sep">Energy Consumption</div>
+  <div class="energy-section">
+    <div class="energy-total" id="energy-total">—</div>
+    <div class="energy-sub">Daily energy estimate · COP <span id="cop-display">3.0</span></div>
+    <div class="energy-bars" id="energy-bars"></div>
+  </div>
+
+  <!-- Technical details (accordion) -->
+  <div class="acc-hdr" onclick="toggleAcc(this)">
+    <h3>Technical Calculation Details</h3>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="acc-body">
+    <div class="inner">
+      <div class="tbl-wrap">
+        <table class="result-table" id="tech-tbl">
+          <thead>
+            <tr>
+              <th>#</th><th>Space</th><th>W/m²</th>
+              <th>Base W</th><th>Vent W</th><th>Persons W</th><th>Install W</th>
+              <th>Total W</th><th>Total BTU</th>
+            </tr>
+          </thead>
+          <tbody id="tech-body"></tbody>
+          <tfoot id="tech-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ventilation (accordion) -->
+  <div class="acc-hdr" onclick="toggleAcc(this)">
+    <h3>Ventilation &amp; Class Rule Compliance</h3>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="acc-body">
+    <div class="inner">
+      <div class="tbl-wrap">
+        <table class="result-table" id="vent-tbl">
+          <thead>
+            <tr>
+              <th>#</th><th>Space</th><th>Volume m³</th><th>ACH /h</th>
+              <th>Vent Flow l/s</th><th>Min/person l/s</th><th>Rule min l/s</th><th>Design l/s</th>
+              <th>WC Ext. l/s</th><th>Compliance</th>
+            </tr>
+          </thead>
+          <tbody id="vent-body"></tbody>
+        </table>
+        <div id="vent-note" style="font-size:11px;color:var(--g500);padding:8px 4px 0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAMU central unit (accordion, conditionally shown) -->
+  <div id="famu-acc" style="display:none">
+    <div class="acc-hdr" onclick="toggleAcc(this)">
+      <h3>FAMU Central Air Handler</h3>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="acc-body">
+      <div class="inner" id="famu-inner" style="padding:16px 20px"></div>
+    </div>
+  </div>
+
+  <!-- Design conditions (accordion) -->
+  <div class="acc-hdr" onclick="toggleAcc(this)">
+    <h3>Design Conditions Used (ISO 7547)</h3>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="acc-body">
+    <div class="inner">
+      <div class="tbl-wrap">
+        <table class="result-table" id="cond-tbl" style="max-width:680px">
+          <thead><tr><th>Parameter</th><th>Value</th><th>Source</th></tr></thead>
+          <tbody id="cond-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /results card -->
+
+</main>
+
+<!-- ─── SUPPLIER EDITOR MODAL ─── -->
+<div class="card" id="chiller-card" style="margin-top:16px">
+  <div class="card-hdr"><h2>&#10052; Chilled Water Plant &mdash; Chiller Selection</h2><span class="badge badge-gold" id="chiller-badge">&mdash;</span></div>
+  <div style="padding:14px 20px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;border-bottom:1px solid var(--g200)">
+    <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Diversity factor</label><div style="display:flex;align-items:center;gap:6px"><input id="chiller-div" type="number" min="40" max="100" step="1" oninput="chillerSet('div',this.value)" style="width:80px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right"><span style="font-size:11px;color:var(--g500)">% of fancoil load</span></div></div>
+    <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Selection</label><select id="chiller-mode" onchange="chillerSet('mode',this.value)" style="padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px"><option value="auto">Auto (smallest covering)</option><option value="manual">Manual</option></select></div>
+    <div id="chiller-manual-wrap" style="display:none;gap:12px;align-items:flex-end">
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Chiller</label><select id="chiller-pick" onchange="chillerSet('model',this.value)" style="padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:170px"></select></div>
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Qty</label><input id="chiller-qty" type="number" min="1" max="12" step="1" oninput="chillerSet('qty',this.value)" style="width:70px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right"></div>
+    </div>
+  </div>
+  <div id="chiller-inner" style="padding:16px 20px"></div>
+</div>
+<div class="overlay" id="overlay" onclick="closeModal()"></div>
+<div class="modal" id="sup-modal">
+  <div class="modal-hdr">
+    <h2>⚙ Supplier Catalog Editor</h2>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="modal-tabs" id="modal-tabs"></div>
+  <div style="display:flex;gap:8px;padding:10px 0 0;flex-wrap:wrap">
+    <button class="btn btn-line btn-xs" onclick="addSupplier()">+ Add Supplier</button>
+    <button class="btn btn-line btn-xs" onclick="document.getElementById('cat-import').click()">&#11014; Import</button>
+    <button class="btn btn-line btn-xs" onclick="exportCatalog()">&#11015; Export</button>
+    <input type="file" id="cat-import" accept=".json,.csv" style="display:none" onchange="importCatalog(this.files[0])">
+  </div>
+  <div class="modal-body">
+    <div style="font-size:12px;color:var(--g500);margin-bottom:12px">
+      Edit model names, BTU ratings and weights. Changes apply immediately to all calculations.
+    </div>
+    <table class="sup-table" id="sup-edit-tbl">
+      <thead id="sup-edit-head"><tr><th>Model</th><th>BTU/h</th><th>Weight kg</th><th class="no-print" style="width:60px"></th></tr></thead>
+      <tbody id="sup-edit-body"></tbody>
+    </table>
+    <div class="add-unit-row">
+      <div class="field"><label>Model</label><input class="sup-inp" id="new-model" placeholder="e.g. EVA30"></div>
+      <div class="field"><label>BTU/h</label><input class="sup-inp" type="number" id="new-btu" placeholder="30000"></div>
+      <div class="field"><label>Weight kg</label><input class="sup-inp" type="number" id="new-kg" placeholder="20"></div>
+      <div class="field" id="new-cop-wrap" style="display:none"><label>COP</label><input class="sup-inp" type="number" id="new-cop" placeholder="3.5" step="0.1"></div>
+      <button class="btn btn-primary btn-sm" onclick="addUnit()" style="flex-shrink:0;margin-bottom:0;height:32px">+ Add</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div style="font-size:12px;color:var(--g500)">Supplier: <strong id="modal-sup-name">—</strong></div>
+    <button class="btn btn-primary btn-sm" onclick="closeModal()">Done</button>
+  </div>
+</div>
+
+` + (typeof rulesPanelHTML==="function"?rulesPanelHTML("ac"):"") + `</main>`; }
+
+// ── DATA ──────────────────────────────────────────────────────────────────
+
+// Cabin type definitions with Mediterranean & Tropical W/m²
+// Tropical values are from the DATA sheet: 250, 270, 290, 310, 330, 350
+const TYPES = {
+  owners:    {l:"Owner's Cabin",       med:80,  trop:250, ach:1.5, note:''},
+  captains:  {l:"Captain's Cabin",     med:100, trop:270, ach:2.0, note:''},
+  guest:     {l:"Guest Stateroom",     med:120, trop:290, ach:2.0, note:''},
+  guest_l:   {l:"Guest Stateroom (Lrg)",med:150,trop:310, ach:2.0, note:''},
+  crew:      {l:"Crew Cabin",          med:120, trop:250, ach:2.5, note:''},
+  crew_mess: {l:"Crew Mess",           med:150, trop:290, ach:3.0, note:''},
+  salon:     {l:"Salon / Saloon",      med:150, trop:310, ach:2.0, note:''},
+  wheelhouse:{l:"Wheelhouse / Bridge", med:180, trop:330, ach:3.0, note:'High glazing area'},
+  galley:    {l:"Galley / Pantry",     med:220, trop:330, ach:8.0, note:'High internal heat'},
+  laundry:   {l:"Laundry",            med:250, trop:350, ach:5.0, note:'Equipment heat'},
+  engine:    {l:"Engine Room",         med:300, trop:350, ach:0,   note:'Separate vent system'},
+  technical: {l:"Technical / Workshop",med:200, trop:310, ach:3.0, note:''},
+  other:     {l:"Other",              med:130, trop:290, ach:2.0, note:''}
+};
+
+// Climate ISO 7547 conditions
+const CLIMATE = {
+  med: {
+    label:'Mediterranean',
+    day:{dH:36.0,  desc:'35°C → 27°C (ISO 7547 summer), H=99.7→63.7 kJ/kg'},
+    sil:{dH:25.4,  desc:'28°C → 20°C, H=70.7→45.3 kJ/kg'},
+    red:{dH:8.0,   desc:'Standby / unoccupied'},
+    famu:{cabin_dH:23.0, central_dH:36.0}
+  },
+  trop: {
+    label:'Tropical',
+    day:{dH:66.3,  desc:'40°C → 27°C, H=130→63.7 kJ/kg (ASHRAE tropical)'},
+    sil:{dH:44.7,  desc:'35°C → 24°C, H=99.7→55 kJ/kg'},
+    red:{dH:15.0,  desc:'Standby / unoccupied'},
+    famu:{cabin_dH:36.0, central_dH:66.3}
+  }
+};
+
+// Supplier catalogs (mutable)
+let SUPS = {
+  VECO:{n:'VECO',u:[
+    {m:'EVA 3',b:3000,w:6.0},{m:'EVA 4.5',b:4500,w:6.5},{m:'EVA 7',b:7000,w:7.6},
+    {m:'EVA 9',b:9000,w:8.0},{m:'EVA 13',b:13000,w:8.7},{m:'EVA 17',b:17000,w:15.0},
+    {m:'EVA 17 SLIM',b:17000,w:18.5},{m:'EVA 24 SLIM',b:24000,w:18.0},
+    {m:'MFC2',b:2000,w:0},{m:'MFC4',b:4000,w:0},{m:'MFC6',b:6000,w:0},{m:'MFC8',b:8000,w:0},
+    {m:'MFC12',b:12000,w:0},{m:'MFC16',b:16000,w:0},{m:'MFC20',b:20000,w:0},
+    {m:'MFCV2.5',b:2500,w:0},{m:'MFCV5',b:5000,w:0},{m:'MFCV9',b:9000,w:0},
+    {m:'AirPro 6',b:6000,w:6.5},{m:'AirPro 13',b:13000,w:10.0},{m:'AirPro 20',b:20000,w:13.5},
+    {m:'AirPro 27',b:27000,w:16.5},{m:'AirPro 38',b:38000,w:22.5}
+  ]},
+  DOMETIC:{n:'Dometic',u:[
+    {m:'AU6DC',  b:6000,  w:10.9},
+    {m:'AU9DC',  b:9000,  w:12.1},
+    {m:'AU12DC', b:12000, w:15.1},
+    {m:'AU18DC', b:18000, w:19.1},
+    {m:'AU24DC', b:24000, w:20.9}
+  ]},
+  WEBASTO:{n:'Webasto',u:[
+    {m:'AH-CO05', b:4500,  w:5.0},
+    {m:'AH-CO06', b:6000,  w:7.5},
+    {m:'AH-CO09', b:9000,  w:9.0},
+    {m:'AH-CO12', b:12000, w:9.5},
+    {m:'AH-CO16', b:16000, w:12.5},
+    {m:'AH-CO20', b:20000, w:14.0},
+    {m:'AH-CO24', b:24000, w:25.0},
+    {m:'AH-CO30', b:30000, w:24.0},
+    {m:'AH-CO48', b:48000, w:40.0}
+  ]},
+  OTHER:{n:'Other',u:[
+    {m:'Custom-3k',  b:3000,  w:0},
+    {m:'Custom-6k',  b:6000,  w:0},
+    {m:'Custom-9k',  b:9000,  w:0},
+    {m:'Custom-12k', b:12000, w:0},
+    {m:'Custom-18k', b:18000, w:0},
+    {m:'Custom-24k', b:24000, w:0},
+    {m:'Custom-36k', b:36000, w:0},
+    {m:'Custom-48k', b:48000, w:0}
+  ]}
+};
+
+const PRESETS = {
+  owners:   {name:"Owner's Cabin",  type:'owners',   area:27, h:2.1, p:2, wc:true},
+  captains: {name:"Captain's Cabin",type:'captains', area:9,  h:2.1, p:1, wc:true},
+  guest:    {name:"Guest Stateroom",type:'guest',    area:12, h:2.1, p:2, wc:true},
+  crew:     {name:"Crew Cabin",     type:'crew',     area:7,  h:2.1, p:2, wc:false},
+  salon:    {name:"Salon",          type:'salon',    area:35, h:2.2, p:0, wc:false},
+  galley:   {name:"Galley",         type:'galley',   area:15, h:2.1, p:1, wc:false}
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+const S = {
+  climate:'med',
+  famu:false,
+  sup:'VECO',
+  cabins:[],
+  nid:1
+};
+
+// ── CALC ENGINE ────────────────────────────────────────────────────────────
+function calcCabin(c) {
+  const area = +c.area||0, h = +c.h||2.1, p = +c.p||0, ach = +c.ach||2, wc = !!c.wc;
+  const t = TYPES[c.type]||TYPES.other;
+  const cli = CLIMATE[S.climate];
+  const wm2 = S.climate==='med' ? t.med : t.trop;
+  const vol = area * h;
+
+  // Forced vent [l/s]
+  const vACH = (vol * ach) / 3.6;
+  const vPer = p * 7;
+  const fv   = Math.max(vACH, vPer, area>0 ? 3 : 0);
+
+  // WC extraction
+  const wcExt = wc ? Math.max(area*4.5, 15) : 0;
+
+  // Heat loads — daytime
+  const dH_d  = S.famu ? cli.famu.cabin_dH : cli.day.dH;
+  const vH_d  = 1.29*1.01*fv*dH_d;
+  const base_d = wm2*area;
+  const pers   = p*150;
+  const inst   = 10*area;
+  const totW_d = base_d + vH_d + pers + inst;
+  const totB_d = totW_d * 3.41214;
+
+  // Silent (55% base)
+  const dH_s  = S.famu ? cli.famu.cabin_dH*0.6 : cli.sil.dH;
+  const vH_s  = 1.29*1.01*fv*dH_s;
+  const base_s = wm2*area*0.55;
+  const totW_s = base_s + vH_s + pers + inst;
+
+  // Reduced (5% base, 5% vent)
+  const dH_r  = S.famu ? 3 : cli.red.dH;
+  const vH_r  = 1.29*1.01*fv*0.3*dH_r;
+  const base_r = wm2*area*0.05;
+  const totW_r = base_r + vH_r + inst*0.3;
+
+  // FAMU central load
+  const famuW = S.famu ? 1.29*1.01*fv*(cli.famu.central_dH - cli.famu.cabin_dH) : 0;
+
+  const classMin = Math.max(p*7, vol*0.5/3.6);
+
+  return {area,h,p,ach,wc,wm2,vol,fv,wcExt,
+          base_d,vH_d,pers,inst,totW_d,totB_d,
+          base_s,vH_s,totW_s,totW_r,famuW,classMin};
+}
+
+function calcEnergy(unitBTU) {
+  const cop = +document.getElementById('cop').value||3;
+  const eKW = (unitBTU/3412)/cop;
+  return {
+    eKW,
+    day:    eKW*1.00*12,
+    sil:    eKW*0.55*8,
+    red:    eKW*0.05*4,
+    get tot(){return this.day+this.sil+this.red}
+  };
+}
+
+function recUnit(btu) {
+  const units = [...SUPS[S.sup].u].sort((a,b)=>a.b-b.b);
+  return units.find(u=>u.b>=btu) || units[units.length-1] || {m:'—',b:0,w:0};
+}
+
+function getUnit(c, btu) {
+  if (c.unitModel) {
+    const u = SUPS[S.sup].u.find(x=>x.m===c.unitModel);
+    if (u) return u;
+  }
+  return recUnit(btu);
+}
+
+// ── CABIN TABLE ────────────────────────────────────────────────────────────
+function typeOptions(sel) {
+  return Object.entries(TYPES).map(([k,v])=>
+    `<option value="${k}"${sel===k?' selected':''}>${v.l}</option>`).join('');
+}
+
+function unitOptions(sel, btu) {
+  const units = [...SUPS[S.sup].u].sort((a,b)=>a.b-b.b);
+  const opts = `<option value="">Auto (${recUnit(btu).m})</option>` +
+    units.map(u=>`<option value="${u.m}"${sel===u.m?' selected':''}>${u.m} · ${fmtK(u.b)} BTU${u.w?' · '+u.w+'kg':''}</option>`).join('');
+  return opts;
+}
+
+function addCabin(data) {
+  const id = S.nid++;
+  const c = data ? {...data, id} : {id,name:'',type:'guest',area:'',h:2.1,p:2,wc:true,ach:2.0,unitModel:''};
+  S.cabins.push(c);
+  renderRow(c);
+  recalc();
+}
+
+function addPreset(k) { addCabin(PRESETS[k]); }
+
+function removeRow(id) {
+  S.cabins = S.cabins.filter(c=>c.id!==id);
+  document.getElementById('r'+id)?.remove();
+  recalc();
+}
+
+function renderRow(c) {
+  const er = document.getElementById('empty-row');
+  if (er) er.remove();
+  const tr = document.createElement('tr');
+  tr.id = 'r'+c.id;
+  tr.innerHTML = `
+    <td style="color:var(--g500);font-weight:600" id="rn${c.id}">—</td>
+    <td><input class="ti ti-name" type="text" placeholder="e.g. Owner's Cabin" value="${esc(c.name||'')}"
+      oninput="upd(${c.id},'name',this.value)"></td>
+    <td><select class="ti ti-type" onchange="updType(${c.id},this.value)">${typeOptions(c.type)}</select></td>
+    <td><input class="ti ti-num" type="number" value="${c.area||''}" min="1" max="500" step="0.5"
+      oninput="upd(${c.id},'area',+this.value)"></td>
+    <td><input class="ti ti-num" type="number" value="${c.h||2.1}" min="1.5" max="4" step="0.1"
+      oninput="upd(${c.id},'h',+this.value)"></td>
+    <td><input class="ti ti-num" type="number" value="${c.p||0}" min="0" max="30"
+      oninput="upd(${c.id},'p',+this.value)"></td>
+    <td class="tc"><input type="checkbox" ${c.wc?'checked':''} onchange="upd(${c.id},'wc',this.checked)"></td>
+    <td><input class="ti ti-num" type="number" value="${c.ach||2}" min="0" max="20" step="0.5"
+      oninput="upd(${c.id},'ach',+this.value)" id="ach${c.id}"></td>
+    <td id="cn${c.id}" style="font-weight:600;white-space:nowrap">—</td>
+    <td><select class="ti" style="min-width:150px" id="us${c.id}"
+      onchange="upd(${c.id},'unitModel',this.value)">${unitOptions(c.unitModel,0)}</select></td>
+    <td class="tc" id="st${c.id}">—</td>
+    <td class="no-print"><button class="icon-btn" onclick="removeRow(${c.id})" title="Remove">✕</button></td>`;
+  document.getElementById('cabin-body').appendChild(tr);
+}
+
+function upd(id, field, val) {
+  const c = S.cabins.find(c=>c.id===id);
+  if (c) { c[field]=val; recalc(); }
+}
+
+function updType(id, type) {
+  const c = S.cabins.find(c=>c.id===id);
+  if (!c) return;
+  c.type = type;
+  // Update ACH default
+  const achEl = document.getElementById('ach'+id);
+  if (achEl) { achEl.value = TYPES[type]?.ach||2; c.ach = +(achEl.value); }
+  recalc();
+}
+
+function refreshUnitDropdowns() {
+  S.cabins.forEach(c => {
+    const el = document.getElementById('us'+c.id);
+    if (!el) return;
+    const cr = calcCabin(c);
+    el.innerHTML = unitOptions(c.unitModel, cr.totB_d);
+  });
+}
+
+// ── MAIN RECALC ────────────────────────────────────────────────────────────
+function recalc() {
+  updateCabinCount();
+  if (!S.cabins.length) { hideResults(); return; }
+
+  const rows = S.cabins.map((c,i) => {
+    const cr = calcCabin(c);
+    const unit = getUnit(c, cr.totB_d);
+    const e = calcEnergy(unit.b);
+    const ok = unit.b >= cr.totB_d;
+    const margin = unit.b ? ((unit.b-cr.totB_d)/cr.totB_d*100) : 0;
+
+    // Update cabin row cells
+    document.getElementById('rn'+c.id).textContent = i+1;
+    document.getElementById('cn'+c.id).textContent = f1(cr.totW_d/1000)+' kW';
+    document.getElementById('us'+c.id).innerHTML = unitOptions(c.unitModel, cr.totB_d);
+    const stEl = document.getElementById('st'+c.id);
+    if (unit.b) {
+      stEl.innerHTML = ok
+        ? `<span class="pill p-ok">✓ +${Math.round(margin)}%</span>`
+        : `<span class="pill p-err">✗ ${Math.round(margin)}%</span>`;
+    } else stEl.innerHTML = `<span class="pill p-dim">—</span>`;
+
+    return {c,cr,unit,e,ok,margin,idx:i};
+  });
+
+  const totW   = sum(rows, r=>r.cr.totW_d);
+  const totB   = sum(rows, r=>r.cr.totB_d);
+  const totInst= sum(rows, r=>r.unit.b);
+  const totKg  = sum(rows, r=>r.unit.w);
+  const totEd  = sum(rows, r=>r.e.day);
+  const totEs  = sum(rows, r=>r.e.sil);
+  const totEr  = sum(rows, r=>r.e.red);
+  const totEt  = totEd+totEs+totEr;
+  const famuW  = S.famu ? sum(rows, r=>r.cr.famuW) : 0;
+
+  showResults();
+  renderKPIs(totW, totB, totInst, totKg, totEt, rows.length);
+  renderEquip(rows, totB, totInst, totKg);
+  renderEnergy(rows, totEd, totEs, totEr, totEt);
+  renderTech(rows, totW, totB);
+  renderVent(rows);
+  renderFAMU(famuW);
+  renderConditions();
+  renderChiller(totB);
+
+  document.getElementById('res-badge').textContent = f0(totB)+' BTU · '+f1(totW/1000)+' kW';
+}
+
+// ── RENDER FUNCTIONS ───────────────────────────────────────────────────────
+function renderKPIs(totW, totB, totInst, totKg, totEt, n) {
+  const cop = +document.getElementById('cop').value||3;
+  const eKW = (totInst/3412)/cop;
+  document.getElementById('kpi-row').innerHTML = `
+    <div class="kpi"><div class="kpi-l">Total Cooling</div><div class="kpi-v">${f1(totW/1000)}</div><div class="kpi-u">kW</div></div>
+    <div class="kpi"><div class="kpi-l">Total BTU/h</div><div class="kpi-v">${f0(Math.round(totB/1000))}k</div><div class="kpi-u">BTU/h needed</div></div>
+    <div class="kpi"><div class="kpi-l">Installed Capacity</div><div class="kpi-v">${f0(Math.round(totInst/1000))}k</div><div class="kpi-u">BTU/h installed</div></div>
+    <div class="kpi"><div class="kpi-l">Electrical Load</div><div class="kpi-v">${f1(eKW)}</div><div class="kpi-u">kW at full load</div></div>
+    <div class="kpi"><div class="kpi-l">Equipment Weight</div><div class="kpi-v">${f1(totKg)}</div><div class="kpi-u">kg total</div></div>
+    <div class="kpi"><div class="kpi-l">Daily Energy</div><div class="kpi-v">${f1(totEt)}</div><div class="kpi-u">kWh / day</div></div>
+    <div class="kpi"><div class="kpi-l">Spaces</div><div class="kpi-v">${n}</div><div class="kpi-u">air-conditioned</div></div>
+    <div class="kpi"><div class="kpi-l">Supplier</div><div class="kpi-v" style="font-size:16px">${SUPS[S.sup].n}</div><div class="kpi-u">selected</div></div>`;
+}
+
+function renderEquip(rows, totB, totInst, totKg) {
+  const tbody = document.getElementById('equip-body');
+  tbody.innerHTML = rows.map(({c,cr,unit,ok,margin},i) => {
+    const pill = ok
+      ? `<span class="pill p-ok">✓ +${Math.round(margin)}%</span>`
+      : `<span class="pill p-err">✗ Undersize</span>`;
+    return `<tr>
+      <td>${i+1}</td>
+      <td><strong>${c.name||(c.type?TYPES[c.type]?.l||c.type:'Space '+(i+1))}</strong></td>
+      <td>${TYPES[c.type]?.l||c.type}</td>
+      <td>${f1(cr.area)}</td>
+      <td>${f1(cr.totW_d/1000)} kW<br><span style="font-size:11px;color:var(--g500)">${f0(cr.totB_d)} BTU</span></td>
+      <td><strong>${unit.m}</strong></td>
+      <td>${unit.b?f0(unit.b)+' BTU':'—'}</td>
+      <td>${unit.w?unit.w+' kg':'—'}</td>
+      <td>${unit.b?pill:'<span class="pill p-dim">—</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  const allOk = rows.every(r=>r.ok);
+  document.getElementById('equip-foot').innerHTML = `<tr>
+    <td colspan="4">TOTAL</td>
+    <td>${f1(totB/1000)} kW / ${f0(totB)} BTU</td>
+    <td></td>
+    <td>${f0(totInst)} BTU</td>
+    <td>${f1(totKg)} kg</td>
+    <td>${allOk?'<span class="pill p-ok">All OK</span>':'<span class="pill p-warn">⚠ Check units</span>'}</td>
+  </tr>`;
+}
+
+function renderEnergy(rows, totEd, totEs, totEr, totEt) {
+  document.getElementById('energy-total').textContent = f1(totEt)+' kWh / day';
+  document.getElementById('cop-display').textContent  = (document.getElementById('cop').value||3);
+  const maxBar = Math.max(totEd, 1);
+  document.getElementById('energy-bars').innerHTML = `
+    <div class="e-bar-row">
+      <div class="e-bar-label">Daytime (12 h)</div>
+      <div class="e-bar-track"><div class="e-bar-fill e-bar-day" style="width:100%" data-label="${f1(totEd)} kWh · 100% load"></div></div>
+      <div class="e-bar-val">${f1(totEd)} kWh</div>
+    </div>
+    <div class="e-bar-row">
+      <div class="e-bar-label">Silent (8 h)</div>
+      <div class="e-bar-track"><div class="e-bar-fill e-bar-sil" style="width:${Math.round(totEs/maxBar*100)}%" data-label="${f1(totEs)} kWh · 55% load"></div></div>
+      <div class="e-bar-val">${f1(totEs)} kWh</div>
+    </div>
+    <div class="e-bar-row">
+      <div class="e-bar-label">Reduced (4 h)</div>
+      <div class="e-bar-track"><div class="e-bar-fill e-bar-red" style="width:${Math.round(totEr/maxBar*100)}%" data-label="${f1(totEr)} kWh · 5% load"></div></div>
+      <div class="e-bar-val">${f1(totEr)} kWh</div>
+    </div>
+    <div class="e-bar-row" style="margin-top:8px;border-top:1px solid var(--g200);padding-top:8px">
+      <div class="e-bar-label" style="font-weight:700">Daily Total</div>
+      <div></div>
+      <div class="e-bar-val" style="font-weight:700;color:var(--navy)">${f1(totEt)} kWh</div>
+    </div>`;
+}
+
+function renderTech(rows, totW, totB) {
+  document.getElementById('tech-body').innerHTML = rows.map(({c,cr},i) => `<tr>
+    <td>${i+1}</td>
+    <td>${c.name||(TYPES[c.type]?.l||c.type)}</td>
+    <td>${cr.wm2} W/m²</td>
+    <td>${f0(cr.base_d)}</td>
+    <td>${f0(cr.vH_d)}</td>
+    <td>${f0(cr.pers)}</td>
+    <td>${f0(cr.inst)}</td>
+    <td><strong>${f0(cr.totW_d)}</strong></td>
+    <td>${f0(cr.totB_d)}</td>
+  </tr>`).join('');
+
+  document.getElementById('tech-foot').innerHTML = `<tr>
+    <td colspan="7">TOTAL</td>
+    <td>${f0(totW)} W</td>
+    <td>${f0(totB)} BTU</td>
+  </tr>`;
+}
+
+function renderVent(rows) {
+  document.getElementById('vent-body').innerHTML = rows.map(({c,cr},i) => {
+    const ok = cr.fv >= cr.classMin - 0.01;
+    const belowMin = (cr.vol*(c.ach||2)/3.6) < cr.classMin - 0.01;  // user ACH gives less than rule minimum
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${c.name||(TYPES[c.type]?.l||c.type)}</td>
+      <td>${f1(cr.vol)}</td>
+      <td>${c.ach||2}</td>
+      <td${belowMin?' style="color:var(--amber);font-weight:600"':''}>${f1(cr.vol*(c.ach||2)/3.6)}</td>
+      <td>${f1((c.p||0)*7)}</td>
+      <td><strong>${f1(cr.classMin)}</strong></td>
+      <td><strong>${f1(cr.fv)}</strong></td>
+      <td>${cr.wcExt?f1(cr.wcExt):'—'}</td>
+      <td>${ok?'<span class="pill p-ok">✓ meets min</span>':'<span class="pill p-err">✗ below min</span>'}</td>
+    </tr>`;
+  }).join('');
+  var note=document.getElementById('vent-note');
+  if(note){
+    var code = (typeof rulesForSystem==="function") ? rulesForSystem('ac').map(function(r){return r.code;}).join(' · ') : '';
+    note.innerHTML = 'Rule minimum fresh-air = greater of <strong>7 l/s per person</strong> (habitability) and <strong>0.5 ACH</strong> (structural). ISO 7547 §4.4 requires outdoor air ≥ 40% of total supply. Design (l/s) auto-applies the governing minimum.' + (code?'<br>Applicable to active project: '+esc(code):'');
+  }
+}
+
+function renderFAMU(famuW) {
+  const acc = document.getElementById('famu-acc');
+  if (!S.famu || famuW < 1) { acc.style.display='none'; return; }
+  acc.style.display='block';
+  const cop = +document.getElementById('cop').value||3;
+  const famuKW = famuW/1000;
+  document.getElementById('famu-inner').innerHTML = `
+    <div class="banner banner-blue" style="margin-bottom:12px">
+      <i>ℹ</i>
+      <div>FAMU central unit handles outdoor→supply air treatment. Cabin fan-coils handle supply→cabin residual only.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div class="kpi"><div class="kpi-l">FAMU Heat Load</div><div class="kpi-v">${f1(famuKW)}</div><div class="kpi-u">kW</div></div>
+      <div class="kpi"><div class="kpi-l">FAMU in BTU</div><div class="kpi-v">${f0(Math.round(famuW*3.41214/1000))}k</div><div class="kpi-u">BTU/h</div></div>
+      <div class="kpi"><div class="kpi-l">Electrical (AHU)</div><div class="kpi-v">${f2(famuKW/cop)}</div><div class="kpi-u">kW</div></div>
+    </div>`;
+}
+
+function renderConditions() {
+  const cli = CLIMATE[S.climate];
+  const cop = document.getElementById('cop').value||3;
+  const famuRow = S.famu
+    ? `<tr><td>FAMU pre-treatment</td><td>Cabin ΔH=${cli.famu.cabin_dH} kJ/kg | Central ΔH=${cli.famu.central_dH} kJ/kg</td><td>Design</td></tr>`
+    : `<tr><td>FAMU</td><td>Not used — fan-coil handles full fresh air load</td><td>—</td></tr>`;
+  document.getElementById('cond-body').innerHTML = `
+    <tr><td>Climate zone</td><td>${cli.label}</td><td>ISO 7547</td></tr>
+    <tr><td>Daytime design</td><td>${cli.day.desc}</td><td>ISO 7547</td></tr>
+    <tr><td>Silent time design</td><td>${cli.sil.desc}</td><td>ISO 7547</td></tr>
+    <tr><td>Reduced / standby</td><td>${cli.red.desc}</td><td>Design</td></tr>
+    ${famuRow}
+    <tr><td>Person heat load</td><td>150 W/person (at rest)</td><td>ISO 7547</td></tr>
+    <tr><td>Installation heat</td><td>10 W/m²</td><td>ISO 7547</td></tr>
+    <tr><td>Vent calc factor</td><td>1.29 × 1.01 (ρ_air × cp)</td><td>ISO 7547</td></tr>
+    <tr><td>Min fresh air</td><td>7 l/s / person</td><td>Class rules</td></tr>
+    <tr><td>WC extraction</td><td>4.5 l/s/m² (min 15 l/s)</td><td>ISO 7547</td></tr>
+    <tr><td>Mode hours</td><td>Daytime 12h · Silent 8h · Reduced 4h</td><td>Design</td></tr>
+    <tr><td>Load factors</td><td>Daytime 100% · Silent 55% · Reduced 5%</td><td>ISO 7547</td></tr>
+    <tr><td>COP</td><td>${cop}</td><td>Input</td></tr>`;
+}
+
+// ── CONTROLS ───────────────────────────────────────────────────────────────
+let projOpen = false;
+function toggleProj() {
+  projOpen = !projOpen;
+  document.getElementById('proj-panel').classList.toggle('open', projOpen);
+  document.getElementById('proj-chevron').textContent = projOpen ? '▴' : '▾';
+}
+
+function setClimate(c) {
+  S.climate = c;
+  document.getElementById('btn-med').classList.toggle('on', c==='med');
+  document.getElementById('btn-trop').classList.toggle('on', c==='trop');
+  recalc();
+}
+
+function setFAMU(v) {
+  S.famu = v;
+  document.getElementById('btn-famu-n').classList.toggle('on', !v);
+  document.getElementById('btn-famu-y').classList.toggle('on', v);
+  document.getElementById('famu-banner').style.display = v ? 'flex' : 'none';
+  recalc();
+}
+
+function setSup(k, el) {
+  S.sup = k;
+  document.querySelectorAll('.sup-btn').forEach(b=>b.classList.remove('on'));
+  if (el) el.classList.add('on');
+  // Clear manual unit selections when supplier changes
+  S.cabins.forEach(c=>c.unitModel='');
+  refreshUnitDropdowns();
+  recalc();
+}
+
+function showResults()  { document.getElementById('results-card').style.display=''; }
+function hideResults()  { document.getElementById('results-card').style.display='none'; }
+
+function updateCabinCount() {
+  const n = S.cabins.length;
+  document.getElementById('cabin-badge').textContent = n + (n===1?' space':' spaces');
+  if (!n && !document.getElementById('empty-row')) {
+    const tr = document.createElement('tr');
+    tr.id='empty-row';
+    tr.innerHTML='<td colspan="12"><div class="empty"><div class="icon">🚢</div><p>No spaces added yet. Click <strong>+ Add Space</strong> to begin.</p></div></td>';
+    document.getElementById('cabin-body').prepend(tr);
+  }
+}
+
+function toggleAcc(hdr) {
+  hdr.classList.toggle('open');
+  hdr.nextElementSibling.classList.toggle('open');
+}
+
+function updateTitle() {
+  const n = document.getElementById('f-yacht').value;
+  document.title = n ? `AC Calc – ${n} – Baltic Yachts` : 'AC Cooling – Baltic Yachts';
+}
+
+// ── SUPPLIER EDITOR ────────────────────────────────────────────────────────
+let modalSup = 'VECO';
+
+function openModal() {
+  modalSup = S.sup;
+  renderModalTabs();
+  renderSupTable();
+  document.getElementById('sup-modal').classList.add('show');
+  document.getElementById('overlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('sup-modal').classList.remove('show');
+  document.getElementById('overlay').classList.remove('show');
+  refreshUnitDropdowns();
+  recalc();
+}
+
+function renderModalTabs() {
+  let html = Object.entries(SUPS).map(([k,v])=>
+    `<button class="modal-tab${k===modalSup?' on':''}" onclick="switchModalSup('${k}',this)">${v.n}</button>`
+  ).join('');
+  html += `<button class="modal-tab${modalSup==='__chillers__'?' on':''}" onclick="switchModalSup('__chillers__',this)">\u2744 Chillers</button>`;
+  document.getElementById('modal-tabs').innerHTML = html;
+  const nm=document.getElementById('modal-sup-name'); if(nm) nm.textContent = modalSup==='__chillers__'?'Chillers':SUPS[modalSup].n;
+}
+
+function switchModalSup(k, el) {
+  modalSup = k;
+  document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  const nm=document.getElementById('modal-sup-name'); if(nm) nm.textContent = k==='__chillers__'?'Chillers':SUPS[k].n;
+  renderSupTable();
+}
+
+function renderSupTable() {
+  const head=document.getElementById('sup-edit-head'), copWrap=document.getElementById('new-cop-wrap');
+  if(modalSup==='__chillers__'){
+    if(head) head.innerHTML='<tr><th>Model</th><th>kW</th><th>COP</th><th>Weight kg</th><th class="no-print" style="width:60px"></th></tr>';
+    if(copWrap) copWrap.style.display='';
+    document.getElementById('sup-edit-body').innerHTML = CHILLERS.map((u,i)=>`
+      <tr id="su${i}">
+        <td><input class="sup-inp" value="${esc(u.m)}" onchange="editUnit(${i},'m',this.value)"></td>
+        <td><input class="sup-inp" type="number" value="${u.kw}" onchange="editUnit(${i},'kw',+this.value)"></td>
+        <td><input class="sup-inp" type="number" step="0.1" value="${u.cop}" onchange="editUnit(${i},'cop',+this.value)"></td>
+        <td><input class="sup-inp" type="number" value="${u.w}" onchange="editUnit(${i},'w',+this.value)"></td>
+        <td class="no-print"><button class="btn btn-danger btn-xs" onclick="delUnit(${i})">✕</button></td>
+      </tr>`).join('');
+    return;
+  }
+  if(head) head.innerHTML='<tr><th>Model</th><th>BTU/h</th><th>Weight kg</th><th class="no-print" style="width:60px"></th></tr>';
+  if(copWrap) copWrap.style.display='none';
+  const units = SUPS[modalSup].u;
+  document.getElementById('sup-edit-body').innerHTML = units.map((u,i)=>`
+    <tr id="su${i}">
+      <td><input class="sup-inp" value="${esc(u.m)}" onchange="editUnit(${i},'m',this.value)"></td>
+      <td><input class="sup-inp" type="number" value="${u.b}" onchange="editUnit(${i},'b',+this.value)"></td>
+      <td><input class="sup-inp" type="number" value="${u.w}" onchange="editUnit(${i},'w',+this.value)"></td>
+      <td class="no-print"><button class="btn btn-danger btn-xs" onclick="delUnit(${i})">✕</button></td>
+    </tr>`).join('');
+}
+
+function editUnit(i, field, val) {
+  const arr = modalSup==='__chillers__' ? CHILLERS : SUPS[modalSup].u;
+  arr[i][field] = field==='m' ? val : +val;
+}
+
+function delUnit(i) {
+  (modalSup==='__chillers__' ? CHILLERS : SUPS[modalSup].u).splice(i, 1);
+  renderSupTable();
+}
+
+function addUnit() {
+  const m = document.getElementById('new-model').value.trim();
+  const b = +document.getElementById('new-btu').value;
+  const w = +document.getElementById('new-kg').value;
+  if (!m || !b) return;
+  if(modalSup==='__chillers__'){ const cop=+document.getElementById('new-cop').value||3.5; CHILLERS.push({m,kw:b,cop,w}); CHILLERS.sort((a,z)=>a.kw-z.kw); document.getElementById('new-cop').value=''; }
+  else { SUPS[modalSup].u.push({m,b,w}); SUPS[modalSup].u.sort((a,z)=>a.b-z.b); }
+  document.getElementById('new-model').value='';
+  document.getElementById('new-btu').value='';
+  document.getElementById('new-kg').value='';
+  renderSupTable();
+}
+
+// ── EXPORT ─────────────────────────────────────────────────────────────────
+function projectMeta() {
+  return {
+    yacht:  document.getElementById('f-yacht').value||'—',
+    proj:   document.getElementById('f-proj').value||'—',
+    by:     document.getElementById('f-by').value||'—',
+    date:   document.getElementById('f-date').value||new Date().toISOString().slice(0,10),
+    rev:    document.getElementById('f-rev').value||'—',
+    client: document.getElementById('f-client').value||'—',
+    cls:    document.getElementById('f-class').value,
+  };
+}
+
+function exportExcel() {
+  if (!window.XLSX) { alert('Excel library loading, please wait a moment.'); return; }
+  const wb = XLSX.utils.book_new();
+  const m = projectMeta();
+  const cli = CLIMATE[S.climate];
+  const cop = +document.getElementById('cop').value||3;
+
+  // Sheet 1: Summary
+  const info = [
+    ['Baltic Yachts — AC Cooling Calculator v2 (ISO 7547)'],
+    ['Yacht', m.yacht, '', 'Date', m.date],
+    ['Project', m.proj, '', 'By', m.by],
+    ['Climate', cli.label, '', 'FAMU', S.famu?'Yes':'No'],
+    ['Supplier', SUPS[S.sup].n, '', 'COP', cop],
+    [],
+    ['#','Space Name','Type','Area m²','Persons','W/m²','Cooling W','BTU/h','Unit','Unit BTU','Weight kg','OK?','Margin %']
+  ];
+  const rows = S.cabins.map((c,i)=>{
+    const cr=calcCabin(c); const u=getUnit(c,cr.totB_d);
+    const ok=u.b>=cr.totB_d;
+    const mg=u.b?((u.b-cr.totB_d)/cr.totB_d*100).toFixed(1):'';
+    return [i+1,c.name||TYPES[c.type]?.l||c.type,TYPES[c.type]?.l||c.type,
+      cr.area,cr.p,cr.wm2,Math.round(cr.totW_d),Math.round(cr.totB_d),
+      u.m,u.b||0,u.w||0,ok?'OK':'FAIL',mg];
+  });
+  const totW=sum(S.cabins.map(c=>({v:calcCabin(c).totW_d})),r=>r.v);
+  const totB=sum(S.cabins.map(c=>({v:calcCabin(c).totB_d})),r=>r.v);
+  rows.push([]);
+  rows.push(['','','TOTAL','','','',Math.round(totW),Math.round(totB)]);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([...info,...rows]), 'Cooling Loads');
+
+  // Sheet 2: Energy
+  const eh = [['#','Space','Unit BTU','Installed kW','Elec kW','Daytime kWh','Silent kWh','Reduced kWh','Daily kWh']];
+  S.cabins.forEach((c,i)=>{
+    const cr=calcCabin(c); const u=getUnit(c,cr.totB_d); const e=calcEnergy(u.b);
+    eh.push([i+1,c.name||TYPES[c.type]?.l,u.b,+(u.b/3412).toFixed(2),+e.eKW.toFixed(2),
+      +e.day.toFixed(2),+e.sil.toFixed(2),+e.red.toFixed(2),+e.tot.toFixed(2)]);
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eh), 'Energy');
+
+  // Sheet 3: Ventilation
+  const vh=[['#','Space','Vol m³','ACH','Flow l/s','Min l/s','Design l/s','WC Ext l/s','OK?']];
+  S.cabins.forEach((c,i)=>{
+    const cr=calcCabin(c);
+    vh.push([i+1,c.name||TYPES[c.type]?.l,+cr.vol.toFixed(1),c.ach||2,
+      +(cr.vol*(c.ach||2)/3.6).toFixed(1),+((c.p||0)*7).toFixed(1),
+      +cr.fv.toFixed(1),cr.wcExt?+cr.wcExt.toFixed(1):'N/A',
+      cr.fv>=cr.classMin?'OK':'FAIL']);
+  });
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(vh), 'Ventilation');
+
+  try{XLSX.writeFile(wb, `Baltic_AC_${m.yacht.replace(/[^a-z0-9]/gi,'_')||'Calc'}.xlsx`);}catch(e){const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});safeDL(new Blob([wbout],{type:'application/octet-stream'}),`Baltic_AC.xlsx`);}
+}
+
+function exportWord() {
+  const m = projectMeta();
+  const cli = CLIMATE[S.climate];
+  const cop = +document.getElementById('cop').value||3;
+
+  const equipRows = S.cabins.map((c,i)=>{
+    const cr=calcCabin(c); const u=getUnit(c,cr.totB_d); const ok=u.b>=cr.totB_d;
+    return `<tr><td>${i+1}</td><td>${esc(c.name||TYPES[c.type]?.l||'—')}</td>
+      <td>${TYPES[c.type]?.l||c.type}</td><td>${f1(cr.area)}</td>
+      <td>${f1(cr.totW_d/1000)} kW</td><td>${u.m}</td>
+      <td>${u.b?f0(u.b)+' BTU':'—'}</td><td>${ok?'✓':'✗'}</td></tr>`;
+  }).join('');
+
+  const energyRows = S.cabins.map((c,i)=>{
+    const cr=calcCabin(c); const u=getUnit(c,cr.totB_d); const e=calcEnergy(u.b);
+    return `<tr><td>${esc(c.name||TYPES[c.type]?.l||'—')}</td>
+      <td>${f2(e.day)}</td><td>${f2(e.sil)}</td><td>${f2(e.red)}</td>
+      <td><strong>${f2(e.tot)}</strong></td></tr>`;
+  }).join('');
+
+  const totW=sum(S.cabins.map(c=>({v:calcCabin(c).totW_d})),r=>r.v);
+  const totEt=sum(S.cabins.map(c=>{const cr=calcCabin(c);const u=getUnit(c,cr.totB_d);const e=calcEnergy(u.b);return {v:e.tot}}),r=>r.v);
+
+  const doc = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+  <head><meta charset='utf-8'><title>Baltic Yachts AC Calculation</title>
+  <style>
+    body{font-family:Calibri,Arial,sans-serif;font-size:10pt;color:#1d2939}
+    h1{color:#1a2744;font-size:16pt;margin-bottom:4pt}
+    h2{color:#1a2744;font-size:12pt;border-bottom:1pt solid #c9a96e;padding-bottom:3pt;margin-top:14pt;margin-bottom:6pt}
+    table{border-collapse:collapse;width:100%;margin-bottom:8pt;font-size:9pt}
+    th{background:#1a2744;color:white;padding:5pt 8pt;text-align:left}
+    td{padding:4pt 8pt;border-bottom:1pt solid #e4e7ec}
+    tr:nth-child(even) td{background:#f6f7f9}
+    tfoot td{background:#1a2744;color:white;font-weight:bold;padding:5pt 8pt}
+    .meta td{border:none;padding:2pt 6pt}
+    .footer{margin-top:20pt;font-size:8pt;color:#667085;border-top:1pt solid #e4e7ec;padding-top:5pt}
+  </style></head><body>
+  <h1>Baltic Yachts — AC Cooling Calculation</h1>
+  <table class="meta" style="width:auto;margin-bottom:14pt">
+    <tr><td><strong>Yacht</strong></td><td>${esc(m.yacht)}</td><td style="padding-left:20pt"><strong>Date</strong></td><td>${m.date}</td></tr>
+    <tr><td><strong>Project</strong></td><td>${esc(m.proj)}</td><td style="padding-left:20pt"><strong>Calculated By</strong></td><td>${esc(m.by)}</td></tr>
+    <tr><td><strong>Client</strong></td><td>${esc(m.client)}</td><td style="padding-left:20pt"><strong>Revision</strong></td><td>${esc(m.rev)}</td></tr>
+    <tr><td><strong>Climate</strong></td><td>${cli.label}</td><td style="padding-left:20pt"><strong>FAMU</strong></td><td>${S.famu?'Yes':'No'}</td></tr>
+    <tr><td><strong>Supplier</strong></td><td>${SUPS[S.sup].n}</td><td style="padding-left:20pt"><strong>Standard</strong></td><td>ISO 7547</td></tr>
+    <tr><td><strong>COP</strong></td><td>${cop}</td><td style="padding-left:20pt"><strong>Class Society</strong></td><td>${m.cls}</td></tr>
+  </table>
+
+  <h2>Unit Selection by Space</h2>
+  <table><thead><tr><th>#</th><th>Space</th><th>Type</th><th>Area m²</th><th>Cooling Need</th><th>Unit</th><th>Capacity</th><th>OK?</th></tr></thead>
+  <tbody>${equipRows}</tbody>
+  <tfoot><tr><td colspan="4">TOTAL</td><td>${f1(totW/1000)} kW</td><td colspan="3"></td></tr></tfoot></table>
+
+  <h2>Energy Consumption</h2>
+  <p style="font-size:9pt;color:#667085;margin-bottom:6pt">Daytime 12h @ 100% load · Silent 8h @ 55% · Reduced 4h @ 5% · COP ${cop}</p>
+  <table><thead><tr><th>Space</th><th>Daytime kWh</th><th>Silent kWh</th><th>Reduced kWh</th><th>Daily Total kWh</th></tr></thead>
+  <tbody>${energyRows}</tbody>
+  <tfoot><tr><td>TOTAL</td><td colspan="3"></td><td>${f2(totEt)} kWh/day</td></tr></tfoot></table>
+
+  <h2>Design Conditions (ISO 7547)</h2>
+  <table style="max-width:500pt"><thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>Daytime</td><td>${cli.day.desc}</td></tr>
+    <tr><td>Silent time</td><td>${cli.sil.desc}</td></tr>
+    <tr><td>FAMU</td><td>${S.famu?'Yes — pre-treated air, reduced cabin load':'No — fan-coil handles full fresh air load'}</td></tr>
+    <tr><td>Person heat load</td><td>150 W/person · Installation: 10 W/m²</td></tr>
+  </tbody></table>
+
+  <div class="footer">Baltic Yachts Ltd — Engineering Department &nbsp;|&nbsp; AC Cooling Calculator v2.0 &nbsp;|&nbsp; ISO 7547 &nbsp;|&nbsp; ${m.date}</div>
+  
+<!-- PWA install banner -->
+<div id="pwa-banner">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAGBUlEQVR4nO3aPW7cVhSGYVJIGdUC5EKlAAnZxWzACLyOAFmAiywgQMqUWUCQDUwdpA9iQF3cCMgqlMKhwhlxSF7y/pxzvvepDFseXQ3Oey/JUd81dnt/eGm9BrTz/HTsW37/6t+cgcec2kFU+WYMPbaoEUPRb8DgI4eSIRR5YQYfJZQIIesLMvioIWcIWV6IwUcLOUK42vsCDD9ayTF7uwJg+NHa3hncdIQw+LBoyyVR8gnA8MOqLbOZFADDD+tSZ3R1AAw/vEiZ1VUBMPzwZu3M7n4MCni2GAC7P7xaM7uzATD88G5phi8GwPAjirlZ5h4A0iY/OYu0+//2w8Prn99//JT96+HH1CfFYQMYD/K5qcFO/Xr4MxXAm0ugCMMPTJma7ZD3AHO7+dS/p3494jgJgN0f0Z3PeMgTAFjrNYBIu//STev5v6d+PXwbzzonAKS9PhaKdAKM8TkApgyPRPuuizv8wJznp2PPJRCkEQCkEQCk9Vz/13X+qTI32m1xAkAaAUAaAVTEL9XZQwCVMPw2EUAFDL9dBABpBFAYu79tBFAQw28fAUAaARTC7u8DARTA8PtBAJkx/L4QAKQRQEbs/v4QQCYMv08EAGkEkAG7v18EsBPD7xsB7MDw+0cAkEYAG7H7x0AAGzD8cRAApBFAohy7/83dY4aVIAcCSJDz0ocIbCCAhoigPQJYqdSN7++/fCjyuliHAFYo/dSHCNohgAW1HnkSQRsEYAgR1EcAM1p84EUEdRHABS0/7SWCegjAKCKogwAm8Ls+OgjgjKXh5xQojwBGLA3/gAjKIgAHiKAcAviPxd1/jAjKIIDO/vAPiCA/AnCGCPKSD8DL7j9GBPlIB+Bx+AdEkIdsAJ6Hf0AE+8kGEAUR7CMZQITdf4wItpMLINrwD4hgG7kAIiOCdFIBRN39x4ggjUwACsM/IIL1JAJQGv4BEawjEYAqIlgWPgDF3X+MCOaFDkB9+AdEcFnoAIAlYQNg9z/FKTAtZAAM/zQieCtcAAz/PCI4FS4ALCOC/4UKgN1/PSL4IkwADH86IggUALZRjyBEAOz++yhH4D4Ahj8P1QjcB4B8FCNwHQC7f35qEbgNgOEvRykClwEw/OWpROAyANShEIG7ANj964oegasAGP42IkfgKgC0EzUCNwGw+7cXMQIXATD8dkSLwHwADD9KMh8A7Il0CpgOgN3frigRmA2A4bcvQgRmA4AP3iMwGQC7vy+eIzAXAMPvk9cITAXA8PvmMQJTAcA/bxGYCYDdPw5PEfS394eX1ouojdimvf/4qfUSqgsZAANeRsRA3AfAsLflPQq3ATD4tngNob9+9+AqgOOPh9ZLwIzD98fWS0hi5ikQ0ILJE+DPX7/ruq7rvvn2p4tfw0lgi6Wdf838DEwEMF7w8OfB+O+mfiBCaMvC4O+ZnyYBpCw49QfqOqIo5ebucdX7X1rO+emv3z28lP6B9g703v9/jkCmXdrNc7//qUrOT//3Hz+fnAA5fqDSb1ir1//n81+bXq+2m7vHruvivf8lXv/NCWBhh07F+ln/VpP3AKWv0Utj/ax/rVU3wZYWvAXrb8vy+jc9BbL+hi9h/W1ZWr+JzwGAVvhVCEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEgjAEj76vrr29ZrAJrhBIA0AoA0AoA0AoC0q+enY996EUALz0/HnhMA0ggA0ggA0q667su1UOuFADUNM88JAGkEAGmvAXAZBBXjWecEgLSTADgFEN35jHMCQNqbADgFENXUbHMCQNpkAJwCiObSTHMCQNrFADgFEMXcLM+eAEQA75ZmePESiAjg1ZrZ5R4A0lYFwCkAb9bO7OoTgAjgRcqsJl0CEQGsS53R5HsAIoBVW2Zz1zDf3h9e9vx/IIc9m/Kup0CcBmht7wzufgxKBGglx+xlHV4uiVBDzk23yO5NCCihxNVG0csXQkAOJS+zq1y/EwK2qHF/Wf0Glhgwp/ZDleZPcAhCW+uniP8CYb0RD5Khb/4AAAAASUVORK5CYII=" alt="AC Calc">
+  <div class="pb-text">
+    <strong>Install AC Cooling Calculator</strong>
+    <span>Add to home screen for quick access</span>
+  </div>
+  <button class="btn-install" onclick="installPWA()">Install</button>
+  <button class="btn-dismiss" onclick="dismissBanner()">✕</button>
+</div>
+
+</body></html>`;
+
+  const blob = new Blob(['﻿', doc], {type:'application/msword'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=`Baltic_AC_${(m.yacht||'Calc').replace(/[^a-z0-9]/gi,'_')}.doc`;
+  a.click(); setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+
+
+// CHILLER DATABASE (example data - edit or import your own)
+let CHILLERS = [
+  {m:'CWS 161 (Aquacontrol)',kw:4.7,cop:3.0,w:36},
+  {m:'CWS 201 (Aquacontrol)',kw:5.9,cop:3.0,w:39},
+  {m:'CWS 251 (Aquacontrol)',kw:7.3,cop:3.0,w:43},
+  {m:'CWS 481 (Aquacontrol)',kw:14.1,cop:3.0,w:70},
+  {m:'DC35 (variable speed)',kw:10,cop:3.0,w:42},
+  {m:'DC50 (variable speed)',kw:14,cop:3.0,w:48},
+  {m:'DC65 (variable speed)',kw:19,cop:3.0,w:55},
+  {m:'DC90 (variable speed)',kw:26,cop:3.0,w:0},
+  {m:'DC130 (variable speed)',kw:38,cop:3.0,w:120}
+];
+function addSupplier(){
+  const name=prompt('New supplier / make name:'); if(!name) return;
+  const key=name.toUpperCase().replace(/[^A-Z0-9]/g,'_');
+  if(!SUPS[key]) SUPS[key]={n:name,u:[]};
+  modalSup=key; renderModalTabs(); renderSupTable();
+}
+function exportCatalog(){
+  safeDL(new Blob([JSON.stringify({suppliers:SUPS,chillers:CHILLERS},null,2)],{type:'application/json'}),'Baltic_AC_catalog.json');
+}
+function importCatalog(file){
+  if(!file) return; const r=new FileReader();
+  r.onload=function(){ try{
+    const txt=r.result;
+    if(file.name.toLowerCase().endsWith('.csv')){
+      txt.split(/\r?\n/).forEach(function(line){ const p=line.split(',').map(s=>s.trim());
+        if(p.length<3||/^supplier$/i.test(p[0])) return;
+        const key=p[0].toUpperCase().replace(/[^A-Z0-9]/g,'_');
+        if(!SUPS[key]) SUPS[key]={n:p[0],u:[]};
+        if(p[1]&&+p[2]) SUPS[key].u.push({m:p[1],b:+p[2],w:+(p[3]||0)});
+      });
+    } else { const o=JSON.parse(txt);
+      if(o.suppliers) Object.keys(o.suppliers).forEach(k=>{SUPS[k]=o.suppliers[k];});
+      if(Array.isArray(o.chillers)) CHILLERS=o.chillers;
+    }
+    Object.keys(SUPS).forEach(k=>SUPS[k].u&&SUPS[k].u.sort((a,z)=>a.b-z.b));
+    renderModalTabs(); renderSupTable(); refreshUnitDropdowns(); recalc(); alert('Catalog imported.');
+  }catch(e){ alert('Could not read that file. Use exported JSON, or CSV: supplier,model,btu,weight'); } };
+  r.readAsText(file);
+}
+function pickChiller(loadKW){
+  const list=CHILLERS.slice().sort((a,z)=>a.kw-z.kw); if(!list.length) return null;
+  for(const ch of list){ if(ch.kw>=loadKW) return {ch,n:1}; }
+  const big=list[list.length-1]; return {ch:big,n:Math.ceil(loadKW/big.kw)};
+}
+function chillerSet(k,v){
+  if(!S.chiller) S.chiller={div:75,mode:'auto',model:'',qty:1};
+  if(k==='mode'||k==='model') S.chiller[k]=v; else S.chiller[k]=Number(v);
+  if(k==='mode'){ var w=document.getElementById('chiller-manual-wrap'); if(w) w.style.display=(v==='manual')?'flex':'none'; }
+  recalc();
+}
+function renderChiller(totB){
+  var inner=document.getElementById('chiller-inner'); if(!inner) return;
+  var badge=document.getElementById('chiller-badge');
+  if(!S.chiller) S.chiller={div:75,mode:'auto',model:'',qty:1};
+  var c=S.chiller;
+  // fill controls
+  var dv=document.getElementById('chiller-div'); if(dv&&document.activeElement!==dv) dv.value=c.div;
+  var md=document.getElementById('chiller-mode'); if(md) md.value=c.mode;
+  var mw=document.getElementById('chiller-manual-wrap'); if(mw) mw.style.display=(c.mode==='manual')?'flex':'none';
+  var pk=document.getElementById('chiller-pick');
+  if(pk){ pk.innerHTML=CHILLERS.map(function(x){return '<option'+(x.m===c.model?' selected':'')+'>'+esc(x.m)+'</option>';}).join(''); if(!c.model&&CHILLERS[0]) c.model=CHILLERS[0].m; pk.value=c.model; }
+  var qt=document.getElementById('chiller-qty'); if(qt&&document.activeElement!==qt) qt.value=c.qty;
+  var fullKW=totB/3412.14;
+  if(!fullKW){ if(badge) badge.textContent='—'; inner.innerHTML='<div style="color:var(--g500);font-size:13px">Add spaces to size a chilled-water plant.</div>'; return; }
+  var div=(c.div||75)/100, designKW=fullKW*div;
+  var sel, manual=(c.mode==='manual');
+  if(manual){ var ch=CHILLERS.filter(function(x){return x.m===c.model;})[0]||CHILLERS[0]; sel={ch:ch,n:Math.max(1,c.qty||1)}; }
+  else { sel=pickChiller(designKW); }
+  if(!sel||!sel.ch){ inner.innerHTML='<div style="color:var(--g500)">No chillers in database.</div>'; return; }
+  var cap=sel.ch.kw*sel.n, covers=cap>=designKW, margin=(cap-designKW)/designKW*100, elec=designKW/(sel.ch.cop||3.5);
+  if(badge) badge.textContent=(sel.n>1?sel.n+' × ':'')+sel.ch.m+(covers?'':' ⚠');
+  var rows=CHILLERS.slice().sort(function(a,z){return a.kw-z.kw;}).map(function(x){ var isSel=x.m===sel.ch.m, ok=x.kw*(manual?sel.n:1)>=designKW;
+    return '<tr'+(isSel?' style="background:var(--gold-bg);font-weight:600"':'')+'><td>'+esc(x.m)+'</td><td>'+f1(x.kw)+'</td><td>'+f1(x.cop)+'</td><td>'+f0(x.w)+'</td><td>'+(ok?'<span class="pill p-ok">covers</span>':'<span class="pill p-dim">below</span>')+'</td></tr>'; }).join('');
+  inner.innerHTML='<div class="kpi-row" style="margin:0 0 14px">'+
+    '<div class="kpi"><div class="kpi-l">Total fancoil load</div><div class="kpi-v">'+f1(fullKW)+'</div><div class="kpi-u">kW</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Chiller design load</div><div class="kpi-v">'+f1(designKW)+'</div><div class="kpi-u">kW @ '+f0(c.div)+'%</div></div>'+
+    '<div class="kpi"><div class="kpi-l">'+(manual?'Selected (manual)':'Selected (auto)')+'</div><div class="kpi-v" style="font-size:18px">'+(sel.n>1?sel.n+' × ':'')+esc(sel.ch.m)+'</div><div class="kpi-u">'+f0(cap)+' kW total</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Coverage</div><div class="kpi-v" style="color:'+(covers?'var(--green-dark)':'var(--red-dark)')+'">'+(covers?'OK':'UNDER')+'</div><div class="kpi-u">'+f0(margin)+'% margin</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Electrical input</div><div class="kpi-v">'+f1(elec)+'</div><div class="kpi-u">kW @ COP '+f1(sel.ch.cop)+'</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Plant weight</div><div class="kpi-v">'+f0(sel.ch.w*sel.n)+'</div><div class="kpi-u">kg</div></div></div>'+
+    (covers?'':'<div style="background:var(--red-bg);color:var(--red-dark);padding:8px 12px;border-radius:6px;font-size:13px;margin-bottom:10px">&#9888; Selected chiller capacity ('+f0(cap)+' kW) is below the design load ('+f1(designKW)+' kW). Increase quantity or pick a larger unit.</div>')+
+    '<table class="result-table"><thead><tr><th>Chiller</th><th>kW</th><th>COP</th><th>Weight kg</th><th>Status</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div style="font-size:11px;color:var(--g500);margin-top:8px">Design load = total fan-coil load × diversity factor (chillers are typically 20–30% below the summed fan-coil capacity). Database is editable via Edit Catalog → Chillers.</div>';
+}
+
+const fmtK= n => n>=1000 ? Math.round(n/1000)+'k' : Math.round(n)+'';
+const sum = (arr, fn) => arr.reduce((s,x)=>s+(+fn(x)||0), 0);
+function safeDL(blob, filename){
+  const url=URL.createObjectURL(blob);
+  const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+  const isSafari=/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  if(isIOS||isSafari){
+    // iOS: open in new tab so user can long-press to save
+    const w=window.open(url,'_blank');
+    if(!w){alert('Please allow pop-ups to download files, or use Print / PDF instead.');}
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+  } else {
+    const a=document.createElement('a');
+    a.href=url; a.download=filename; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+}
+
+
 
 function mountAC(){
   if(AC_MOUNTED){ recalc(); return; }
-  el("view-ac").innerHTML=acHTML();
-  AC_MOUNTED=true;
-  var a=acState(); S={climate:a.climate||"med",famu:a.famu||false,sup:a.sup||"VECO",cabins:a.cabins||[],nid:a.nid||1,cop:a.cop||3.0};
-  el("ac-cop").value=S.cop;
-  setClimate(S.climate,1);setFAMU(S.famu,1);renderSupBtns();renderCabins();recalc();
-}
-function acHTML(){
-  return "<main>"+
-    "<div class='page-head'><div><h2>Air Conditioning</h2><p>ISO 7547 cabin cooling. Results feed the seawater pump and fan-coil consumers into Electrical.</p></div>"+
-      "<div style='display:flex;gap:8px' class='no-print'>"+
-        "<button class='btn btn-line btn-sm' onclick='exportExcel()'>&#11015; Excel</button>"+
-        "<button class='btn btn-gold btn-sm' onclick='sendACtoElectrical()'>&#9889; Send to Electrical</button>"+
-      "</div></div>"+
-    "<div class='card'><div class='card-hdr'><h2>Settings</h2></div><div style='padding:14px 20px;display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end'>"+
-      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>Climate</label>"+
-        "<div style='display:flex;border:1.5px solid var(--g300);border-radius:4px;overflow:hidden;height:32px'>"+
-        "<button id='ac-bmed' class='acseg on' onclick=\"setClimate('med')\">Mediterranean</button><button id='ac-btrop' class='acseg' onclick=\"setClimate('trop')\">Tropical</button></div></div>"+
-      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>FAMU</label>"+
-        "<div style='display:flex;border:1.5px solid var(--g300);border-radius:4px;overflow:hidden;height:32px'>"+
-        "<button id='ac-bfn' class='acseg on' onclick='setFAMU(false)'>No</button><button id='ac-bfy' class='acseg' onclick='setFAMU(true)'>Yes</button></div></div>"+
-      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>Supplier</label>"+
-        "<div id='ac-sup' style='display:flex;gap:5px;flex-wrap:wrap'></div></div>"+
-      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>COP</label>"+
-        "<input id='ac-cop' type='number' value='3.0' min='1.5' max='6' step='0.1' oninput='S.cop=+this.value;acSave();recalc()' style='width:64px;padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;text-align:center'></div>"+
-    "</div></div>"+
-    "<div class='card'><div class='card-hdr'><h2>Spaces &amp; Cabins</h2><div style='display:flex;gap:8px;align-items:center'><span class='badge' id='ac-badge'>0</span><button class='btn btn-primary btn-sm no-print' onclick='addCabin()'>+ Add Space</button></div></div>"+
-      "<div class='tbl-wrap'><table><thead><tr><th>#</th><th>Name</th><th>Type</th><th>Area m&#178;</th><th>H</th><th>&#128100;</th><th>WC</th><th>ACH</th><th>Cooling</th><th>OK</th><th class='no-print'></th></tr></thead>"+
-      "<tbody id='ac-body'></tbody></table></div>"+
-      "<div style='padding:10px 16px;background:var(--g100);border-top:1px solid var(--g200);display:flex;gap:6px;flex-wrap:wrap' class='no-print' id='ac-quick'></div></div>"+
-    "<div class='card' id='ac-results' style='display:none'>"+
-      "<div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='ac-resbadge'>&#8212;</span></div>"+
-      "<div class='kpi-row' id='ac-kpi'></div>"+
-      "<div class='tbl-wrap' style='padding:0 0 8px'><table class='result-table'><thead><tr><th>#</th><th>Space</th><th>Area</th><th>Cooling</th><th>Unit</th><th>BTU</th><th>kg</th></tr></thead><tbody id='ac-equip'></tbody><tfoot id='ac-equipfoot'></tfoot></table></div>"+
-    "</div></main>"+
-    "<style>.acseg{padding:0 13px;border:none;background:#fff;color:var(--g700);font-size:12px;font-weight:500;cursor:pointer}.acseg.on{background:var(--navy);color:#fff}.acseg+.acseg{border-left:1.5px solid var(--g300)}"+
-    ".acsup{padding:0 11px;height:32px;border:1.5px solid var(--g300);border-radius:4px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--g700)}.acsup.on{border-color:var(--gold);background:var(--gold-bg);color:var(--navy)}"+
-    ".ti{padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;width:100%}.ti:focus{outline:none;border-color:var(--navy)}.tin{max-width:56px;text-align:right}</style>";
-}
-function calcCabin(c){
-  var area=Number(c.area)||0,h=Number(c.h)||2.1,p=Number(c.p)||0,ach=Number(c.ach)||2,wc=!!c.wc;
-  var t=TYPES[c.type]||TYPES.other,cli=CLIMATE[S.climate];
-  var wm2=S.climate==="med"?t.med:t.trop,vol=area*h;
-  var fv=Math.max((vol*ach)/3.6,p*7,area>0?3:0);
-  var dH=S.famu?cli.famu.cabin_dH:cli.day.dH;
-  var vH=1.29*1.01*fv*dH,base=wm2*area,pers=p*150,inst=10*area;
-  var totW=base+vH+pers+inst,totB=totW*3.41214;
-  return {area:area,p:p,wm2:wm2,vol:vol,fv:fv,totW:totW,totB:totB};
-}
-function recUnit(btu){var u=SUPS[S.sup].u.slice().sort(function(a,b){return a.b-b.b;});var f=u.filter(function(x){return x.b>=btu;});return f.length?f[0]:u[u.length-1]||{m:"-",b:0,w:0};}
-function typeOpts(sel){return Object.keys(TYPES).map(function(k){return "<option value='"+k+"'"+(sel===k?" selected":"")+">"+TYPES[k].l+"</option>";}).join("");}
-function renderSupBtns(){
-  if(!el("ac-sup"))return;
-  el("ac-sup").innerHTML=Object.keys(SUPS).map(function(k){return "<button class='acsup"+(S.sup===k?" on":"")+"' onclick=\"setSup('"+k+"')\">"+SUPS[k].n+"</button>";}).join("");
-  if(el("ac-quick"))el("ac-quick").innerHTML="<span style='font-size:12px;color:var(--g500)'>Quick add:</span>"+Object.keys(ACP).map(function(k){return "<button class='btn btn-line btn-xs' onclick=\"addPreset('"+k+"')\">"+ACP[k].name+"</button>";}).join("");
-}
-function setSup(k){S.sup=k;renderSupBtns();acSave();recalc();}
-function setClimate(c,q){S.climate=c;if(el("ac-bmed")){el("ac-bmed").classList.toggle("on",c==="med");el("ac-btrop").classList.toggle("on",c==="trop");}if(!q){acSave();recalc();}}
-function setFAMU(v,q){S.famu=v;if(el("ac-bfn")){el("ac-bfn").classList.toggle("on",!v);el("ac-bfy").classList.toggle("on",v);}if(!q){acSave();recalc();}}
-function appendRow(c){
-  if(el("acr"+c.id))return;
-  var tr=document.createElement("tr");tr.id="acr"+c.id;
-  tr.innerHTML="<td class='rn' style='color:var(--g500);font-weight:600'>-</td>"+
-    "<td><input class='ti' style='min-width:120px' value='"+esc(c.name||"")+"' oninput=\"upd("+c.id+",'name',this.value)\"></td>"+
-    "<td><select class='ti' style='min-width:150px' onchange='updType("+c.id+",this.value)'>"+typeOpts(c.type)+"</select></td>"+
-    "<td><input class='ti tin' type='number' value='"+(c.area||"")+"' oninput=\"upd("+c.id+",'area',+this.value)\"></td>"+
-    "<td><input class='ti tin' type='number' value='"+(c.h||2.1)+"' step='0.1' oninput=\"upd("+c.id+",'h',+this.value)\"></td>"+
-    "<td><input class='ti tin' type='number' value='"+(c.p||0)+"' oninput=\"upd("+c.id+",'p',+this.value)\"></td>"+
-    "<td style='text-align:center'><input type='checkbox' "+(c.wc?"checked":"")+" onchange=\"upd("+c.id+",'wc',this.checked)\"></td>"+
-    "<td><input class='ti tin' type='number' value='"+(c.ach||2)+"' step='0.5' id='acach"+c.id+"' oninput=\"upd("+c.id+",'ach',+this.value)\"></td>"+
-    "<td id='accn"+c.id+"' style='font-weight:600;white-space:nowrap'>-</td>"+
-    "<td id='acst"+c.id+"'><span class='pill p-dim'>-</span></td>"+
-    "<td class='no-print'><button class='btn btn-line btn-xs' onclick='removeRow("+c.id+")'>&#10005;</button></td>";
-  el("ac-body").appendChild(tr);
-}
-function renderCabins(){var t=el("ac-body");if(!t)return;t.innerHTML="";S.cabins.forEach(function(c){appendRow(c);});rowNums();badge();}
-function addCabin(d){var id=S.nid++;var c=d?Object.assign({},d,{id:id}):{id:id,name:"",type:"guest",area:"",h:2.1,p:2,wc:true,ach:2.0};S.cabins.push(c);appendRow(c);rowNums();badge();acSave();recalc();}
-function addPreset(k){addCabin(Object.assign({},ACP[k]));}
-function removeRow(id){S.cabins=S.cabins.filter(function(c){return c.id!==id;});var r=el("acr"+id);if(r)r.remove();rowNums();badge();acSave();recalc();}
-function rowNums(){S.cabins.forEach(function(c,i){var e=document.querySelector("#acr"+c.id+" .rn");if(e)e.textContent=i+1;});}
-function badge(){if(el("ac-badge"))el("ac-badge").textContent=S.cabins.length+(S.cabins.length===1?" space":" spaces");}
-function upd(id,f,v){var c=S.cabins.find(function(c){return c.id===id;});if(c){c[f]=v;acSave();recalc();}}
-function updType(id,t){var c=S.cabins.find(function(c){return c.id===id;});if(!c)return;c.type=t;var a=el("acach"+id);if(a&&TYPES[t]){a.value=TYPES[t].ach;c.ach=TYPES[t].ach;}acSave();recalc();}
-function recalc(){
-  if(!el("ac-results"))return;
-  if(!S.cabins.length){el("ac-results").style.display="none";return;}
-  el("ac-results").style.display="";
-  var rows=S.cabins.map(function(c){var cr=calcCabin(c);var u=recUnit(cr.totB);var ok=u.b>=cr.totB;return {c:c,cr:cr,u:u,ok:ok};});
-  rows.forEach(function(r){var cn=el("accn"+r.c.id);if(cn)cn.textContent=f1(r.cr.totW/1000)+" kW";var st=el("acst"+r.c.id);if(st)st.innerHTML=r.u.b?(r.ok?"<span class='pill p-ac'>&#10003;</span>":"<span class='pill p-dim'>&#10007;</span>"):"<span class='pill p-dim'>-</span>";});
-  var totW=rows.reduce(function(s,r){return s+r.cr.totW;},0);
-  var totB=rows.reduce(function(s,r){return s+r.cr.totB;},0);
-  var totInst=rows.reduce(function(s,r){return s+r.u.b;},0);
-  var totKg=rows.reduce(function(s,r){return s+r.u.w;},0);
-  var cop=Number(el("ac-cop").value)||3;var eKW=(totInst/3412)/cop;
-  el("ac-resbadge").textContent=f0(totB)+" BTU";
-  el("ac-kpi").innerHTML=
-    "<div class='kpi'><div class='kpi-l'>Cooling Need</div><div class='kpi-v'>"+f1(totW/1000)+"</div><div class='kpi-u'>kW</div></div>"+
-    "<div class='kpi'><div class='kpi-l'>Installed</div><div class='kpi-v'>"+f0(Math.round(totInst/1000))+"k</div><div class='kpi-u'>BTU/h</div></div>"+
-    "<div class='kpi'><div class='kpi-l'>Compressor Elec</div><div class='kpi-v'>"+f1(eKW)+"</div><div class='kpi-u'>kW</div></div>"+
-    "<div class='kpi'><div class='kpi-l'>Weight</div><div class='kpi-v'>"+f1(totKg)+"</div><div class='kpi-u'>kg</div></div>"+
-    "<div class='kpi'><div class='kpi-l'>Spaces</div><div class='kpi-v'>"+rows.length+"</div><div class='kpi-u'>cabins</div></div>";
-  el("ac-equip").innerHTML=rows.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td><strong>"+esc(r.c.name||TYPES[r.c.type].l)+"</strong></td><td>"+f1(r.cr.area)+" m&#178;</td><td>"+f1(r.cr.totW/1000)+" kW</td><td><strong>"+r.u.m+"</strong></td><td>"+(r.u.b?f0(r.u.b):"-")+"</td><td>"+(r.u.w||"-")+"</td></tr>";}).join("");
-  el("ac-equipfoot").innerHTML="<tr><td colspan='3'>TOTAL</td><td>"+f1(totW/1000)+" kW</td><td></td><td>"+f0(totInst)+"</td><td>"+f1(totKg)+"</td></tr>";
-  S._tot={btu:totInst,eKW:eKW};
+  el("view-ac").innerHTML = acHTML();
+  AC_MOUNTED = true;
+  var d=el("f-date"); if(d) d.value=new Date().toISOString().slice(0,10);
+  var y=el("f-yacht"); if(y && !y.value) y.value=PROJECT.meta.yacht||"";
+  if(typeof renderConditions==="function") renderConditions();
+  updateCabinCount();
+  recalc();
 }
 function sendACtoElectrical(){
-  if(!S.cabins.length){alert("Add cabins first.");return;}
-  recalc();
-  var cop=Number(el("ac-cop").value)||3;
-  var compKW=(S._tot.btu/3412)/cop;
-  var swKW=Math.max(0.5,compKW*0.06);
-  var circKW=Math.max(0.5,compKW*0.10);
-  var fanKW=Math.max(0.2,S.cabins.length*0.15);
-  var list=[
-    {source:"AC",name:"AC compressor(s)",bus:"AC",pcs:1,kw:+compKW.toFixed(2),day:65,eve:65,night:35},
-    {source:"AC",name:"Seawater pump (AC)",bus:"AC",pcs:1,kw:+swKW.toFixed(2),day:100,eve:100,night:100},
-    {source:"AC",name:"Circulation pump (AC)",bus:"AC",pcs:1,kw:+circKW.toFixed(2),day:100,eve:100,night:100},
-    {source:"AC",name:"Fan-coils",bus:"INV",pcs:S.cabins.length,kw:+(fanKW/Math.max(1,S.cabins.length)).toFixed(3),day:70,eve:70,night:40}
-  ];
-  addConsumers(list);
-  alert("Sent "+list.length+" AC consumers to the Electrical load balance.");
-}
-function exportExcel(){
-  if(!window.XLSX){alert("Excel library loading.");return;}
-  var wb=XLSX.utils.book_new();var m=PROJECT.meta;
-  var info=[["Baltic Yachts AC Cooling (ISO 7547)"],["Yacht",m.yacht,"Project",m.proj],["Climate",CLIMATE[S.climate].label,"FAMU",S.famu?"Yes":"No"],[],["#","Space","Type","Area m2","W/m2","Cooling W","BTU","Unit","Unit BTU","kg"]];
-  S.cabins.forEach(function(c,i){var cr=calcCabin(c);var u=recUnit(cr.totB);info.push([i+1,c.name||TYPES[c.type].l,TYPES[c.type].l,cr.area,cr.wm2,Math.round(cr.totW),Math.round(cr.totB),u.m,u.b,u.w]);});
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(info),"AC Loads");
-  XLSX.writeFile(wb,"Baltic_AC_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+  if(!S.cabins.length){ alert("Add at least one space first."); return; }
+  var totB=0;
+  S.cabins.forEach(function(c){ var cr=calcCabin(c); var u=getUnit(c,cr.totB_d); totB+=u.b||cr.totB_d; });
+  var coolKW=totB/3412.14;            // installed cooling kW (BTU/h -> kW)
+  var elecKW=coolKW/3.0;              // electrical input at COP 3.0
+  addConsumers([{source:"Air Conditioning",name:"AC compressors + fan-coils",bus:"AC",pcs:1,kw:+elecKW.toFixed(2),day:100,eve:90,night:70}]);
+  alert("Sent AC electrical load ("+elecKW.toFixed(1)+" kW @ COP 3.0) to the Electrical load balance.");
 }
 
-/* ===== ENGINE ROOM VENTILATION (ISO 8861) ===== */
 var ERV_MOUNTED=false;
-function ervDefaults(){return{ ro:1.13, c:1.01, tout:35, dt:12.5, pdp:405, ddp:4.6, pdg:75, pgel:55, eta:94, ngen:2, ddg:9.4404, mad:0.002, fel:0, fex:0, ft:0, fo:0, fdp:350, feff:60, vg:3, vd:10, vfd:10 };}
+function ervDefaults(){return{
+  ro:1.13, c:1.01, tout:35, dt:12.5,
+  pdp:405, ddp:4.6,
+  pdg:75, pgel:55, eta:94, ngen:2, ddg:9.4404,
+  mad:0.002,
+  fel:0, fex:0, ft:0, fo:0,
+  fdp:350, feff:60,
+  vg:3, vd:10, vfd:10
+};}
 function ervState(){ if(!PROJECT.erv)PROJECT.erv=ervDefaults(); return PROJECT.erv; }
 function ervSave(){ saveActive(); }
 function E(id){return el("erv-"+id);}
 function ervSet(k,v){ ervState()[k]=Number(v); ervSave(); ervCalc(); }
-function mountERV(){ if(ERV_MOUNTED){ervFill();ervCalc();return;} el("view-ervent").innerHTML=ervHTML(); ERV_MOUNTED=true; ervFill(); ervCalc(); }
+
+function mountERV(){
+  if(ERV_MOUNTED){ervFill();ervCalc();return;}
+  el("view-ervent").innerHTML=ervHTML();
+  ERV_MOUNTED=true; ervFill(); ervCalc();
+}
 function ervField(k,label,unit,step){
   return "<div style='display:flex;flex-direction:column;gap:3px'>"+
     "<label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+label+"</label>"+
@@ -683,11 +1830,13 @@ function ervHTML(){
      "</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Main Engine</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
-       ervField("pdp","Max power Pdp","kW")+ervField("ddp","Heat rejection Ddp","%")+ervField("mad","Air req. mad","kg/kWs","0.0001")+"</div></div>"+
+       ervField("pdp","Max power Pdp","kW")+ervField("ddp","Heat rejection Ddp","%")+
+       ervField("mad","Air req. mad","kg/kWs","0.0001")+"</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Generator Set(s)</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        ervField("ngen","Quantity running","pcs","1")+ervField("pdg","Engine power Pdg (ea)","kW")+
-       ervField("pgel","Electric power (ea)","kW")+ervField("eta","Alternator eff. &eta;","%")+ervField("ddg","Heat rejection Ddg","%")+"</div></div>"+
+       ervField("pgel","Electric power (ea)","kW")+ervField("eta","Alternator eff. &eta;","%")+
+       ervField("ddg","Heat rejection Ddg","%")+"</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Additional Heat Emissions</h2><span style='font-size:11px;color:var(--g500)'>optional</span></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        ervField("fel","Electrical install. &Phi;el","kW")+ervField("fex","Exhaust system &Phi;ex","kW")+
@@ -695,33 +1844,45 @@ function ervHTML(){
    "<div class='card'><div class='card-hdr'><h2>Fan &amp; Duct Design</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        ervField("fdp","Fan static pressure","Pa")+ervField("feff","Fan efficiency","%")+
-       ervField("vg","Grille velocity","m/s")+ervField("vd","Duct velocity","m/s")+ervField("vfd","Fire damper velocity","m/s")+"</div></div>"+
+       ervField("vg","Grille velocity","m/s")+ervField("vd","Duct velocity","m/s")+
+       ervField("vfd","Fire damper velocity","m/s")+"</div></div>"+
    "<div class='card' id='erv-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='erv-badge'>-</span></div>"+
      "<div class='kpi-row' id='erv-kpi'></div>"+
+     "<div class='section' style='padding:0 20px 6px'></div>"+
      "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Symbol</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='erv-tbl'></tbody></table></div>"+
    "</div></main>";
 }
-function ervFill(){ var s=ervState(); ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd"].forEach(function(k){ if(E(k))E(k).value=s[k]; }); }
+function ervFill(){
+  var s=ervState();
+  ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd"].forEach(function(k){ if(E(k))E(k).value=s[k]; });
+}
 function ervCompute(){
   var s=ervState();
   var ertemp=s.tout+s.dt;
+  // combustion air
   var qdp=(s.pdp*s.mad)/s.ro;
-  var qdg=(s.pdg*s.mad)/s.ro;
+  var qdg=(s.pdg*s.mad)/s.ro;               // per genset
   var Qc=qdp+s.ngen*qdg;
   var q15=Qc*1.5;
+  // heat emissions [kW]
   var Fdp=s.pdp*(s.ddp/100);
-  var Fdg=s.pdg*(s.ddg/100);
-  var Fg=s.pgel*(1-s.eta/100);
+  var Fdg=s.pdg*(s.ddg/100);                // per genset engine
+  var Fg=s.pgel*(1-s.eta/100);              // per electrical generator
   var sumF=Fdp + s.ngen*(Fdg+Fg) + s.fel + s.fex + s.ft + s.fo;
   var Qh=sumF/(s.ro*s.c*s.dt) - 0.4*Qc;
   if(Qh<0)Qh=0;
-  var Qin=Qc+Qh, Qout=Qh;
-  var A=Qin/s.vg;
-  var Dduct=Math.sqrt((Qin/s.vd)/Math.PI)*2*1000;
-  var Afd=Qin/s.vfd;
+  var Qsum=Qc+Qh;                       // combustion + heat-removal
+  var Qin=Math.max(Qsum,q15);          // ISO 8861 §5.1b: not less than 1.5 x combustion air
+  var govMin=(q15>Qsum);               // true if the 1.5xQc minimum governs
+  var Qout=Qin-Qc;        // exhaust [m3/s] (supply minus combustion air consumed)
+  // sizing
+  var A=Qin/s.vg;                          // grille area m2
+  var Dduct=Math.sqrt((Qin/s.vd)/Math.PI)*2*1000; // mm
+  var Afd=Qin/s.vfd;                       // fire damper m2
+  // fan power kW
   var fanIn=Qin*s.fdp/((s.feff/100)*1000);
   var fanOut=Qout*s.fdp/((s.feff/100)*1000);
-  return {ertemp:ertemp,qdp:qdp,qdg:qdg,Qc:Qc,q15:q15,Fdp:Fdp,Fdg:Fdg,Fg:Fg,sumF:sumF,Qh:Qh,Qin:Qin,Qout:Qout,A:A,Dduct:Dduct,Afd:Afd,fanIn:fanIn,fanOut:fanOut};
+  return {ertemp:ertemp,qdp:qdp,qdg:qdg,Qc:Qc,q15:q15,Fdp:Fdp,Fdg:Fdg,Fg:Fg,sumF:sumF,Qh:Qh,Qsum:Qsum,govMin:govMin,Qin:Qin,Qout:Qout,A:A,Dduct:Dduct,Afd:Afd,fanIn:fanIn,fanOut:fanOut};
 }
 function ervCalc(){
   if(!E("results"))return;
@@ -747,7 +1908,7 @@ function ervCalc(){
     row("Heat, electrical generator (ea)","Φ<sub>g</sub>",f1(r.Fg),"kW","P<sub>el</sub> × (1-η)")+
     row("Total heat emission","ΣΦ",f1(r.sumF),"kW","sum of all Φ")+
     row("Heat-loss airflow","Q<sub>h</sub>",f3(r.Qh),"m³/s","ΣΦ / (ρ·c·Δt) - 0.4Q<sub>c</sub>")+
-    row("Required supply air","Q<sub>in</sub>",f3(r.Qin)+" / "+f0(r.Qin*3600),"m³/s / m³/h","Q<sub>c</sub> + Q<sub>h</sub>")+
+    row("Required supply air","Q<sub>in</sub>",f3(r.Qin)+" / "+f0(r.Qin*3600),"m³/s / m³/h","max(Q<sub>c</sub>+Q<sub>h</sub>, 1.5·Q<sub>c</sub>) &mdash; ISO 8861 §5.1b"+(r.govMin?" &mdash; <strong>1.5·Q<sub>c</sub> governs</strong>":""))+
     row("Required exhaust air","Q<sub>out</sub>",f3(r.Qout)+" / "+f0(r.Qout*3600),"m³/s / m³/h","Q<sub>h</sub>")+
     row("Grille cross section","A",f3(r.A)+" / "+f0(r.A*10000),"m² / cm²","Q<sub>in</sub> / v<sub>grille</sub>")+
     row("Duct hydraulic diameter","Ø",f0(r.Dduct),"mm","√(Q<sub>in</sub>/v<sub>duct</sub>/π)×2")+
@@ -755,6 +1916,7 @@ function ervCalc(){
     row("Supply fan electrical","P<sub>sup</sub>",f2(r.fanIn),"kW","Q<sub>in</sub>·Δp / η")+
     row("Exhaust fan electrical","P<sub>exh</sub>",f2(r.fanOut),"kW","Q<sub>out</sub>·Δp / η");
 }
+function f3(n){return Number(n).toFixed(3);}
 function ervToElectrical(){
   var r=ervCompute();
   var list=[
@@ -771,18 +1933,24 @@ function ervExcel(){
     ["INPUTS"],["Outside temp",s.tout,"C"],["Max temp rise dt",s.dt,"C"],["Air density",s.ro,"kg/m3"],["Heat coeff c",s.c,"kJ/kgK"],
     ["Main engine Pdp",s.pdp,"kW"],["Ddp",s.ddp,"%"],["mad",s.mad,"kg/kWs"],
     ["Gensets running",s.ngen,"pcs"],["Genset engine Pdg",s.pdg,"kW"],["Genset electric",s.pgel,"kW"],["Eta",s.eta,"%"],["Ddg",s.ddg,"%"],
-    ["Phi el/ex/t/o",s.fel+"/"+s.fex+"/"+s.ft+"/"+s.fo,"kW"],["Fan dP",s.fdp,"Pa"],["Fan eff",s.feff,"%"],[],
-    ["RESULTS"],["Max ER temp",+r.ertemp.toFixed(1),"C"],["Combustion air Qc",+r.Qc.toFixed(3),"m3/s"],["Qc x1.5",+r.q15.toFixed(3),"m3/s"],
+    ["Phi el/ex/t/o",s.fel+"/"+s.fex+"/"+s.ft+"/"+s.fo,"kW"],
+    ["Fan dP",s.fdp,"Pa"],["Fan eff",s.feff,"%"],[],
+    ["RESULTS"],["Max ER temp",+r.ertemp.toFixed(1),"C"],
+    ["Combustion air Qc",+r.Qc.toFixed(3),"m3/s"],["Qc x1.5",+r.q15.toFixed(3),"m3/s"],
     ["Total heat emission",+r.sumF.toFixed(1),"kW"],["Heat-loss air Qh",+r.Qh.toFixed(3),"m3/s"],
     ["Supply air Qin",+r.Qin.toFixed(3),"m3/s",+(r.Qin*3600).toFixed(0),"m3/h"],
     ["Exhaust air Qout",+r.Qout.toFixed(3),"m3/s",+(r.Qout*3600).toFixed(0),"m3/h"],
-    ["Grille area",+r.A.toFixed(3),"m2",+(r.A*10000).toFixed(0),"cm2"],["Duct diameter",+r.Dduct.toFixed(0),"mm"],
+    ["Grille area",+r.A.toFixed(3),"m2",+(r.A*10000).toFixed(0),"cm2"],
+    ["Duct diameter",+r.Dduct.toFixed(0),"mm"],
     ["Supply fan",+r.fanIn.toFixed(2),"kW"],["Exhaust fan",+r.fanOut.toFixed(2),"kW"]];
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"ER Ventilation");
   XLSX.writeFile(wb,"Baltic_ERVent_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
-/* ===== shared field helper ===== */
+
+/* ================================================================
+   SHARED little input field helper for new modules
+   ================================================================ */
 function modField(pfx,k,label,unit,step){
   return "<div style='display:flex;flex-direction:column;gap:3px'>"+
     "<label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+label+"</label>"+
@@ -791,7 +1959,9 @@ function modField(pfx,k,label,unit,step){
     "<span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>";
 }
 
-/* ===== BILGE (RINA / DNV) ===== */
+/* ================================================================
+   BILGE MODULE  (RINA Pt C Ch1 Sec9 / DNV)  -> #view-bilge
+   ================================================================ */
 var BIL_MOUNTED=false;
 function bilDefaults(){return{ rule:"RINA", L:29.16, B:5.96, H:3.38, head:25, eff:50, branches:[{name:"Compartment 1",L1:7.1}] };}
 function bilState(){ if(!PROJECT.bilge)PROJECT.bilge=bilDefaults(); if(!PROJECT.bilge.branches)PROJECT.bilge.branches=[]; return PROJECT.bilge; }
@@ -807,7 +1977,8 @@ function bilHTML(){
      "<div style='display:flex;border:1.5px solid var(--g300);border-radius:4px;overflow:hidden;height:30px' class='no-print'>"+
        "<button id='bil-rRINA' class='bseg on' onclick=\"bilSetRule('RINA')\">RINA</button><button id='bil-rDNV' class='bseg' onclick=\"bilSetRule('DNV')\">DNV</button></div></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
-       modField("bil","L","Length @ LWL","m")+modField("bil","B","Breadth @ DWL","m")+modField("bil","H","Hull bottom to deck @ CL","m")+"</div></div>"+
+       modField("bil","L","Length @ LWL","m")+modField("bil","B","Breadth @ DWL","m")+modField("bil","H","Hull bottom to deck @ CL","m")+
+     "</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Branch Compartments</h2><button class='btn btn-primary btn-sm no-print' onclick='bilAddBranch()'>+ Add</button></div>"+
      "<div class='tbl-wrap'><table><thead><tr><th>Compartment</th><th>L1 (m)</th><th>Branch pipe d (mm)</th><th class='no-print'></th></tr></thead><tbody id='bil-branches'></tbody></table></div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Bilge Pump (electrical)</h2></div>"+
@@ -837,13 +2008,13 @@ function renderBranches(){
 }
 function bilCompute(){
   var s=bilState();
-  var d=25+1.68*Math.sqrt(s.L*(s.B+s.H));
+  var d=25+1.68*Math.sqrt(s.L*(s.B+s.H));            // main pipe inner dia [mm]
   var coef=(s.rule==="RINA")?0.0058:0.00575;
-  var Qm3h=coef*d*d;
+  var Qm3h=coef*d*d;                                  // pump min capacity m3/h
   var Qlmin=Qm3h/60*1000;
   var Qls=Qm3h/3.6;
   var Qm3s=Qm3h/3600;
-  var pumpKW=1025*9.81*Qm3s*s.head/((s.eff/100)*1000);
+  var pumpKW=1025*9.81*Qm3s*s.head/((s.eff/100)*1000); // rho seawater 1025
   return {d:d,Qm3h:Qm3h,Qlmin:Qlmin,Qls:Qls,Qm3s:Qm3s,pumpKW:pumpKW};
 }
 function bilCalc(){
@@ -882,8 +2053,12 @@ function bilExcel(){
   XLSX.writeFile(wb,"Baltic_Bilge_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
-/* ===== SEAWATER COOLING ===== */
+/* ================================================================
+   SEAWATER COOLING MODULE  (manifold dimensioning)  -> #view-seawater
+   ================================================================ */
 var SW_MOUNTED=false;
+var WATER_MOUNTED=false;
+var THR_MOUNTED=false;
 function swDefaults(){return{ vmax:1.97, head:15, eff:55, items:[
   {name:"Main Engine",q:360},{name:"Generator 1",q:80},{name:"Generator 2",q:0},
   {name:"Watermaker",q:20},{name:"Air Conditioning",q:150},{name:"Fridge & Freezer",q:110},
@@ -899,7 +2074,8 @@ function swHTML(){
        "<button class='btn btn-line btn-sm' onclick='swExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='swToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Cooling Consumers (flow required)</h2><button class='btn btn-primary btn-sm no-print' onclick='swAddItem()'>+ Add</button></div>"+
-     "<div class='tbl-wrap'><table><thead><tr><th>Consumer</th><th>Flow (l/min)</th><th class='no-print'></th></tr></thead><tbody id='sw-items'></tbody><tfoot id='sw-foot'></tfoot></table></div></div>"+
+     "<div class='tbl-wrap'><table><thead><tr><th>Consumer</th><th>Flow (l/min)</th><th class='no-print'></th></tr></thead><tbody id='sw-items'></tbody>"+
+     "<tfoot id='sw-foot'></tfoot></table></div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Pipe &amp; Pump</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        modField("sw","vmax","Max velocity Vmax","m/s")+modField("sw","head","Pump head","m")+modField("sw","eff","Pump efficiency","%")+"</div></div>"+
@@ -925,9 +2101,9 @@ function renderSWItems(){
 }
 function swCompute(){
   var s=swState();
-  var qtot=s.items.reduce(function(a,it){return a+(+it.q||0);},0);
+  var qtot=s.items.reduce(function(a,it){return a+(+it.q||0);},0); // l/min
   var Qm3s=(qtot/60)/1000;
-  var di=Math.sqrt((4*Qm3s)/(Math.PI*s.vmax))*1000;
+  var di=Math.sqrt((4*Qm3s)/(Math.PI*s.vmax))*1000;  // mm
   var pumpKW=1025*9.81*Qm3s*s.head/((s.eff/100)*1000);
   return {qtot:qtot,Qm3s:Qm3s,di:di,pumpKW:pumpKW};
 }
@@ -965,7 +2141,628 @@ function swExcel(){
   XLSX.writeFile(wb,"Baltic_Seawater_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
-/* ===== PWA ===== */
+/* ================================================================
+   WATER & WASTEWATER TANK BALANCE   (v0.8)
+   Source of truth: Baltic Yachts "Water & Wastewater tank balance.xlsx"
+   (M.Strengell). Discharge per MEPC 157(55): Drmax = 0.00926 * V * D * B.
+   ================================================================ */
+function watDefaults(){return{
+  persons:14, toiletType:"Tecma/Planus",
+  flushrate:8, tecma:3.5, vacuum:1.2, sf:1.5,
+  cons:[
+    {name:"Persons (drinking/cooking)", fx:"per",    c:14, d:0,  e:0,   f:8},
+    {name:"Toilet flushes",             fx:"toilet", c:0,  d:0,  e:0,   f:0},
+    {name:"Showers/day",                fx:"shower", c:4,  d:2,  e:4,   f:11},
+    {name:"Dishwasher",                 fx:"fd",     c:0,  d:3,  e:0,   f:40},
+    {name:"Washer",                     fx:"fdc",    c:1,  d:2,  e:0,   f:49},
+    {name:"Misc.",                      fx:"fedc",   c:2,  d:6,  e:0.3, f:11}
+  ],
+  deckC:2, deckF:11,
+  tankVol:2400, wmRate:600, wmRun:4, fwAuton:2,   // fwAuton = desired days of autonomy for FW tank suggestion
+  treatCap:3000, treatRun:6.5, units:1, wasteTank:1300, wasteSF:1.2,  // HLCC-0125 rated 3000 l/day (125 l/h x 24h)
+  sludgePct:3, sludgeDays:14, sludgeTank:0, sludgeSF:1.2,  // sludge = 3% of treated (Hamann manual gives no rate)
+  vKn:8, draft:1, beam:8.25,
+  elec:{fwp:0, wm:0, stp:1.4, dis:0}              // stp 1.4 kW = documented HLCC-0125 component loads
+};}
+function watState(){ if(!PROJECT.water)PROJECT.water=watDefaults();
+  var w=PROJECT.water,d=watDefaults(); if(!w.cons)w.cons=d.cons; if(!w.elec)w.elec=d.elec;
+  ["units","fwAuton","wasteSF","sludgePct","sludgeDays","sludgeTank","sludgeSF"].forEach(function(k){if(w[k]===undefined)w[k]=d[k];}); return w; }
+function watSet(k,v){ var w=watState(); if(k==="toiletType"){w[k]=v;} else {w[k]=Number(v);} saveActive(); watCalc(); }
+function watElecSet(k,v){ watState().elec[k]=Number(v); saveActive(); watCalc(); }
+function watConSet(i,k,v){ var it=watState().cons[i]; if(it){ it[k]=(k==="name")?v:Number(v); saveActive(); watCalc(); } }
+function watAddCon(){ watState().cons.push({name:"Consumer",fx:"gen",c:1,d:1,e:0,f:0}); saveActive(); renderWatCons(); watCalc(); }
+function watDelCon(i){ watState().cons.splice(i,1); saveActive(); renderWatCons(); watCalc(); }
+
+function watConTotal(it,w){
+  var c=+it.c||0,d=+it.d||0,e=+it.e||0,f=+it.f||0;
+  switch(it.fx){
+    case "per":    return w.persons*f;
+    case "toilet": var fl=w.flushrate*w.persons, vol=(w.toiletType==="Vacuum")?w.vacuum:w.tecma; return fl*vol;
+    case "shower": return c*(d*(e*f));
+    case "fd":     return f*d;
+    case "fdc":    return (f*d)*c;
+    case "fedc":   return ((f*e)*d)*c;
+    default:       return (c||1)*(d||1)*(f||0);   // generic custom row
+  }
+}
+function watCompute(){
+  var w=watState();
+  var usage=w.cons.reduce(function(a,it){return a+watConTotal(it,w);},0);   // G21  l/day
+  var perPerson=w.persons?usage/w.persons:0;                                // C21
+  var deck=(+w.deckF||0)*(+w.deckC||0)*60;                                  // G20  l/day
+  // fresh water
+  var balDay=w.tankVol-(usage+deck);
+  var wmRun=+w.wmRun||0, wmRate=+w.wmRate||0;
+  var wmProd=wmRate*wmRun;                                                  // watermaker l/day at set rate & runtime
+  var balWM=balDay+wmProd;
+  var fwTankSuggest=usage*(+w.fwAuton||0);                                  // suggested FW tank = daily usage x autonomy
+  var wmRateNeed=wmRun?usage/wmRun:0;                                       // l/h output to replace daily draw at set runtime
+  var wmRunNeed=wmRate?usage/wmRate:0;                                      // h/day runtime to replace daily draw at set rate
+  // waste water  -  HLCC-0125: hourly rate 125 l/h (= 3000 l/d / 24h). Daily treated depends on runtime.
+  var wwDay=usage;                                                          // wastewater generated/day
+  var units=Math.max(1,+w.units||1);
+  var treatRun=+w.treatRun||0;
+  var hourlyRate=(+w.treatCap||0)/24;                                       // l/h (3000/24 = 125 l/h, per manual)
+  var capAtRun=hourlyRate*treatRun*units;                                   // l/day treated at set runtime
+  var plantCap=(+w.treatCap||0)*units;                                      // 24h rated capacity
+  var util=capAtRun?wwDay/capAtRun:0;                                       // load vs treatment at set runtime
+  var runNeed=hourlyRate*units?wwDay/(hourlyRate*units):0;                  // runtime h/day needed to treat all
+  var residual=Math.max(0,wwDay-capAtRun);                                  // untreated surplus/day at set runtime
+  var wasteTankSuggest=wwDay*Math.max(0,24-treatRun)/24*(+w.wasteSF||1);    // buffer during non-operating hours
+  var wasteOK=(+w.wasteTank||0)>=wasteTankSuggest;
+  // sludge  =  % of treated throughput (Hamann manual gives no rate; default 3%)
+  var floc=0.040*24;                                                        // flocculant 40 ml/h -> l/day (manual 9.4)
+  var sludgeDay=(+w.sludgePct||0)/100*wwDay;                                // l/day sludge to ship tank
+  var sludgeReq=sludgeDay*(+w.sludgeDays||0)*(+w.sludgeSF||1);              // recommended sludge tank
+  var sludgeOK=(+w.sludgeTank||0)>=sludgeReq;
+  // discharge MEPC 157(55)
+  var drM3h=0.00926*(+w.vKn||0)*(+w.draft||0)*(+w.beam||0);
+  return {usage:usage,perPerson:perPerson,deck:deck,balDay:balDay,wmProd:wmProd,balWM:balWM,
+    fwTankSuggest:fwTankSuggest,wmRateNeed:wmRateNeed,wmRunNeed:wmRunNeed,
+    wwDay:wwDay,units:units,hourlyRate:hourlyRate,capAtRun:capAtRun,plantCap:plantCap,util:util,
+    runNeed:runNeed,residual:residual,wasteTankSuggest:wasteTankSuggest,wasteOK:wasteOK,
+    floc:floc,sludgeDay:sludgeDay,sludgeReq:sludgeReq,sludgeOK:sludgeOK,
+    drM3h:drM3h,drLh:drM3h*1000,drLpm:drM3h*1000/60};
+}
+function mountWater(){ if(WATER_MOUNTED){watFill();renderWatCons();watCalc();return;}
+  el("view-water").innerHTML=watHTML(); WATER_MOUNTED=true; watFill(); renderWatCons(); watCalc(); }
+function watSelToilet(){
+  var w=watState();
+  return "<div style='display:flex;flex-direction:column;gap:3px'>"+
+    "<label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Toilet type</label>"+
+    "<select onchange=\"watSet('toiletType',this.value)\" style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'>"+
+    "<option"+(w.toiletType==="Tecma/Planus"?" selected":"")+">Tecma/Planus</option>"+
+    "<option"+(w.toiletType==="Vacuum"?" selected":"")+">Vacuum</option></select></div>";
+}
+function watHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Water &amp; Waste Water</h2><p>Daily demand, tank balance &amp; holding-tank check. Discharge rate per MEPC 157(55).</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-line btn-sm' onclick='watExcel()'>&#11015; Excel</button>"+
+       "<button class='btn btn-gold btn-sm' onclick='watToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Settings</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("wat","persons","Persons","pers")+watSelToilet()+
+       modField("wat","flushrate","Flush rate","/pers/day")+
+       modField("wat","tecma","Tecma/Planus","l/flush")+
+       modField("wat","vacuum","Vacuum","l/flush")+
+       modField("wat","sf","Safety factor","x")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Fresh Water Consumers</h2><button class='btn btn-primary btn-sm no-print' onclick='watAddCon()'>+ Add</button></div>"+
+     "<div class='tbl-wrap'><table><thead><tr><th>Consumer</th><th>No.</th><th>Times</th><th>Time (min)</th><th>Usage (l)</th><th>Total (l/day)</th><th class='no-print'></th></tr></thead>"+
+     "<tbody id='wat-cons'></tbody><tfoot id='wat-cons-foot'></tfoot></table></div>"+
+     "<div style='padding:14px 20px;display:flex;gap:20px;flex-wrap:wrap;border-top:1px solid var(--g200)'>"+
+       "<div style='font-size:12px;color:var(--g500);align-self:center'>Deckwashing (separate, excluded from per-person)</div>"+
+       modField("wat","deckC","Deckwash duration","h")+modField("wat","deckF","Deckwash flow","l/min")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Fresh Water Tank Balance</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("wat","tankVol","Water tanks total","l")+
+       modField("wat","wmRate","Watermaker output","l/h")+
+       modField("wat","wmRun","Watermaker runtime","h")+
+       modField("wat","fwAuton","Autonomy target","days")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Waste Water &amp; Treatment</h2><span class='badge' style='background:var(--gold-bg);color:var(--navy)'>Hamann HL-CONT Compact 0125 &middot; IMO MEPC.227(64)</span></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("wat","treatCap","Rated capacity / unit","l/day")+
+       modField("wat","units","Units installed","no.")+
+       modField("wat","treatRun","Treatment runtime","h/day")+
+       modField("wat","wasteTank","Holding/buffer tank","l")+
+       modField("wat","wasteSF","Buffer safety factor","x")+"</div>"+
+     "<div style='padding:0 20px 14px;font-size:11px;color:var(--g500)'>HLCC-0125 processes ~125 l/h (3000 l/day at 24 h), 12 persons @ 240 l/p/d, 2.41 kg BOD/d. Daily treated = 125 l/h &times; runtime &times; units.</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Sludge &amp; Sludge Tank Sizing</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("wat","sludgePct","Sludge % of treated","%")+
+       modField("wat","sludgeDays","Emptying interval","days")+
+       modField("wat","sludgeSF","Safety factor","x")+
+       modField("wat","sludgeTank","Sludge tank installed","l")+"</div>"+
+     "<div style='padding:0 20px 14px;font-size:11px;color:var(--g500)'>Default 3% of treated wastewater (editable). Note: the Hamann manual states no sludge rate &mdash; it gives only flocculant dosing (~40 ml/h &asymp; 0.96 l/day) and organic load (2.41 kg BOD/d).</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Discharge Rate &mdash; MEPC 157(55)</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("wat","vKn","Speed V","kn")+modField("wat","draft","Draft D","m")+modField("wat","beam","Breadth B","m")+"</div>"+
+     "<div class='tbl-wrap' id='wat-disc-grid'></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Electrical Consumers</h2><span class='badge' style='background:var(--g200);color:var(--g700)'>enter kW, then Send to Electrical</span></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>FW pressure pump</label><div style='display:flex;align-items:center;gap:6px'><input id='wat-e-fwp' type='number' step='any' oninput=\"watElecSet('fwp',this.value)\" style='width:92px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>kW</span></div></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Watermaker</label><div style='display:flex;align-items:center;gap:6px'><input id='wat-e-wm' type='number' step='any' oninput=\"watElecSet('wm',this.value)\" style='width:92px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>kW</span></div></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Sewage treatment unit</label><div style='display:flex;align-items:center;gap:6px'><input id='wat-e-stp' type='number' step='any' oninput=\"watElecSet('stp',this.value)\" style='width:92px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>kW</span></div><span style='font-size:10px;color:var(--g500)'>HLCC-0125 docs &asymp;1.4 kW</span></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Grey/black discharge pump</label><div style='display:flex;align-items:center;gap:6px'><input id='wat-e-dis' type='number' step='any' oninput=\"watElecSet('dis',this.value)\" style='width:92px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>kW</span></div></div>"+
+     "</div></div>"+
+
+   "<div class='card' id='wat-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='wat-badge'>-</span></div>"+
+     "<div class='kpi-row' id='wat-kpi'></div>"+
+     "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='wat-tbl'></tbody></table></div>"+
+   "</div></main>"+
+   "<style>.wati{padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;width:100%}.wati:focus{outline:none;border-color:var(--navy)}.wati[disabled]{background:var(--g100);color:var(--g500)}</style>";
+}
+function watFill(){ var w=watState();
+  ["persons","flushrate","tecma","vacuum","sf","deckC","deckF","tankVol","wmRate","wmRun","fwAuton","treatCap","units","treatRun","wasteTank","wasteSF","sludgePct","sludgeDays","sludgeSF","sludgeTank","vKn","draft","beam"].forEach(function(k){var e=el("wat-"+k);if(e)e.value=w[k];});
+  ["fwp","wm","stp","dis"].forEach(function(k){var e=el("wat-e-"+k);if(e)e.value=w.elec[k];});
+}
+function renderWatCons(){
+  var w=watState(),t=el("wat-cons"); if(!t)return;
+  t.innerHTML=w.cons.map(function(it,i){
+    var locked=(it.fx!=="gen");
+    var dis=function(field){ // which input cells are meaningful per formula
+      var map={per:["f"],toilet:[],shower:["c","d","e","f"],fd:["d","f"],fdc:["c","d","f"],fedc:["c","d","e","f"],gen:["c","d","f"]};
+      return (map[it.fx]||["c","d","e","f"]).indexOf(field)<0;
+    };
+    function cell(field){ return "<td><input class='wati' type='number' value='"+(it[field]||0)+"' "+(dis(field)?"disabled":"")+" oninput=\"watConSet("+i+",'"+field+"',+this.value)\" style='max-width:90px'></td>"; }
+    return "<tr><td><input class='wati' value='"+esc(it.name||"")+"' "+(locked?"disabled":"")+" oninput=\"watConSet("+i+",'name',this.value)\" style='min-width:170px'></td>"+
+      cell("c")+cell("d")+cell("e")+cell("f")+
+      "<td><strong>"+f1(watConTotal(it,w))+"</strong></td>"+
+      "<td class='no-print'>"+(locked?"":"<button class='btn btn-line btn-xs' onclick='watDelCon("+i+")'>&#10005;</button>")+"</td></tr>";
+  }).join("");
+  var r=watCompute();
+  el("wat-cons-foot").innerHTML="<tr style='background:var(--navy2);color:#fff;font-weight:600'><td colspan='5'>TOTAL usage (excl. deckwash)</td><td>"+f1(r.usage)+" l/day</td><td class='no-print'></td></tr>"+
+    "<tr style='background:var(--navy3);color:#fff'><td colspan='5'>Per person</td><td>"+f1(r.perPerson)+" l/pers/day</td><td class='no-print'></td></tr>";
+}
+function watDiscGrid(){
+  var w=watState(),beam=+w.beam||0;
+  var speeds=[4,6,8,10,12],drafts=[1,2,3,4,5,6];
+  var h="<table class='result-table'><thead><tr><th>Draft &darr; / Speed &rarr;</th>"+speeds.map(function(s){return "<th>"+s+" kn</th>";}).join("")+"</tr></thead><tbody>";
+  drafts.forEach(function(d){
+    h+="<tr><td><strong>"+d+" m</strong></td>"+speeds.map(function(s){return "<td>"+f2(0.00926*beam*d*s)+"</td>";}).join("")+"</tr>";
+  });
+  h+="</tbody></table><div style='padding:6px 14px;font-size:11px;color:var(--g500)'>Moderate discharge rate Drmax (m&sup3;/h) = 0.00926 &middot; V &middot; D &middot; B &nbsp;|&nbsp; MEPC 157(55)</div>";
+  return h;
+}
+function watCalc(){
+  if(!el("wat-results"))return;
+  var w=watState(),r=watCompute();
+  renderWatCons();
+  el("wat-disc-grid").innerHTML=watDiscGrid();
+  el("wat-badge").textContent=(r.balWM>=0?"FW balance OK":"FW deficit");
+  el("wat-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Daily demand</div><div class='kpi-v'>"+f0(r.usage)+"</div><div class='kpi-u'>l/day</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Per person</div><div class='kpi-v'>"+f1(r.perPerson)+"</div><div class='kpi-u'>l/pers/day</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Suggested FW tank</div><div class='kpi-v'>"+f0(r.fwTankSuggest)+"</div><div class='kpi-u'>l ("+f1(w.fwAuton)+" d)</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Treatment runtime needed</div><div class='kpi-v'>"+f1(r.runNeed)+"</div><div class='kpi-u'>h/day</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Suggested buffer tank</div><div class='kpi-v'>"+f0(r.wasteTankSuggest)+"</div><div class='kpi-u'>l</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Sludge tank req.</div><div class='kpi-v'>"+f0(r.sludgeReq)+"</div><div class='kpi-u'>l</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Discharge Drmax</div><div class='kpi-v'>"+f2(r.drM3h)+"</div><div class='kpi-u'>m&sup3;/h</div></div>";
+  function row(q,v,u,ref){return "<tr><td>"+q+"</td><td><strong>"+v+"</strong></td><td>"+u+"</td><td style='color:var(--g500)'>"+ref+"</td></tr>";}
+  el("wat-tbl").innerHTML=
+    row("Total fresh water demand",f1(r.usage),"l/day","&Sigma; consumers (excl. deckwash)")+
+    row("Demand per person",f1(r.perPerson),"l/pers/day","usage / persons")+
+    row("Deckwashing",f0(r.deck),"l/day","flow &times; duration")+
+    row("Tank balance after 1 day",f1(r.balDay),"l","tank &minus; (usage + deckwash)")+
+    row("Watermaker production",f0(r.wmProd),"l/day",f0(w.wmRate)+" l/h &times; "+f1(w.wmRun)+" h")+
+    row("Balance incl. watermaker",f1(r.balWM),"l",(r.balWM>=0?"surplus":"deficit"))+
+    row("Suggested fresh-water tank",f0(r.fwTankSuggest),"l","daily usage &times; "+f1(w.fwAuton)+" d autonomy"+(w.tankVol>=r.fwTankSuggest?" (current OK)":" &mdash; below target"))+
+    row("Watermaker output to keep topped",f0(r.wmRateNeed),"l/h","to replace daily draw at "+f1(w.wmRun)+" h runtime")+
+    row("&nbsp;&nbsp;or watermaker runtime needed",f1(r.wmRunNeed),"h/day","to replace daily draw at "+f0(w.wmRate)+" l/h")+
+    row("Wastewater generated",f1(r.wwDay),"l/day","= fresh water demand")+
+    row("Treatment capacity at runtime",f0(r.capAtRun),"l/day",f0(r.hourlyRate)+" l/h &times; "+f1(w.treatRun)+" h &times; "+r.units+" unit(s)")+
+    row("Plant utilisation",f0(r.util*100),"%","wastewater / treated at runtime"+(r.util>1?" &mdash; increase runtime":""))+
+    row("Treatment runtime needed",f1(r.runNeed),"h/day","to treat all wastewater ("+r.units+" unit)")+
+    row("Untreated surplus at runtime",f1(r.residual),"l/day",(r.residual>0?"accumulates in buffer":"none"))+
+    row("Suggested holding/buffer tank",f0(r.wasteTankSuggest),"l","inflow during "+f1(24-w.treatRun)+" idle h &times; "+f1(w.wasteSF))+
+    row("Holding tank installed",f0(w.wasteTank),"l",(r.wasteOK?"OK":"below suggested"))+
+    row("Treatment unit power",f2(w.elec.stp)+" / "+f0(w.elec.stp*1000),"kW / W","documented HLCC-0125 components")+
+    row("Flocculant consumption",f2(r.floc),"l/day","40 ml/h nominal (manual 9.4)")+
+    row("Sludge production",f1(r.sludgeDay),"l/day",f1(w.sludgePct)+"% of treated wastewater")+
+    row("Recommended sludge tank",f0(r.sludgeReq),"l",f1(r.sludgeDay)+" l/d &times; "+f0(w.sludgeDays)+" d &times; "+f1(w.sludgeSF))+
+    row("Sludge tank installed",f0(w.sludgeTank),"l",(r.sludgeOK?"OK":"below recommended"))+
+    row("Discharge rate Drmax",f2(r.drM3h)+" / "+f0(r.drLh)+" / "+f1(r.drLpm),"m&sup3;/h / l/h / lpm","0.00926&middot;V&middot;D&middot;B &mdash; MEPC 157(55)");
+}
+function watToElectrical(){
+  var w=watState(),e=w.elec,list=[];
+  function add(name,kw,bus,day,eve,night){ if((+kw||0)>0)list.push({source:"Water & Waste",name:name,bus:bus,pcs:1,kw:+(+kw).toFixed(2),day:day,eve:eve,night:night}); }
+  add("Fresh-water pressure pump",e.fwp,"24VDC",100,100,60);
+  add("Watermaker",e.wm,"AC",60,40,10);
+  add("Sewage treatment unit",e.stp,"AC",80,80,60);
+  add("Grey/black discharge pump",e.dis,"AC",40,30,10);
+  if(!list.length){alert("Enter at least one electrical load (kW) above before sending.");return;}
+  addConsumers(list);
+  alert("Sent "+list.length+" Water & Waste consumer(s) to the Electrical load balance.");
+}
+function watExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var w=watState(),r=watCompute(),m=PROJECT.meta,wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Water & Wastewater Tank Balance"],["Yacht",m.yacht,"Project",m.proj],
+    ["Persons",w.persons,"Toilet",w.toiletType],[],["FRESH WATER CONSUMERS"],["Consumer","No.","Times","Time(min)","Usage(l)","Total(l/day)"]];
+  w.cons.forEach(function(it){a.push([it.name,it.c,it.d,it.e,it.f,+watConTotal(it,w).toFixed(1)]);});
+  a.push(["TOTAL usage",,,,,+r.usage.toFixed(1)],["Per person",,,,,+r.perPerson.toFixed(1)],["Deckwashing",,,,,+r.deck.toFixed(0)],[],
+    ["FRESH WATER TANK BALANCE"],["Water tanks total",w.tankVol,"l"],["Balance after 1 day",+r.balDay.toFixed(1),"l"],
+    ["Watermaker production",+r.wmProd.toFixed(0),"l","("+w.wmRate+" l/h x "+w.wmRun+" h)"],["Balance incl. watermaker",+r.balWM.toFixed(1),"l"],
+    ["Autonomy target",w.fwAuton,"days"],["Suggested FW tank",+r.fwTankSuggest.toFixed(0),"l"],
+    ["Watermaker output to keep topped",+r.wmRateNeed.toFixed(0),"l/h"],["or runtime needed",+r.wmRunNeed.toFixed(1),"h/day"],[],
+    ["WASTE WATER & TREATMENT - Hamann HL-CONT Compact 0125 (IMO MEPC.227(64))"],
+    ["Wastewater/day",+r.wwDay.toFixed(1),"l"],["Units installed",r.units],["Rated capacity/unit",w.treatCap,"l/day"],
+    ["Hourly rate",+r.hourlyRate.toFixed(0),"l/h"],["Treatment runtime",w.treatRun,"h/day"],
+    ["Treated at runtime",+r.capAtRun.toFixed(0),"l/day"],["Plant utilisation",+(r.util*100).toFixed(0),"%"],
+    ["Runtime needed (treat all)",+r.runNeed.toFixed(1),"h/day"],["Untreated surplus at runtime",+r.residual.toFixed(1),"l/day"],
+    ["Buffer safety factor",w.wasteSF],["Suggested holding tank",+r.wasteTankSuggest.toFixed(0),"l"],["Holding tank installed",w.wasteTank,"l"],["Tank check",r.wasteOK?"OK":"below suggested"],
+    ["Treatment unit power (documented)",w.elec.stp,"kW"],["Flocculant consumption",+r.floc.toFixed(2),"l/day"],[],
+    ["SLUDGE (manual states no rate; default 3% of treated)"],
+    ["Sludge % of treated",w.sludgePct,"%"],["Sludge production",+r.sludgeDay.toFixed(1),"l/day"],["Emptying interval",w.sludgeDays,"days"],["Safety factor",w.sludgeSF],
+    ["Recommended sludge tank",+r.sludgeReq.toFixed(0),"l"],["Sludge tank installed",w.sludgeTank,"l"],[],
+    ["DISCHARGE - MEPC 157(55)"],["V",w.vKn,"kn"],["D",w.draft,"m"],["B",w.beam,"m"],
+    ["Drmax",+r.drM3h.toFixed(3),"m3/h"],["Drmax",+r.drLh.toFixed(1),"l/h"],["Drmax",+r.drLpm.toFixed(1),"lpm"]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Water & Waste");
+  XLSX.writeFile(wb,"Baltic_WaterWaste_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
+
+/* ================================================================
+   BOW / STERN THRUSTER  -  CALCULATION   (v0.10)
+   Source: Baltic Yachts "Thruster calculation.xlsm" (PG, rev 30.06.2022).
+   Wind + rotation + acceleration force balance -> moment about pivot
+   -> required thrust -> approx. electric power, tabulated vs wind speed.
+   ================================================================ */
+function thrDefaults(){return{
+  vs:0.2572, displ:262100, acc:0.04,                 // design transverse speed, displacement, acceleration
+  AR:48.66888, AH:142.123, AL:63.009,                // rig, hull-above-DWL, underwater lateral areas
+  arLC:24.811, ahLC:22.875, alLC:23.355, lcg:25.283, // longitudinal centres (from bow)
+  transom:46.839, mh:64.838, hbi:2.872,              // transom/pivot pos, mast-head height, height base
+  x1:3, x2:0,                                         // bow / stern thruster distance from bow
+  CR:1.0, CH:0.9, rot:1.22, kwf:4.5, shear:0.1,      // drag coeffs, rotation factor, kW factor, wind shear
+  config:"bow", designWind:10, elecKW:0
+};}
+function thrState(){ if(!PROJECT.thr)PROJECT.thr=thrDefaults();
+  var w=PROJECT.thr,d=thrDefaults(); for(var k in d){if(w[k]===undefined)w[k]=d[k];} return w; }
+function thrSet(k,v){ var w=thrState(); if(k==="config"){w[k]=v;} else {w[k]=Number(v);} saveActive(); thrCalc(); }
+var THR_WINDS=[0,2,4,6,8,10,12,14,16];
+function thrRow(w,wind){
+  var rhoA=1.29, rhoW=1025;
+  var AF38=w.transom-w.x1;                            // stern -> bow thruster lever
+  var AF39=w.transom-w.arLC, AF44=w.transom-w.ahLC;
+  var AF45=(w.transom-w.ahLC)*w.rot, AF49=(w.transom-w.alLC)*w.rot, AE58=(w.transom-w.lcg)*w.rot;
+  var rigFac=Math.pow((w.mh*0.35+w.hbi)/w.mh, w.shear);
+  var hullFac=Math.pow((w.hbi*0.5)/w.mh, w.shear);
+  var windRig=wind*rigFac, windHull=wind*hullFac;
+  // rotational apparent components
+  var rRig=w.vs*AF39/AF38;                            // AG39 (rotation at rig)
+  var rHull=w.vs*AF44*w.rot/AF38;                     // AG44
+  var rUW=w.vs*AF49/AF38;                             // AG49 (underwater)
+  if(w.config==="bowstern"){
+    var aRig=windRig+w.vs, aHull=windHull+w.vs, aUW=w.vs;
+    var RAR=0.5*rhoA*aRig*aRig*w.CR*w.AR;
+    var RAH=0.5*rhoA*aHull*aHull*w.CH*w.AH;
+    var RAL=0.5*rhoW*aUW*aUW*w.CH*w.AL;
+    var Facc=w.displ*w.acc;
+    var Rtot=RAR+RAH+RAL+Facc;
+    var Rmom=RAR*w.arLC+RAH*w.ahLC+RAL*w.alLC+Facc*w.lcg;
+    var BT=(w.x1-w.x2)?(Rmom-w.x2*Rtot)/(w.x1-w.x2):Rmom/w.x1;
+    var BS=Rtot-BT;
+    var kWtot=Rtot*w.kwf*0.001/0.5;
+    var BTkW=(BT+BS)?BT*kWtot/(BT+BS):0, BSkW=kWtot-BTkW;
+    return {wind:wind,btN:BT,bsN:BS,btkW:BTkW,bskW:BSkW,totkW:kWtot};
+  } else {
+    var RAR_rot=0.5*rhoA*rRig*rRig*w.CR*w.AR;
+    var RAR_wind=0.5*rhoA*windRig*windRig*w.CR*w.AR;
+    var RAH_rot=0.5*rhoA*rHull*rHull*w.CH*w.AH;
+    var RAH_wind=0.5*rhoA*windHull*windHull*w.CH*w.AH;
+    var RAL=0.5*rhoW*rUW*rUW*w.CH*w.AL;
+    var Facct=w.displ*w.acc*AE58/AF38;                // AG59
+    var Rmom=AF39*RAR_rot+AF39*RAR_wind+AF45*RAH_rot+AF44*RAH_wind+AF49*RAL+Facct*AE58;
+    var BT=Rmom/AF38;
+    var kW=BT*w.kwf*0.001/0.5;
+    return {wind:wind,btN:BT,bsN:0,btkW:kW,bskW:0,totkW:kW};
+  }
+}
+function thrCompute(){ var w=thrState(); return THR_WINDS.map(function(x){return thrRow(w,x);}); }
+function thrAt(wind){ return thrRow(thrState(),wind); }
+function mountThr(){ if(THR_MOUNTED){thrFill();thrCalc();return;} el("view-thruster").innerHTML=thrHTML(); THR_MOUNTED=true; thrFill(); thrCalc(); }
+function thrSelConfig(){ var w=thrState();
+  return "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Configuration</label>"+
+    "<select onchange=\"thrSet('config',this.value)\" style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'>"+
+    "<option value='bow'"+(w.config==="bow"?" selected":"")+">Bow thruster only</option>"+
+    "<option value='bowstern'"+(w.config==="bowstern"?" selected":"")+">Bow + stern thruster</option></select></div>";
+}
+function thrHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Bow / Stern Thruster</h2><p>Wind, rotation &amp; acceleration force balance &rarr; required thrust &amp; power. Feeds Electrical.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-line btn-sm' onclick='thrExcel()'>&#11015; Excel</button>"+
+       "<button class='btn btn-gold btn-sm' onclick='thrToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Vessel &amp; Manoeuvre</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       thrSelConfig()+modField("thr","vs","Transverse speed Vs","m/s")+modField("thr","acc","Acceleration","m/s&sup2;")+
+       modField("thr","displ","Displacement","kg")+modField("thr","designWind","Design wind","m/s")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Lateral Areas</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("thr","AR","Rig &amp; superstructure AR","m&sup2;")+
+       modField("thr","AH","Hull above DWL AH","m&sup2;")+
+       modField("thr","AL","Underwater lateral AL","m&sup2;")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Longitudinal Geometry (from bow)</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("thr","arLC","AR centre","m")+modField("thr","ahLC","AH centre","m")+modField("thr","alLC","AL centre","m")+
+       modField("thr","lcg","LCG","m")+modField("thr","transom","Transom / pivot","m")+
+       modField("thr","x1","Bow thruster","m")+modField("thr","x2","Stern thruster","m")+
+       modField("thr","mh","Mast-head height","m")+modField("thr","hbi","Height base","m")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Coefficients</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("thr","CR","Rig drag CR","-")+modField("thr","CH","Hull drag CH","-")+
+       modField("thr","rot","Rotation factor","-")+modField("thr","kwf","kW factor","-")+modField("thr","shear","Wind shear a","-")+"</div></div>"+
+
+   "<div class='card' id='thr-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='thr-badge'>-</span></div>"+
+     "<div class='kpi-row' id='thr-kpi'></div>"+
+     "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Wind (m/s)</th><th>Bow thrust (kN)</th><th>Bow (kW)</th><th>Stern thrust (kN)</th><th>Stern (kW)</th><th>Total (kW)</th></tr></thead><tbody id='thr-tbl'></tbody></table></div>"+
+   "</div></main>";
+}
+function thrFill(){ var w=thrState();
+  ["vs","acc","displ","designWind","AR","AH","AL","arLC","ahLC","alLC","lcg","transom","x1","x2","mh","hbi","CR","CH","rot","kwf","shear"].forEach(function(k){var e=el("thr-"+k);if(e)e.value=w[k];});
+}
+function thrCalc(){
+  if(!el("thr-results"))return;
+  var w=thrState(),rows=thrCompute(),dp=thrAt(w.designWind),mx=thrAt(16);
+  el("thr-badge").textContent=f1(dp.btN/1000)+" kN @ "+f0(w.designWind)+" m/s";
+  el("thr-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Bow thrust @ design</div><div class='kpi-v'>"+f1(dp.btN/1000)+"</div><div class='kpi-u'>kN ("+f0(w.designWind)+" m/s)</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Bow power @ design</div><div class='kpi-v'>"+f0(dp.btkW)+"</div><div class='kpi-u'>kW</div></div>"+
+    (w.config==="bowstern"?"<div class='kpi'><div class='kpi-l'>Stern thrust @ design</div><div class='kpi-v'>"+f1(dp.bsN/1000)+"</div><div class='kpi-u'>kN</div></div>":"")+
+    "<div class='kpi'><div class='kpi-l'>Bow thrust @ 16 m/s</div><div class='kpi-v'>"+f1(mx.btN/1000)+"</div><div class='kpi-u'>kN</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Total power @ 16 m/s</div><div class='kpi-v'>"+f0(mx.totkW)+"</div><div class='kpi-u'>kW</div></div>";
+  el("thr-tbl").innerHTML=rows.map(function(r){
+    var hl=(Math.abs(r.wind-w.designWind)<0.001)?" style='background:var(--gold-bg);font-weight:600'":"";
+    return "<tr"+hl+"><td>"+r.wind+"</td><td>"+f2(r.btN/1000)+"</td><td>"+f1(r.btkW)+"</td>"+
+      "<td>"+(w.config==="bowstern"?f2(r.bsN/1000):"&ndash;")+"</td><td>"+(w.config==="bowstern"?f1(r.bskW):"&ndash;")+"</td><td>"+f1(r.totkW)+"</td></tr>";
+  }).join("");
+}
+function thrToElectrical(){
+  var w=thrState(),dp=thrAt(w.designWind),list=[];
+  list.push({source:"Thruster",name:"Bow thruster",bus:"AC",pcs:1,kw:+dp.btkW.toFixed(1),day:100,eve:100,night:100});
+  if(w.config==="bowstern")list.push({source:"Thruster",name:"Stern thruster",bus:"AC",pcs:1,kw:+dp.bskW.toFixed(1),day:100,eve:100,night:100});
+  addConsumers(list);
+  alert("Sent thruster load(s) at "+f0(w.designWind)+" m/s design wind to the Electrical load balance.");
+}
+function thrExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var w=thrState(),rows=thrCompute(),m=PROJECT.meta,wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Bow / Stern Thruster Calculation"],["Yacht",m.yacht,"Project",m.proj],
+    ["Config",w.config,"Vs",w.vs,"Displ",w.displ,"Acc",w.acc],
+    ["AR",w.AR,"AH",w.AH,"AL",w.AL],[],
+    ["Wind m/s","Bow thrust kN","Bow kW","Stern thrust kN","Stern kW","Total kW"]];
+  rows.forEach(function(r){a.push([r.wind,+(r.btN/1000).toFixed(2),+r.btkW.toFixed(1),+(r.bsN/1000).toFixed(2),+r.bskW.toFixed(1),+r.totkW.toFixed(1)]);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Thruster");
+  XLSX.writeFile(wb,"Baltic_Thruster_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
+
+/* ================================================================
+   CLASS & FLAG RULES FRAMEWORK  (v0.15)
+   Project-level Class + Flag selection -> applicable rules per system.
+   Extensible: add / import / export rules. Red Ensign group logic.
+   ================================================================ */
+var REG_FLAGS=["United Kingdom","Cayman Islands","Gibraltar","Bermuda","Isle of Man",
+  "British Virgin Islands","Jersey","Guernsey","Falkland Islands","St Helena","Anguilla",
+  "Montserrat","Turks & Caicos Islands"];
+function flagGroup(f){ if(!f)return"OTHER"; if(REG_FLAGS.indexOf(f)>=0)return"REG"; if(f==="Malta")return"MALTA"; return"OTHER"; }
+function flagGroupLabel(g){ return g==="REG"?"Red Ensign Group":(g==="MALTA"?"Malta":(g==="OTHER"?"Other / international":g)); }
+
+var SYS_LABEL={ac:"Air Conditioning",ervent:"Engine Room Ventilation",bilge:"Bilge",seawater:"Seawater Cooling",water:"Water & Waste",thruster:"Thruster",electrical:"Electrical","*":"All systems"};
+
+/* Each rule: {sys, code, req}.  Grounded entries from the supplied rule documents; editable/extensible. */
+var RULES_DB={
+  class:{
+    "DNV GL":[
+      {sys:"bilge",code:"DNV-RU-HSLC Pt.4 Ch.6 §1.1.7",req:"Bilge main internal dia  d = 25 + 1.68·√(L(B+D))  mm"},
+      {sys:"bilge",code:"DNV-RU-HSLC Pt.4 Ch.6 §1.1.6",req:"Each power bilge pump shall pump through the required pipe at ≥ 2 m/s"},
+      {sys:"seawater",code:"DNV-RU-HSLC Pt.4 Ch.6",req:"Sea-inlet & cooling piping per class; pipe wall/velocity limits apply"}
+    ],
+    "RINA":[ {sys:"bilge",code:"RINA Rules Pt C",req:"Bilge main dia per RINA (≈ IACS d = 25 + 1.68·√(L(B+D)))"} ],
+    "Bureau Veritas (BV)":[], "ABS":[], "Other":[]
+  },
+  flag:{
+    "REG":[
+      {sys:"water",code:"REG Yacht Code 2024 (Part A)",req:"Fresh-water & sanitary systems per REG-YC"},
+      {sys:"water",code:"MARPOL Annex IV",req:"Sewage treatment / holding & discharge (IMO-approved plant, e.g. MEPC.227(64))"},
+      {sys:"ac",code:"REG Yacht Code 2024",req:"Accommodation ventilation & comfort per code"},
+      {sys:"bilge",code:"REG-YC / SOLAS II-1",req:"Bilge & drainage arrangements per code"}
+    ],
+    "MALTA":[
+      {sys:"water",code:"Malta CYC 2025 §13.1.12 / §13.3.8",req:"Fresh-water supply & sanitary: adequate drinking water piped to accommodation; UV-purified; per-person provision"},
+      {sys:"water",code:"Malta CYC 2025 §13.1.16 + MARPOL Annex IV",req:"Sewage / holding tank — no foul-fume leakage; IMO-approved treatment & discharge"},
+      {sys:"ac",code:"Malta CYC 2025 §13",req:"Accommodation ventilation & comfort"},
+      {sys:"ervent",code:"Malta CYC 2025 §6",req:"Machinery-space ventilation"},
+      {sys:"electrical",code:"Malta CYC 2025 §7",req:"Electrical installations"}
+    ],
+    "OTHER":[ {sys:"water",code:"MARPOL / SOLAS baseline",req:"International baseline (MARPOL Annex IV sewage, SOLAS)"} ]
+  },
+  always:[
+    {sys:"ac",code:"ISO 7547:2002",req:"Summer +35°C/70% outdoor → +27°C/50% indoor; ≥ 40% outdoor air"},
+    {sys:"ervent",code:"SFS-EN ISO 8861:1998",req:"ER ventilation: combustion air (m_ad=0.002 kg/kW·s 4-stroke), heat-removal qh=ΣΦ/(ρ·c·Δt)−0.4·Qc, Δt≤12.5 K, total ≥1.5·Qc"}
+  ]
+};
+
+function activeRules(){
+  var cls=(PROJECT.meta&&PROJECT.meta.cls)||"", fg=flagGroup(PROJECT.meta&&PROJECT.meta.flag);
+  var out=[];
+  (RULES_DB.class[cls]||[]).forEach(function(r){out.push({sys:r.sys,code:r.code,req:r.req,src:"Class · "+cls});});
+  (RULES_DB.flag[fg]||[]).forEach(function(r){out.push({sys:r.sys,code:r.code,req:r.req,src:"Flag · "+flagGroupLabel(fg)});});
+  RULES_DB.always.forEach(function(r){out.push({sys:r.sys,code:r.code,req:r.req,src:"Standard"});});
+  return out;
+}
+function rulesForSystem(sys){ return activeRules().filter(function(r){return r.sys===sys||r.sys==="*";}); }
+
+/* Compact panel a module can render to show its applicable rules */
+function rulesPanelHTML(sys){
+  var rs=rulesForSystem(sys); if(!rs.length) return "";
+  return "<div class='card'><div class='card-hdr'><h2>Applicable Rules</h2><span class='badge' style='background:var(--gold-bg);color:var(--navy)'>"+
+    ((PROJECT.meta.cls||"—")+" · "+flagGroupLabel(flagGroup(PROJECT.meta.flag)))+"</span></div>"+
+    "<div style='padding:12px 20px'>"+rs.map(function(r){
+      return "<div style='padding:6px 0;border-bottom:1px solid var(--g100);font-size:13px'><strong>"+esc(r.code)+"</strong> &mdash; "+esc(r.req)+" <span style='color:var(--g500);font-size:11px'>("+esc(r.src)+")</span></div>";
+    }).join("")+"</div></div>";
+}
+
+/* Home-screen consolidated compliance panel */
+function renderHomeRules(){
+  var box=el("home-rules"); if(!box) return;
+  var rs=activeRules();
+  var cls=PROJECT.meta.cls||"—", fg=flagGroup(PROJECT.meta.flag), flag=PROJECT.meta.flag||"—";
+  var bySys={};
+  rs.forEach(function(r){ (bySys[r.sys]=bySys[r.sys]||[]).push(r); });
+  var order=["ac","ervent","bilge","seawater","water","thruster","electrical","*"];
+  var html="<div class='card-hdr'><h2>Project Compliance &mdash; Applicable Rules</h2>"+
+    "<button class='btn btn-line btn-sm no-print' onclick='openRulesEditor()'>&#9881; Manage Rules</button></div>"+
+    "<div style='padding:10px 20px 4px;font-size:12px;color:var(--g500)'>Class <strong style='color:var(--navy)'>"+esc(cls)+
+    "</strong> &nbsp;|&nbsp; Flag <strong style='color:var(--navy)'>"+esc(flag)+"</strong> ("+flagGroupLabel(fg)+")</div>"+
+    "<div style='padding:8px 20px 16px'>";
+  order.forEach(function(s){ if(!bySys[s])return;
+    html+="<div style='margin:8px 0 4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold)'>"+esc(SYS_LABEL[s]||s)+"</div>";
+    bySys[s].forEach(function(r){
+      html+="<div style='padding:5px 0;border-bottom:1px solid var(--g100);font-size:13px'><strong>"+esc(r.code)+"</strong> &mdash; "+esc(r.req)+" <span style='color:var(--g500);font-size:11px'>("+esc(r.src)+")</span></div>";
+    });
+  });
+  html+="</div>";
+  box.innerHTML=html;
+}
+
+/* Rules editor: add / import / export */
+function openRulesEditor(){ renderRulesEditor(); el("rules-overlay").classList.add("show"); el("rules-modal").classList.add("show"); }
+function closeRulesEditor(){ el("rules-overlay").classList.remove("show"); el("rules-modal").classList.remove("show"); renderHomeRules(); }
+function renderRulesEditor(){
+  var b=el("rules-edit-body"); if(!b)return;
+  var rows=[];
+  ["class","flag"].forEach(function(bucket){
+    Object.keys(RULES_DB[bucket]).forEach(function(key){
+      RULES_DB[bucket][key].forEach(function(r,i){
+        rows.push("<tr><td>"+bucket+"</td><td>"+esc(key)+"</td><td><span class='pill p-dim'>"+esc(SYS_LABEL[r.sys]||r.sys)+"</span></td><td>"+esc(r.code)+"</td><td>"+esc(r.req)+
+          "</td><td class='no-print'><button class='btn btn-danger btn-xs' onclick=\"delRule('"+bucket+"','"+key+"',"+i+")\">&#10005;</button></td></tr>");
+      });
+    });
+  });
+  RULES_DB.always.forEach(function(r,i){
+    rows.push("<tr><td>always</td><td>—</td><td><span class='pill p-dim'>"+esc(SYS_LABEL[r.sys]||r.sys)+"</span></td><td>"+esc(r.code)+"</td><td>"+esc(r.req)+
+      "</td><td class='no-print'><button class='btn btn-danger btn-xs' onclick=\"delRule('always','',"+i+")\">&#10005;</button></td></tr>");
+  });
+  b.innerHTML=rows.join("");
+}
+function addRule(){
+  var bucket=el("nr-bucket").value, key=el("nr-key").value.trim(), sys=el("nr-sys").value,
+      code=el("nr-code").value.trim(), req=el("nr-req").value.trim();
+  if(!code||!req){ alert("Enter a rule reference and requirement."); return; }
+  if(bucket==="always"){ RULES_DB.always.push({sys:sys,code:code,req:req}); }
+  else { if(!key){ alert("Enter the "+(bucket==="class"?"class society":"flag group (REG / MALTA / OTHER)")+" key."); return; }
+    if(!RULES_DB[bucket][key]) RULES_DB[bucket][key]=[]; RULES_DB[bucket][key].push({sys:sys,code:code,req:req}); }
+  el("nr-code").value=""; el("nr-req").value="";
+  renderRulesEditor();
+}
+function delRule(bucket,key,i){ if(bucket==="always") RULES_DB.always.splice(i,1); else RULES_DB[bucket][key].splice(i,1); renderRulesEditor(); }
+function exportRules(){ safeDLgeneric(JSON.stringify(RULES_DB,null,2),"Baltic_rules.json"); }
+function importRules(file){
+  if(!file)return; var r=new FileReader();
+  r.onload=function(){ try{ var o=JSON.parse(r.result);
+    if(o.class) RULES_DB.class=o.class; if(o.flag) RULES_DB.flag=o.flag; if(o.always) RULES_DB.always=o.always;
+    renderRulesEditor(); renderHomeRules(); alert("Rules imported.");
+  }catch(e){ alert("Could not read that rules file (expects exported JSON)."); } };
+  r.readAsText(file);
+}
+function safeDLgeneric(text,filename){
+  try{ var blob=new Blob([text],{type:"application/json"}), url=URL.createObjectURL(blob),
+    a=document.createElement("a"); a.href=url; a.download=filename; a.click(); setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  }catch(e){ alert("Download failed."); }
+}
+
+
+/* ================================================================
+   HOME PROJECT MANAGEMENT  (create / list / copy)
+   ================================================================ */
+function syncACState(){ if(typeof S!=="undefined"){ try{ PROJECT.ac=JSON.parse(JSON.stringify(S)); }catch(e){} } }
+function restoreACState(){ if(typeof S!=="undefined" && PROJECT.ac){ try{ var k; for(k in PROJECT.ac){ S[k]=PROJECT.ac[k]; } }catch(e){} } }
+
+function toggleNewProject(){ var f=el("new-project-form"); if(f) f.style.display=(f.style.display==="none"||!f.style.display)?"block":"none"; }
+
+function createProjectFromHome(){
+  var y=el("np-yacht").value.trim();
+  if(!y){ alert("Enter a yacht name."); return; }
+  PROJECT={meta:{ yacht:y, proj:el("np-proj").value.trim(), type:el("np-type").value,
+    by:(PROJECT.meta&&PROJECT.meta.by)||"", rev:"", cls:el("np-cls").value, flag:el("np-flag").value,
+    date:new Date().toISOString().split("T")[0] }, consumers:[]};
+  if(typeof S!=="undefined"){ S.cabins=[]; S.nid=1; S.chiller=null; }
+  if(typeof AC_MOUNTED!=="undefined") AC_MOUNTED=false;
+  syncACState(); saveActive();
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  var snap=JSON.parse(JSON.stringify(PROJECT)); snap.savedAt=new Date().toISOString().split("T")[0];
+  list.push(snap); localStorage.setItem("by_projects",JSON.stringify(list));
+  el("np-yacht").value=""; el("np-proj").value="";
+  var f=el("new-project-form"); if(f) f.style.display="none";
+  renderHomeProjects(); renderHomeRules(); if(typeof updateChip==="function") updateChip();
+  alert('Project "'+y+'" created. Class '+PROJECT.meta.cls+(PROJECT.meta.flag?' + Flag '+PROJECT.meta.flag:'')+'.');
+}
+function saveCurrentProject(){
+  if(!PROJECT.meta.yacht){ alert("Open or create a project first."); return; }
+  syncACState();
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  var snap=JSON.parse(JSON.stringify(PROJECT)); snap.savedAt=new Date().toISOString().split("T")[0];
+  var idx=list.findIndex(function(p){return p.meta.yacht===PROJECT.meta.yacht&&p.meta.proj===PROJECT.meta.proj;});
+  if(idx>=0)list[idx]=snap; else list.push(snap);
+  localStorage.setItem("by_projects",JSON.stringify(list));
+  renderHomeProjects(); alert('Saved "'+PROJECT.meta.yacht+'".');
+}
+function openProjectHome(i){
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]"); if(!list[i])return;
+  PROJECT=JSON.parse(JSON.stringify(list[i])); if(!PROJECT.consumers)PROJECT.consumers=[];
+  restoreACState();
+  if(typeof AC_MOUNTED!=="undefined") AC_MOUNTED=false;
+  saveActive(); if(typeof updateChip==="function") updateChip();
+  renderHomeProjects(); renderHomeRules();
+  alert('Opened "'+PROJECT.meta.yacht+'". Class '+(PROJECT.meta.cls||"—")+(PROJECT.meta.flag?' + Flag '+PROJECT.meta.flag:'')+'.');
+}
+function copyProject(i){
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]"); if(!list[i])return;
+  var name=prompt('New name (copy of "'+list[i].meta.yacht+'"):', list[i].meta.yacht+" (copy)");
+  if(!name)return;
+  var snap=JSON.parse(JSON.stringify(list[i])); snap.meta.yacht=name; snap.meta.proj=""; snap.savedAt=new Date().toISOString().split("T")[0];
+  list.push(snap); localStorage.setItem("by_projects",JSON.stringify(list));
+  renderHomeProjects(); alert('Copied to "'+name+'" — same class, flag & configuration as a template.');
+}
+function renderHomeProjects(){
+  var box=el("home-proj-list"); if(!box) return;
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  var active=(PROJECT.meta&&PROJECT.meta.yacht)||"";
+  if(!list.length){ box.innerHTML="<p style='color:var(--g500);font-size:13px'>No projects yet. Click <strong>Create Project</strong> to start.</p>"; return; }
+  box.innerHTML=list.map(function(p,i){
+    var fg=flagGroup(p.meta.flag), isA=(p.meta.yacht===active);
+    return "<div style='padding:12px;border:1px solid "+(isA?"var(--gold)":"var(--g200)")+";border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:"+(isA?"var(--gold-bg)":"#fff")+"'>"+
+      "<div style='cursor:pointer;flex:1' onclick='openProjectHome("+i+")'><strong>"+esc(p.meta.yacht||"(unnamed)")+"</strong> <span style='font-size:12px;color:var(--g500)'>"+esc(p.meta.proj||"")+"</span>"+(isA?" <span class='pill p-ok'>active</span>":"")+"<br>"+
+      "<span style='font-size:11px;color:var(--g500)'>"+esc(p.meta.type||"")+" &middot; Class "+esc(p.meta.cls||"—")+" &middot; Flag "+esc(p.meta.flag||"—")+" ("+flagGroupLabel(fg)+") &middot; "+(p.savedAt||"")+"</span></div>"+
+      "<div style='display:flex;gap:6px' class='no-print'>"+
+        "<button class='btn btn-line btn-xs' onclick='openProjectHome("+i+")'>Open</button>"+
+        "<button class='btn btn-line btn-xs' onclick='copyProject("+i+")'>Copy</button>"+
+        "<button class='btn btn-line btn-xs' onclick='delProjectShell("+i+");renderHomeProjects()'>&#128465;</button>"+
+      "</div></div>";
+  }).join("");
+}
+function classOptionsHTML(sel){
+  return ["DNV GL","RINA","Bureau Veritas (BV)","ABS","Other"].map(function(c){return "<option"+(c===sel?" selected":"")+">"+c+"</option>";}).join("");
+}
+function flagOptionsHTML(sel){
+  var h="<option value=''>— none —</option><optgroup label='Red Ensign Group'>";
+  REG_FLAGS.forEach(function(f){ h+="<option"+(f===sel?" selected":"")+">"+f+"</option>"; });
+  h+="</optgroup><optgroup label='Other'><option"+(sel==="Malta"?" selected":"")+">Malta</option><option"+(sel==="Other"?" selected":"")+">Other</option></optgroup>";
+  return h;
+}
+
+/* ---------- PWA ---------- */
 function makeIcon(sz){
   var c=document.createElement("canvas");c.width=c.height=sz;
   var g=c.getContext("2d"),s=sz,r=s/5;
@@ -998,6 +2795,7 @@ function installPWA(){if(_deferredPrompt){_deferredPrompt.prompt();_deferredProm
 function dismissPWA(){localStorage.setItem("pwa-dismissed","1");el("pwa-banner").style.display="none";}
 function dismissIOS(){localStorage.setItem("ios-dismissed","1");el("ios-hint").style.display="none";}
 
+/* ---------- Boot ---------- */
 window.addEventListener("DOMContentLoaded",function(){
   loadActive();updateChip();setupPWA();
   if(!location.hash)location.hash="#/home";
