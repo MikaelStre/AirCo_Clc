@@ -28,8 +28,6 @@
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
 }
 body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg);min-height:100dvh}
-
-/* ===== SHELL TOP NAV ===== */
 .shell-nav{background:var(--navy);position:sticky;top:0;z-index:300;box-shadow:0 2px 16px rgba(0,0,0,.3);padding-top:var(--sat)}
 .shell-nav-in{max-width:1440px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:14px;cursor:pointer;flex-shrink:0}
@@ -51,13 +49,9 @@ body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(
 .btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy3)}
 .btn-sm{padding:5px 10px;font-size:12px}.btn-xs{padding:3px 8px;font-size:11px}
 .btn-line{background:#fff;color:var(--navy);border:1.5px solid var(--g300)}.btn-line:hover{border-color:var(--navy)}
-
-/* ===== VIEWS ===== */
 .view{display:none}
 .view.active{display:block}
 main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px + var(--sab))}
-
-/* ===== HERO (home) ===== */
 .hero{text-align:center;padding:26px 0 22px}
 .hero h1{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:.3px}
 .hero p{font-size:14px;color:var(--g500);margin-top:6px}
@@ -70,8 +64,6 @@ main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px +
 .cat .tag{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:99px}
 .tag-live{background:var(--green-bg);color:var(--green-dark)}
 .tag-soon{background:var(--g100);color:var(--g500)}
-
-/* ===== SUB GRID (systems landing / engine) ===== */
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
 .page-head h2{font-size:21px;font-weight:700;color:var(--navy)}
 .page-head p{font-size:13px;color:var(--g500);margin-top:3px}
@@ -85,8 +77,6 @@ main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px +
 .tile p{font-size:12px;color:var(--g500);line-height:1.45}
 .tile .ref{font-size:10px;color:var(--gold);font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.4px}
 .tile .tag{position:absolute;top:12px;right:12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:99px}
-
-/* ===== CARD / TABLE (shared) ===== */
 .card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
 .card-hdr{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200)}
 .card-hdr h2{font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.8px}
@@ -103,21 +93,15 @@ tr:last-child td{border-bottom:none}
 .pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap}
 .p-24{background:#eef2ff;color:#3730a3}.p-ac{background:#ecfdf5;color:#065f46}.p-inv{background:#fef3c7;color:#92400e}
 .p-dim{background:var(--g100);color:var(--g500)}
-
-/* ===== KPI ===== */
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;padding:16px}
 .kpi{padding:12px 16px;background:var(--bg);border-radius:var(--r2);border-left:3px solid var(--gold)}
 .kpi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);margin-bottom:4px}
 .kpi-v{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
 .kpi-u{font-size:11px;color:var(--g500);margin-top:2px}
-
-/* ===== EMPTY / SOON ===== */
 .empty{text-align:center;padding:56px 20px;color:var(--g500)}
 .empty .icon{font-size:46px;margin-bottom:14px}
 .empty h3{font-size:17px;color:var(--navy);margin-bottom:6px}
 .empty p{font-size:13px;max-width:440px;margin:0 auto;line-height:1.6}
-
-/* ===== MODAL ===== */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;backdrop-filter:blur(2px)}
 .overlay.show{display:block}
 .modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:var(--r);box-shadow:var(--sh2);z-index:600;width:min(560px,95vw);max-height:85vh;flex-direction:column}
@@ -133,8 +117,6 @@ tr:last-child td{border-bottom:none}
 .field input,.field select{padding:8px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;width:100%;background:#fff}
 .field input:focus,.field select:focus{outline:none;border-color:var(--navy)}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* ===== PWA banners ===== */
 #pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--navy);color:#fff;align-items:center;gap:12px;padding:12px 20px;padding-bottom:calc(12px + var(--sab));box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 #pwa-banner canvas{width:40px;height:40px;border-radius:8px;flex-shrink:0}
 .pwa-txt{flex:1}.pwa-txt strong{display:block;font-size:14px}.pwa-txt span{font-size:11px;opacity:.7}
@@ -142,10 +124,8 @@ tr:last-child td{border-bottom:none}
 #ios-hint{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--navy);color:#fff;padding:14px 20px;padding-bottom:calc(14px + var(--sab));text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 #ios-hint p{font-size:13px;line-height:1.6}
 #ios-hint button{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;position:absolute;top:10px;right:14px}
-
 footer{background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;padding-bottom:calc(14px + var(--sab));font-size:11px;margin-top:28px}
 footer strong{color:var(--gold)}
-
 @media print{
   .shell-nav,.nav-right,#pwa-banner,#ios-hint,.no-print{display:none!important}
   main{padding:10px!important;max-width:100%}
@@ -172,7 +152,6 @@ footer strong{color:var(--gold)}
 </head>
 <body>
 
-<!-- ===== SHELL TOP NAV ===== -->
 <div class="shell-nav">
 <div class="shell-nav-in">
   <div class="brand" onclick="go('home')">
@@ -190,7 +169,6 @@ footer strong{color:var(--gold)}
 </div>
 </div>
 
-<!-- ===== VIEW: HOME ===== -->
 <div class="view" id="view-home">
 <main>
   <div class="hero">
@@ -222,7 +200,6 @@ footer strong{color:var(--gold)}
 </main>
 </div>
 
-<!-- ===== VIEW: SYSTEMS ===== -->
 <div class="view" id="view-systems">
 <main>
   <div class="page-head">
@@ -234,13 +211,13 @@ footer strong{color:var(--gold)}
       <div class="t-ic">&#10052;</div>
       <div><h3>Air Conditioning</h3><p>Cabin cooling loads &amp; unit selection</p><div class="ref">ISO 7547</div></div>
     </div>
-    <div class="tile" onclick="go('ac')">
+    <div class="tile" onclick="go('seawater')">
       <span class="tag tag-live">Live</span>
       <div class="t-ic">&#127754;</div>
-      <div><h3>Seawater Cooling</h3><p>Seawater pump for the AC/chiller circuit</p><div class="ref">Linked to AC</div></div>
+      <div><h3>Seawater Cooling</h3><p>Cooling flow sum &amp; inlet pipe sizing</p><div class="ref">Manifold dimensioning</div></div>
     </div>
-    <div class="tile disabled">
-      <span class="tag tag-soon">Soon</span>
+    <div class="tile" onclick="go('bilge')">
+      <span class="tag tag-live">Live</span>
       <div class="t-ic">&#128167;</div>
       <div><h3>Bilge</h3><p>Bilge pipe &amp; pump sizing</p><div class="ref">RINA / DNV-GL</div></div>
     </div>
@@ -263,7 +240,6 @@ footer strong{color:var(--gold)}
 </main>
 </div>
 
-<!-- ===== VIEW: ENGINE (subpage) ===== -->
 <div class="view" id="view-engine">
 <main>
   <div class="page-head">
@@ -284,7 +260,6 @@ footer strong{color:var(--gold)}
 </main>
 </div>
 
-<!-- ===== VIEW: ELECTRICAL ===== -->
 <div class="view" id="view-electrical">
 <main>
   <div class="page-head">
@@ -308,25 +283,21 @@ footer strong{color:var(--gold)}
 </main>
 </div>
 
-<!-- ===== VIEW: INTERIOR ===== -->
 <div class="view" id="view-interior"><main>
   <div class="empty"><div class="icon">&#128719;</div><h3>Interior &mdash; coming soon</h3>
   <p>Joinery weights, furnishing and interior calculations will live here. Tell us which calculation to build first.</p></div>
 </main></div>
 
-<!-- ===== VIEW: MECHANICAL ===== -->
 <div class="view" id="view-mechanical"><main>
   <div class="empty"><div class="icon">&#128295;</div><h3>Mechanical &mdash; coming soon</h3>
   <p>Steering, hydraulics and deck machinery calculations will live here.</p></div>
 </main></div>
 
-<!-- ===== VIEW: AC (the full calculator module) ===== -->
 <div class="view" id="view-ac"></div>
-
-<!-- ===== VIEW: ENGINE ROOM VENTILATION ===== -->
 <div class="view" id="view-ervent"></div>
+<div class="view" id="view-bilge"></div>
+<div class="view" id="view-seawater"></div>
 
-<!-- ===== PROJECT MODAL ===== -->
 <div class="overlay" id="proj-overlay" onclick="closeProjModal()"></div>
 <div class="modal" id="proj-modal">
   <div class="modal-hdr"><h2>&#128203; Project</h2><button class="modal-close" onclick="closeProjModal()">&#10005;</button></div>
@@ -356,7 +327,6 @@ footer strong{color:var(--gold)}
   </div>
 </div>
 
-<!-- PWA banners -->
 <div id="pwa-banner"><canvas id="pwa-icon" width="40" height="40"></canvas>
   <div class="pwa-txt"><strong>Install Engineering Suite</strong><span>Add to home screen</span></div>
   <button class="btn btn-gold btn-sm" onclick="installPWA()">Install</button>
@@ -365,15 +335,9 @@ footer strong{color:var(--gold)}
 <div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
   <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
 
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.6 &middot; ISO 7547 / 8861 &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.7 &middot; ISO 7547 / 8861 &middot; RINA / DNV-GL</footer>
 
 <script>
-/* ================================================================
-   BALTIC YACHTS ENGINEERING SUITE  v0.6
-   Single-file SPA. Shared PROJECT + CONSUMERS store.
-   Modules: AC, Engine Room Ventilation (ISO 8861). Electrical aggregates consumers.
-   ================================================================ */
-
 function el(id){return document.getElementById(id);}
 function f0(n){return Math.round(Number(n)).toLocaleString("en-GB");}
 function f1(n){return Number(n).toFixed(1);}
@@ -381,7 +345,6 @@ function f2(n){return Number(n).toFixed(2);}
 function f3(n){return Number(n).toFixed(3);}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
-/* ---------- Shared project + consumers ---------- */
 var PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:""},consumers:[]};
 
 function loadActive(){
@@ -397,7 +360,6 @@ function updateChip(){
   c.className=n?"":"muted";
 }
 
-/* ---------- Router ---------- */
 var ROUTES={
   home:{view:"view-home",crumb:[["Home",null]]},
   systems:{view:"view-systems",crumb:[["Home","home"],["Systems",null]]},
@@ -406,7 +368,9 @@ var ROUTES={
   interior:{view:"view-interior",crumb:[["Home","home"],["Interior",null]]},
   mechanical:{view:"view-mechanical",crumb:[["Home","home"],["Mechanical",null]]},
   ac:{view:"view-ac",crumb:[["Home","home"],["Systems","systems"],["Air Conditioning",null]]},
-  ervent:{view:"view-ervent",crumb:[["Home","home"],["Systems","systems"],["Engine Room Ventilation",null]]}
+  ervent:{view:"view-ervent",crumb:[["Home","home"],["Systems","systems"],["Engine Room Ventilation",null]]},
+  bilge:{view:"view-bilge",crumb:[["Home","home"],["Systems","systems"],["Bilge",null]]},
+  seawater:{view:"view-seawater",crumb:[["Home","home"],["Systems","systems"],["Seawater Cooling",null]]}
 };
 function go(r){location.hash="#/"+r;}
 function renderRoute(){
@@ -416,7 +380,6 @@ function renderRoute(){
   var vs=document.querySelectorAll(".view");
   for(var i=0;i<vs.length;i++)vs[i].classList.remove("active");
   el(def.view).classList.add("active");
-  // crumbs
   var ch="";
   for(var j=0;j<def.crumb.length;j++){
     var c=def.crumb[j];
@@ -426,12 +389,13 @@ function renderRoute(){
   el("crumbs").innerHTML=ch;
   if(r==="ac"){mountAC();}
   if(r==="ervent"){mountERV();}
+  if(r==="bilge"){mountBilge();}
+  if(r==="seawater"){mountSW();}
   if(r==="electrical"){renderElectrical();}
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",renderRoute);
 
-/* ---------- Project modal ---------- */
 function openProjModal(){
   var m=PROJECT.meta;
   el("pm-yacht").value=m.yacht||"";el("pm-proj").value=m.proj||"";el("pm-type").value=m.type||"";
@@ -475,6 +439,8 @@ function loadProjectShell(i){
   saveActive();
   if(typeof acSyncFromProject==="function")acSyncFromProject();
   if(typeof ERV_MOUNTED!=="undefined"&&ERV_MOUNTED){ervFill();ervCalc();}
+  if(typeof BIL_MOUNTED!=="undefined"&&BIL_MOUNTED){bilFill();renderBranches();bilCalc();}
+  if(typeof SW_MOUNTED!=="undefined"&&SW_MOUNTED){swFill();renderSWItems();swCalc();}
   closeProjModal();
   alert("Loaded \""+PROJECT.meta.yacht+"\".");
 }
@@ -489,13 +455,12 @@ function newProjectShell(){
   saveActive();
   if(typeof acResetModule==="function")acResetModule();
   if(typeof ERV_MOUNTED!=="undefined"&&ERV_MOUNTED){ervFill();ervCalc();}
+  if(typeof BIL_MOUNTED!=="undefined"&&BIL_MOUNTED){bilFill();renderBranches();bilCalc();}
+  if(typeof SW_MOUNTED!=="undefined"&&SW_MOUNTED){swFill();renderSWItems();swCalc();}
   openProjModal();
 }
 
-/* ---------- Electrical consumers store ---------- */
-/* consumer = {id, source, name, bus, pcs, kw, day, eve, night}  (day/eve/night = % load 0-100) */
 function addConsumers(list){
-  // remove existing consumers from same source, then add fresh
   if(list.length){
     var src=list[0].source;
     PROJECT.consumers=PROJECT.consumers.filter(function(c){return c.source!==src;});
@@ -517,7 +482,7 @@ function renderElectrical(){
   el("elec-count").textContent=cs.length;
   if(!cs.length){
     body.innerHTML="";foot.innerHTML="";
-    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Try the Air Conditioning or Engine Room Ventilation modules &mdash; they push pumps and fans into this load balance.</p></div>";
+    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Each module has a Send to Electrical button.</p></div>";
     el("elec-kpi").innerHTML="";
     return;
   }
@@ -543,10 +508,7 @@ function renderElectrical(){
     "<div class='kpi'><div class='kpi-l'>Night</div><div class='kpi-v'>"+f1(tN)+"</div><div class='kpi-u'>kW demand</div></div>";
 }
 
-/* ================================================================
-   AC MODULE  (mounted into #view-ac on demand)
-   ================================================================ */
-
+/* ===== AC MODULE ===== */
 var AC_MOUNTED=false;
 var TYPES={owners:{l:"Owner's Cabin",med:80,trop:250,ach:1.5},captains:{l:"Captain's Cabin",med:100,trop:270,ach:2.0},guest:{l:"Guest Stateroom",med:120,trop:290,ach:2.0},guest_l:{l:"Guest Stateroom (Lrg)",med:150,trop:310,ach:2.0},crew:{l:"Crew Cabin",med:120,trop:250,ach:2.5},crew_mess:{l:"Crew Mess",med:150,trop:290,ach:3.0},salon:{l:"Salon / Saloon",med:150,trop:310,ach:2.0},wheelhouse:{l:"Wheelhouse / Bridge",med:180,trop:330,ach:3.0},galley:{l:"Galley / Pantry",med:220,trop:330,ach:8.0},laundry:{l:"Laundry",med:250,trop:350,ach:5.0},engine:{l:"Engine Room",med:300,trop:350,ach:0},technical:{l:"Technical / Workshop",med:200,trop:310,ach:3.0},other:{l:"Other",med:130,trop:290,ach:2.0}};
 var CLIMATE={med:{label:"Mediterranean",day:{dH:36.0,desc:"35-27C"},sil:{dH:25.4,desc:"28-20C"},red:{dH:8.0,desc:"Standby"},famu:{cabin_dH:23.0,central_dH:36.0},humidity:{day:{min:45,max:55},sil:{min:50,max:60},red:{min:55,max:70}}},trop:{label:"Tropical",day:{dH:66.3,desc:"40-27C"},sil:{dH:44.7,desc:"35-24C"},red:{dH:15.0,desc:"Standby"},famu:{cabin_dH:36.0,central_dH:66.3},humidity:{day:{min:40,max:50},sil:{min:45,max:55},red:{min:50,max:65}}}};
@@ -567,7 +529,6 @@ function mountAC(){
   el("ac-cop").value=S.cop;
   setClimate(S.climate,1);setFAMU(S.famu,1);renderSupBtns();renderCabins();recalc();
 }
-
 function acHTML(){
   return "<main>"+
     "<div class='page-head'><div><h2>Air Conditioning</h2><p>ISO 7547 cabin cooling. Results feed the seawater pump and fan-coil consumers into Electrical.</p></div>"+
@@ -600,7 +561,6 @@ function acHTML(){
     ".acsup{padding:0 11px;height:32px;border:1.5px solid var(--g300);border-radius:4px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--g700)}.acsup.on{border-color:var(--gold);background:var(--gold-bg);color:var(--navy)}"+
     ".ti{padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;width:100%}.ti:focus{outline:none;border-color:var(--navy)}.tin{max-width:56px;text-align:right}</style>";
 }
-
 function calcCabin(c){
   var area=Number(c.area)||0,h=Number(c.h)||2.1,p=Number(c.p)||0,ach=Number(c.ach)||2,wc=!!c.wc;
   var t=TYPES[c.type]||TYPES.other,cli=CLIMATE[S.climate];
@@ -613,7 +573,6 @@ function calcCabin(c){
 }
 function recUnit(btu){var u=SUPS[S.sup].u.slice().sort(function(a,b){return a.b-b.b;});var f=u.filter(function(x){return x.b>=btu;});return f.length?f[0]:u[u.length-1]||{m:"-",b:0,w:0};}
 function typeOpts(sel){return Object.keys(TYPES).map(function(k){return "<option value='"+k+"'"+(sel===k?" selected":"")+">"+TYPES[k].l+"</option>";}).join("");}
-
 function renderSupBtns(){
   if(!el("ac-sup"))return;
   el("ac-sup").innerHTML=Object.keys(SUPS).map(function(k){return "<button class='acsup"+(S.sup===k?" on":"")+"' onclick=\"setSup('"+k+"')\">"+SUPS[k].n+"</button>";}).join("");
@@ -622,7 +581,6 @@ function renderSupBtns(){
 function setSup(k){S.sup=k;renderSupBtns();acSave();recalc();}
 function setClimate(c,q){S.climate=c;if(el("ac-bmed")){el("ac-bmed").classList.toggle("on",c==="med");el("ac-btrop").classList.toggle("on",c==="trop");}if(!q){acSave();recalc();}}
 function setFAMU(v,q){S.famu=v;if(el("ac-bfn")){el("ac-bfn").classList.toggle("on",!v);el("ac-bfy").classList.toggle("on",v);}if(!q){acSave();recalc();}}
-
 function appendRow(c){
   if(el("acr"+c.id))return;
   var tr=document.createElement("tr");tr.id="acr"+c.id;
@@ -647,7 +605,6 @@ function rowNums(){S.cabins.forEach(function(c,i){var e=document.querySelector("
 function badge(){if(el("ac-badge"))el("ac-badge").textContent=S.cabins.length+(S.cabins.length===1?" space":" spaces");}
 function upd(id,f,v){var c=S.cabins.find(function(c){return c.id===id;});if(c){c[f]=v;acSave();recalc();}}
 function updType(id,t){var c=S.cabins.find(function(c){return c.id===id;});if(!c)return;c.type=t;var a=el("acach"+id);if(a&&TYPES[t]){a.value=TYPES[t].ach;c.ach=TYPES[t].ach;}acSave();recalc();}
-
 function recalc(){
   if(!el("ac-results"))return;
   if(!S.cabins.length){el("ac-results").style.display="none";return;}
@@ -670,8 +627,6 @@ function recalc(){
   el("ac-equipfoot").innerHTML="<tr><td colspan='3'>TOTAL</td><td>"+f1(totW/1000)+" kW</td><td></td><td>"+f0(totInst)+"</td><td>"+f1(totKg)+"</td></tr>";
   S._tot={btu:totInst,eKW:eKW};
 }
-
-/* ---- Consumer hand-off: AC -> Electrical ---- */
 function sendACtoElectrical(){
   if(!S.cabins.length){alert("Add cabins first.");return;}
   recalc();
@@ -689,7 +644,6 @@ function sendACtoElectrical(){
   addConsumers(list);
   alert("Sent "+list.length+" AC consumers to the Electrical load balance.");
 }
-
 function exportExcel(){
   if(!window.XLSX){alert("Excel library loading.");return;}
   var wb=XLSX.utils.book_new();var m=PROJECT.meta;
@@ -699,29 +653,14 @@ function exportExcel(){
   XLSX.writeFile(wb,"Baltic_AC_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
-/* ================================================================
-   ENGINE ROOM VENTILATION MODULE  (ISO 8861)  -> #view-ervent
-   ================================================================ */
+/* ===== ENGINE ROOM VENTILATION (ISO 8861) ===== */
 var ERV_MOUNTED=false;
-function ervDefaults(){return{
-  ro:1.13, c:1.01, tout:35, dt:12.5,
-  pdp:405, ddp:4.6,
-  pdg:75, pgel:55, eta:94, ngen:2, ddg:9.4404,
-  mad:0.002,
-  fel:0, fex:0, ft:0, fo:0,
-  fdp:350, feff:60,
-  vg:3, vd:10, vfd:10
-};}
+function ervDefaults(){return{ ro:1.13, c:1.01, tout:35, dt:12.5, pdp:405, ddp:4.6, pdg:75, pgel:55, eta:94, ngen:2, ddg:9.4404, mad:0.002, fel:0, fex:0, ft:0, fo:0, fdp:350, feff:60, vg:3, vd:10, vfd:10 };}
 function ervState(){ if(!PROJECT.erv)PROJECT.erv=ervDefaults(); return PROJECT.erv; }
 function ervSave(){ saveActive(); }
 function E(id){return el("erv-"+id);}
 function ervSet(k,v){ ervState()[k]=Number(v); ervSave(); ervCalc(); }
-
-function mountERV(){
-  if(ERV_MOUNTED){ervFill();ervCalc();return;}
-  el("view-ervent").innerHTML=ervHTML();
-  ERV_MOUNTED=true; ervFill(); ervCalc();
-}
+function mountERV(){ if(ERV_MOUNTED){ervFill();ervCalc();return;} el("view-ervent").innerHTML=ervHTML(); ERV_MOUNTED=true; ervFill(); ervCalc(); }
 function ervField(k,label,unit,step){
   return "<div style='display:flex;flex-direction:column;gap:3px'>"+
     "<label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+label+"</label>"+
@@ -744,13 +683,11 @@ function ervHTML(){
      "</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Main Engine</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
-       ervField("pdp","Max power Pdp","kW")+ervField("ddp","Heat rejection Ddp","%")+
-       ervField("mad","Air req. mad","kg/kWs","0.0001")+"</div></div>"+
+       ervField("pdp","Max power Pdp","kW")+ervField("ddp","Heat rejection Ddp","%")+ervField("mad","Air req. mad","kg/kWs","0.0001")+"</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Generator Set(s)</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        ervField("ngen","Quantity running","pcs","1")+ervField("pdg","Engine power Pdg (ea)","kW")+
-       ervField("pgel","Electric power (ea)","kW")+ervField("eta","Alternator eff. &eta;","%")+
-       ervField("ddg","Heat rejection Ddg","%")+"</div></div>"+
+       ervField("pgel","Electric power (ea)","kW")+ervField("eta","Alternator eff. &eta;","%")+ervField("ddg","Heat rejection Ddg","%")+"</div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Additional Heat Emissions</h2><span style='font-size:11px;color:var(--g500)'>optional</span></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        ervField("fel","Electrical install. &Phi;el","kW")+ervField("fex","Exhaust system &Phi;ex","kW")+
@@ -758,18 +695,13 @@ function ervHTML(){
    "<div class='card'><div class='card-hdr'><h2>Fan &amp; Duct Design</h2></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        ervField("fdp","Fan static pressure","Pa")+ervField("feff","Fan efficiency","%")+
-       ervField("vg","Grille velocity","m/s")+ervField("vd","Duct velocity","m/s")+
-       ervField("vfd","Fire damper velocity","m/s")+"</div></div>"+
+       ervField("vg","Grille velocity","m/s")+ervField("vd","Duct velocity","m/s")+ervField("vfd","Fire damper velocity","m/s")+"</div></div>"+
    "<div class='card' id='erv-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='erv-badge'>-</span></div>"+
      "<div class='kpi-row' id='erv-kpi'></div>"+
-     "<div class='section' style='padding:0 20px 6px'></div>"+
      "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Symbol</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='erv-tbl'></tbody></table></div>"+
    "</div></main>";
 }
-function ervFill(){
-  var s=ervState();
-  ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd"].forEach(function(k){ if(E(k))E(k).value=s[k]; });
-}
+function ervFill(){ var s=ervState(); ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd"].forEach(function(k){ if(E(k))E(k).value=s[k]; }); }
 function ervCompute(){
   var s=ervState();
   var ertemp=s.tout+s.dt;
@@ -783,8 +715,7 @@ function ervCompute(){
   var sumF=Fdp + s.ngen*(Fdg+Fg) + s.fel + s.fex + s.ft + s.fo;
   var Qh=sumF/(s.ro*s.c*s.dt) - 0.4*Qc;
   if(Qh<0)Qh=0;
-  var Qin=Qc+Qh;
-  var Qout=Qh;
+  var Qin=Qc+Qh, Qout=Qh;
   var A=Qin/s.vg;
   var Dduct=Math.sqrt((Qin/s.vd)/Math.PI)*2*1000;
   var Afd=Qin/s.vfd;
@@ -840,21 +771,201 @@ function ervExcel(){
     ["INPUTS"],["Outside temp",s.tout,"C"],["Max temp rise dt",s.dt,"C"],["Air density",s.ro,"kg/m3"],["Heat coeff c",s.c,"kJ/kgK"],
     ["Main engine Pdp",s.pdp,"kW"],["Ddp",s.ddp,"%"],["mad",s.mad,"kg/kWs"],
     ["Gensets running",s.ngen,"pcs"],["Genset engine Pdg",s.pdg,"kW"],["Genset electric",s.pgel,"kW"],["Eta",s.eta,"%"],["Ddg",s.ddg,"%"],
-    ["Phi el/ex/t/o",s.fel+"/"+s.fex+"/"+s.ft+"/"+s.fo,"kW"],
-    ["Fan dP",s.fdp,"Pa"],["Fan eff",s.feff,"%"],[],
-    ["RESULTS"],["Max ER temp",+r.ertemp.toFixed(1),"C"],
-    ["Combustion air Qc",+r.Qc.toFixed(3),"m3/s"],["Qc x1.5",+r.q15.toFixed(3),"m3/s"],
+    ["Phi el/ex/t/o",s.fel+"/"+s.fex+"/"+s.ft+"/"+s.fo,"kW"],["Fan dP",s.fdp,"Pa"],["Fan eff",s.feff,"%"],[],
+    ["RESULTS"],["Max ER temp",+r.ertemp.toFixed(1),"C"],["Combustion air Qc",+r.Qc.toFixed(3),"m3/s"],["Qc x1.5",+r.q15.toFixed(3),"m3/s"],
     ["Total heat emission",+r.sumF.toFixed(1),"kW"],["Heat-loss air Qh",+r.Qh.toFixed(3),"m3/s"],
     ["Supply air Qin",+r.Qin.toFixed(3),"m3/s",+(r.Qin*3600).toFixed(0),"m3/h"],
     ["Exhaust air Qout",+r.Qout.toFixed(3),"m3/s",+(r.Qout*3600).toFixed(0),"m3/h"],
-    ["Grille area",+r.A.toFixed(3),"m2",+(r.A*10000).toFixed(0),"cm2"],
-    ["Duct diameter",+r.Dduct.toFixed(0),"mm"],
+    ["Grille area",+r.A.toFixed(3),"m2",+(r.A*10000).toFixed(0),"cm2"],["Duct diameter",+r.Dduct.toFixed(0),"mm"],
     ["Supply fan",+r.fanIn.toFixed(2),"kW"],["Exhaust fan",+r.fanOut.toFixed(2),"kW"]];
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"ER Ventilation");
   XLSX.writeFile(wb,"Baltic_ERVent_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
-/* ---------- PWA ---------- */
+/* ===== shared field helper ===== */
+function modField(pfx,k,label,unit,step){
+  return "<div style='display:flex;flex-direction:column;gap:3px'>"+
+    "<label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+label+"</label>"+
+    "<div style='display:flex;align-items:center;gap:6px'>"+
+    "<input id='"+pfx+"-"+k+"' type='number' step='"+(step||"any")+"' oninput=\""+pfx+"Set('"+k+"',this.value)\" style='width:92px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'>"+
+    "<span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>";
+}
+
+/* ===== BILGE (RINA / DNV) ===== */
+var BIL_MOUNTED=false;
+function bilDefaults(){return{ rule:"RINA", L:29.16, B:5.96, H:3.38, head:25, eff:50, branches:[{name:"Compartment 1",L1:7.1}] };}
+function bilState(){ if(!PROJECT.bilge)PROJECT.bilge=bilDefaults(); if(!PROJECT.bilge.branches)PROJECT.bilge.branches=[]; return PROJECT.bilge; }
+function bilSet(k,v){ var s=bilState(); s[k]=(k==="rule")?v:Number(v); saveActive(); bilCalc(); }
+function mountBilge(){ if(BIL_MOUNTED){bilFill();bilCalc();return;} el("view-bilge").innerHTML=bilHTML(); BIL_MOUNTED=true; bilFill(); renderBranches(); bilCalc(); }
+function bilHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Bilge System</h2><p>Bilge pipe &amp; pump sizing per RINA / DNV. Bilge pump feeds Electrical.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-line btn-sm' onclick='bilExcel()'>&#11015; Excel</button>"+
+       "<button class='btn btn-gold btn-sm' onclick='bilToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Rule &amp; Vessel</h2>"+
+     "<div style='display:flex;border:1.5px solid var(--g300);border-radius:4px;overflow:hidden;height:30px' class='no-print'>"+
+       "<button id='bil-rRINA' class='bseg on' onclick=\"bilSetRule('RINA')\">RINA</button><button id='bil-rDNV' class='bseg' onclick=\"bilSetRule('DNV')\">DNV</button></div></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("bil","L","Length @ LWL","m")+modField("bil","B","Breadth @ DWL","m")+modField("bil","H","Hull bottom to deck @ CL","m")+"</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Branch Compartments</h2><button class='btn btn-primary btn-sm no-print' onclick='bilAddBranch()'>+ Add</button></div>"+
+     "<div class='tbl-wrap'><table><thead><tr><th>Compartment</th><th>L1 (m)</th><th>Branch pipe d (mm)</th><th class='no-print'></th></tr></thead><tbody id='bil-branches'></tbody></table></div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Bilge Pump (electrical)</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("bil","head","Pump head","m")+modField("bil","eff","Pump efficiency","%")+"</div></div>"+
+   "<div class='card' id='bil-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='bil-badge'>-</span></div>"+
+     "<div class='kpi-row' id='bil-kpi'></div>"+
+     "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='bil-tbl'></tbody></table></div>"+
+   "</div></main>"+
+   "<style>.bseg{padding:0 14px;border:none;background:#fff;color:var(--g700);font-size:12px;font-weight:600;cursor:pointer}.bseg.on{background:var(--navy);color:#fff}.bseg+.bseg{border-left:1.5px solid var(--g300)}"+
+   ".bri{padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;width:100%}.bri:focus{outline:none;border-color:var(--navy)}</style>";
+}
+function bilFill(){ var s=bilState(); ["L","B","H","head","eff"].forEach(function(k){var e=el("bil-"+k);if(e)e.value=s[k];}); if(el("bil-rRINA")){el("bil-rRINA").classList.toggle("on",s.rule==="RINA");el("bil-rDNV").classList.toggle("on",s.rule==="DNV");} }
+function bilSetRule(r){ bilState().rule=r; el("bil-rRINA").classList.toggle("on",r==="RINA"); el("bil-rDNV").classList.toggle("on",r==="DNV"); saveActive(); renderBranches(); bilCalc(); }
+function bilAddBranch(){ bilState().branches.push({name:"Compartment "+(bilState().branches.length+1),L1:5}); saveActive(); renderBranches(); bilCalc(); }
+function bilDelBranch(i){ bilState().branches.splice(i,1); saveActive(); renderBranches(); bilCalc(); }
+function bilBranchSet(i,k,v){ var b=bilState().branches[i]; if(b){ b[k]=(k==="name")?v:Number(v); saveActive(); if(k!=="name")renderBranches(); bilCalc(); } }
+function branchDia(L1){ var s=bilState(); if(s.rule==="RINA") return 0.85*L1+25; return 2.15*Math.sqrt(L1*(s.B+s.H))+25; }
+function renderBranches(){
+  var s=bilState(),t=el("bil-branches"); if(!t)return;
+  t.innerHTML=s.branches.map(function(b,i){
+    return "<tr><td><input class='bri' value='"+esc(b.name||"")+"' oninput=\"bilBranchSet("+i+",'name',this.value)\" style='min-width:140px'></td>"+
+      "<td><input class='bri' type='number' value='"+(b.L1||"")+"' step='0.1' oninput=\"bilBranchSet("+i+",'L1',+this.value)\" style='max-width:90px'></td>"+
+      "<td style='font-weight:700;color:var(--navy)'>"+f1(branchDia(b.L1||0))+" mm</td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' onclick='bilDelBranch("+i+")'>&#10005;</button></td></tr>";
+  }).join("")||"<tr><td colspan='4' style='color:var(--g500);text-align:center;padding:14px'>No branch compartments</td></tr>";
+}
+function bilCompute(){
+  var s=bilState();
+  var d=25+1.68*Math.sqrt(s.L*(s.B+s.H));
+  var coef=(s.rule==="RINA")?0.0058:0.00575;
+  var Qm3h=coef*d*d;
+  var Qlmin=Qm3h/60*1000;
+  var Qls=Qm3h/3.6;
+  var Qm3s=Qm3h/3600;
+  var pumpKW=1025*9.81*Qm3s*s.head/((s.eff/100)*1000);
+  return {d:d,Qm3h:Qm3h,Qlmin:Qlmin,Qls:Qls,Qm3s:Qm3s,pumpKW:pumpKW};
+}
+function bilCalc(){
+  if(!el("bil-results"))return;
+  var s=bilState(),r=bilCompute();
+  el("bil-badge").textContent=f1(r.d)+" mm main pipe";
+  el("bil-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Main Pipe d</div><div class='kpi-v'>"+f1(r.d)+"</div><div class='kpi-u'>mm inner</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Pump Capacity</div><div class='kpi-v'>"+f1(r.Qm3h)+"</div><div class='kpi-u'>m³/h</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Pump Capacity</div><div class='kpi-v'>"+f0(r.Qlmin)+"</div><div class='kpi-u'>l/min</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Pump Capacity</div><div class='kpi-v'>"+f1(r.Qls)+"</div><div class='kpi-u'>l/s</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Pump Electrical</div><div class='kpi-v'>"+f2(r.pumpKW)+"</div><div class='kpi-u'>kW</div></div>";
+  function row(q,v,u,ref){return "<tr><td>"+q+"</td><td><strong>"+v+"</strong></td><td>"+u+"</td><td style='color:var(--g500)'>"+ref+"</td></tr>";}
+  el("bil-tbl").innerHTML=
+    row("Rule applied",s.rule,"","RINA Pt C Ch1 Sec9 / DNV")+
+    row("Main bilge pipe inner dia","d = "+f1(r.d),"mm","25 + 1.68·√(L·(B+H))")+
+    row("Pump minimum capacity",f2(r.Qm3h),"m³/h",(s.rule==="RINA"?"0.0058·d²":"0.00575·d²"))+
+    row("Pump capacity",f0(r.Qlmin),"l/min","Q × 1000 / 60")+
+    row("Pump capacity",f2(r.Qls),"l/s","Q / 3.6")+
+    row("Bilge pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)");
+}
+function bilToElectrical(){
+  var r=bilCompute();
+  addConsumers([{source:"Bilge",name:"Bilge pump",bus:"AC",pcs:1,kw:+r.pumpKW.toFixed(2),day:5,eve:5,night:2}]);
+  alert("Sent bilge pump ("+f2(r.pumpKW)+" kW) to the Electrical load balance.");
+}
+function bilExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=bilState(),r=bilCompute(),m=PROJECT.meta,wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Bilge System ("+s.rule+")"],["Yacht",m.yacht,"Project",m.proj],[],
+    ["INPUTS"],["Length LWL",s.L,"m"],["Breadth DWL",s.B,"m"],["Height to deck",s.H,"m"],["Pump head",s.head,"m"],["Pump eff",s.eff,"%"],[],
+    ["RESULTS"],["Main pipe dia",+r.d.toFixed(1),"mm"],["Pump capacity",+r.Qm3h.toFixed(2),"m3/h",+r.Qlmin.toFixed(0),"l/min",+r.Qls.toFixed(2),"l/s"],["Pump electrical",+r.pumpKW.toFixed(2),"kW"],[],
+    ["BRANCH PIPES"],["Compartment","L1 (m)","Branch d (mm)"]];
+  s.branches.forEach(function(b){a.push([b.name,b.L1,+branchDia(b.L1).toFixed(1)]);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Bilge");
+  XLSX.writeFile(wb,"Baltic_Bilge_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
+
+/* ===== SEAWATER COOLING ===== */
+var SW_MOUNTED=false;
+function swDefaults(){return{ vmax:1.97, head:15, eff:55, items:[
+  {name:"Main Engine",q:360},{name:"Generator 1",q:80},{name:"Generator 2",q:0},
+  {name:"Watermaker",q:20},{name:"Air Conditioning",q:150},{name:"Fridge & Freezer",q:110},
+  {name:"Fire fighting 1",q:210},{name:"Fire fighting 2",q:0}
+]};}
+function swState(){ if(!PROJECT.sw)PROJECT.sw=swDefaults(); if(!PROJECT.sw.items)PROJECT.sw.items=[]; return PROJECT.sw; }
+function swSet(k,v){ swState()[k]=Number(v); saveActive(); swCalc(); }
+function mountSW(){ if(SW_MOUNTED){swFill();renderSWItems();swCalc();return;} el("view-seawater").innerHTML=swHTML(); SW_MOUNTED=true; swFill(); renderSWItems(); swCalc(); }
+function swHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Seawater Cooling</h2><p>Sum of cooling flows &amp; inlet pipe dimensioning. Seawater pump feeds Electrical.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-line btn-sm' onclick='swExcel()'>&#11015; Excel</button>"+
+       "<button class='btn btn-gold btn-sm' onclick='swToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Cooling Consumers (flow required)</h2><button class='btn btn-primary btn-sm no-print' onclick='swAddItem()'>+ Add</button></div>"+
+     "<div class='tbl-wrap'><table><thead><tr><th>Consumer</th><th>Flow (l/min)</th><th class='no-print'></th></tr></thead><tbody id='sw-items'></tbody><tfoot id='sw-foot'></tfoot></table></div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Pipe &amp; Pump</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       modField("sw","vmax","Max velocity Vmax","m/s")+modField("sw","head","Pump head","m")+modField("sw","eff","Pump efficiency","%")+"</div></div>"+
+   "<div class='card' id='sw-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='sw-badge'>-</span></div>"+
+     "<div class='kpi-row' id='sw-kpi'></div>"+
+     "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='sw-tbl'></tbody></table></div>"+
+   "</div></main>"+
+   "<style>.swi{padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;width:100%}.swi:focus{outline:none;border-color:var(--navy)}</style>";
+}
+function swFill(){ var s=swState(); ["vmax","head","eff"].forEach(function(k){var e=el("sw-"+k);if(e)e.value=s[k];}); }
+function swAddItem(){ swState().items.push({name:"Consumer",q:0}); saveActive(); renderSWItems(); swCalc(); }
+function swDelItem(i){ swState().items.splice(i,1); saveActive(); renderSWItems(); swCalc(); }
+function swItemSet(i,k,v){ var it=swState().items[i]; if(it){ it[k]=(k==="name")?v:Number(v); saveActive(); swCalc(); } }
+function renderSWItems(){
+  var s=swState(),t=el("sw-items"); if(!t)return;
+  t.innerHTML=s.items.map(function(it,i){
+    return "<tr><td><input class='swi' value='"+esc(it.name||"")+"' oninput=\"swItemSet("+i+",'name',this.value)\" style='min-width:160px'></td>"+
+      "<td><input class='swi' type='number' value='"+(it.q||0)+"' oninput=\"swItemSet("+i+",'q',+this.value)\" style='max-width:110px'></td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' onclick='swDelItem("+i+")'>&#10005;</button></td></tr>";
+  }).join("");
+  var tot=s.items.reduce(function(a,it){return a+(+it.q||0);},0);
+  el("sw-foot").innerHTML="<tr style='background:var(--navy2);color:#fff;font-weight:600'><td>TOTAL qtot</td><td>"+f0(tot)+" l/min</td><td class='no-print'></td></tr>";
+}
+function swCompute(){
+  var s=swState();
+  var qtot=s.items.reduce(function(a,it){return a+(+it.q||0);},0);
+  var Qm3s=(qtot/60)/1000;
+  var di=Math.sqrt((4*Qm3s)/(Math.PI*s.vmax))*1000;
+  var pumpKW=1025*9.81*Qm3s*s.head/((s.eff/100)*1000);
+  return {qtot:qtot,Qm3s:Qm3s,di:di,pumpKW:pumpKW};
+}
+function swCalc(){
+  if(!el("sw-results"))return;
+  var s=swState(),r=swCompute();
+  el("sw-badge").textContent=f1(r.di)+" mm inlet";
+  el("sw-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Total Flow qtot</div><div class='kpi-v'>"+f0(r.qtot)+"</div><div class='kpi-u'>l/min</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Total Flow</div><div class='kpi-v'>"+f3(r.Qm3s)+"</div><div class='kpi-u'>m³/s</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Inlet Pipe di</div><div class='kpi-v'>"+f1(r.di)+"</div><div class='kpi-u'>mm</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Seawater Pump</div><div class='kpi-v'>"+f2(r.pumpKW)+"</div><div class='kpi-u'>kW elec</div></div>";
+  function row(q,v,u,ref){return "<tr><td>"+q+"</td><td><strong>"+v+"</strong></td><td>"+u+"</td><td style='color:var(--g500)'>"+ref+"</td></tr>";}
+  el("sw-tbl").innerHTML=
+    row("Sum of cooling flows qtot",f0(r.qtot),"l/min","Σ consumer flows")+
+    row("Total flow",f3(r.Qm3s),"m³/s","qtot / 60 / 1000")+
+    row("Seawater inlet pipe dia","di = "+f1(r.di),"mm","√(4Q / (π·Vmax)) × 1000")+
+    row("Max velocity",f2(s.vmax),"m/s","pipe & inlet strainer")+
+    row("Seawater pump electrical",f2(r.pumpKW),"kW","ρ·g·Q·H / η  (ρ=1025)");
+}
+function swToElectrical(){
+  var r=swCompute();
+  addConsumers([{source:"Seawater",name:"Seawater cooling pump",bus:"AC",pcs:1,kw:+r.pumpKW.toFixed(2),day:100,eve:100,night:80}]);
+  alert("Sent seawater pump ("+f2(r.pumpKW)+" kW) to the Electrical load balance.");
+}
+function swExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=swState(),r=swCompute(),m=PROJECT.meta,wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Seawater Cooling (manifold dimensioning)"],["Yacht",m.yacht,"Project",m.proj],[],["CONSUMER FLOWS"],["Consumer","l/min"]];
+  s.items.forEach(function(it){a.push([it.name,it.q]);});
+  a.push(["TOTAL qtot",r.qtot,"l/min"],[],
+    ["RESULTS"],["Total flow",+r.Qm3s.toFixed(4),"m3/s"],["Vmax",s.vmax,"m/s"],
+    ["Inlet pipe dia",+r.di.toFixed(1),"mm"],["Seawater pump",+r.pumpKW.toFixed(2),"kW"]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Seawater");
+  XLSX.writeFile(wb,"Baltic_Seawater_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
+
+/* ===== PWA ===== */
 function makeIcon(sz){
   var c=document.createElement("canvas");c.width=c.height=sz;
   var g=c.getContext("2d"),s=sz,r=s/5;
@@ -887,7 +998,6 @@ function installPWA(){if(_deferredPrompt){_deferredPrompt.prompt();_deferredProm
 function dismissPWA(){localStorage.setItem("pwa-dismissed","1");el("pwa-banner").style.display="none";}
 function dismissIOS(){localStorage.setItem("ios-dismissed","1");el("ios-hint").style.display="none";}
 
-/* ---------- Boot ---------- */
 window.addEventListener("DOMContentLoaded",function(){
   loadActive();updateChip();setupPWA();
   if(!location.hash)location.hash="#/home";
