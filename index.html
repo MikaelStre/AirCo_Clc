@@ -227,6 +227,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
   <div class="crumbs" id="crumbs"></div>
   <div class="nav-right">
     <div class="proj-chip" onclick="openProjModal()"><span class="dot"></span><span id="chip-name" class="muted">No project</span></div>
+    <button class="btn btn-sm no-print" onclick="go('summary')" title="Sammanställning – project overview" style="background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.28)">Overview</button>
     <button class="btn btn-sm no-print" onclick="go('classflag')" title="Class & flag guide" style="background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.28)">&#9878; Class &amp; Flag</button>
     <button class="btn btn-sm no-print" onclick="go('howto')" title="How to use this app" style="background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.28)">? Help</button>
     <button class="btn btn-gold btn-sm no-print" onclick="window.print()">&#128438;</button>
@@ -245,26 +246,31 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
   <div class="cat-grid">
     <div class="cat" onclick="go('systems')">
       <span class="tag tag-live">Active</span>
-      <div class="ic">&#9881;</div><h3>Systems</h3>
+      <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h3>Systems</h3>
       <p>AC, seawater, bilge, ventilation, water &amp; waste, engine</p>
     </div>
     <div class="cat" onclick="go('interior')">
       <span class="tag tag-soon">Soon</span>
-      <div class="ic">&#128719;</div><h3>Interior</h3>
+      <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M3 13a2 2 0 0 1 2 2v2h14v-2a2 2 0 0 1 4 0v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a2 2 0 0 1 2-2z"/><line x1="6" y1="18" x2="6" y2="20"/><line x1="18" y1="18" x2="18" y2="20"/></svg></div><h3>Interior</h3>
       <p>Joinery, weights, furnishing calculations</p>
     </div>
     <div class="cat" onclick="go('mechanical')">
       <span class="tag tag-soon">Soon</span>
-      <div class="ic">&#128295;</div><h3>Mechanical</h3>
+      <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><h3>Mechanical</h3>
       <p>Steering, hydraulics, deck machinery</p>
     </div>
     <div class="cat" onclick="go('electrical')">
       <span class="tag tag-live">Active</span>
-      <div class="ic">&#9889;</div><h3>Electrical</h3>
+      <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><h3>Electrical</h3>
       <p>Load balance &mdash; aggregates consumers from every calculation</p>
     </div>
   </div>
-  <div class="card" id="home-projects" style="margin-top:22px"><div class="card-hdr"><h2>Projects</h2><div style="display:flex;gap:8px" class="no-print"><button class="btn btn-line btn-sm" onclick="saveCurrentProject()">&#128190; Save current</button><button class="btn btn-gold btn-sm" onclick="toggleNewProject()">+ Create Project</button></div></div><div id="new-project-form" style="display:none;padding:16px 20px;border-bottom:1px solid var(--g200)"><div class="field-row"><div class="field"><label>Yacht Name</label><input id="np-yacht" placeholder="e.g. B175"></div><div class="field"><label>Project No.</label><input id="np-proj" placeholder="B175-01"></div></div><div class="field-row"><div class="field"><label>Type</label><select id="np-type"><option>Sailing Yacht</option><option>Motor Yacht</option><option>Catamaran</option></select></div><div class="field"><label>Class Society</label><select id="np-cls"><option>DNV GL</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>ABS</option><option>Other</option></select></div><div class="field"><label>Flag (additional rule book)</label><select id="np-flag"><option value="">&mdash; none &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div></div><div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="createProjectFromHome()">Create Project</button></div></div><div id="home-proj-list" style="padding:14px 20px"></div></div>
+  <div class="card" style="margin-top:22px;cursor:pointer" onclick="go('summary')"><div style="padding:16px 20px;display:flex;align-items:center;gap:14px">
+    <div style="width:44px;height:44px;border-radius:11px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6a1 1 0 0 1 1 1v1h2a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h2V3a1 1 0 0 1 1-1z"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="13" y2="18"/></svg></div>
+    <div style="flex:1"><h3 style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:2px">Sammanst&auml;llning &mdash; Project Overview</h3><p style="font-size:12px;color:var(--g500)">All selected data for the active project, gathered into one page (print-ready).</p></div>
+    <span style="color:var(--gold);font-weight:700;font-size:18px">&rarr;</span>
+  </div></div>
+  <div class="card" id="home-projects" style="margin-top:22px"><div class="card-hdr"><h2>Projects</h2><div style="display:flex;gap:8px" class="no-print"><button class="btn btn-line btn-sm" onclick="saveCurrentProject()">&#128190; Save current</button><button class="btn btn-gold btn-sm" onclick="toggleNewProject()">+ Create Project</button></div></div><div id="new-project-form" style="display:none;padding:16px 20px;border-bottom:1px solid var(--g200)"><div class="field-row"><div class="field"><label>Yacht Name</label><input id="np-yacht" placeholder="e.g. B175"></div><div class="field"><label>Project No.</label><input id="np-proj" placeholder="B175-01"></div></div><div class="field-row"><div class="field"><label>Type</label><select id="np-type"><option>Sailing Yacht</option><option>Motor Yacht</option><option>Catamaran</option></select></div><div class="field"><label>Class Society</label><select id="np-cls"><option>DNV GL</option><option>RINA</option><option>Other</option></select></div><div class="field"><label>Flag (additional rule book)</label><select id="np-flag"><option value="">&mdash; none &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div></div><div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="createProjectFromHome()">Create Project</button></div></div><div id="home-proj-list" style="padding:14px 20px"></div></div>
   <div class="card" id="home-rules" style="margin-top:22px"></div>
 </main>
 </div>
@@ -471,14 +477,14 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
   <div class="card" style="margin-bottom:16px">
     <div class="card-hdr"><h2>Class societies in the Suite</h2></div>
     <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
-      Pick the society when you create a project. The calculation pages tag their outputs with that society&rsquo;s rule references (for example, bilge pipe sizing to RINA / DNV&#8209;GL).
+      Pick the society when you create a project. The calculation pages tag their outputs with that society&rsquo;s rule references (for example, bilge pipe sizing to RINA / DNV&#8209;GL). The Suite&rsquo;s calculations are currently <strong>reconciled against DNV&nbsp;GL and RINA</strong>:
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
         <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">DNV GL</span>
         <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">RINA</span>
-        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Bureau Veritas (BV)</span>
-        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">ABS</span>
-        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Lloyd&rsquo;s Register (LR)</span>
-        <span style="background:var(--g100);color:var(--g500);border:1px solid var(--g200);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Other</span>
+        <span style="background:var(--g100);color:var(--g500);border:1px solid var(--g200);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Other (record only &mdash; no society rules applied)</span>
+      </div>
+      <div style="margin-top:14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:10px 12px;font-size:13px;color:#92400e">
+        <strong>Not yet available:</strong> Bureau&nbsp;Veritas (BV), ABS and Lloyd&rsquo;s Register (LR). These rule sets have <strong>not been reconciled</strong> against the Suite&rsquo;s calculations yet, so they are not selectable when creating a project. They will be added once verified.
       </div>
     </div>
   </div>
@@ -529,6 +535,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div class="view" id="view-seawater"></div>
 <div class="view" id="view-water"></div>
 <div class="view" id="view-thruster"></div>
+<div class="view" id="view-summary"></div>
 
 <!-- ===== PROJECT MODAL ===== -->
 <div class="overlay" id="proj-overlay" onclick="closeProjModal()"></div>
@@ -578,7 +585,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.33 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.36 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -594,7 +601,7 @@ function f2(n){return Number(n).toFixed(2);}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
 /* ---------- Shared project + consumers ---------- */
-var PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:""},consumers:[]};
+var PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"DNV GL",date:""},consumers:[]};
 
 function loadActive(){
   try{var a=JSON.parse(localStorage.getItem("by_active")||"null");if(a)PROJECT=a;}catch(e){}
@@ -624,9 +631,135 @@ var ROUTES={
   water:{view:"view-water",crumb:[["Home","home"],["Systems","systems"],["Water & Waste Water",null]]},
   thruster:{view:"view-thruster",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Thruster",null]]},
   howto:{view:"view-howto",crumb:[["Home","home"],["How to use this app",null]]},
-  classflag:{view:"view-classflag",crumb:[["Home","home"],["Class & Flag",null]]}
+  classflag:{view:"view-classflag",crumb:[["Home","home"],["Class & Flag",null]]},
+  summary:{view:"view-summary",crumb:[["Home","home"],["Sammanställning",null]]}
 };
 function go(r){location.hash="#/"+r;}
+/* ---------- Overview exports: Excel + Word ---------- */
+function summaryData(){
+  ["mountAC","mountERV","mountBilge","mountSW","mountWater","mountThr","mountElec"].forEach(function(fn){try{if(typeof window[fn]==="function")window[fn]();}catch(e){}});
+  var m=(PROJECT&&PROJECT.meta)||{};
+  function txt(id){var e=el(id);return e?(e.textContent||"").trim():"";}
+  function kpis(id){var e=el(id); if(!e)return []; return Array.prototype.slice.call(e.querySelectorAll(".kpi")).map(function(k){
+    var l=k.querySelector(".kpi-l"),v=k.querySelector(".kpi-v"),u=k.querySelector(".kpi-u");
+    return {label:l?l.textContent.trim():"",value:v?v.textContent.trim():"",unit:u?u.textContent.trim():""};
+  });}
+  var discs=[
+    {name:"Air Conditioning",badge:txt("res-badge"),rows:kpis("kpi-row")},
+    {name:"Engine Room Ventilation",badge:txt("erv-badge"),rows:kpis("erv-kpi")},
+    {name:"Bilge",badge:txt("bil-badge"),rows:kpis("bil-kpi")},
+    {name:"Seawater Cooling",badge:txt("sw-badge"),rows:kpis("sw-kpi")},
+    {name:"Water & Waste Water",badge:txt("wat-badge"),rows:kpis("wat-kpi")},
+    {name:"Thruster",badge:txt("thr-badge"),rows:kpis("thr-kpi")},
+    {name:"Electrical Load Balance",badge:txt("elec-badge"),rows:kpis("elec-kpi")}
+  ];
+  if(PROJECT.elec&&PROJECT.elec.hv&&PROJECT.elec.hv.on) discs.push({name:"HV DC Bus",badge:"",rows:kpis("hv-kpi")});
+  return {meta:m,discs:discs,consumers:(PROJECT.consumers)||[],rules:((typeof activeRules==="function")?activeRules():[])};
+}
+function summaryExcel(){
+  if(!window.XLSX){alert("Excel library is still loading — try again in a moment (it loads from the web on first use).");return;}
+  var d=summaryData(), wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts — Project Overview"],
+    ["Yacht",d.meta.yacht||""],["Project no.",d.meta.proj||""],["Type",d.meta.type||""],
+    ["Class",d.meta.cls||""],["Flag",d.meta.flag||""],["Calculated by",d.meta.by||""],["Revision",d.meta.rev||""],[]];
+  d.discs.forEach(function(dc){
+    a.push([dc.name, dc.badge||""]);
+    a.push(["","Parameter","Value","Unit"]);
+    if(dc.rows.length) dc.rows.forEach(function(r){a.push(["",r.label,r.value,r.unit]);});
+    else a.push(["","(no data entered)","",""]);
+    a.push([]);
+  });
+  a.push([(typeof disclaimerLine==="function")?disclaimerLine():""]);
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(a), "Overview");
+  var c=[["Source","Consumer","Bus","Qty","kW each","Installed kW"]];
+  d.consumers.forEach(function(x){c.push([x.source||"",x.name||"",x.bus||"",(+x.pcs||0),(+x.kw||0),(+x.pcs||0)*(+x.kw||0)]);});
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(c), "Consumers");
+  var r=[["Code","Requirement","Source"]];
+  d.rules.forEach(function(x){r.push([x.code||"",x.req||"",x.src||""]);});
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(r), "Rules");
+  var fn="Baltic_Overview_"+((d.meta.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
+  try{XLSX.writeFile(wb,fn);}catch(e){var o=XLSX.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
+}
+function summaryWord(){
+  var d=summaryData();
+  function E(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Baltic Overview</title>";
+  h+="<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a2744}h1{font-size:18pt}h2{font-size:13pt;color:#1a2744;border-bottom:1px solid #c9a96e;padding-bottom:3px;margin-top:18px}table{border-collapse:collapse;width:100%;margin:6px 0}td,th{border:1px solid #ccc;padding:4px 7px;font-size:10pt;text-align:left}th{background:#1a2744;color:#fff}.muted{color:#666;font-size:8pt}</style></head><body>";
+  h+="<h1>Baltic Yachts &ndash; Project Overview</h1>";
+  h+="<table><tr><th>Yacht</th><td>"+E(d.meta.yacht)+"</td><th>Project</th><td>"+E(d.meta.proj)+"</td></tr>"+
+     "<tr><th>Type</th><td>"+E(d.meta.type)+"</td><th>Class</th><td>"+E(d.meta.cls)+"</td></tr>"+
+     "<tr><th>Flag</th><td>"+E(d.meta.flag)+"</td><th>By</th><td>"+E(d.meta.by)+"</td></tr>"+
+     "<tr><th>Revision</th><td>"+E(d.meta.rev)+"</td><th>Date</th><td>"+E(d.meta.date||"")+"</td></tr></table>";
+  d.discs.forEach(function(dc){
+    h+="<h2>"+E(dc.name)+(dc.badge?(" &mdash; "+E(dc.badge)):"")+"</h2>";
+    if(dc.rows.length){ h+="<table><tr><th>Parameter</th><th>Value</th><th>Unit</th></tr>";
+      dc.rows.forEach(function(r){h+="<tr><td>"+E(r.label)+"</td><td>"+E(r.value)+"</td><td>"+E(r.unit)+"</td></tr>";});
+      h+="</table>";
+    } else h+="<p class='muted'>No data entered.</p>";
+  });
+  if(d.consumers.length){
+    h+="<h2>Electrical consumers ("+d.consumers.length+")</h2><table><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>Qty</th><th>kW each</th><th>Installed kW</th></tr>";
+    d.consumers.forEach(function(x){h+="<tr><td>"+E(x.source)+"</td><td>"+E(x.name)+"</td><td>"+E(x.bus)+"</td><td>"+(+x.pcs||0)+"</td><td>"+(+x.kw||0)+"</td><td>"+((+x.pcs||0)*(+x.kw||0)).toFixed(2)+"</td></tr>";});
+    h+="</table>";
+  }
+  if(d.rules.length){
+    h+="<h2>Class &amp; Flag rules ("+E(d.meta.cls||"")+" / "+E(d.meta.flag||"")+")</h2><table><tr><th>Code</th><th>Requirement</th><th>Source</th></tr>";
+    d.rules.forEach(function(x){h+="<tr><td>"+E(x.code)+"</td><td>"+E(x.req)+"</td><td>"+E(x.src)+"</td></tr>";});
+    h+="</table>";
+  }
+  h+="<p class='muted'>"+E((typeof disclaimerLine==="function")?disclaimerLine():"")+"<br>Created by Mikael Strengell, Head of Engineering, Baltic Yachts.</p></body></html>";
+  var fn="Baltic_Overview_"+((d.meta.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".doc";
+  safeDL(new Blob(["﻿"+h],{type:"application/msword"}), fn);
+}
+
+/* ---------- Sammanställning / Project Overview ---------- */
+function renderSummary(){
+  var box=el("view-summary"); if(!box) return;
+  ["mountAC","mountERV","mountBilge","mountSW","mountWater","mountThr","mountElec"].forEach(function(fn){try{if(typeof window[fn]==="function")window[fn]();}catch(e){}});
+  var m=(PROJECT&&PROJECT.meta)||{};
+  function g(id){var e=el(id);return e?e.innerHTML:"";}
+  function bdg(id){var e=el(id);var v=e?(e.textContent||"").trim():"";return (v&&v!=="-"&&v!=="—")?v:"";}
+  function kprow(h){return h?("<div class='kpi-row' style='padding:14px 20px'>"+h+"</div>"):"<div style='padding:12px 20px;font-size:13px;color:var(--g500)'>No inputs yet — open the page to enter data.</div>";}
+  function mi(l,v){return "<div><div style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+l+"</div><div style='font-size:14px;color:var(--text);font-weight:600;padding:3px 0'>"+(v?esc(String(v)):"—")+"</div></div>";}
+  function disc(title,badge,kpiId,link,extra){
+    return "<div class='card' style='margin-bottom:14px'>"+
+      "<div class='card-hdr'><h2>"+title+"</h2><div style='display:flex;gap:8px;align-items:center'>"+(badge?("<span class='badge badge-gold'>"+esc(badge)+"</span>"):"<span class='pill p-dim'>not set</span>")+"<button class='btn btn-line btn-xs no-print' onclick=\"go('"+link+"')\">Open →</button></div></div>"+
+      (extra||"")+kprow(g(kpiId))+
+    "</div>";
+  }
+  var hdr="<div class='card' style='margin-bottom:14px'><div class='card-hdr'><h2>"+(m.yacht?("⚓ "+esc(m.yacht)):"Project overview")+"</h2><div style='display:flex;gap:6px' class='no-print'><button class='btn btn-line btn-sm' onclick='summaryExcel()'>&#11015; Excel</button><button class='btn btn-line btn-sm' onclick='summaryWord()'>&#11015; Word</button><button class='btn btn-gold btn-sm' onclick='window.print()'>&#128438; Print / PDF</button></div></div>"+
+    "<div style='padding:14px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px'>"+
+    mi("Project no.",m.proj)+mi("Type",m.type)+mi("Class",m.cls)+mi("Flag",m.flag)+mi("Calculated by",m.by)+mi("Revision",m.rev)+
+    "</div></div>";
+  var acExtra="";
+  try{ if(typeof S!=="undefined"){ acExtra="<div style='padding:12px 20px 0;font-size:12px;color:var(--g500)'>Supplier <strong style='color:var(--navy)'>"+esc((typeof SUPS!=="undefined"&&SUPS[S.sup]&&SUPS[S.sup].n)||S.sup||"—")+"</strong> &middot; "+(S.cabins?S.cabins.length:0)+" spaces &middot; FAMU "+(S.famu?"on":"off")+"</div>"; } }catch(e){}
+  var html=hdr+
+    disc("Air Conditioning",bdg("res-badge"),"kpi-row","ac",acExtra)+
+    disc("Engine Room Ventilation",bdg("erv-badge"),"erv-kpi","ervent")+
+    disc("Bilge",bdg("bil-badge"),"bil-kpi","bilge")+
+    disc("Seawater Cooling",bdg("sw-badge"),"sw-kpi","seawater")+
+    disc("Water & Waste Water",bdg("wat-badge"),"wat-kpi","water")+
+    disc("Thruster",bdg("thr-badge"),"thr-kpi","thruster")+
+    disc("Electrical Load Balance",bdg("elec-badge"),"elec-kpi","electrical","");
+  if(PROJECT.elec&&PROJECT.elec.hv&&PROJECT.elec.hv.on){ html+="<div class='card' style='margin-bottom:14px'><div class='card-hdr'><h2>HV DC Bus</h2><button class='btn btn-line btn-xs no-print' onclick=\"go('electrical')\">Open →</button></div>"+kprow(g("hv-kpi"))+"</div>"; }
+  var cs=(PROJECT.consumers)||[];
+  if(cs.length){
+    var tot=0; cs.forEach(function(c){tot+=(+c.pcs||0)*(+c.kw||0);});
+    html+="<div class='card' style='margin-bottom:14px'><div class='card-hdr'><h2>Electrical consumers ("+cs.length+")</h2><span class='badge badge-gold'>"+f1(tot)+" kW installed</span></div><div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>Qty</th><th>kW ea</th><th>Installed</th></tr></thead><tbody>"+
+      cs.map(function(c){return "<tr><td style='color:var(--g500)'>"+esc(c.source||"")+"</td><td>"+esc(c.name||"")+"</td><td>"+esc(c.bus||"")+"</td><td>"+(c.pcs||0)+"</td><td>"+(c.kw||0)+"</td><td>"+f2((+c.pcs||0)*(+c.kw||0))+"</td></tr>";}).join("")+
+      "</tbody></table></div></div>";
+  }
+  try{ var rs=(typeof activeRules==="function")?activeRules():[];
+    if(rs.length){ html+="<div class='card' style='margin-bottom:14px'><div class='card-hdr'><h2>Class &amp; Flag rules</h2><span class='pill p-dim'>"+esc(m.cls||"—")+" / "+esc(m.flag||"—")+"</span></div><div style='padding:8px 20px 16px'>"+
+      rs.map(function(r){return "<div style='padding:5px 0;border-bottom:1px solid var(--g100);font-size:13px'><strong>"+esc(r.code)+"</strong> — "+esc(r.req)+" <span style='color:var(--g500);font-size:11px'>("+esc(r.src)+")</span></div>";}).join("")+
+      "</div></div>"; }
+  }catch(e){}
+  html+="<div style='font-size:11px;color:var(--g500);padding:4px 4px 14px'>Preliminary estimates &mdash; verify against class, flag and manufacturer documentation before use. Created by Mikael Strengell, Head of Engineering, Baltic Yachts.</div>";
+  box.innerHTML="<main>"+
+    "<div class='page-head'><div><h2>Sammanställning &mdash; Project Overview</h2><p>Everything selected for the active project, gathered into one page. Use Print / PDF to export it.</p></div></div>"+
+    html+"</main>";
+}
+
 function renderRoute(){
   var r=(location.hash||"#/home").replace("#/","")||"home";
   if(!ROUTES[r])r="home";
@@ -649,6 +782,7 @@ function renderRoute(){
   if(r==="water"){mountWater();}
   if(r==="thruster"){mountThr();}
   if(r==="electrical"){mountElec();}
+  if(r==="summary"){renderSummary();}
   if(r==="home"){if(typeof renderHomeProjects==="function")renderHomeProjects();if(typeof renderHomeRules==="function")renderHomeRules();}
   window.scrollTo(0,0);
 }
@@ -2740,7 +2874,7 @@ var RULES_DB={
       {sys:"seawater",code:"DNV-RU-HSLC Pt.4 Ch.6",req:"Sea-inlet & cooling piping per class; pipe wall/velocity limits apply"}
     ],
     "RINA":[ {sys:"bilge",code:"RINA Rules Pt C",req:"Bilge main dia per RINA (≈ IACS d = 25 + 1.68·√(L(B+D)))"} ],
-    "Bureau Veritas (BV)":[], "ABS":[], "Other":[]
+    "Other":[]
   },
   flag:{
     "REG":[
@@ -2950,7 +3084,7 @@ function renderHomeProjects(){
   }).join("");
 }
 function classOptionsHTML(sel){
-  return ["DNV GL","RINA","Bureau Veritas (BV)","ABS","Other"].map(function(c){return "<option"+(c===sel?" selected":"")+">"+c+"</option>";}).join("");
+  return ["DNV GL","RINA","Other"].map(function(c){return "<option"+(c===sel?" selected":"")+">"+c+"</option>";}).join("");
 }
 function flagOptionsHTML(sel){
   var h="<option value=''>— none —</option><optgroup label='Red Ensign Group'>";
