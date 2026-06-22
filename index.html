@@ -328,10 +328,10 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
       <div class="t-ic">&#129517;</div>
       <div><h3>Thruster</h3><p>Bow / stern thruster sizing &amp; power</p><div class="ref">Wind + accel balance</div></div>
     </div>
-    <div class="tile" onclick="window.open('https://balticyachts-my.sharepoint.com/personal/mikael_strengell_balticyachts_fi/_layouts/15/Doc.aspx?sourcedoc=%7BE7D4B8E7-1A7D-46EE-BE0D-60EEACADF937%7D&file=Propeller%20calculation.xlsm&action=default&mobileredirect=true','_blank')">
-      <span class="tag tag-soon">Soon</span>
+    <div class="tile" onclick="go('propeller')">
+      <span class="tag tag-live">Live</span>
       <div class="t-ic">&#9763;</div>
-      <div><h3>Propeller</h3><p>Propeller sizing (displacement / planing)</p><div class="ref">Open workbook &#8594;</div></div>
+      <div><h3>Propeller</h3><p>Resistance, prop matching, speed &amp; fuel</p><div class="ref">Delft / Froude + open-water</div></div>
     </div>
   </div>
 </main>
@@ -342,6 +342,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 
 <!-- ===== VIEW: INTERIOR ===== -->
 <div class="view" id="view-interior"></div>
+
+<!-- ===== VIEW: PROPELLER ===== -->
+<div class="view" id="view-propeller"></div>
 
 <!-- ===== VIEW: MECHANICAL ===== -->
 <div class="view" id="view-mechanical"><main>
@@ -434,9 +437,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
         <li><strong>Preliminary estimates only.</strong> Results, equipment selections and rule compliance must be
         independently checked by a qualified engineer against the applicable class society, flag administration and
         manufacturer documentation before use.</li>
-        <li><strong>Not every discipline is built yet.</strong> Interior now includes a joinery &amp; furnishing
-        weight schedule with LCG; Mechanical (steering, hydraulics, deck machinery) is still a placeholder. The
-        Propeller calculation currently opens an external Excel workbook rather than running in-app.</li>
+        <li><strong>Not every discipline is built yet.</strong> Interior includes materials &amp; procurement plus a
+        weight schedule; Propeller now runs in-app (resistance + propulsion prediction). Mechanical (steering,
+        hydraulics, deck machinery) is still a placeholder.</li>
         <li><strong>The electrical supplier library is still being expanded.</strong> AC consumers feed the load
         balance automatically; charger / inverter / combi units, 24 V&ndash;48 V and high-voltage (800 V) battery
         options are being added.</li>
@@ -582,7 +585,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.48 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.49 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -627,6 +630,7 @@ var ROUTES={
   seawater:{view:"view-seawater",crumb:[["Home","home"],["Systems","systems"],["Seawater Cooling",null]]},
   water:{view:"view-water",crumb:[["Home","home"],["Systems","systems"],["Water & Waste Water",null]]},
   thruster:{view:"view-thruster",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Thruster",null]]},
+  propeller:{view:"view-propeller",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Propeller",null]]},
   howto:{view:"view-howto",crumb:[["Home","home"],["How to use this app",null]]},
   classflag:{view:"view-classflag",crumb:[["Home","home"],["Class & Flag",null]]},
   summary:{view:"view-summary",crumb:[["Home","home"],["Sammanställning",null]]}
@@ -1008,6 +1012,7 @@ function renderRoute(){
   if(r==="seawater"){mountSW();}
   if(r==="water"){mountWater();}
   if(r==="thruster"){mountThr();}
+  if(r==="propeller"){mountProp();}
   if(r==="electrical"){mountElec();}
   if(r==="interior"){mountInterior();}
   if(r==="summary"){renderSummary();}
@@ -4318,6 +4323,178 @@ function intMatExcel(){
   });
   var fn="Baltic_Interior_Materials_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
   try{XL.writeFile(wb,fn);}catch(e){var o=XL.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
+}
+
+/* ===================== PROPELLER — resistance + propulsion ===================== */
+/* Delft Systematic Yacht Hull Series residuary coefficients (Keuning & Sonnenberg), Fn 0.15–0.75 */
+var DELFT=[
+  [0.15,-0.0005,0.0023,-0.0086,-0.0015,0.0061,0.001,0.0001,0.0052],
+  [0.2,-0.0003,0.0059,-0.0064,0.007,0.0014,0.0013,0.0005,-0.002],
+  [0.25,-0.0002,-0.0156,0.0031,-0.0021,-0.007,0.0148,0.001,-0.0043],
+  [0.3,-0.0009,0.0016,0.0337,-0.0285,-0.0367,0.0218,0.0015,-0.0172],
+  [0.35,-0.0026,-0.0567,0.0446,-0.1091,-0.0707,0.0914,0.0021,-0.0078],
+  [0.4,-0.0064,-0.4034,-0.125,0.0273,-0.1341,0.3578,0.0045,0.1115],
+  [0.45,-0.0218,-0.5261,-0.2945,0.2485,-0.2428,0.6293,0.0081,0.2086],
+  [0.5,-0.0388,-0.5986,-0.3038,0.6033,-0.043,0.8332,0.0106,0.1336],
+  [0.55,-0.0347,-0.4764,-0.2361,0.8726,0.4219,0.899,0.0096,-0.2272],
+  [0.6,-0.0361,0.0037,-0.296,0.9661,0.6123,0.7534,0.01,-0.3352],
+  [0.65,0.0008,0.3728,-0.3667,1.3957,1.0343,0.323,0.0072,-0.463],
+  [0.7,0.0108,-0.1238,-0.2026,1.1282,1.1836,0.4973,0.0038,-0.4477],
+  [0.75,0.1023,0.7726,0.504,1.7867,2.1934,-1.5479,-0.0115,-0.0977]
+];
+var PROP_DEF={
+  lwl:36.288,bwl:2.198,tc:1.035,cp:0.616,lcb:20.994,lcf:19.883,disp:46130,awp:64.607,sc:102.084,cm:0.9934,ax:2.26,atr:0.507,kf:0.8417,resMethod:"froude",
+  vw:5,cd:0.667,af:43.356,
+  pmax:324,pavail:281.6,nm:3300,red:3,sfc:250,tank:2500,aux:30,mech:0.9,etaShaft:0.95,
+  d:0.813,p:0.65,nprop:1,w:0,t:0,etaB:0.62,
+  vmin:8,vmax:17
+};
+function propState(){
+  if(!PROJECT.prop)PROJECT.prop=JSON.parse(JSON.stringify(PROP_DEF));
+  for(var k in PROP_DEF){if(PROJECT.prop[k]===undefined)PROJECT.prop[k]=PROP_DEF[k];}
+  return PROJECT.prop;
+}
+function propSet(k,v){var s=propState();s[k]=(k==="resMethod")?v:(Number(v));if(isNaN(s[k])&&k!=="resMethod")s[k]=0;saveActive();propCalc();}
+function propVol(s){return (+s.disp||0)/1025;} /* displaced volume m³ */
+function delftRr(s,Fn){ /* residuary resistance kN via DSYHS polynomial, interpolated on Fn */
+  var vol=propVol(s),v13=Math.pow(vol,1/3),v23=Math.pow(vol,2/3),lwl=s.lwl;
+  function M(row){var a=row;
+    var t1=(a[2]*s.lcb/lwl + a[3]*s.cp + a[4]*v23/s.awp + a[5]*s.bwl/lwl)*v13/lwl;
+    var t2=(a[6]*s.lcb/s.lcf + a[7]*s.bwl/s.tc + a[8]*s.cm)*v13/lwl;
+    return a[1]+t1+t2;
+  }
+  var last=DELFT.length-1;
+  if(Fn<=DELFT[0][0]){return Math.max(0,M(DELFT[0]))*9.81*1025*vol/1000*(Fn/DELFT[0][0]);}
+  var lo=DELFT[last-1],hi=DELFT[last];
+  for(var i=0;i<last;i++){if(Fn>=DELFT[i][0]&&Fn<=DELFT[i+1][0]){lo=DELFT[i];hi=DELFT[i+1];break;}}
+  var fr=(Fn-lo[0])/(hi[0]-lo[0]);
+  var m=M(lo)+fr*(M(hi)-M(lo));
+  return m*9.81*1025*vol/1000;
+}
+function propRows(){
+  var s=propState(),rows=[],g=9.81,rho=1025,rhoA=1.29,A0=Math.PI*Math.pow(s.d,2)/4;
+  var vmin=Math.round(s.vmin||8),vmax=Math.round(s.vmax||17); if(vmax<vmin)vmax=vmin;
+  for(var vk=vmin;vk<=vmax;vk++){
+    var V=vk*1852/3600, Fn=V/Math.sqrt(g*s.lwl);
+    var Rn=V*s.lwl*0.7/1e-6, Cf=0.075/Math.pow(Math.log(Rn)/Math.LN10-2,2);
+    var RF=Cf*0.5*rho*V*V*s.sc*s.kf/1000;
+    var Rr=(s.resMethod==="delft")?delftRr(s,Fn):(0.00025*Fn*Math.pow(10,5.5*Fn))*g*s.disp*0.001;
+    var Ctr=0.3*Math.pow(s.atr/s.ax,1.5)/Math.pow(s.sc/s.ax,0.5);
+    var Rtr=Ctr*rho*V*V*0.5*s.ax/1000;
+    var Vapp=V+(+s.vw||0), Rwind=0.5*rhoA*(s.cd*s.af)*Vapp*Vapp/1000;
+    var Rt=RF+Rr+Rtr+Rwind;
+    var Va=V*(1-(+s.w||0)), Tn=Rt*1000/((1-(+s.t||0))*Math.max(1,s.nprop)); /* thrust per prop, N */
+    var PE=Rt*V; /* effective tow power kW */
+    var CT=Tn/(0.5*rho*A0*Math.max(0.01,Va*Va));
+    var etaI=2/(1+Math.sqrt(1+CT)); var etaO=etaI*s.etaB;
+    var PD=Tn*Va/1000/Math.max(0.05,etaO); /* delivered to prop, per prop kW */
+    var PBprop=PD/Math.max(0.5,s.etaShaft); /* shaft loss */
+    var PB=PBprop*s.nprop; /* total propulsion brake kW */
+    /* engine matching: propeller cube law for rpm vs power */
+    var frac=s.pmax>0?Math.min(1,Math.pow(Math.max(0,PB)/s.pmax,1/3)):0;
+    var rpmEng=s.nm*frac, rpmProp=rpmEng/Math.max(0.1,s.red), nrev=rpmProp/60;
+    var slip=(s.p*nrev>0)?(1-V/(s.p*nrev))*100:0;
+    var tip=Math.PI*s.d*nrev;
+    var brakeTot=PB+(+s.aux||0)/Math.max(0.5,s.mech); /* incl auxiliaries on the engine */
+    var fuel=(s.sfc*0.001*( (+s.aux||0) + PB/Math.max(0.5,s.mech) ))/0.87;
+    var range=fuel>0?(s.tank/fuel)*vk:0;
+    rows.push({vk:vk,Fn:Fn,RF:RF,Rr:Rr,Rtr:Rtr,Rw:Rwind,Rt:Rt,PE:PE,PB:PB,etaO:etaO,Tkn:Tn/1000,rpmEng:rpmEng,rpmProp:rpmProp,slip:slip,tip:tip,fuel:fuel,range:range});
+  }
+  return rows;
+}
+function propMaxSpeed(rows,s){
+  /* speed where required brake power meets available engine power */
+  var lim=s.pavail||s.pmax;
+  for(var i=0;i<rows.length;i++){ if(rows[i].PB>=lim){ if(i===0)return rows[0].vk; var a=rows[i-1],b=rows[i]; var f=(lim-a.PB)/Math.max(1e-6,(b.PB-a.PB)); return a.vk+f*(b.vk-a.vk); } }
+  return rows.length?rows[rows.length-1].vk:0;
+}
+function mountProp(){ el("view-propeller").innerHTML=propHTML(); propFill(); propCalc(); }
+function pf(pfx,k,label,unit,w){ return "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g500)'>"+label+"</label><div style='display:flex;align-items:center;gap:6px'><input id='"+pfx+"-"+k+"' type='number' step='any' oninput=\"propSet('"+k+"',this.value)\" style='width:"+(w||72)+"px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>"; }
+function propHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Propeller &amp; Propulsion</h2><p>Hull resistance, propeller open-water matching and engine power across the speed range &mdash; predicted boat speed, RPM, thrust, slip, fuel &amp; range.</p>"+
+     "<p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:880px;line-height:1.55'><strong style='color:var(--navy)'>Method:</strong> resistance = ITTC-57 friction + residuary (Froude exponential, or Delft Systematic Yacht Hull Series) + transom + aerodynamic windage. The propeller is matched by actuator-disk open-water efficiency with a blade factor; engine RPM follows the propeller cube law and the operating speed is where required brake power meets the available engine power. Preliminary &mdash; verify against sea-trial and the manufacturer propeller (B-series / brand) data.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='propExcel()'>&#11015; Excel</button></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Hull</h2><span style='font-size:12px;color:var(--g500)' class='no-print'>residuary method:&nbsp;<select id='prop-resMethod' onchange=\"propSet('resMethod',this.value)\" style='padding:4px 6px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px'><option value='froude'>Froude exponential</option><option value='delft'>Delft DSYHS</option></select></span></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","lwl","LWL","m")+pf("prop","bwl","BWL (canoe)","m")+pf("prop","tc","Tc canoe draft","m")+pf("prop","cp","Cp","")+pf("prop","cm","Cm","")+pf("prop","lcb","LCB","m")+pf("prop","lcf","LCF","m")+pf("prop","disp","Displacement","kg",90)+pf("prop","awp","Awp","m²")+pf("prop","sc","Wetted Sc","m²")+pf("prop","ax","Ax midship","m²")+pf("prop","atr","Atr transom","m²")+pf("prop","kf","Friction factor","")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Windage</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","vw","Head wind","m/s")+pf("prop","af","Frontal area","m²")+pf("prop","cd","Cd","")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Engine &amp; drivetrain</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","pmax","Max power","kW")+pf("prop","pavail","Available power","kW")+pf("prop","nm","Engine speed","rpm",80)+pf("prop","red","Reduction","×")+pf("prop","sfc","SFC","g/kWh")+pf("prop","mech","Mech. eff.","")+pf("prop","etaShaft","Shaft eff.","")+pf("prop","aux","Aux load","kW")+pf("prop","tank","Fuel tank","L",80)+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Propeller</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","d","Diameter","m")+pf("prop","p","Pitch","m")+pf("prop","nprop","No. of props","×")+pf("prop","w","Wake w","")+pf("prop","t","Thrust ded. t","")+pf("prop","etaB","Blade factor","")+pf("prop","vmin","Speed from","kn",56)+pf("prop","vmax","Speed to","kn",56)+"</div></div>"+
+
+   "<div class='card' id='prop-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Propulsion Prediction</h2><span class='badge badge-gold' id='prop-badge'>-</span></div>"+
+     "<div class='kpi-row' id='prop-kpi'></div>"+
+     "<div id='prop-charts' style='display:flex;gap:18px;flex-wrap:wrap;padding:8px 20px'></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>kn</th><th>Fn</th><th>R<sub>F</sub> kN</th><th>R<sub>r</sub> kN</th><th>Wind kN</th><th>R<sub>tot</sub> kN</th><th>Thrust kN</th><th>Eff. P kW</th><th>Brake kW</th><th>Prop rpm</th><th>Eng rpm</th><th>Slip %</th><th>η<sub>o</sub></th><th>Tip m/s</th><th>Fuel L/h</th><th>Range NM</th></tr></thead><tbody id='prop-body'></tbody></table></div>"+
+     "<div id='prop-checks' style='padding:14px 20px'></div>"+
+   "</div></main>";
+}
+function propFill(){var s=propState();for(var k in PROP_DEF){var e=el("prop-"+k);if(e){if(k==="resMethod")e.value=s[k];else e.value=s[k];}}}
+function propSvgLine(series,opts){
+  opts=opts||{}; var W=opts.w||360,H=opts.h||190,pad=34;
+  var xs=series[0].pts.map(function(p){return p.x;}); var allY=[]; series.forEach(function(se){se.pts.forEach(function(p){allY.push(p.y);});});
+  var xmin=Math.min.apply(null,xs),xmax=Math.max.apply(null,xs),ymin=0,ymax=Math.max.apply(null,allY)*1.08||1;
+  function X(x){return pad+(x-xmin)/((xmax-xmin)||1)*(W-pad-8);}
+  function Y(y){return H-pad-(y-ymin)/((ymax-ymin)||1)*(H-pad-12);}
+  var g="<svg width='"+W+"' height='"+H+"' style='background:#fff;border:1px solid var(--g200);border-radius:8px'>";
+  // axes
+  g+="<line x1='"+pad+"' y1='"+(H-pad)+"' x2='"+(W-6)+"' y2='"+(H-pad)+"' stroke='#cbd2dc'/><line x1='"+pad+"' y1='12' x2='"+pad+"' y2='"+(H-pad)+"' stroke='#cbd2dc'/>";
+  // x labels
+  for(var xv=Math.ceil(xmin);xv<=xmax;xv+=Math.max(1,Math.round((xmax-xmin)/6))){g+="<text x='"+X(xv)+"' y='"+(H-pad+12)+"' font-size='9' fill='#6b7280' text-anchor='middle'>"+xv+"</text>";}
+  g+="<text x='"+(W/2)+"' y='"+(H-4)+"' font-size='9' fill='#6b7280' text-anchor='middle'>"+(opts.xlabel||"knots")+"</text>";
+  g+="<text x='"+X(xmax)+"' y='10' font-size='10' fill='#1a2744' text-anchor='end' font-weight='700'>"+(opts.title||"")+"</text>";
+  series.forEach(function(se){
+    var d=se.pts.map(function(p,i){return (i?"L":"M")+X(p.x).toFixed(1)+" "+Y(p.y).toFixed(1);}).join(" ");
+    g+="<path d='"+d+"' fill='none' stroke='"+se.color+"' stroke-width='2'/>";
+  });
+  // legend
+  var lx=pad+6,ly=18; series.forEach(function(se,i){g+="<rect x='"+lx+"' y='"+(ly+i*13-8)+"' width='9' height='9' fill='"+se.color+"'/><text x='"+(lx+13)+"' y='"+(ly+i*13)+"' font-size='9' fill='#22272f'>"+se.name+"</text>";});
+  if(opts.hline!=null){g+="<line x1='"+pad+"' y1='"+Y(opts.hline)+"' x2='"+(W-6)+"' y2='"+Y(opts.hline)+"' stroke='#c0392b' stroke-width='1.2' stroke-dasharray='4 3'/>";}
+  g+="</svg>"; return g;
+}
+function propCalc(){
+  if(!el("prop-results"))return;
+  var s=propState(), rows=propRows();
+  var vmax=propMaxSpeed(rows,s);
+  var lim=s.pavail||s.pmax;
+  el("prop-badge").textContent=f1(vmax)+" kn max";
+  // cruise = ~0.85 of max, nearest row
+  var cruiseV=Math.round(vmax*0.9), cr=null; rows.forEach(function(r){if(r.vk<=cruiseV)cr=r;}); if(!cr)cr=rows[0];
+  var rpmAtMax=null; rows.forEach(function(r){if(r.vk<=vmax)rpmAtMax=r.rpmEng;});
+  el("prop-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Max speed</div><div class='kpi-v'>"+f1(vmax)+"</div><div class='kpi-u'>kn @ "+f0(lim)+" kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Engine rpm @ max</div><div class='kpi-v'>"+f0(rpmAtMax||0)+"</div><div class='kpi-u'>of "+f0(s.nm)+"</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Resistance @ max</div><div class='kpi-v'>"+f1(rows.length?rows[rows.length-1].Rt:0)+"</div><div class='kpi-u'>kN @ "+rows[rows.length-1].vk+" kn</div></div>"+
+    (cr?("<div class='kpi'><div class='kpi-l'>Cruise "+cr.vk+" kn</div><div class='kpi-v'>"+f1(cr.fuel)+"</div><div class='kpi-u'>L/h · "+f0(cr.range)+" NM</div></div>"):"")+
+    (cr?("<div class='kpi'><div class='kpi-l'>Prop eff @ "+cr.vk+" kn</div><div class='kpi-v'>"+f2(cr.etaO)+"</div><div class='kpi-u'>η open-water</div></div>"):"");
+  // charts
+  var cR={name:"Resistance kN",color:"#1a2744",pts:rows.map(function(r){return {x:r.vk,y:r.Rt};})};
+  var cP={name:"Brake kW",color:"#c9a96e",pts:rows.map(function(r){return {x:r.vk,y:r.PB};})};
+  var cE={name:"Eng rpm",color:"#2f8f7a",pts:rows.map(function(r){return {x:r.vk,y:r.rpmEng};})};
+  el("prop-charts").innerHTML=
+    propSvgLine([cR],{title:"Resistance",xlabel:"knots"})+
+    propSvgLine([cP],{title:"Brake power vs available",xlabel:"knots",hline:lim})+
+    propSvgLine([cE],{title:"Engine rpm",xlabel:"knots",hline:s.nm});
+  // table
+  el("prop-body").innerHTML=rows.map(function(r){
+    var over=r.PB>lim;
+    return "<tr"+(over?" style='background:#fdecec'":"")+"><td>"+r.vk+"</td><td>"+f2(r.Fn)+"</td><td>"+f2(r.RF)+"</td><td>"+f2(r.Rr)+"</td><td>"+f2(r.Rw)+"</td><td><strong>"+f2(r.Rt)+"</strong></td><td>"+f2(r.Tkn)+"</td><td>"+f1(r.PE)+"</td><td>"+f1(r.PB)+"</td><td>"+f0(r.rpmProp)+"</td><td>"+f0(r.rpmEng)+"</td><td>"+f1(r.slip)+"</td><td>"+f2(r.etaO)+"</td><td>"+f1(r.tip)+"</td><td>"+f1(r.fuel)+"</td><td>"+f0(r.range)+"</td></tr>";
+  }).join("");
+  el("prop-checks").innerHTML="<div style='font-size:11px;color:var(--g500);line-height:1.6'>Predicted max speed is where required brake power ("+f0(lim)+" kW available) is reached. Rows above the engine limit are shaded. Residuary method: <strong>"+(s.resMethod==="delft"?"Delft DSYHS polynomial":"Froude exponential (workbook)")+"</strong>. Open-water efficiency uses an actuator-disk ideal with blade factor "+f2(s.etaB)+"; tune it to your propeller's measured open-water curve. Tip speed should stay below ~"+ "45–50 m/s to limit cavitation/noise.</div>";
+}
+function propExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=propState(),rows=propRows(),m=PROJECT.meta||{},wb=XLSX.utils.book_new(),vmax=propMaxSpeed(rows,s);
+  var a=[["Baltic Yachts - Propeller & Propulsion"],["Yacht",m.yacht,"Project",m.proj],["Predicted max speed",+vmax.toFixed(2),"kn"],["Residuary method",s.resMethod],[],
+    ["Knots","Fn","RF kN","Rr kN","Transom kN","Wind kN","Rtot kN","Thrust kN","Effective kW","Brake kW","Prop rpm","Eng rpm","Slip %","Eta_o","Tip m/s","Fuel L/h","Range NM"]];
+  rows.forEach(function(r){a.push([r.vk,+r.Fn.toFixed(3),+r.RF.toFixed(2),+r.Rr.toFixed(2),+r.Rtr.toFixed(2),+r.Rw.toFixed(2),+r.Rt.toFixed(2),+r.Tkn.toFixed(2),+r.PE.toFixed(1),+r.PB.toFixed(1),+r.rpmProp.toFixed(0),+r.rpmEng.toFixed(0),+r.slip.toFixed(1),+r.etaO.toFixed(3),+r.tip.toFixed(1),+r.fuel.toFixed(1),+r.range.toFixed(0)]);});
+  a.push([],[disclaimerLine()]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Propulsion");
+  var fn="Baltic_Propeller_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
+  try{XLSX.writeFile(wb,fn);}catch(e){var o=XLSX.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
 }
 
 /* ---------- PWA ---------- */
