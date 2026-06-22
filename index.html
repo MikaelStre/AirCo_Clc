@@ -585,7 +585,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.49 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.50 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -4342,16 +4342,107 @@ var DELFT=[
   [0.7,0.0108,-0.1238,-0.2026,1.1282,1.1836,0.4973,0.0038,-0.4477],
   [0.75,0.1023,0.7726,0.504,1.7867,2.1934,-1.5479,-0.0115,-0.0977]
 ];
+/* Engine library (power kW vs rpm) — from the workbook Engines sheet */
+var PROP_ENGINES=[
+  {n:"Yanmar 4JHA-TE 55.2 kW",nm:3200,pmax:55.2,curve:[[1200,18],[1600,32],[2000,44],[2600,52.7],[3000,55.1],[3200,55.2]]},
+  {n:"Yanmar 4JH80 58.8 kW",nm:3200,pmax:58.8,curve:[[800,12],[1200,21],[1600,37],[2000,47],[2600,57],[3000,58.7],[3200,58.8]]},
+  {n:"Yanmar 6LP-STP2 225 kW",nm:3800,pmax:225,curve:[[1600,63],[1800,87],[2000,125],[2200,160],[2400,180],[2600,192],[2800,202],[3000,210],[3400,220],[3800,225]]},
+  {n:"Yanmar 6LY400 294 kW",nm:3300,pmax:294,curve:[[1400,80],[1800,160],[2200,260],[2600,293],[3000,294],[3300,294]]},
+  {n:"Yanmar 6LY400 324 kW",nm:3300,pmax:324,curve:[[1400,80],[1800,160],[2200,280],[2600,320],[3000,323],[3300,324]]},
+  {n:"Cummins QSB5.9 261 kW",nm:2800,pmax:261,curve:[[1000,59],[1200,81],[1400,112],[1600,156],[1800,212],[2000,242],[2200,254],[2400,258],[2600,260],[2800,261]]},
+  {n:"Cummins QSB6.7 280 kW",nm:3000,pmax:280,curve:[[800,45],[1000,65],[1200,92],[1400,124],[1600,167],[1800,220],[2000,269],[2400,278],[2700,279],[3000,280]]},
+  {n:"Cummins QSL9-405 HO 298 kW",nm:2100,pmax:298,curve:[[800,59],[1000,106],[1100,143],[1200,184],[1300,215],[1400,237],[1600,268],[1700,278],[1900,293],[2100,298]]},
+  {n:"Cummins QSB6.7 425ID 313 kW",nm:3000,pmax:313,curve:[[800,45],[1000,65],[1200,92],[1400,124],[1600,167],[1800,223],[2000,296],[2400,309],[2700,311],[3000,313]]},
+  {n:"Cummins QSL8.9 404ID 302 kW",nm:2175,pmax:302,curve:[[600,33],[900,79],[1100,135],[1300,196],[1500,244],[1700,269],[1900,287],[2099,302],[2175,302]]},
+  {n:"CAT 7.1 D Rating 317 kW",nm:2700,pmax:317,curve:[[600,34],[1000,70],[1400,136],[1800,255],[2200,310],[2400,317],[2600,317],[2700,317]]},
+  {n:"CAT 7.1 E-Rating 373 kW",nm:2900,pmax:373,curve:[[600,23],[1200,88],[1600,195],[1900,264],[2500,364],[2700,373],[2900,373]]},
+  {n:"CAT C8.7 C-Rating 368 kW",nm:2300,pmax:368,curve:[[700,45],[950,100],[1300,250],[1500,305],[2000,360],[2300,368]]},
+  {n:"CAT C8.7 E-Rating 478 kW",nm:2300,pmax:478,curve:[[700,55],[950,109],[1300,306],[1500,366],[2000,470],[2100,477],[2300,478]]},
+  {n:"CAT C9 ACERT D 375 kW",nm:2500,pmax:375,curve:[[800,67],[1000,100],[1300,166],[1600,322],[1700,350],[1900,370],[2100,375],[2500,375]]},
+  {n:"CAT C9 ACERT E 423 kW",nm:2500,pmax:423,curve:[[700,55],[900,83],[1300,176],[1600,345],[1700,381],[1900,415],[2100,421],[2500,423]]},
+  {n:"CAT C9.3 B Rating 280 kW",nm:1800,pmax:280,curve:[[700,40],[900,70],[1200,168],[1400,238],[1600,277],[1800,280]]}
+];
+/* Propeller type catalogue — from the workbook Prop Info sheet (bn=blades, bar=A/Ao %, dD=hub/D, dv=velocity factor %) */
+var PROP_CAT=[
+  {t:"Manual input",bn:4,bar:45.8,dD:0.244,dv:66.9},
+  {t:"Hundested VPS & PC",bn:4,bar:65.0,dD:0.274,dv:66.8},
+  {t:"Hundested CP",bn:4,bar:61.8,dD:0.323,dv:71.2},
+  {t:"Hundested CP VP4",bn:4,bar:53.9,dD:0.289,dv:70.7},
+  {t:"Hundested CP VP5",bn:4,bar:54.2,dD:0.322,dv:71.5},
+  {t:"Bruntons Varifold 3B",bn:3,bar:32.0,dD:0.272,dv:64.6},
+  {t:"Bruntons CPP 4B",bn:4,bar:42.5,dD:0.27,dv:68.7},
+  {t:"SPW Varifold 3B",bn:3,bar:30.5,dD:0.273,dv:67.0},
+  {t:"SPW Varifold 4B",bn:4,bar:45.8,dD:0.244,dv:66.9},
+  {t:"SPW Variprop XLS",bn:4,bar:47.6,dD:0.259,dv:63.3},
+  {t:"SPW Variprop GP 2B",bn:2,bar:22.8,dD:0.244,dv:65.6},
+  {t:"SPW Variprop GP 3B",bn:3,bar:38.5,dD:0.201,dv:63.7},
+  {t:"SPW Variprop GP 4B",bn:4,bar:51.2,dD:0.201,dv:63.7},
+  {t:"Max-Prop feathering 2B",bn:2,bar:25.4,dD:0.164,dv:58.9},
+  {t:"Max-Prop feathering 3B",bn:3,bar:37.4,dD:0.174,dv:58.4},
+  {t:"Max-Prop feathering 4B",bn:4,bar:43.1,dD:0.29,dv:63.6},
+  {t:"Max-Prop feathering 5B",bn:5,bar:50.7,dD:0.19,dv:60.8},
+  {t:"Volvo folding 3B",bn:3,bar:33.9,dD:0.229,dv:64.9},
+  {t:"Volvo folding 4B",bn:4,bar:39.8,dD:0.246,dv:64.9},
+  {t:"Gori folding 3B",bn:3,bar:27.8,dD:0.207,dv:67.4},
+  {t:"Oceanvolt ServoProp",bn:3,bar:23.0,dD:0.271,dv:63.0},
+  {t:"Veem Star Serie",bn:5,bar:73.0,dD:0.15,dv:65.7},
+  {t:"Veem Sportfish",bn:5,bar:66.7,dD:0.14,dv:64.9},
+  {t:"Veem Ultra Scew",bn:5,bar:102.6,dD:0.15,dv:66.8},
+  {t:"Servogear CP",bn:4,bar:41.7,dD:0.233,dv:66.1},
+  {t:"Luke feathering 3B",bn:3,bar:41.3,dD:0.269,dv:65.8},
+  {t:"Martec Folding 2B",bn:2,bar:18.4,dD:0.217,dv:61.8}
+];
+function propUserEngines(){try{return JSON.parse(localStorage.getItem("by_prop_engines")||"[]");}catch(e){return [];}}
+function propUserProps(){try{return JSON.parse(localStorage.getItem("by_prop_props")||"[]");}catch(e){return [];}}
+function propAllEngines(){return PROP_ENGINES.concat(propUserEngines());}
+function propAllProps(){return PROP_CAT.concat(propUserProps());}
+function propEngByName(n){var a=propAllEngines();for(var i=0;i<a.length;i++)if(a[i].n===n)return a[i];return null;}
+function propCatByName(t){var a=propAllProps();for(var i=0;i<a.length;i++)if(a[i].t===t)return a[i];return null;}
+function propSelEngine(n){var s=propState();s.engKey=n;var e=propEngByName(n);if(e){s.pmax=e.pmax;s.nm=e.nm;s.pavail=e.pmax;}saveActive();mountProp();}
+function propSelProp(t){var s=propState();s.propType=t;var p=propCatByName(t);if(p&&t!=="Manual input"){s.bn=p.bn;s.bar=p.bar;s.dD=p.dD;}saveActive();mountProp();}
+function propAddEngine(){
+  var nm=el("pae-name").value.trim(); if(!nm){alert("Enter an engine name.");return;}
+  var rpm=+el("pae-rpm").value||0, kw=+el("pae-kw").value||0;
+  if(rpm<=0||kw<=0){alert("Enter rated rpm and power.");return;}
+  var curve=[];
+  var raw=(el("pae-curve").value||"").trim();
+  if(raw){ raw.split(/\n/).forEach(function(ln){var p=ln.split(/[,\t; ]+/).filter(Boolean);if(p.length>=2){var r=+p[0],k=+p[1];if(r>0&&k>0)curve.push([r,k]);}}); }
+  if(curve.length<2){ /* synthesise a propeller-law-ish curve up to rated */
+    curve=[]; for(var i=1;i<=5;i++){var r=Math.round(rpm*i/5);curve.push([r,+(kw*Math.pow(i/5,2.7)).toFixed(1)]);}
+  }
+  curve.sort(function(a,b){return a[0]-b[0];});
+  var list=propUserEngines(); list.push({n:nm,nm:rpm,pmax:kw,curve:curve,user:true});
+  localStorage.setItem("by_prop_engines",JSON.stringify(list));
+  propSelEngine(nm);
+}
+function propAddProp(){
+  var t=el("pap-name").value.trim(); if(!t){alert("Enter a propeller name.");return;}
+  var bn=+el("pap-bn").value||3, bar=+el("pap-bar").value||0, dD=+el("pap-dD").value||0.2;
+  var list=propUserProps(); list.push({t:t,bn:bn,bar:bar,dD:dD,dv:null,user:true});
+  localStorage.setItem("by_prop_props",JSON.stringify(list));
+  propSelProp(t);
+}
+function propDelEngine(){var s=propState();var u=propUserEngines();var idx=-1;for(var i=0;i<u.length;i++)if(u[i].n===s.engKey)idx=i;if(idx<0){alert("Only your own added engines can be removed.");return;}if(!confirm("Remove engine \""+s.engKey+"\"?"))return;u.splice(idx,1);localStorage.setItem("by_prop_engines",JSON.stringify(u));s.engKey=PROP_ENGINES[4].n;propSelEngine(s.engKey);}
+function propDelProp(){var s=propState();var u=propUserProps();var idx=-1;for(var i=0;i<u.length;i++)if(u[i].t===s.propType)idx=i;if(idx<0){alert("Only your own added propellers can be removed.");return;}if(!confirm("Remove propeller \""+s.propType+"\"?"))return;u.splice(idx,1);localStorage.setItem("by_prop_props",JSON.stringify(u));s.propType="Manual input";propSelProp("Manual input");}
+function propToggleForm(id){var e=el(id);if(e)e.style.display=(e.style.display==="none"||!e.style.display)?"block":"none";}
+function propEngAvail(curve,rpm){ /* interpolate engine max power (kW) at rpm */
+  if(!curve||!curve.length)return 0;
+  if(rpm<=curve[0][0])return curve[0][1]*(rpm/curve[0][0]);
+  if(rpm>=curve[curve.length-1][0])return curve[curve.length-1][1];
+  for(var i=0;i<curve.length-1;i++){if(rpm>=curve[i][0]&&rpm<=curve[i+1][0]){var f=(rpm-curve[i][0])/(curve[i+1][0]-curve[i][0]);return curve[i][1]+f*(curve[i+1][1]-curve[i][1]);}}
+  return curve[curve.length-1][1];
+}
 var PROP_DEF={
   lwl:36.288,bwl:2.198,tc:1.035,cp:0.616,lcb:20.994,lcf:19.883,disp:46130,awp:64.607,sc:102.084,cm:0.9934,ax:2.26,atr:0.507,kf:0.8417,resMethod:"froude",
   vw:5,cd:0.667,af:43.356,
-  pmax:324,pavail:281.6,nm:3300,red:3,sfc:250,tank:2500,aux:30,mech:0.9,etaShaft:0.95,
-  d:0.813,p:0.65,nprop:1,w:0,t:0,etaB:0.62,
+  engKey:"Yanmar 6LY400 324 kW",pmax:324,pavail:324,nm:3300,red:3,sfc:250,tank:2500,aux:30,mech:0.9,etaShaft:0.95,
+  propType:"SPW Varifold 4B",d:0.813,p:0.65,nprop:1,w:0,t:0,etaB:0.62,bn:4,bar:45.8,dD:0.244,himm:1.0,
   vmin:8,vmax:17
 };
 function propState(){
   if(!PROJECT.prop)PROJECT.prop=JSON.parse(JSON.stringify(PROP_DEF));
   for(var k in PROP_DEF){if(PROJECT.prop[k]===undefined)PROJECT.prop[k]=PROP_DEF[k];}
+  var e=propEngByName(PROJECT.prop.engKey); PROJECT.prop.engCurve=e?e.curve:null;
   return PROJECT.prop;
 }
 function propSet(k,v){var s=propState();s[k]=(k==="resMethod")?v:(Number(v));if(isNaN(s[k])&&k!=="resMethod")s[k]=0;saveActive();propCalc();}
@@ -4391,99 +4482,152 @@ function propRows(){
     var PBprop=PD/Math.max(0.5,s.etaShaft); /* shaft loss */
     var PB=PBprop*s.nprop; /* total propulsion brake kW */
     /* engine matching: propeller cube law for rpm vs power */
-    var frac=s.pmax>0?Math.min(1,Math.pow(Math.max(0,PB)/s.pmax,1/3)):0;
+    var frac=s.pmax>0?Math.min(1.05,Math.pow(Math.max(0,PB)/s.pmax,1/3)):0;
     var rpmEng=s.nm*frac, rpmProp=rpmEng/Math.max(0.1,s.red), nrev=rpmProp/60;
     var slip=(s.p*nrev>0)?(1-V/(s.p*nrev))*100:0;
     var tip=Math.PI*s.d*nrev;
-    var brakeTot=PB+(+s.aux||0)/Math.max(0.5,s.mech); /* incl auxiliaries on the engine */
+    /* available engine power at this rpm (from the engine curve, else flat) */
+    var avail=s.engCurve?propEngAvail(s.engCurve,rpmEng):(s.pavail||s.pmax);
     var fuel=(s.sfc*0.001*( (+s.aux||0) + PB/Math.max(0.5,s.mech) ))/0.87;
     var range=fuel>0?(s.tank/fuel)*vk:0;
-    rows.push({vk:vk,Fn:Fn,RF:RF,Rr:Rr,Rtr:Rtr,Rw:Rwind,Rt:Rt,PE:PE,PB:PB,etaO:etaO,Tkn:Tn/1000,rpmEng:rpmEng,rpmProp:rpmProp,slip:slip,tip:tip,fuel:fuel,range:range});
+    /* Keller minimum blade-area ratio (cavitation) */
+    var p0=101325+rho*g*Math.max(0.1,s.himm), pv=1700, k=(s.nprop>1?0.0:0.1);
+    var barMin=(1.3+0.3*s.bn)*Tn/((p0-pv)*Math.pow(s.d,2))+k;
+    rows.push({vk:vk,Fn:Fn,RF:RF,Rr:Rr,Rtr:Rtr,Rw:Rwind,Rt:Rt,PE:PE,PB:PB,avail:avail,etaO:etaO,Tkn:Tn/1000,rpmEng:rpmEng,rpmProp:rpmProp,slip:slip,tip:tip,fuel:fuel,range:range,barMin:barMin*100});
   }
   return rows;
 }
 function propMaxSpeed(rows,s){
-  /* speed where required brake power meets available engine power */
-  var lim=s.pavail||s.pmax;
-  for(var i=0;i<rows.length;i++){ if(rows[i].PB>=lim){ if(i===0)return rows[0].vk; var a=rows[i-1],b=rows[i]; var f=(lim-a.PB)/Math.max(1e-6,(b.PB-a.PB)); return a.vk+f*(b.vk-a.vk); } }
+  /* speed where required brake power meets available engine power (curve) */
+  for(var i=0;i<rows.length;i++){ var lim=rows[i].avail; if(rows[i].PB>=lim){ if(i===0)return rows[0].vk; var a=rows[i-1],b=rows[i]; var f=(a.avail-a.PB)/Math.max(1e-6,((b.PB-a.PB)-(b.avail-a.avail))); return a.vk+f*(b.vk-a.vk); } }
   return rows.length?rows[rows.length-1].vk:0;
 }
 function mountProp(){ el("view-propeller").innerHTML=propHTML(); propFill(); propCalc(); }
 function pf(pfx,k,label,unit,w){ return "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g500)'>"+label+"</label><div style='display:flex;align-items:center;gap:6px'><input id='"+pfx+"-"+k+"' type='number' step='any' oninput=\"propSet('"+k+"',this.value)\" style='width:"+(w||72)+"px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>"; }
+function propEngSelHTML(s){return "<select id='prop-engKey' onchange='propSelEngine(this.value)' style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:230px'>"+propAllEngines().map(function(e){return "<option"+(e.n===s.engKey?" selected":"")+">"+esc(e.n)+(e.user?" *":"")+"</option>";}).join("")+"</select>";}
+function propTypeSelHTML(s){return "<select id='prop-propType' onchange='propSelProp(this.value)' style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:200px'>"+propAllProps().map(function(p){return "<option"+(p.t===s.propType?" selected":"")+">"+esc(p.t)+(p.user?" *":"")+"</option>";}).join("")+"</select>";}
 function propHTML(){
+  var s=propState();
   return "<main>"+
    "<div class='page-head'><div><h2>Propeller &amp; Propulsion</h2><p>Hull resistance, propeller open-water matching and engine power across the speed range &mdash; predicted boat speed, RPM, thrust, slip, fuel &amp; range.</p>"+
-     "<p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:880px;line-height:1.55'><strong style='color:var(--navy)'>Method:</strong> resistance = ITTC-57 friction + residuary (Froude exponential, or Delft Systematic Yacht Hull Series) + transom + aerodynamic windage. The propeller is matched by actuator-disk open-water efficiency with a blade factor; engine RPM follows the propeller cube law and the operating speed is where required brake power meets the available engine power. Preliminary &mdash; verify against sea-trial and the manufacturer propeller (B-series / brand) data.</p></div>"+
-     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='propExcel()'>&#11015; Excel</button></div></div>"+
+     "<p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:880px;line-height:1.55'><strong style='color:var(--navy)'>Method:</strong> resistance = ITTC-57 friction + residuary (Froude exponential, or Delft Systematic Yacht Hull Series) + transom + aerodynamic windage. The propeller is matched against the engine power curve (propeller cube law); blade-area is checked with Keller's cavitation criterion. Preliminary &mdash; verify against sea-trial and manufacturer propeller data.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='propWord()'>&#128462; Word</button><button class='btn btn-line btn-sm' onclick='propExcel()'>&#11015; Excel</button></div></div>"+
 
    "<div class='card'><div class='card-hdr'><h2>Hull</h2><span style='font-size:12px;color:var(--g500)' class='no-print'>residuary method:&nbsp;<select id='prop-resMethod' onchange=\"propSet('resMethod',this.value)\" style='padding:4px 6px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px'><option value='froude'>Froude exponential</option><option value='delft'>Delft DSYHS</option></select></span></div>"+
      "<div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","lwl","LWL","m")+pf("prop","bwl","BWL (canoe)","m")+pf("prop","tc","Tc canoe draft","m")+pf("prop","cp","Cp","")+pf("prop","cm","Cm","")+pf("prop","lcb","LCB","m")+pf("prop","lcf","LCF","m")+pf("prop","disp","Displacement","kg",90)+pf("prop","awp","Awp","m²")+pf("prop","sc","Wetted Sc","m²")+pf("prop","ax","Ax midship","m²")+pf("prop","atr","Atr transom","m²")+pf("prop","kf","Friction factor","")+"</div></div>"+
 
    "<div class='card'><div class='card-hdr'><h2>Windage</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","vw","Head wind","m/s")+pf("prop","af","Frontal area","m²")+pf("prop","cd","Cd","")+"</div></div>"+
 
-   "<div class='card'><div class='card-hdr'><h2>Engine &amp; drivetrain</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","pmax","Max power","kW")+pf("prop","pavail","Available power","kW")+pf("prop","nm","Engine speed","rpm",80)+pf("prop","red","Reduction","×")+pf("prop","sfc","SFC","g/kWh")+pf("prop","mech","Mech. eff.","")+pf("prop","etaShaft","Shaft eff.","")+pf("prop","aux","Aux load","kW")+pf("prop","tank","Fuel tank","L",80)+"</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Engine &amp; drivetrain</h2><div style='display:flex;gap:8px;align-items:center' class='no-print'>"+propEngSelHTML(s)+"<button class='btn btn-line btn-xs' onclick=\"propToggleForm('prop-eng-form')\">+ Add</button><button class='btn btn-line btn-xs' onclick='propDelEngine()'>&#128465;</button></div></div>"+
+     "<div id='prop-eng-form' style='display:none;padding:14px 20px;background:var(--g100);border-bottom:1px solid var(--g200)'><div style='display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end'>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>NAME</label><input id='pae-name' style='width:200px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px' placeholder='e.g. Scania DI13 405'></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>RATED RPM</label><input id='pae-rpm' type='number' style='width:90px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>RATED kW</label><input id='pae-kw' type='number' style='width:80px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px;flex:1;min-width:220px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>POWER CURVE (rpm,kW per line &mdash; optional)</label><textarea id='pae-curve' style='min-height:48px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px;font-family:inherit' placeholder='1400,80&#10;2200,280&#10;3300,324'></textarea></div>"+
+       "<button class='btn btn-primary btn-sm' onclick='propAddEngine()'>Save engine</button>"+
+     "</div></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","pmax","Max power","kW")+pf("prop","pavail","Available power","kW")+pf("prop","nm","Engine speed","rpm",80)+pf("prop","red","Reduction","×")+pf("prop","sfc","SFC","g/kWh")+pf("prop","mech","Mech. eff.","")+pf("prop","etaShaft","Shaft eff.","")+pf("prop","aux","Aux load","kW")+pf("prop","tank","Fuel tank","L",80)+"</div></div>"+
 
-   "<div class='card'><div class='card-hdr'><h2>Propeller</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","d","Diameter","m")+pf("prop","p","Pitch","m")+pf("prop","nprop","No. of props","×")+pf("prop","w","Wake w","")+pf("prop","t","Thrust ded. t","")+pf("prop","etaB","Blade factor","")+pf("prop","vmin","Speed from","kn",56)+pf("prop","vmax","Speed to","kn",56)+"</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Propeller</h2><div style='display:flex;gap:8px;align-items:center' class='no-print'>"+propTypeSelHTML(s)+"<button class='btn btn-line btn-xs' onclick=\"propToggleForm('prop-prop-form')\">+ Add</button><button class='btn btn-line btn-xs' onclick='propDelProp()'>&#128465;</button></div></div>"+
+     "<div id='prop-prop-form' style='display:none;padding:14px 20px;background:var(--g100);border-bottom:1px solid var(--g200)'><div style='display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end'>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>NAME</label><input id='pap-name' style='width:200px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px' placeholder='e.g. Flexofold 4B'></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>BLADES</label><input id='pap-bn' type='number' value='3' style='width:60px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>A/Ao %</label><input id='pap-bar' type='number' style='width:70px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></div>"+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;color:var(--g500)'>HUB d/D</label><input id='pap-dD' type='number' step='any' style='width:70px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></div>"+
+       "<button class='btn btn-primary btn-sm' onclick='propAddProp()'>Save propeller</button>"+
+     "</div></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+pf("prop","d","Diameter","m")+pf("prop","p","Pitch","m")+pf("prop","bn","Blades","")+pf("prop","bar","A/Ao","%")+pf("prop","nprop","No. of props","×")+pf("prop","himm","Shaft immersion","m")+pf("prop","w","Wake w","")+pf("prop","t","Thrust ded.","")+pf("prop","etaB","Blade factor","")+pf("prop","vmin","Speed from","kn",56)+pf("prop","vmax","Speed to","kn",56)+"</div></div>"+
 
    "<div class='card' id='prop-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Propulsion Prediction</h2><span class='badge badge-gold' id='prop-badge'>-</span></div>"+
      "<div class='kpi-row' id='prop-kpi'></div>"+
+     "<div style='font-size:11px;color:var(--g500);padding:4px 20px 0' class='no-print'>Tip: click any chart to enlarge.</div>"+
      "<div id='prop-charts' style='display:flex;gap:18px;flex-wrap:wrap;padding:8px 20px'></div>"+
-     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>kn</th><th>Fn</th><th>R<sub>F</sub> kN</th><th>R<sub>r</sub> kN</th><th>Wind kN</th><th>R<sub>tot</sub> kN</th><th>Thrust kN</th><th>Eff. P kW</th><th>Brake kW</th><th>Prop rpm</th><th>Eng rpm</th><th>Slip %</th><th>η<sub>o</sub></th><th>Tip m/s</th><th>Fuel L/h</th><th>Range NM</th></tr></thead><tbody id='prop-body'></tbody></table></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>kn</th><th>Fn</th><th>R<sub>F</sub> kN</th><th>R<sub>r</sub> kN</th><th>Wind kN</th><th>R<sub>tot</sub> kN</th><th>Thrust kN</th><th>Brake kW</th><th>Avail kW</th><th>Prop rpm</th><th>Eng rpm</th><th>Slip %</th><th>η<sub>o</sub></th><th>Tip m/s</th><th>A/Ao min</th><th>Fuel L/h</th><th>Range NM</th></tr></thead><tbody id='prop-body'></tbody></table></div>"+
      "<div id='prop-checks' style='padding:14px 20px'></div>"+
    "</div></main>";
 }
-function propFill(){var s=propState();for(var k in PROP_DEF){var e=el("prop-"+k);if(e){if(k==="resMethod")e.value=s[k];else e.value=s[k];}}}
+function propFill(){var s=propState();for(var k in PROP_DEF){if(k==="engCurve")continue;var e=el("prop-"+k);if(e&&e.tagName==="INPUT")e.value=s[k];}var rm=el("prop-resMethod");if(rm)rm.value=s.resMethod;}
 function propSvgLine(series,opts){
-  opts=opts||{}; var W=opts.w||360,H=opts.h||190,pad=34;
-  var xs=series[0].pts.map(function(p){return p.x;}); var allY=[]; series.forEach(function(se){se.pts.forEach(function(p){allY.push(p.y);});});
+  opts=opts||{}; var big=!!opts.big; var W=opts.w||(big?760:360),H=opts.h||(big?420:190),pad=big?54:36,padT=big?34:14,padR=big?16:8;
+  var fs=big?13:9, fsT=big?16:10;
+  var xs=[],allY=[]; series.forEach(function(se){se.pts.forEach(function(p){xs.push(p.x);allY.push(p.y);});});
   var xmin=Math.min.apply(null,xs),xmax=Math.max.apply(null,xs),ymin=0,ymax=Math.max.apply(null,allY)*1.08||1;
-  function X(x){return pad+(x-xmin)/((xmax-xmin)||1)*(W-pad-8);}
-  function Y(y){return H-pad-(y-ymin)/((ymax-ymin)||1)*(H-pad-12);}
-  var g="<svg width='"+W+"' height='"+H+"' style='background:#fff;border:1px solid var(--g200);border-radius:8px'>";
-  // axes
-  g+="<line x1='"+pad+"' y1='"+(H-pad)+"' x2='"+(W-6)+"' y2='"+(H-pad)+"' stroke='#cbd2dc'/><line x1='"+pad+"' y1='12' x2='"+pad+"' y2='"+(H-pad)+"' stroke='#cbd2dc'/>";
-  // x labels
-  for(var xv=Math.ceil(xmin);xv<=xmax;xv+=Math.max(1,Math.round((xmax-xmin)/6))){g+="<text x='"+X(xv)+"' y='"+(H-pad+12)+"' font-size='9' fill='#6b7280' text-anchor='middle'>"+xv+"</text>";}
-  g+="<text x='"+(W/2)+"' y='"+(H-4)+"' font-size='9' fill='#6b7280' text-anchor='middle'>"+(opts.xlabel||"knots")+"</text>";
-  g+="<text x='"+X(xmax)+"' y='10' font-size='10' fill='#1a2744' text-anchor='end' font-weight='700'>"+(opts.title||"")+"</text>";
+  function X(x){return pad+(x-xmin)/((xmax-xmin)||1)*(W-pad-padR);}
+  function Y(y){return H-pad-(y-ymin)/((ymax-ymin)||1)*(H-pad-padT);}
+  var g="<svg xmlns='http://www.w3.org/2000/svg' width='"+W+"' height='"+H+"' viewBox='0 0 "+W+" "+H+"' style='background:#fff;border:1px solid #e2e6ec;border-radius:8px;max-width:100%'>";
+  // gridlines + y ticks
+  var ny=big?6:4;
+  for(var i=0;i<=ny;i++){var yv=ymin+(ymax-ymin)*i/ny; var yy=Y(yv); g+="<line x1='"+pad+"' y1='"+yy.toFixed(1)+"' x2='"+(W-padR)+"' y2='"+yy.toFixed(1)+"' stroke='#eef1f5'/><text x='"+(pad-5)+"' y='"+(yy+3).toFixed(1)+"' font-size='"+fs+"' fill='#6b7280' text-anchor='end'>"+(ymax>=100?f0(yv):f1(yv))+"</text>";}
+  // x ticks
+  var nx=big?Math.min(12,(xmax-xmin)):6, step=Math.max(1,Math.round((xmax-xmin)/(big?10:6)));
+  for(var xv=Math.ceil(xmin/step)*step;xv<=xmax;xv+=step){g+="<line x1='"+X(xv)+"' y1='"+padT+"' x2='"+X(xv)+"' y2='"+(H-pad)+"' stroke='#f4f6f9'/><text x='"+X(xv)+"' y='"+(H-pad+(big?20:12))+"' font-size='"+fs+"' fill='#6b7280' text-anchor='middle'>"+f0(xv)+"</text>";}
+  g+="<line x1='"+pad+"' y1='"+(H-pad)+"' x2='"+(W-padR)+"' y2='"+(H-pad)+"' stroke='#aab3c0'/><line x1='"+pad+"' y1='"+padT+"' x2='"+pad+"' y2='"+(H-pad)+"' stroke='#aab3c0'/>";
+  g+="<text x='"+((pad+W-padR)/2)+"' y='"+(H-(big?6:2))+"' font-size='"+fs+"' fill='#6b7280' text-anchor='middle'>"+(opts.xlabel||"knots")+"</text>";
+  if(big&&opts.ylabel)g+="<text x='14' y='"+((padT+H-pad)/2)+"' font-size='"+fs+"' fill='#6b7280' text-anchor='middle' transform='rotate(-90,14,"+((padT+H-pad)/2)+")'>"+opts.ylabel+"</text>";
+  g+="<text x='"+pad+"' y='"+(big?22:11)+"' font-size='"+fsT+"' fill='#1a2744' text-anchor='start' font-weight='700'>"+(opts.title||"")+"</text>";
+  if(opts.hline!=null){g+="<line x1='"+pad+"' y1='"+Y(opts.hline)+"' x2='"+(W-padR)+"' y2='"+Y(opts.hline)+"' stroke='#c0392b' stroke-width='1.3' stroke-dasharray='5 3'/>"+(big?"<text x='"+(W-padR)+"' y='"+(Y(opts.hline)-4)+"' font-size='"+fs+"' fill='#c0392b' text-anchor='end'>"+(opts.hlabel||"")+"</text>":"");}
+  if(opts.vline!=null){g+="<line x1='"+X(opts.vline)+"' y1='"+padT+"' x2='"+X(opts.vline)+"' y2='"+(H-pad)+"' stroke='#1b7f44' stroke-width='1.3' stroke-dasharray='5 3'/>";}
   series.forEach(function(se){
     var d=se.pts.map(function(p,i){return (i?"L":"M")+X(p.x).toFixed(1)+" "+Y(p.y).toFixed(1);}).join(" ");
-    g+="<path d='"+d+"' fill='none' stroke='"+se.color+"' stroke-width='2'/>";
+    g+="<path d='"+d+"' fill='none' stroke='"+se.color+"' stroke-width='"+(big?2.5:2)+"'/>";
+    if(big)se.pts.forEach(function(p){g+="<circle cx='"+X(p.x).toFixed(1)+"' cy='"+Y(p.y).toFixed(1)+"' r='3' fill='"+se.color+"'/>";});
   });
   // legend
-  var lx=pad+6,ly=18; series.forEach(function(se,i){g+="<rect x='"+lx+"' y='"+(ly+i*13-8)+"' width='9' height='9' fill='"+se.color+"'/><text x='"+(lx+13)+"' y='"+(ly+i*13)+"' font-size='9' fill='#22272f'>"+se.name+"</text>";});
-  if(opts.hline!=null){g+="<line x1='"+pad+"' y1='"+Y(opts.hline)+"' x2='"+(W-6)+"' y2='"+Y(opts.hline)+"' stroke='#c0392b' stroke-width='1.2' stroke-dasharray='4 3'/>";}
+  var lx=pad+8,ly=big?40:20; series.forEach(function(se,i){g+="<rect x='"+lx+"' y='"+(ly+i*(big?17:13)-8)+"' width='"+(big?12:9)+"' height='"+(big?12:9)+"' fill='"+se.color+"'/><text x='"+(lx+(big?17:13))+"' y='"+(ly+i*(big?17:13))+"' font-size='"+fs+"' fill='#22272f'>"+se.name+"</text>";});
   g+="</svg>"; return g;
+}
+var PROP_CHARTS=[];
+function propBuildCharts(rows,s,vmax){
+  var navy="#1a2744",gold="#c9a96e",teal="#2f8f7a",red="#c0392b";
+  var c=[];
+  c.push({series:[{name:"Total resistance (kN)",color:navy,pts:rows.map(function(r){return {x:r.vk,y:r.Rt};})},
+                  {name:"Friction",color:teal,pts:rows.map(function(r){return {x:r.vk,y:r.RF};})},
+                  {name:"Windage",color:gold,pts:rows.map(function(r){return {x:r.vk,y:r.Rw};})}],
+          opts:{title:"Resistance",xlabel:"boat speed (kn)",ylabel:"resistance (kN)",vline:vmax}});
+  c.push({series:[{name:"Required brake (kW)",color:gold,pts:rows.map(function(r){return {x:r.vk,y:r.PB};})},
+                  {name:"Available (kW)",color:navy,pts:rows.map(function(r){return {x:r.vk,y:r.avail};})}],
+          opts:{title:"Power vs available",xlabel:"boat speed (kn)",ylabel:"power (kW)",vline:vmax}});
+  // engine matching diagram: engine max-power curve vs propeller demand, on engine-rpm axis
+  var engPts=(s.engCurve||[]).map(function(p){return {x:p[0],y:p[1]};});
+  c.push({series:[{name:"Engine max power",color:navy,pts:engPts.length?engPts:[{x:0,y:0},{x:s.nm,y:s.pmax}]},
+                  {name:"Propeller demand",color:gold,pts:rows.map(function(r){return {x:r.rpmEng,y:r.PB};})}],
+          opts:{title:"Engine ⟷ propeller match",xlabel:"engine rpm",ylabel:"power (kW)"}});
+  c.push({series:[{name:"Slip (%)",color:teal,pts:rows.map(function(r){return {x:r.vk,y:r.slip};})},
+                  {name:"η open-water ×100",color:gold,pts:rows.map(function(r){return {x:r.vk,y:r.etaO*100};})}],
+          opts:{title:"Slip & efficiency",xlabel:"boat speed (kn)",ylabel:"%",vline:vmax}});
+  PROP_CHARTS=c; return c;
 }
 function propCalc(){
   if(!el("prop-results"))return;
   var s=propState(), rows=propRows();
   var vmax=propMaxSpeed(rows,s);
-  var lim=s.pavail||s.pmax;
   el("prop-badge").textContent=f1(vmax)+" kn max";
-  // cruise = ~0.85 of max, nearest row
   var cruiseV=Math.round(vmax*0.9), cr=null; rows.forEach(function(r){if(r.vk<=cruiseV)cr=r;}); if(!cr)cr=rows[0];
-  var rpmAtMax=null; rows.forEach(function(r){if(r.vk<=vmax)rpmAtMax=r.rpmEng;});
+  var rpmAtMax=null,availAtMax=null,barAtMax=0; rows.forEach(function(r){if(r.vk<=vmax){rpmAtMax=r.rpmEng;availAtMax=r.avail;barAtMax=r.barMin;}});
+  if(!barAtMax&&rows.length)barAtMax=rows[0].barMin;
+  var topBar=barAtMax;
   el("prop-kpi").innerHTML=
-    "<div class='kpi'><div class='kpi-l'>Max speed</div><div class='kpi-v'>"+f1(vmax)+"</div><div class='kpi-u'>kn @ "+f0(lim)+" kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Max speed</div><div class='kpi-v'>"+f1(vmax)+"</div><div class='kpi-u'>kn @ "+f0(availAtMax||s.pmax)+" kW</div></div>"+
     "<div class='kpi'><div class='kpi-l'>Engine rpm @ max</div><div class='kpi-v'>"+f0(rpmAtMax||0)+"</div><div class='kpi-u'>of "+f0(s.nm)+"</div></div>"+
-    "<div class='kpi'><div class='kpi-l'>Resistance @ max</div><div class='kpi-v'>"+f1(rows.length?rows[rows.length-1].Rt:0)+"</div><div class='kpi-u'>kN @ "+rows[rows.length-1].vk+" kn</div></div>"+
     (cr?("<div class='kpi'><div class='kpi-l'>Cruise "+cr.vk+" kn</div><div class='kpi-v'>"+f1(cr.fuel)+"</div><div class='kpi-u'>L/h · "+f0(cr.range)+" NM</div></div>"):"")+
-    (cr?("<div class='kpi'><div class='kpi-l'>Prop eff @ "+cr.vk+" kn</div><div class='kpi-v'>"+f2(cr.etaO)+"</div><div class='kpi-u'>η open-water</div></div>"):"");
-  // charts
-  var cR={name:"Resistance kN",color:"#1a2744",pts:rows.map(function(r){return {x:r.vk,y:r.Rt};})};
-  var cP={name:"Brake kW",color:"#c9a96e",pts:rows.map(function(r){return {x:r.vk,y:r.PB};})};
-  var cE={name:"Eng rpm",color:"#2f8f7a",pts:rows.map(function(r){return {x:r.vk,y:r.rpmEng};})};
-  el("prop-charts").innerHTML=
-    propSvgLine([cR],{title:"Resistance",xlabel:"knots"})+
-    propSvgLine([cP],{title:"Brake power vs available",xlabel:"knots",hline:lim})+
-    propSvgLine([cE],{title:"Engine rpm",xlabel:"knots",hline:s.nm});
-  // table
+    (cr?("<div class='kpi'><div class='kpi-l'>Prop eff @ "+cr.vk+" kn</div><div class='kpi-v'>"+f2(cr.etaO)+"</div><div class='kpi-u'>η open-water</div></div>"):"")+
+    "<div class='kpi'><div class='kpi-l'>Min A/Ao needed</div><div class='kpi-v'>"+f0(topBar)+"</div><div class='kpi-u'>% (have "+f0(s.bar)+"%)</div></div>";
+  var charts=propBuildCharts(rows,s,vmax);
+  el("prop-charts").innerHTML=charts.map(function(c,i){return "<div class='no-print' style='cursor:zoom-in' onclick='propZoom("+i+")' title='Click to enlarge'>"+propSvgLine(c.series,c.opts)+"</div>";}).join("");
   el("prop-body").innerHTML=rows.map(function(r){
-    var over=r.PB>lim;
-    return "<tr"+(over?" style='background:#fdecec'":"")+"><td>"+r.vk+"</td><td>"+f2(r.Fn)+"</td><td>"+f2(r.RF)+"</td><td>"+f2(r.Rr)+"</td><td>"+f2(r.Rw)+"</td><td><strong>"+f2(r.Rt)+"</strong></td><td>"+f2(r.Tkn)+"</td><td>"+f1(r.PE)+"</td><td>"+f1(r.PB)+"</td><td>"+f0(r.rpmProp)+"</td><td>"+f0(r.rpmEng)+"</td><td>"+f1(r.slip)+"</td><td>"+f2(r.etaO)+"</td><td>"+f1(r.tip)+"</td><td>"+f1(r.fuel)+"</td><td>"+f0(r.range)+"</td></tr>";
+    var over=r.PB>r.avail, barBad=(r.barMin>s.bar);
+    return "<tr"+(over?" style='background:#fdecec'":"")+"><td>"+r.vk+"</td><td>"+f2(r.Fn)+"</td><td>"+f2(r.RF)+"</td><td>"+f2(r.Rr)+"</td><td>"+f2(r.Rw)+"</td><td><strong>"+f2(r.Rt)+"</strong></td><td>"+f2(r.Tkn)+"</td><td>"+f1(r.PB)+"</td><td>"+f0(r.avail)+"</td><td>"+f0(r.rpmProp)+"</td><td>"+f0(r.rpmEng)+"</td><td>"+f1(r.slip)+"</td><td>"+f2(r.etaO)+"</td><td>"+f1(r.tip)+"</td><td"+(barBad?" style='color:#c0392b;font-weight:700'":"")+">"+f0(r.barMin)+"</td><td>"+f1(r.fuel)+"</td><td>"+f0(r.range)+"</td></tr>";
   }).join("");
-  el("prop-checks").innerHTML="<div style='font-size:11px;color:var(--g500);line-height:1.6'>Predicted max speed is where required brake power ("+f0(lim)+" kW available) is reached. Rows above the engine limit are shaded. Residuary method: <strong>"+(s.resMethod==="delft"?"Delft DSYHS polynomial":"Froude exponential (workbook)")+"</strong>. Open-water efficiency uses an actuator-disk ideal with blade factor "+f2(s.etaB)+"; tune it to your propeller's measured open-water curve. Tip speed should stay below ~"+ "45–50 m/s to limit cavitation/noise.</div>";
+  var barOK=topBar<=s.bar;
+  el("prop-checks").innerHTML="<div style='font-size:11px;color:var(--g500);line-height:1.6'>Max speed = intersection of required brake power and the <strong>"+esc(s.engKey)+"</strong> power curve. Residuary: <strong>"+(s.resMethod==="delft"?"Delft DSYHS":"Froude exponential")+"</strong>. Cavitation (Keller): minimum blade-area ratio needed at top speed is <strong style='color:"+(barOK?"#1b7f44":"#c0392b")+"'>"+f0(topBar)+"%</strong> vs the selected propeller's "+f0(s.bar)+"% &mdash; "+(barOK?"OK.":"<strong style='color:#c0392b'>under-bladed, risk of cavitation.</strong>")+" Open-water efficiency uses an actuator-disk ideal × blade factor "+f2(s.etaB)+"; tune to measured data. Keep tip speed below ~45&ndash;50 m/s.</div>";
+}
+function propZoom(i){
+  var c=PROP_CHARTS[i]; if(!c)return;
+  var optsBig={}; for(var k in c.opts)optsBig[k]=c.opts[k]; optsBig.big=true;
+  var ov=el("prop-zoom"); if(!ov){ov=document.createElement("div");ov.id="prop-zoom";document.body.appendChild(ov);}
+  ov.style.cssText="position:fixed;inset:0;background:rgba(13,20,33,.62);z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px";
+  ov.innerHTML="<div style='background:#fff;border-radius:12px;padding:18px;max-width:96vw;max-height:92vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)'><div style='display:flex;justify-content:flex-end;margin-bottom:6px'><button class='btn btn-line btn-sm' onclick=\"var z=document.getElementById('prop-zoom');if(z)z.remove();\">&#10005; Close</button></div>"+propSvgLine(c.series,optsBig)+"</div>";
+  ov.onclick=function(e){if(e.target===ov)ov.remove();};
 }
 function propExcel(){
   if(!window.XLSX){alert("Excel library loading.");return;}
@@ -4495,6 +4639,53 @@ function propExcel(){
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Propulsion");
   var fn="Baltic_Propeller_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
   try{XLSX.writeFile(wb,fn);}catch(e){var o=XLSX.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
+}
+function propSvgToPng(svg,w,h){
+  return new Promise(function(resolve){
+    try{
+      var img=new Image();
+      var blob=new Blob([svg],{type:"image/svg+xml;charset=utf-8"});
+      var url=URL.createObjectURL(blob);
+      img.onload=function(){
+        var sc=2, cv=document.createElement("canvas"); cv.width=w*sc; cv.height=h*sc;
+        var ctx=cv.getContext("2d"); ctx.fillStyle="#fff"; ctx.fillRect(0,0,cv.width,cv.height); ctx.drawImage(img,0,0,cv.width,cv.height);
+        URL.revokeObjectURL(url);
+        cv.toBlob(function(b){ if(!b){resolve(null);return;} var fr=new FileReader(); fr.onload=function(){resolve(new Uint8Array(fr.result));}; fr.readAsArrayBuffer(b); },"image/png");
+      };
+      img.onerror=function(){URL.revokeObjectURL(url);resolve(null);};
+      img.src=url;
+    }catch(e){resolve(null);}
+  });
+}
+function propWord(){
+  if(!window.docx){alert("Word library loading.");return;}
+  var D=docx, s=propState(), rows=propRows(), m=PROJECT.meta||{}, vmax=propMaxSpeed(rows,s);
+  var charts=propBuildCharts(rows,s,vmax);
+  var jobs=charts.map(function(c){return propSvgToPng(propSvgLine(c.series,{big:true,w:720,h:360,title:c.opts.title,xlabel:c.opts.xlabel,ylabel:c.opts.ylabel,vline:c.opts.vline,hline:c.opts.hline}),720,360);});
+  Promise.all(jobs).then(function(pngs){
+    var NAVY="1A2744",GOLD="C9A96E",INK="22272F";
+    function P(runs,o){o=o||{};return new D.Paragraph({children:runs,spacing:{before:(o.before||0)*20,after:(o.after||0)*20},alignment:o.align,heading:o.heading,border:o.bb?{bottom:{style:D.BorderStyle.SINGLE,size:8,color:GOLD,space:3}}:undefined});}
+    function T(t,o){o=o||{};return new D.TextRun({text:String(t==null?"":t),bold:!!o.b,italics:!!o.i,size:Math.round((o.sz||10)*2),color:o.c||INK,font:"Calibri"});}
+    function cell(txt,o){o=o||{};return new D.TableCell({width:o.w?{size:o.w,type:D.WidthType.DXA}:undefined,shading:o.fill?{type:D.ShadingType.CLEAR,fill:o.fill,color:"auto"}:undefined,margins:{top:20,bottom:20,left:60,right:60},children:[new D.Paragraph({alignment:o.align||D.AlignmentType.LEFT,children:[T(txt,{b:o.b,sz:8,c:o.c})]})]});}
+    var body=[];
+    body.push(P([T("Propeller & Propulsion Calculation",{b:true,sz:18,c:NAVY})],{after:2}));
+    body.push(P([T((m.yacht?m.yacht+"  ·  ":"")+(m.proj?"Project "+m.proj+"  ·  ":"")+"Baltic Yachts",{c:GOLD,sz:10,b:true})],{after:6,bb:true}));
+    body.push(P([T("Predicted max speed ",{b:true,sz:12}),T(f1(vmax)+" kn",{b:true,sz:12,c:NAVY}),T("   ·   Engine: "+s.engKey+"   ·   Propeller: "+s.propType,{sz:9,c:"6B7280"})],{before:6,after:8}));
+    // key inputs line
+    body.push(P([T("Hull  ",{b:true,sz:9}),T("LWL "+f1(s.lwl)+" m · ∇ "+f1(s.disp/1025)+" m³ · Sc "+f1(s.sc)+" m² · Cp "+f2(s.cp)+"     ",{sz:9}),T("Prop  ",{b:true,sz:9}),T("D "+f2(s.d)+" m · P "+f2(s.p)+" m · "+s.bn+"B · A/Ao "+f0(s.bar)+"% · reduction "+f1(s.red)+":1",{sz:9})],{after:8}));
+    // charts
+    pngs.forEach(function(png,i){ if(png){ body.push(new D.Paragraph({alignment:D.AlignmentType.CENTER,spacing:{before:60,after:60},children:[new D.ImageRun({data:png,transformation:{width:560,height:280}})]})); } });
+    // results table (condensed)
+    var hd=["kn","Rtot kN","Brake kW","Avail kW","Eng rpm","Slip %","ηo","A/Ao%","Fuel L/h","Range NM"];
+    var trows=[new D.TableRow({tableHeader:true,children:hd.map(function(h){return cell(h,{b:true,c:"FFFFFF",fill:NAVY,align:D.AlignmentType.CENTER});})})];
+    rows.forEach(function(r){trows.push(new D.TableRow({children:[
+      cell(r.vk,{align:D.AlignmentType.CENTER}),cell(f2(r.Rt)),cell(f1(r.PB)),cell(f0(r.avail)),cell(f0(r.rpmEng)),cell(f1(r.slip)),cell(f2(r.etaO)),cell(f0(r.barMin),{c:(r.barMin>s.bar?"C0392B":INK)}),cell(f1(r.fuel)),cell(f0(r.range))
+    ].map(function(c,ci){return c;})}));});
+    body.push(new D.Table({width:{size:100,type:D.WidthType.PERCENTAGE},rows:trows}));
+    body.push(P([T(disclaimerLine(),{i:true,sz:7,c:"6B7280"})],{before:10}));
+    var doc=new D.Document({sections:[{properties:{page:{size:{orientation:D.PageOrientation.LANDSCAPE}}},children:body}]});
+    D.Packer.toBlob(doc).then(function(blob){ safeDL(blob,"Baltic_Propeller_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".docx"); });
+  });
 }
 
 /* ---------- PWA ---------- */
