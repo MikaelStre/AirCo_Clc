@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>AC Cooling Calculator &#8211; Baltic Yachts</title>
+<title>Baltic Yachts &#8211; Engineering Suite</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AC Calc">
+<meta name="apple-mobile-web-app-title" content="BY Engineering">
 <meta name="theme-color" content="#1a2744">
 <link rel="manifest" id="pwa-manifest">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -21,54 +21,75 @@
   --g500:#667085;--g700:#344054;--text:#1d2939;
   --green:#12b76a;--green-bg:#d1fae5;--green-dark:#065f46;
   --red:#f04438;--red-bg:#fee2e2;--red-dark:#991b1b;
+  --amber:#f79009;
   --r:8px;--r2:4px;
   --sh:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.07);
   --sh2:0 4px 20px rgba(26,39,68,.14);
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
 }
 body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg);min-height:100dvh}
-header{background:var(--navy);position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3);padding-top:var(--sat)}
-.hdr{max-width:1440px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.logo-wrap{display:flex;align-items:center;gap:16px}
-.hdr-title h1{font-size:15px;font-weight:600;color:#fff;letter-spacing:.3px}
-.hdr-btns{display:flex;gap:6px}
+
+/* ===== SHELL TOP NAV ===== */
+.shell-nav{background:var(--navy);position:sticky;top:0;z-index:300;box-shadow:0 2px 16px rgba(0,0,0,.3);padding-top:var(--sat)}
+.shell-nav-in{max-width:1440px;margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:14px;cursor:pointer;flex-shrink:0}
+.brand svg{width:118px;height:40px}
+.crumbs{display:flex;align-items:center;gap:7px;font-size:13px;color:rgba(255,255,255,.55);overflow:hidden;flex:1;white-space:nowrap}
+.crumbs a{color:rgba(255,255,255,.8);cursor:pointer;text-decoration:none}
+.crumbs a:hover{color:#fff}
+.crumbs .sep{color:rgba(255,255,255,.3)}
+.crumbs .cur{color:#fff;font-weight:600}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.proj-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:99px;padding:5px 12px;cursor:pointer;transition:all .15s}
+.proj-chip:hover{background:rgba(255,255,255,.14)}
+.proj-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.proj-chip span{font-size:12px;color:#fff;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proj-chip .muted{color:rgba(255,255,255,.5)}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--r2);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
 .btn-gold{background:var(--gold);color:var(--navy)}.btn-gold:hover{background:var(--gold2)}
 .btn-ghost{background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.25)}.btn-ghost:hover{background:rgba(255,255,255,.1)}
 .btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy3)}
 .btn-sm{padding:5px 10px;font-size:12px}.btn-xs{padding:3px 8px;font-size:11px}
-.btn-link{background:none;border:none;color:var(--g500);font-size:12px;padding:4px 8px;cursor:pointer}.btn-link:hover{color:var(--navy)}
-.settings-bar{background:var(--white);border-bottom:1px solid var(--g200);position:sticky;top:calc(68px + var(--sat));z-index:150}
-.sb-inner{max-width:1440px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.sb-group{display:flex;flex-direction:column;gap:4px}
-.sb-group label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500)}
-.toggle{display:flex;border:1.5px solid var(--g300);border-radius:var(--r2);overflow:hidden;height:32px}
-.toggle button{padding:0 14px;border:none;background:var(--white);color:var(--g700);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
-.toggle button.on{background:var(--navy);color:#fff}
-.toggle button:not(:last-child){border-right:1.5px solid var(--g300)}
-.sup-pick{display:flex;gap:5px;height:32px;flex-wrap:wrap}
-.sup-btn{padding:0 12px;border:1.5px solid var(--g300);border-radius:var(--r2);background:var(--white);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--g700)}
-.sup-btn.on{border-color:var(--gold);background:var(--gold-bg);color:var(--navy)}
-.cop-inp{width:64px;padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;font-weight:500;text-align:center}
-.cop-inp:focus{outline:none;border-color:var(--navy)}
-.sb-sep{width:1px;height:32px;background:var(--g200)}
-.proj-toggle-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);background:var(--white);font-size:12px;cursor:pointer;color:var(--g700);transition:all .15s}
-.proj-toggle-btn:hover{border-color:var(--navy);color:var(--navy)}
-input[type=number]{-moz-appearance:textfield}
-input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.proj-panel{background:var(--white);border-bottom:1px solid var(--g200);overflow:hidden;max-height:0;transition:max-height .35s ease}
-.proj-panel.open{max-height:380px}
-.proj-grid{max-width:1440px;margin:0 auto;padding:16px 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.proj-actions{max-width:1440px;margin:0 auto;padding:12px 24px 16px;display:flex;gap:10px;border-top:1px solid var(--g200);flex-wrap:wrap}
-.field{display:flex;flex-direction:column;gap:3px}
-.field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500)}
-.field input,.field select{padding:7px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;color:var(--text);transition:border-color .15s;width:100%;background:#fff}
-.field input:focus,.field select:focus{outline:none;border-color:var(--navy)}
-main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px;padding-bottom:calc(20px + var(--sab))}
-.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.btn-line{background:#fff;color:var(--navy);border:1.5px solid var(--g300)}.btn-line:hover{border-color:var(--navy)}
+
+/* ===== VIEWS ===== */
+.view{display:none}
+.view.active{display:block}
+main{max-width:1440px;margin:0 auto;padding:24px 22px;padding-bottom:calc(24px + var(--sab))}
+
+/* ===== HERO (home) ===== */
+.hero{text-align:center;padding:26px 0 22px}
+.hero h1{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:.3px}
+.hero p{font-size:14px;color:var(--g500);margin-top:6px}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+.cat{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:26px 20px;cursor:pointer;transition:all .18s;border:1px solid var(--g200);position:relative;overflow:hidden;text-align:center}
+.cat:hover{transform:translateY(-3px);box-shadow:var(--sh2);border-color:var(--gold)}
+.cat .ic{width:56px;height:56px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px}
+.cat h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.cat p{font-size:12px;color:var(--g500);line-height:1.5}
+.cat .tag{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:99px}
+.tag-live{background:var(--green-bg);color:var(--green-dark)}
+.tag-soon{background:var(--g100);color:var(--g500)}
+
+/* ===== SUB GRID (systems landing / engine) ===== */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.page-head h2{font-size:21px;font-weight:700;color:var(--navy)}
+.page-head p{font-size:13px;color:var(--g500);margin-top:3px}
+.tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tile{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:18px;cursor:pointer;transition:all .16s;border:1px solid var(--g200);position:relative;display:flex;gap:14px;align-items:flex-start}
+.tile:hover{box-shadow:var(--sh2);border-color:var(--gold);transform:translateY(-2px)}
+.tile.disabled{cursor:default;opacity:.72}
+.tile.disabled:hover{transform:none;border-color:var(--g200);box-shadow:var(--sh)}
+.tile .t-ic{width:44px;height:44px;border-radius:11px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.tile h3{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.tile p{font-size:12px;color:var(--g500);line-height:1.45}
+.tile .ref{font-size:10px;color:var(--gold);font-weight:600;margin-top:5px;text-transform:uppercase;letter-spacing:.4px}
+.tile .tag{position:absolute;top:12px;right:12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:99px}
+
+/* ===== CARD / TABLE (shared) ===== */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
 .card-hdr{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--g200)}
 .card-hdr h2{font-size:13px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.8px}
-.card-hdr-right{display:flex;align-items:center;gap:8px}
 .badge{background:var(--navy);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px}
 .badge-gold{background:var(--gold);color:var(--navy)}
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -76,835 +97,641 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:var(--g100);padding:9px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);white-space:nowrap}
 td{padding:7px 10px;border-bottom:1px solid var(--g100);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(26,39,68,.02)}
-.ti{padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;background:#fff;transition:border-color .15s;width:100%}
-.ti:focus{outline:none;border-color:var(--navy)}
-.ti-name{min-width:140px}.ti-type{min-width:160px}.ti-num{max-width:58px;text-align:right}
-.tc{text-align:center}
-.tc input[type=checkbox]{width:15px;height:15px;accent-color:var(--navy);cursor:pointer}
+.result-table th{background:var(--navy);color:#fff}
+.result-table tbody tr:nth-child(even) td{background:rgba(26,39,68,.025)}
+.result-table tfoot td{background:var(--navy);color:#fff;font-weight:600;padding:9px 10px}
 .pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:11px;font-weight:600;white-space:nowrap}
-.p-ok{background:var(--green-bg);color:var(--green-dark)}
-.p-warn{background:#fef3c7;color:#92400e}
-.p-err{background:var(--red-bg);color:var(--red-dark)}
+.p-24{background:#eef2ff;color:#3730a3}.p-ac{background:#ecfdf5;color:#065f46}.p-inv{background:#fef3c7;color:#92400e}
 .p-dim{background:var(--g100);color:var(--g500)}
-.tbl-footer{padding:10px 16px;background:var(--g100);border-top:1px solid var(--g200);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.icon-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;color:var(--g500);border-radius:var(--r2);display:inline-flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
-.icon-btn:hover{background:var(--red-bg);color:var(--red)}
+
+/* ===== KPI ===== */
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;padding:16px}
 .kpi{padding:12px 16px;background:var(--bg);border-radius:var(--r2);border-left:3px solid var(--gold)}
 .kpi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);margin-bottom:4px}
 .kpi-v{font-size:22px;font-weight:700;color:var(--navy);line-height:1}
 .kpi-u{font-size:11px;color:var(--g500);margin-top:2px}
-.result-table th{background:var(--navy);color:#fff}
-.result-table tbody tr:nth-child(even) td{background:rgba(26,39,68,.025)}
-.result-table tfoot td{background:var(--navy);color:#fff;font-weight:600;padding:9px 10px}
-.humidity-section{padding:16px;background:var(--g100);border-radius:var(--r2);margin:12px 16px}
-.humidity-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}
-.humidity-cell{padding:12px;background:var(--white);border-radius:var(--r2);border-left:3px solid var(--gold)}
-.humidity-label{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g500);margin-bottom:4px}
-.humidity-val{font-size:18px;font-weight:700;color:var(--navy)}
-.humidity-unit{font-size:11px;color:var(--g500);margin-top:2px}
-.acc-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;cursor:pointer;user-select:none;border-top:1px solid var(--g200)}
-.acc-hdr:hover{background:var(--g100)}
-.acc-hdr h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500)}
-.acc-hdr .chevron{font-size:12px;color:var(--g500);transition:transform .2s}
-.acc-body{overflow:hidden;max-height:0;transition:max-height .3s ease}
-.acc-body.open{max-height:4000px}
-.acc-body .inner{padding:0 0 16px}
-.acc-hdr.open .chevron{transform:rotate(180deg)}
+
+/* ===== EMPTY / SOON ===== */
+.empty{text-align:center;padding:56px 20px;color:var(--g500)}
+.empty .icon{font-size:46px;margin-bottom:14px}
+.empty h3{font-size:17px;color:var(--navy);margin-bottom:6px}
+.empty p{font-size:13px;max-width:440px;margin:0 auto;line-height:1.6}
+
+/* ===== MODAL ===== */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;backdrop-filter:blur(2px)}
 .overlay.show{display:block}
-.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:var(--r);box-shadow:var(--sh2);z-index:600;width:min(720px,95vw);max-height:85vh;flex-direction:column}
+.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:var(--r);box-shadow:var(--sh2);z-index:600;width:min(560px,95vw);max-height:85vh;flex-direction:column}
 .modal.show{display:flex}
 .modal-hdr{padding:16px 20px;background:var(--navy);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.modal-hdr h2{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px}
+.modal-hdr h2{font-size:14px;font-weight:700;color:#fff}
 .modal-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;border-radius:4px}
 .modal-close:hover{background:rgba(255,255,255,.1);color:#fff}
-.modal-tabs{display:flex;gap:5px;padding:12px 20px 0;flex-shrink:0;flex-wrap:wrap}
 .modal-body{flex:1;overflow-y:auto;padding:16px 20px}
-.modal-footer{padding:12px 20px;border-top:1px solid var(--g200);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;flex-shrink:0}
-.sup-table{width:100%;border-collapse:collapse;font-size:13px}
-.sup-table th{padding:8px 10px;background:var(--g100);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);text-align:left}
-.sup-table td{padding:7px 10px;border-bottom:1px solid var(--g100)}
-.sup-table tr:hover td{background:var(--g100)}
-.sup-inp{padding:4px 7px;border:1.5px solid var(--g300);border-radius:3px;font-size:12px;width:100%}
-.sup-inp:focus{outline:none;border-color:var(--navy)}
-.add-unit-row{display:flex;gap:8px;padding:10px 0 0;align-items:flex-end;flex-wrap:wrap}
-.add-unit-row .field{flex:1;min-width:120px}
-.empty{text-align:center;padding:40px 20px;color:var(--g500)}
-.empty .icon{font-size:40px;margin-bottom:12px}
-.empty p{font-size:14px}
-.section-sep{padding:12px 20px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);border-top:1px solid var(--g200);background:var(--white)}
-.ecfg-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--g200)}
-.ecfg-block{padding:16px 20px;border-right:1px solid var(--g200)}
-.ecfg-block:last-child{border-right:none}
-.ecfg-block h3{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g500);margin-bottom:12px}
-.ecfg-table{width:100%;border-collapse:collapse;font-size:13px}
-.ecfg-table td{padding:5px 6px;vertical-align:middle}
-.ecfg-table td:first-child{font-weight:600;color:var(--navy);white-space:nowrap;padding-right:10px}
-.e-inp{padding:5px 7px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;width:62px;text-align:right;background:#fff}
-.e-inp:focus{outline:none;border-color:var(--navy)}
-.e-inp-w{width:76px}
-.e-unit{font-size:11px;color:var(--g500);margin-left:4px}
-.src-toggle{display:flex;border:1.5px solid var(--g300);border-radius:var(--r2);overflow:hidden;height:30px;margin-bottom:12px}
-.src-toggle button{flex:1;border:none;background:var(--white);color:var(--g700);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
-.src-toggle button.on{background:var(--navy);color:#fff}
-.src-toggle button:first-child{border-right:1.5px solid var(--g300)}
-.e-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.e-row label{font-size:12px;color:var(--g700);min-width:110px}
-.rt-table{width:100%;border-collapse:collapse;font-size:12px}
-.rt-table th{background:var(--g100);padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500);border-bottom:1px solid var(--g200);white-space:nowrap}
-.rt-table td{padding:6px 10px;border-bottom:1px solid var(--g100);vertical-align:middle}
-.rt-table tr:last-child td{border-bottom:none}
-.rt-table tr:hover td{background:rgba(26,39,68,.02)}
-.preset-sel{padding:5px 8px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:12px;background:#fff;cursor:pointer;min-width:110px}
-.preset-sel:focus{outline:none;border-color:var(--navy)}
-.rt-inp{padding:5px 7px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:12px;width:52px;text-align:right;background:#fff}
-.rt-inp:focus{outline:none;border-color:var(--navy)}
-.eng-sum-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:16px}
-.eng-kpi{padding:11px 14px;background:var(--bg);border-radius:var(--r2);border-left:3px solid var(--navy2)}
-.eng-kpi.gold{border-left-color:var(--gold)}.eng-kpi.green{border-left-color:var(--green)}.eng-kpi.fuel{border-left-color:#9b8060}
-.eng-kpi-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);margin-bottom:3px}
-.eng-kpi-v{font-size:20px;font-weight:700;color:var(--navy);line-height:1}
-.eng-kpi-u{font-size:11px;color:var(--g500);margin-top:2px}
-.eng-cabin-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.eng-cabin-tbl th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-.eng-cabin-tbl td{padding:7px 10px;border-bottom:1px solid var(--g100);vertical-align:middle}
-.eng-cabin-tbl tbody tr:nth-child(even) td{background:rgba(26,39,68,.025)}
-.eng-cabin-tbl tfoot td{background:var(--navy2);color:#fff;font-weight:600;padding:7px 10px}
-.e-bar-row{display:grid;grid-template-columns:150px 1fr 70px;align-items:center;gap:12px;margin-bottom:8px}
-.e-bar-label{font-size:12px;color:var(--g700);font-weight:500}
-.e-bar-track{height:20px;background:var(--g200);border-radius:3px;overflow:hidden;position:relative}
-.e-bar-fill{height:100%;border-radius:3px;position:relative;transition:width .4s ease}
-.e-bar-fill::after{content:attr(data-label);position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;color:#fff;white-space:nowrap}
-.e-bar-day{background:var(--navy)}.e-bar-sil{background:var(--gold)}.e-bar-red{background:var(--g300)}
-.e-bar-val{font-size:13px;font-weight:600;color:var(--navy);text-align:right}
-.energy-section{padding:16px}
-#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;
-  background:var(--navy);color:#fff;align-items:center;gap:12px;
-  padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));
-  box-shadow:0 -4px 20px rgba(0,0,0,.3);flex-direction:row}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--g200);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0}
+.field{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
+.field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500)}
+.field input,.field select{padding:8px 10px;border:1.5px solid var(--g300);border-radius:var(--r2);font-size:13px;width:100%;background:#fff}
+.field input:focus,.field select:focus{outline:none;border-color:var(--navy)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ===== PWA banners ===== */
+#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--navy);color:#fff;align-items:center;gap:12px;padding:12px 20px;padding-bottom:calc(12px + var(--sab));box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 #pwa-banner canvas{width:40px;height:40px;border-radius:8px;flex-shrink:0}
-.pwa-txt{flex:1}
-.pwa-txt strong{display:block;font-size:14px;margin-bottom:2px}
-.pwa-txt span{font-size:11px;opacity:.7}
-.pwa-dismiss{background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;padding:4px 8px;line-height:1}
-#ios-hint{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;
-  background:var(--navy);color:#fff;padding:14px 20px;
-  padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));
-  text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.pwa-txt{flex:1}.pwa-txt strong{display:block;font-size:14px}.pwa-txt span{font-size:11px;opacity:.7}
+.pwa-dismiss{background:none;border:none;color:rgba(255,255,255,.6);font-size:22px;cursor:pointer;padding:4px 8px}
+#ios-hint{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1000;background:var(--navy);color:#fff;padding:14px 20px;padding-bottom:calc(14px + var(--sab));text-align:center;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 #ios-hint p{font-size:13px;line-height:1.6}
 #ios-hint button{background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;position:absolute;top:10px;right:14px}
+
+footer{background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;padding-bottom:calc(14px + var(--sab));font-size:11px;margin-top:28px}
+footer strong{color:var(--gold)}
+
 @media print{
-  .settings-bar,.hdr-btns,.tbl-footer,.icon-btn,.no-print,.overlay,.modal,#pwa-banner,#ios-hint{display:none!important}
-  header{position:static!important;padding-top:0!important}
-  .proj-panel{max-height:none!important}
-  main{padding:16px!important}
-  .card{box-shadow:none!important;border:1px solid #ccc!important;page-break-inside:avoid;margin-bottom:16px}
-  .card-hdr{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  .acc-body{max-height:none!important}
-  th,.result-table th,.eng-cabin-tbl th{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  .result-table tfoot td,.eng-cabin-tbl tfoot td{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  @page{margin:1.5cm;size:A4 landscape}
+  .shell-nav,.nav-right,#pwa-banner,#ios-hint,.no-print{display:none!important}
+  main{padding:10px!important;max-width:100%}
+  .card{box-shadow:none!important;border:1px solid #ccc!important;page-break-inside:avoid}
+  th,.result-table th,.result-table tfoot td{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  @page{margin:1.4cm;size:A4 landscape}
 }
-@media(max-width:900px){
-  .hdr{padding:0 14px;height:58px}
-  .settings-bar{top:calc(58px + var(--sat))}
-  .sb-inner{padding:8px 12px;gap:10px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
-  .sb-group{flex-shrink:0}.sb-sep{display:none}
-  .proj-grid{grid-template-columns:1fr 1fr;padding:12px;gap:10px}
-  main{padding:12px;gap:12px}
-  .kpi-row{grid-template-columns:1fr 1fr;padding:12px;gap:8px}.kpi-v{font-size:18px}
-  .modal{width:96vw;max-height:88vh}
-  .ecfg-row{grid-template-columns:1fr}
-  .ecfg-block{border-right:none;border-bottom:1px solid var(--g200)}
-  .ecfg-block:last-child{border-bottom:none}
-  .eng-sum-grid{grid-template-columns:1fr 1fr;padding:12px;gap:8px}
-  .e-bar-row{grid-template-columns:100px 1fr 60px;gap:8px}
+@media(max-width:1000px){
+  .cat-grid{grid-template-columns:1fr 1fr}
+  .tile-grid{grid-template-columns:1fr 1fr}
 }
-@media(max-width:600px){
-  .hdr{height:52px}.hdr-title h1{font-size:13px}.hdr-btns .btn-ghost{display:none}
-  .settings-bar{top:calc(52px + var(--sat))}
-  main{padding:10px;gap:10px}
-  .kpi-row{grid-template-columns:1fr 1fr;padding:10px;gap:7px}.kpi{padding:10px 12px}.kpi-v{font-size:16px}
-  th,td{padding:6px 7px;font-size:12px}
-  .modal{width:98vw;max-height:92vh;top:4%;transform:translateX(-50%)}
-  .ti,.ti-name,.ti-type{font-size:16px}
-  select.ti{font-size:16px}
-  input[type=checkbox]{width:18px;height:18px}
-  .eng-sum-grid{grid-template-columns:1fr 1fr}
-  .e-bar-row{grid-template-columns:80px 1fr 52px;gap:6px}.e-bar-label{font-size:11px}
-  .humidity-row{grid-template-columns:1fr}
+@media(max-width:640px){
+  .shell-nav-in{padding:0 12px;height:54px;gap:10px}
+  .brand svg{width:96px;height:32px}
+  .crumbs{display:none}
+  .proj-chip span{max-width:90px}
+  main{padding:16px 12px}
+  .cat-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .tile-grid{grid-template-columns:1fr}
+  .hero h1{font-size:21px}
+  .kpi-row{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
-<header>
-<div class="hdr">
-  <div class="logo-wrap">
-    <svg viewBox="0 0 130 44" xmlns="http://www.w3.org/2000/svg" style="width:130px;height:44px;flex-shrink:0">
-      <text x="0" y="28" font-family="Georgia,'Times New Roman',serif" font-size="24" font-weight="700" fill="#c9a96e" letter-spacing="3.5">BALTIC</text>
-      <line x1="0" y1="33" x2="126" y2="33" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/>
-      <text x="2" y="43" font-family="Georgia,'Times New Roman',serif" font-size="11" fill="rgba(255,255,255,0.8)" letter-spacing="9">YACHTS</text>
+
+<!-- ===== SHELL TOP NAV ===== -->
+<div class="shell-nav">
+<div class="shell-nav-in">
+  <div class="brand" onclick="go('home')">
+    <svg viewBox="0 0 118 40" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="25" font-family="Georgia,'Times New Roman',serif" font-size="22" font-weight="700" fill="#c9a96e" letter-spacing="3">BALTIC</text>
+      <line x1="0" y1="30" x2="115" y2="30" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/>
+      <text x="2" y="39" font-family="Georgia,'Times New Roman',serif" font-size="10" fill="rgba(255,255,255,0.8)" letter-spacing="8">YACHTS</text>
     </svg>
-    <div class="hdr-title"><h1>AC Cooling Calculator</h1></div>
   </div>
-  <div class="hdr-btns no-print">
-    <button class="btn btn-ghost btn-sm" onclick="exportExcel()">&#11015; Excel</button>
-    <button class="btn btn-ghost btn-sm" onclick="exportPDF()">&#128196; PDF</button>
-    <button class="btn btn-gold btn-sm" onclick="window.print()">&#128438; Print</button>
+  <div class="crumbs" id="crumbs"></div>
+  <div class="nav-right">
+    <div class="proj-chip" onclick="openProjModal()"><span class="dot"></span><span id="chip-name" class="muted">No project</span></div>
+    <button class="btn btn-gold btn-sm no-print" onclick="window.print()">&#128438;</button>
   </div>
 </div>
-</header>
-<div class="settings-bar no-print">
-<div class="sb-inner">
-  <button class="proj-toggle-btn" id="proj-btn" onclick="toggleProj()">&#128203; Project <span id="proj-chevron">&#9662;</span></button>
-  <div class="sb-sep"></div>
-  <div class="sb-group"><label>Climate</label>
-    <div class="toggle">
-      <button id="btn-med" class="on" onclick="setClimate('med')">Mediterranean</button>
-      <button id="btn-trop" onclick="setClimate('trop')">Tropical</button>
+</div>
+
+<!-- ===== VIEW: HOME ===== -->
+<div class="view" id="view-home">
+<main>
+  <div class="hero">
+    <h1>Engineering Calculation Suite</h1>
+    <p>Select a discipline to begin. All calculations link to the active project.</p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat" onclick="go('systems')">
+      <span class="tag tag-live">Active</span>
+      <div class="ic">&#9881;</div><h3>Systems</h3>
+      <p>AC, seawater, bilge, ventilation, water &amp; waste, engine</p>
+    </div>
+    <div class="cat" onclick="go('interior')">
+      <span class="tag tag-soon">Soon</span>
+      <div class="ic">&#128719;</div><h3>Interior</h3>
+      <p>Joinery, weights, furnishing calculations</p>
+    </div>
+    <div class="cat" onclick="go('mechanical')">
+      <span class="tag tag-soon">Soon</span>
+      <div class="ic">&#128295;</div><h3>Mechanical</h3>
+      <p>Steering, hydraulics, deck machinery</p>
+    </div>
+    <div class="cat" onclick="go('electrical')">
+      <span class="tag tag-live">Active</span>
+      <div class="ic">&#9889;</div><h3>Electrical</h3>
+      <p>Load balance &mdash; aggregates consumers from every calculation</p>
     </div>
   </div>
-  <div class="sb-group"><label>FAMU</label>
-    <div class="toggle">
-      <button id="btn-famu-n" class="on" onclick="setFAMU(false)">No</button>
-      <button id="btn-famu-y" onclick="setFAMU(true)">Yes</button>
+</main>
+</div>
+
+<!-- ===== VIEW: SYSTEMS ===== -->
+<div class="view" id="view-systems">
+<main>
+  <div class="page-head">
+    <div><h2>Systems</h2><p>Calculations that size equipment and feed electrical consumers into the load balance.</p></div>
+  </div>
+  <div class="tile-grid">
+    <div class="tile" onclick="go('ac')">
+      <span class="tag tag-live">Live</span>
+      <div class="t-ic">&#10052;</div>
+      <div><h3>Air Conditioning</h3><p>Cabin cooling loads &amp; unit selection</p><div class="ref">ISO 7547</div></div>
+    </div>
+    <div class="tile" onclick="go('ac')">
+      <span class="tag tag-live">Live</span>
+      <div class="t-ic">&#127754;</div>
+      <div><h3>Seawater Cooling</h3><p>Seawater pump for the AC/chiller circuit</p><div class="ref">Linked to AC</div></div>
+    </div>
+    <div class="tile disabled">
+      <span class="tag tag-soon">Soon</span>
+      <div class="t-ic">&#128167;</div>
+      <div><h3>Bilge</h3><p>Bilge pipe &amp; pump sizing</p><div class="ref">RINA / DNV-GL</div></div>
+    </div>
+    <div class="tile disabled">
+      <span class="tag tag-soon">Soon</span>
+      <div class="t-ic">&#127786;</div>
+      <div><h3>Engine Room Ventilation</h3><p>Combustion + heat-loss airflow, fan sizing</p><div class="ref">ISO 8861</div></div>
+    </div>
+    <div class="tile disabled">
+      <span class="tag tag-soon">Soon</span>
+      <div class="t-ic">&#128688;</div>
+      <div><h3>Water &amp; Waste Water</h3><p>Tank balance, fresh / grey / black pumps</p><div class="ref">Class rules</div></div>
+    </div>
+    <div class="tile" onclick="go('engine')">
+      <span class="tag tag-soon">Subpage</span>
+      <div class="t-ic">&#9875;</div>
+      <div><h3>Engine</h3><p>Thruster &amp; propeller calculations</p><div class="ref">Open subpage &#8594;</div></div>
     </div>
   </div>
-  <div class="sb-group">
-    <label>Supplier <button class="btn-link btn-xs" onclick="openSupplierModal()">&#9881; Edit</button></label>
-    <div class="sup-pick" id="sup-pick"></div>
-  </div>
-  <div class="sb-group"><label>COP</label>
-    <input type="number" class="cop-inp" id="cop" value="3.0" min="1.5" max="6" step="0.1" oninput="recalc()">
-  </div>
+</main>
 </div>
-</div>
-<div class="proj-panel" id="proj-panel">
-  <div class="proj-grid" id="proj-grid"></div>
-  <div class="proj-actions">
-    <button class="btn btn-primary btn-sm" onclick="saveProject()">&#128190; Save</button>
-    <button class="btn btn-ghost btn-sm" onclick="openProjectModal()">&#128194; Load</button>
-    <button class="btn btn-ghost btn-sm" onclick="newProject()">&#128196; New</button>
+
+<!-- ===== VIEW: ENGINE (subpage) ===== -->
+<div class="view" id="view-engine">
+<main>
+  <div class="page-head">
+    <div><h2>Engine</h2><p>Propulsion-related calculations under Systems.</p></div>
   </div>
+  <div class="tile-grid">
+    <div class="tile disabled">
+      <span class="tag tag-soon">Soon</span>
+      <div class="t-ic">&#129517;</div>
+      <div><h3>Thruster</h3><p>Bow / stern thruster sizing &amp; power</p><div class="ref">Class rules</div></div>
+    </div>
+    <div class="tile disabled">
+      <span class="tag tag-soon">Soon</span>
+      <div class="t-ic">&#9763;</div>
+      <div><h3>Propeller</h3><p>Propeller sizing (displacement / planing)</p><div class="ref">Baltic method</div></div>
+    </div>
+  </div>
+</main>
 </div>
-<main id="main-content"></main>
-<div class="overlay" id="proj-overlay" onclick="closeProjectModal()"></div>
+
+<!-- ===== VIEW: ELECTRICAL ===== -->
+<div class="view" id="view-electrical">
+<main>
+  <div class="page-head">
+    <div><h2>Electrical Load Balance</h2><p>Consumers aggregated from all calculations. Day / Evening / Night demand per bus.</p></div>
+    <button class="btn btn-line btn-sm no-print" onclick="clearConsumers()">&#128465; Clear all</button>
+  </div>
+  <div class="card">
+    <div class="kpi-row" id="elec-kpi"></div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><h2>Consumers</h2><span class="badge badge-gold" id="elec-count">0</span></div>
+    <div class="tbl-wrap">
+      <table class="result-table">
+        <thead><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>pcs</th><th>kW ea</th><th>Total kW</th><th>Day kW</th><th>Eve kW</th><th>Night kW</th><th class="no-print"></th></tr></thead>
+        <tbody id="elec-body"></tbody>
+        <tfoot id="elec-foot"></tfoot>
+      </table>
+    </div>
+  </div>
+  <div id="elec-empty"></div>
+</main>
+</div>
+
+<!-- ===== VIEW: INTERIOR ===== -->
+<div class="view" id="view-interior"><main>
+  <div class="empty"><div class="icon">&#128719;</div><h3>Interior &mdash; coming soon</h3>
+  <p>Joinery weights, furnishing and interior calculations will live here. Tell us which calculation to build first.</p></div>
+</main></div>
+
+<!-- ===== VIEW: MECHANICAL ===== -->
+<div class="view" id="view-mechanical"><main>
+  <div class="empty"><div class="icon">&#128295;</div><h3>Mechanical &mdash; coming soon</h3>
+  <p>Steering, hydraulics and deck machinery calculations will live here.</p></div>
+</main></div>
+
+<!-- ===== VIEW: AC (the full calculator module) ===== -->
+<div class="view" id="view-ac"></div>
+
+<!-- ===== PROJECT MODAL ===== -->
+<div class="overlay" id="proj-overlay" onclick="closeProjModal()"></div>
 <div class="modal" id="proj-modal">
-  <div class="modal-hdr"><h2>&#128194; Saved Projects</h2><button class="modal-close" onclick="closeProjectModal()">&#10005;</button></div>
-  <div class="modal-body"><div id="projects-list" style="display:grid;gap:10px"></div></div>
-  <div class="modal-footer"><button class="btn btn-ghost btn-sm" onclick="closeProjectModal()">Close</button></div>
-</div>
-<div class="overlay" id="sup-overlay" onclick="closeSupplierModal()"></div>
-<div class="modal" id="sup-modal">
-  <div class="modal-hdr"><h2>&#9881; Supplier Catalog</h2><button class="modal-close" onclick="closeSupplierModal()">&#10005;</button></div>
-  <div class="modal-tabs" id="sup-modal-tabs"></div>
+  <div class="modal-hdr"><h2>&#128203; Project</h2><button class="modal-close" onclick="closeProjModal()">&#10005;</button></div>
   <div class="modal-body">
-    <p style="font-size:12px;color:var(--g500);margin-bottom:12px">Editing: <strong id="modal-sup-name">&#8212;</strong></p>
-    <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-sm" style="background:var(--g100)" onclick="document.getElementById('csv-upload').click()">&#8679; Import CSV/JSON</button>
-      <button class="btn btn-sm" style="background:var(--g100)" onclick="exportSupplierCSV()">&#11015; Export CSV</button>
-      <input type="file" id="csv-upload" style="display:none" accept=".csv,.json" onchange="importSupplierData(event)">
+    <div class="field-row">
+      <div class="field"><label>Yacht Name</label><input id="pm-yacht" placeholder="e.g. B107C ZETEO"></div>
+      <div class="field"><label>Project No.</label><input id="pm-proj" placeholder="B121-01"></div>
     </div>
-    <table class="sup-table">
-      <thead><tr><th>Model</th><th>BTU/h</th><th>Weight kg</th><th class="no-print" style="width:50px"></th></tr></thead>
-      <tbody id="sup-edit-body"></tbody>
-    </table>
-    <div class="add-unit-row">
-      <div class="field"><label>Model</label><input class="sup-inp" id="new-model" placeholder="e.g. EVA30"></div>
-      <div class="field"><label>BTU/h</label><input class="sup-inp" type="number" id="new-btu" placeholder="30000"></div>
-      <div class="field"><label>Weight kg</label><input class="sup-inp" type="number" id="new-kg" placeholder="20"></div>
-      <button class="btn btn-primary btn-sm" onclick="addSupplierUnit()" style="flex-shrink:0;height:32px;margin-bottom:0">+ Add</button>
+    <div class="field-row">
+      <div class="field"><label>Type</label><input id="pm-type" placeholder="Sailing Yacht"></div>
+      <div class="field"><label>Class Society</label>
+        <select id="pm-cls"><option>Lloyd's Register (LRS)</option><option>DNV</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>MCA</option><option>RCD (EU)</option></select></div>
     </div>
+    <div class="field-row">
+      <div class="field"><label>Calculated By</label><input id="pm-by" placeholder="Engineer"></div>
+      <div class="field"><label>Revision</label><input id="pm-rev" placeholder="Rev. A"></div>
+    </div>
+    <div style="margin-top:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)">Saved projects</div>
+    <div id="pm-list" style="display:grid;gap:8px;margin-top:8px"></div>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-ghost btn-sm" onclick="closeSupplierModal()">Cancel</button>
-    <button class="btn btn-primary btn-sm" onclick="closeSupplierModal()">Done</button>
+    <button class="btn btn-line btn-sm" onclick="newProjectShell()">&#128196; New</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-line btn-sm" onclick="saveProjectShell()">&#128190; Save</button>
+      <button class="btn btn-primary btn-sm" onclick="applyProjMeta();closeProjModal()">Apply</button>
+    </div>
   </div>
 </div>
-<div id="pwa-banner">
-  <canvas id="pwa-icon" width="40" height="40"></canvas>
-  <div class="pwa-txt">
-    <strong>Install AC Cooling Calculator</strong>
-    <span>Add to home screen for quick access</span>
-  </div>
+
+<!-- PWA banners -->
+<div id="pwa-banner"><canvas id="pwa-icon" width="40" height="40"></canvas>
+  <div class="pwa-txt"><strong>Install Engineering Suite</strong><span>Add to home screen</span></div>
   <button class="btn btn-gold btn-sm" onclick="installPWA()">Install</button>
   <button class="pwa-dismiss" onclick="dismissPWA()">&#10005;</button>
 </div>
-<div id="ios-hint">
-  <button onclick="dismissIOS()">&#10005;</button>
-  <p>To install on iPhone: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p>
-</div>
-<footer style="background:var(--navy);color:rgba(255,255,255,.45);text-align:center;padding:14px;padding-bottom:calc(14px + var(--sab));font-size:11px;margin-top:24px">
-  <strong style="color:var(--gold)">Baltic Yachts Ltd</strong> &mdash; Engineering Department &middot; AC Cooling Calculator v4.0 &middot; ISO 7547
-</footer>
+<div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
+  <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
+
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.5 (shell) &middot; ISO 7547 / 8861 &middot; RINA / DNV-GL</footer>
+
 <script>
-var TYPES={owners:{l:"Owner's Cabin",med:80,trop:250,ach:1.5},captains:{l:"Captain's Cabin",med:100,trop:270,ach:2.0},guest:{l:"Guest Stateroom",med:120,trop:290,ach:2.0},guest_l:{l:"Guest Stateroom (Lrg)",med:150,trop:310,ach:2.0},crew:{l:"Crew Cabin",med:120,trop:250,ach:2.5},crew_mess:{l:"Crew Mess",med:150,trop:290,ach:3.0},salon:{l:"Salon / Saloon",med:150,trop:310,ach:2.0},wheelhouse:{l:"Wheelhouse / Bridge",med:180,trop:330,ach:3.0},galley:{l:"Galley / Pantry",med:220,trop:330,ach:8.0},laundry:{l:"Laundry",med:250,trop:350,ach:5.0},engine:{l:"Engine Room",med:300,trop:350,ach:0},technical:{l:"Technical / Workshop",med:200,trop:310,ach:3.0},other:{l:"Other",med:130,trop:290,ach:2.0}};
-var CLIMATE={med:{label:"Mediterranean",day:{dH:36.0,desc:"35-27C"},sil:{dH:25.4,desc:"28-20C"},red:{dH:8.0,desc:"Standby"},famu:{cabin_dH:23.0,central_dH:36.0},humidity:{day:{min:45,max:55},sil:{min:50,max:60},red:{min:55,max:70}}},trop:{label:"Tropical",day:{dH:66.3,desc:"40-27C"},sil:{dH:44.7,desc:"35-24C"},red:{dH:15.0,desc:"Standby"},famu:{cabin_dH:36.0,central_dH:66.3},humidity:{day:{min:40,max:50},sil:{min:45,max:55},red:{min:50,max:65}}}};
-var RT_PRESETS={std:{l:"Standard",d:12,s:8,r:4},full:{l:"Full Day",d:16,s:6,r:2},night:{l:"Night Only",d:4,s:10,r:10},away:{l:"Unoccupied",d:0,s:2,r:22},cust:{l:"Custom",d:12,s:8,r:4}};
-var SUPS={VECO:{n:"VECO",u:[{m:"MFC2",b:2000,w:7.5},{m:"MFC4",b:4000,w:9.3},{m:"MFC6",b:6000,w:10.3},{m:"MFC8",b:8000,w:12.3},{m:"MFC12",b:12000,w:13.8},{m:"MFC16",b:16000,w:16.3},{m:"EVA3",b:3000,w:6.0},{m:"EVA4.5",b:4500,w:6.4},{m:"EVA7",b:7000,w:7.6},{m:"EVA9",b:9000,w:8.0},{m:"EVA13",b:13000,w:8.7},{m:"EVA15",b:15000,w:15.3},{m:"EVA17",b:17000,w:18.5},{m:"EVA24",b:24000,w:18.0}]},DOMETIC:{n:"Dometic",u:[{m:"AU6DC",b:6000,w:10.9},{m:"AU9DC",b:9000,w:12.1},{m:"AU12DC",b:12000,w:15.1},{m:"AU18DC",b:18000,w:19.1},{m:"AU24DC",b:24000,w:20.9}]},WEBASTO:{n:"Webasto",u:[{m:"AH-CO05",b:4500,w:5.0},{m:"AH-CO06",b:6000,w:7.5},{m:"AH-CO09",b:9000,w:9.0},{m:"AH-CO12",b:12000,w:9.5},{m:"AH-CO16",b:16000,w:12.5},{m:"AH-CO20",b:20000,w:14.0},{m:"AH-CO24",b:24000,w:25.0},{m:"AH-CO30",b:30000,w:24.0},{m:"AH-CO48",b:48000,w:40.0}]},OTHER:{n:"Other",u:[{m:"Custom-3k",b:3000,w:0},{m:"Custom-6k",b:6000,w:0},{m:"Custom-9k",b:9000,w:0},{m:"Custom-12k",b:12000,w:0},{m:"Custom-24k",b:24000,w:0},{m:"Custom-36k",b:36000,w:0},{m:"Custom-48k",b:48000,w:0}]}};
-var PRESETS={owners:{name:"Owner's Cabin",type:"owners",area:27,h:2.1,p:2,wc:true},captains:{name:"Captain's Cabin",type:"captains",area:9,h:2.1,p:1,wc:true},guest:{name:"Guest Stateroom",type:"guest",area:12,h:2.1,p:2,wc:true},crew:{name:"Crew Cabin",type:"crew",area:7,h:2.1,p:2,wc:false},salon:{name:"Salon",type:"salon",area:35,h:2.2,p:0,wc:false},galley:{name:"Galley",type:"galley",area:15,h:2.1,p:1,wc:false}};
-var S={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,project:{yacht:"",proj:"",by:"Mikael Strengell",date:"",rev:"",client:"",cls:"Lloyd's Register (LRS)"},energy:{daytime:{h:12,load:100},silent:{h:8,load:55},reduced:{h:4,load:5},diversity:0.8,source:"generator",shore_rate:0.25,gen_rate:0.35,fuel_cost:1.80,passage_days:7}};
+/* ================================================================
+   BALTIC YACHTS ENGINEERING SUITE  v0.5 (shell)
+   Single-file SPA. Shared PROJECT + CONSUMERS store.
+   Modules: AC (live) + placeholders. Electrical aggregates consumers.
+   ================================================================ */
+
+function el(id){return document.getElementById(id);}
 function f0(n){return Math.round(Number(n)).toLocaleString("en-GB");}
 function f1(n){return Number(n).toFixed(1);}
 function f2(n){return Number(n).toFixed(2);}
-function el(id){return document.getElementById(id);}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function calcCost(kWh){return S.energy.source==="shore"?kWh*S.energy.shore_rate:kWh*S.energy.gen_rate*S.energy.fuel_cost;}
-function calcFuel(kWh){return S.energy.source==="generator"?kWh*S.energy.gen_rate:0;}
-function fmtCost(v){return "€"+f1(v);}
-function calcCabinEng(c,cr){
-  var unit=recUnit(cr.totB_d);
-  if(!unit||!unit.b)return null;
-  var cop=Number(el("cop").value)||3;
-  var eKW=(unit.b/3412)/cop;
-  var rt=c.rt||{d:S.energy.daytime.h,s:S.energy.silent.h,r:S.energy.reduced.h};
-  var eDd=eKW*(S.energy.daytime.load/100)*rt.d;
-  var eDs=eKW*(S.energy.silent.load/100)*rt.s;
-  var eDr=eKW*(S.energy.reduced.load/100)*rt.r;
-  var eDay=eDd+eDs+eDr;
-  return{unit:unit,eKW:eKW,day_d:eDd,day_s:eDs,day_r:eDr,daily:eDay,passage:eDay*S.energy.passage_days,cost_daily:calcCost(eDay),fuel_daily:calcFuel(eDay)};
+
+/* ---------- Shared project + consumers ---------- */
+var PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:""},consumers:[]};
+
+function loadActive(){
+  try{var a=JSON.parse(localStorage.getItem("by_active")||"null");if(a)PROJECT=a;}catch(e){}
+  if(!PROJECT.meta.date)PROJECT.meta.date=new Date().toISOString().split("T")[0];
+  if(!PROJECT.consumers)PROJECT.consumers=[];
 }
-function init(){
-  S.project.date=new Date().toISOString().split("T")[0];
-  loadSuppliersFromStorage();renderProjectFields();renderSupplierButtons();renderMainContent();
+function saveActive(){localStorage.setItem("by_active",JSON.stringify(PROJECT));updateChip();}
+function updateChip(){
+  var n=PROJECT.meta.yacht||PROJECT.meta.proj;
+  var c=el("chip-name");
+  c.textContent=n||"No project";
+  c.className=n?"":"muted";
 }
-function renderProjectFields(){
-  var cls=["Lloyd's Register (LRS)","DNV","Bureau Veritas (BV)","MCA","RCD (EU)"];
-  var opts=cls.map(function(c){return"<option"+(S.project.cls===c?" selected":"")+">"+c+"</option>";}).join("");
-  el("proj-grid").innerHTML=
-    "<div class='field'><label>Yacht Name</label><input type='text' id='f-yacht' placeholder='e.g. B107C ZETEO' value='"+esc(S.project.yacht)+"' oninput=\"S.project.yacht=this.value\"></div>"+
-    "<div class='field'><label>Project No.</label><input type='text' id='f-proj' placeholder='B107C-AC-001' value='"+esc(S.project.proj)+"' oninput=\"S.project.proj=this.value\"></div>"+
-    "<div class='field'><label>Calculated By</label><input type='text' id='f-by' value='"+esc(S.project.by)+"' oninput=\"S.project.by=this.value\"></div>"+
-    "<div class='field'><label>Date</label><input type='date' id='f-date' value='"+S.project.date+"' oninput=\"S.project.date=this.value\"></div>"+
-    "<div class='field'><label>Revision</label><input type='text' id='f-rev' placeholder='Rev. A' value='"+esc(S.project.rev)+"' oninput=\"S.project.rev=this.value\"></div>"+
-    "<div class='field'><label>Client / Owner</label><input type='text' id='f-client' placeholder='Owner' value='"+esc(S.project.client)+"' oninput=\"S.project.client=this.value\"></div>"+
-    "<div class='field'><label>Class Society</label><select id='f-cls' onchange=\"S.project.cls=this.value\">"+opts+"</select></div>";
+
+/* ---------- Router ---------- */
+var ROUTES={
+  home:{view:"view-home",crumb:[["Home",null]]},
+  systems:{view:"view-systems",crumb:[["Home","home"],["Systems",null]]},
+  engine:{view:"view-engine",crumb:[["Home","home"],["Systems","systems"],["Engine",null]]},
+  electrical:{view:"view-electrical",crumb:[["Home","home"],["Electrical",null]]},
+  interior:{view:"view-interior",crumb:[["Home","home"],["Interior",null]]},
+  mechanical:{view:"view-mechanical",crumb:[["Home","home"],["Mechanical",null]]},
+  ac:{view:"view-ac",crumb:[["Home","home"],["Systems","systems"],["Air Conditioning",null]]}
+};
+function go(r){location.hash="#/"+r;}
+function renderRoute(){
+  var r=(location.hash||"#/home").replace("#/","")||"home";
+  if(!ROUTES[r])r="home";
+  var def=ROUTES[r];
+  var vs=document.querySelectorAll(".view");
+  for(var i=0;i<vs.length;i++)vs[i].classList.remove("active");
+  el(def.view).classList.add("active");
+  // crumbs
+  var ch="";
+  for(var j=0;j<def.crumb.length;j++){
+    var c=def.crumb[j];
+    if(j>0)ch+="<span class='sep'>&#8250;</span>";
+    ch+=c[1]?("<a onclick=\"go('"+c[1]+"')\">"+c[0]+"</a>"):("<span class='cur'>"+c[0]+"</span>");
+  }
+  el("crumbs").innerHTML=ch;
+  if(r==="ac"){mountAC();}
+  if(r==="electrical"){renderElectrical();}
+  window.scrollTo(0,0);
 }
-function toggleProj(){var p=el("proj-panel");p.classList.toggle("open");el("proj-chevron").textContent=p.classList.contains("open")?"▴":"▾";}
-function saveProject(){
-  if(!S.project.yacht){alert("Please enter a yacht name first.");return;}
-  var snap=JSON.parse(JSON.stringify(S));snap.cop=el("cop").value;snap.id=Date.now().toString();
-  var projects=JSON.parse(localStorage.getItem("ac_projects")||"[]");
-  var idx=projects.findIndex(function(p){return(p.project||p).yacht===S.project.yacht&&(p.project||p).proj===S.project.proj;});
-  if(idx>=0)projects[idx]=snap;else projects.push(snap);
-  localStorage.setItem("ac_projects",JSON.stringify(projects));
-  alert("Project \""+S.project.yacht+"\" saved!");
-}
-function openProjectModal(){
-  var projects=JSON.parse(localStorage.getItem("ac_projects")||"[]");
-  if(!projects.length){el("projects-list").innerHTML="<p style='color:var(--g500)'>No saved projects yet.</p>";}
-  else el("projects-list").innerHTML=projects.map(function(p,i){
-    var pr=p.project||p;
-    return"<div style='padding:12px;background:var(--g100);border-radius:var(--r2);display:flex;justify-content:space-between;align-items:center;cursor:pointer' onclick='loadProject("+i+")'><div><strong>"+esc(pr.yacht)+"</strong><br><span style='font-size:11px;color:var(--g500)'>"+esc(pr.proj)+" · "+pr.date+" · "+(p.cabins||[]).length+" spaces</span></div><button class='icon-btn' onclick='event.stopPropagation();deleteProject("+i+")'>&#128465;</button></div>";
-  }).join("");
+window.addEventListener("hashchange",renderRoute);
+
+/* ---------- Project modal ---------- */
+function openProjModal(){
+  var m=PROJECT.meta;
+  el("pm-yacht").value=m.yacht||"";el("pm-proj").value=m.proj||"";el("pm-type").value=m.type||"";
+  el("pm-by").value=m.by||"";el("pm-rev").value=m.rev||"";el("pm-cls").value=m.cls||"Lloyd's Register (LRS)";
+  renderProjList();
   el("proj-overlay").classList.add("show");el("proj-modal").classList.add("show");
 }
-function closeProjectModal(){el("proj-overlay").classList.remove("show");el("proj-modal").classList.remove("show");}
-function loadProject(i){
-  var projects=JSON.parse(localStorage.getItem("ac_projects")||"[]");
-  var p=projects[i];if(!p)return;
-  var pr=p.project||p;
-  S.project={yacht:pr.yacht||"",proj:pr.proj||"",by:pr.by||"",date:pr.date||"",rev:pr.rev||"",client:pr.client||"",cls:pr.cls||pr.class||"Lloyd's Register (LRS)"};
-  S.cabins=p.cabins||[];
-  S.nid=S.cabins.reduce(function(mx,c){return Math.max(mx,c.id||0);},0)+1;
-  S.sup=p.sup||"VECO";S.climate=p.climate||"med";S.famu=p.famu||false;
-  if(p.energy)S.energy=p.energy;
-  el("cop").value=p.cop||"3.0";
-  closeProjectModal();setClimate(S.climate);setFAMU(S.famu);
-  renderProjectFields();renderSupplierButtons();renderMainContent();
-  renderCabins();syncEnergyCfg();recalc();
+function closeProjModal(){el("proj-overlay").classList.remove("show");el("proj-modal").classList.remove("show");}
+function applyProjMeta(){
+  PROJECT.meta.yacht=el("pm-yacht").value;PROJECT.meta.proj=el("pm-proj").value;
+  PROJECT.meta.type=el("pm-type").value;PROJECT.meta.by=el("pm-by").value;
+  PROJECT.meta.rev=el("pm-rev").value;PROJECT.meta.cls=el("pm-cls").value;
+  saveActive();
+  if(typeof acSyncFromProject==="function")acSyncFromProject();
 }
-function deleteProject(i){
-  var projects=JSON.parse(localStorage.getItem("ac_projects")||"[]");
-  var name=(projects[i].project||projects[i]).yacht;
-  if(!confirm("Delete \""+name+"\"?"))return;
-  projects.splice(i,1);localStorage.setItem("ac_projects",JSON.stringify(projects));openProjectModal();
+function saveProjectShell(){
+  applyProjMeta();
+  if(!PROJECT.meta.yacht){alert("Enter a yacht name first.");return;}
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  var snap=JSON.parse(JSON.stringify(PROJECT));snap.savedAt=new Date().toISOString().split("T")[0];
+  var idx=list.findIndex(function(p){return p.meta.yacht===PROJECT.meta.yacht&&p.meta.proj===PROJECT.meta.proj;});
+  if(idx>=0)list[idx]=snap;else list.push(snap);
+  localStorage.setItem("by_projects",JSON.stringify(list));
+  renderProjList();
+  alert("Project \""+PROJECT.meta.yacht+"\" saved.");
 }
-function newProject(){
-  if(S.cabins.length&&!confirm("Start a new project? Unsaved changes will be lost."))return;
-  S={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,
-    project:{yacht:"",proj:"",by:"Mikael Strengell",date:new Date().toISOString().split("T")[0],rev:"",client:"",cls:"Lloyd's Register (LRS)"},
-    energy:{daytime:{h:12,load:100},silent:{h:8,load:55},reduced:{h:4,load:5},diversity:0.8,source:"generator",shore_rate:0.25,gen_rate:0.35,fuel_cost:1.80,passage_days:7}};
-  el("cop").value="3.0";setClimate("med");setFAMU(false);
-  renderProjectFields();renderSupplierButtons();renderMainContent();
+function renderProjList(){
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  if(!list.length){el("pm-list").innerHTML="<p style='color:var(--g500);font-size:12px'>No saved projects yet.</p>";return;}
+  el("pm-list").innerHTML=list.map(function(p,i){
+    return "<div style='padding:10px;background:var(--g100);border-radius:var(--r2);display:flex;justify-content:space-between;align-items:center;cursor:pointer' onclick='loadProjectShell("+i+")'>"+
+      "<div><strong>"+esc(p.meta.yacht)+"</strong><br><span style='font-size:11px;color:var(--g500)'>"+esc(p.meta.proj)+" &middot; "+(p.consumers?p.consumers.length:0)+" consumers &middot; "+(p.savedAt||"")+"</span></div>"+
+      "<button class='btn btn-line btn-xs' onclick='event.stopPropagation();delProjectShell("+i+")'>&#128465;</button></div>";
+  }).join("");
 }
+function loadProjectShell(i){
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  if(!list[i])return;
+  PROJECT=JSON.parse(JSON.stringify(list[i]));
+  if(!PROJECT.consumers)PROJECT.consumers=[];
+  saveActive();
+  if(typeof acSyncFromProject==="function")acSyncFromProject();
+  closeProjModal();
+  alert("Loaded \""+PROJECT.meta.yacht+"\".");
+}
+function delProjectShell(i){
+  var list=JSON.parse(localStorage.getItem("by_projects")||"[]");
+  if(!confirm("Delete \""+list[i].meta.yacht+"\"?"))return;
+  list.splice(i,1);localStorage.setItem("by_projects",JSON.stringify(list));renderProjList();
+}
+function newProjectShell(){
+  if(!confirm("Start a new project? Unsaved changes are lost."))return;
+  PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:new Date().toISOString().split("T")[0]},consumers:[]};
+  saveActive();
+  if(typeof acResetModule==="function")acResetModule();
+  openProjModal();
+}
+
+/* ---------- Electrical consumers store ---------- */
+/* consumer = {id, source, name, bus, pcs, kw, day, eve, night}  (day/eve/night = % load 0-100) */
+function addConsumers(list){
+  // remove existing consumers from same source, then add fresh
+  if(list.length){
+    var src=list[0].source;
+    PROJECT.consumers=PROJECT.consumers.filter(function(c){return c.source!==src;});
+  }
+  list.forEach(function(c){c.id=c.id||("c"+Date.now()+Math.round(Math.random()*1e4));PROJECT.consumers.push(c);});
+  saveActive();
+}
+function removeConsumer(id){
+  PROJECT.consumers=PROJECT.consumers.filter(function(c){return c.id!==id;});
+  saveActive();renderElectrical();
+}
+function clearConsumers(){
+  if(!confirm("Remove all consumers from the load balance?"))return;
+  PROJECT.consumers=[];saveActive();renderElectrical();
+}
+function renderElectrical(){
+  var cs=PROJECT.consumers||[];
+  var body=el("elec-body"),foot=el("elec-foot"),emp=el("elec-empty");
+  el("elec-count").textContent=cs.length;
+  if(!cs.length){
+    body.innerHTML="";foot.innerHTML="";
+    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Try the Air Conditioning module &mdash; it can push the seawater pump, circulation pump and fan-coils into this load balance.</p></div>";
+    el("elec-kpi").innerHTML="";
+    return;
+  }
+  emp.innerHTML="";
+  var busCls={"24VDC":"p-24","AC":"p-ac","INV":"p-inv"};
+  var tD=0,tE=0,tN=0,tTot=0;
+  body.innerHTML=cs.map(function(c){
+    var tot=c.pcs*c.kw;
+    var dD=tot*(c.day/100),dE=tot*(c.eve/100),dN=tot*(c.night/100);
+    tD+=dD;tE+=dE;tN+=dN;tTot+=tot;
+    return "<tr><td>"+esc(c.source)+"</td><td><strong>"+esc(c.name)+"</strong></td>"+
+      "<td><span class='pill "+(busCls[c.bus]||"p-dim")+"'>"+c.bus+"</span></td>"+
+      "<td>"+c.pcs+"</td><td>"+f2(c.kw)+"</td><td>"+f2(tot)+"</td>"+
+      "<td>"+f2(dD)+"</td><td>"+f2(dE)+"</td><td>"+f2(dN)+"</td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' onclick=\"removeConsumer('"+c.id+"')\">&#10005;</button></td></tr>";
+  }).join("");
+  foot.innerHTML="<tr><td colspan='5'>TOTAL</td><td>"+f2(tTot)+" kW</td><td>"+f2(tD)+"</td><td>"+f2(tE)+"</td><td>"+f2(tN)+"</td><td class='no-print'></td></tr>";
+  el("elec-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Consumers</div><div class='kpi-v'>"+cs.length+"</div><div class='kpi-u'>lines</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Installed</div><div class='kpi-v'>"+f1(tTot)+"</div><div class='kpi-u'>kW total</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Daytime</div><div class='kpi-v'>"+f1(tD)+"</div><div class='kpi-u'>kW demand</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Evening</div><div class='kpi-v'>"+f1(tE)+"</div><div class='kpi-u'>kW demand</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Night</div><div class='kpi-v'>"+f1(tN)+"</div><div class='kpi-u'>kW demand</div></div>";
+}
+
+/* ================================================================
+   AC MODULE  (mounted into #view-ac on demand)
+   ================================================================ */
+
+var AC_MOUNTED=false;
+var TYPES={owners:{l:"Owner's Cabin",med:80,trop:250,ach:1.5},captains:{l:"Captain's Cabin",med:100,trop:270,ach:2.0},guest:{l:"Guest Stateroom",med:120,trop:290,ach:2.0},guest_l:{l:"Guest Stateroom (Lrg)",med:150,trop:310,ach:2.0},crew:{l:"Crew Cabin",med:120,trop:250,ach:2.5},crew_mess:{l:"Crew Mess",med:150,trop:290,ach:3.0},salon:{l:"Salon / Saloon",med:150,trop:310,ach:2.0},wheelhouse:{l:"Wheelhouse / Bridge",med:180,trop:330,ach:3.0},galley:{l:"Galley / Pantry",med:220,trop:330,ach:8.0},laundry:{l:"Laundry",med:250,trop:350,ach:5.0},engine:{l:"Engine Room",med:300,trop:350,ach:0},technical:{l:"Technical / Workshop",med:200,trop:310,ach:3.0},other:{l:"Other",med:130,trop:290,ach:2.0}};
+var CLIMATE={med:{label:"Mediterranean",day:{dH:36.0,desc:"35-27C"},sil:{dH:25.4,desc:"28-20C"},red:{dH:8.0,desc:"Standby"},famu:{cabin_dH:23.0,central_dH:36.0},humidity:{day:{min:45,max:55},sil:{min:50,max:60},red:{min:55,max:70}}},trop:{label:"Tropical",day:{dH:66.3,desc:"40-27C"},sil:{dH:44.7,desc:"35-24C"},red:{dH:15.0,desc:"Standby"},famu:{cabin_dH:36.0,central_dH:66.3},humidity:{day:{min:40,max:50},sil:{min:45,max:55},red:{min:50,max:65}}}};
+var SUPS={VECO:{n:"VECO",u:[{m:"MFC2",b:2000,w:7.5},{m:"MFC4",b:4000,w:9.3},{m:"MFC6",b:6000,w:10.3},{m:"MFC8",b:8000,w:12.3},{m:"MFC12",b:12000,w:13.8},{m:"MFC16",b:16000,w:16.3},{m:"EVA3",b:3000,w:6.0},{m:"EVA4.5",b:4500,w:6.4},{m:"EVA7",b:7000,w:7.6},{m:"EVA9",b:9000,w:8.0},{m:"EVA13",b:13000,w:8.7},{m:"EVA15",b:15000,w:15.3},{m:"EVA17",b:17000,w:18.5},{m:"EVA24",b:24000,w:18.0}]},DOMETIC:{n:"Dometic",u:[{m:"AU6DC",b:6000,w:10.9},{m:"AU9DC",b:9000,w:12.1},{m:"AU12DC",b:12000,w:15.1},{m:"AU18DC",b:18000,w:19.1},{m:"AU24DC",b:24000,w:20.9}]},WEBASTO:{n:"Webasto",u:[{m:"AH-CO05",b:4500,w:5.0},{m:"AH-CO06",b:6000,w:7.5},{m:"AH-CO09",b:9000,w:9.0},{m:"AH-CO12",b:12000,w:9.5},{m:"AH-CO16",b:16000,w:12.5},{m:"AH-CO20",b:20000,w:14.0},{m:"AH-CO24",b:24000,w:25.0},{m:"AH-CO30",b:30000,w:24.0},{m:"AH-CO48",b:48000,w:40.0}]},OTHER:{n:"Other",u:[{m:"Custom-6k",b:6000,w:0},{m:"Custom-12k",b:12000,w:0},{m:"Custom-24k",b:24000,w:0},{m:"Custom-36k",b:36000,w:0},{m:"Custom-48k",b:48000,w:0}]}};
+var ACP={owners:{name:"Owner's Cabin",type:"owners",area:27,h:2.1,p:2,wc:true},captains:{name:"Captain's Cabin",type:"captains",area:9,h:2.1,p:1,wc:true},guest:{name:"Guest Stateroom",type:"guest",area:12,h:2.1,p:2,wc:true},crew:{name:"Crew Cabin",type:"crew",area:7,h:2.1,p:2,wc:false},salon:{name:"Salon",type:"salon",area:35,h:2.2,p:0,wc:false},galley:{name:"Galley",type:"galley",area:15,h:2.1,p:1,wc:false}};
+var S={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,cop:3.0};
+
+function acState(){ if(!PROJECT.ac)PROJECT.ac={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,cop:3.0}; return PROJECT.ac; }
+function acSave(){ PROJECT.ac=S; saveActive(); }
+function acSyncFromProject(){ var a=acState(); S={climate:a.climate||"med",famu:a.famu||false,sup:a.sup||"VECO",cabins:a.cabins||[],nid:a.nid||1,cop:a.cop||3.0}; if(AC_MOUNTED){ el("ac-cop").value=S.cop; setClimate(S.climate,1); setFAMU(S.famu,1); renderSupBtns(); renderCabins(); recalc(); } }
+function acResetModule(){ S={climate:"med",famu:false,sup:"VECO",cabins:[],nid:1,cop:3.0}; if(AC_MOUNTED){renderCabins();recalc();} }
+
+function mountAC(){
+  if(AC_MOUNTED){ recalc(); return; }
+  el("view-ac").innerHTML=acHTML();
+  AC_MOUNTED=true;
+  var a=acState(); S={climate:a.climate||"med",famu:a.famu||false,sup:a.sup||"VECO",cabins:a.cabins||[],nid:a.nid||1,cop:a.cop||3.0};
+  el("ac-cop").value=S.cop;
+  setClimate(S.climate,1);setFAMU(S.famu,1);renderSupBtns();renderCabins();recalc();
+}
+
+function acHTML(){
+  return "<main>"+
+    "<div class='page-head'><div><h2>Air Conditioning</h2><p>ISO 7547 cabin cooling. Results feed the seawater pump and fan-coil consumers into Electrical.</p></div>"+
+      "<div style='display:flex;gap:8px' class='no-print'>"+
+        "<button class='btn btn-line btn-sm' onclick='exportExcel()'>&#11015; Excel</button>"+
+        "<button class='btn btn-gold btn-sm' onclick='sendACtoElectrical()'>&#9889; Send to Electrical</button>"+
+      "</div></div>"+
+    "<div class='card'><div class='card-hdr'><h2>Settings</h2></div><div style='padding:14px 20px;display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end'>"+
+      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>Climate</label>"+
+        "<div style='display:flex;border:1.5px solid var(--g300);border-radius:4px;overflow:hidden;height:32px'>"+
+        "<button id='ac-bmed' class='acseg on' onclick=\"setClimate('med')\">Mediterranean</button><button id='ac-btrop' class='acseg' onclick=\"setClimate('trop')\">Tropical</button></div></div>"+
+      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>FAMU</label>"+
+        "<div style='display:flex;border:1.5px solid var(--g300);border-radius:4px;overflow:hidden;height:32px'>"+
+        "<button id='ac-bfn' class='acseg on' onclick='setFAMU(false)'>No</button><button id='ac-bfy' class='acseg' onclick='setFAMU(true)'>Yes</button></div></div>"+
+      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>Supplier</label>"+
+        "<div id='ac-sup' style='display:flex;gap:5px;flex-wrap:wrap'></div></div>"+
+      "<div><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--g500);display:block;margin-bottom:4px'>COP</label>"+
+        "<input id='ac-cop' type='number' value='3.0' min='1.5' max='6' step='0.1' oninput='S.cop=+this.value;acSave();recalc()' style='width:64px;padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;text-align:center'></div>"+
+    "</div></div>"+
+    "<div class='card'><div class='card-hdr'><h2>Spaces &amp; Cabins</h2><div style='display:flex;gap:8px;align-items:center'><span class='badge' id='ac-badge'>0</span><button class='btn btn-primary btn-sm no-print' onclick='addCabin()'>+ Add Space</button></div></div>"+
+      "<div class='tbl-wrap'><table><thead><tr><th>#</th><th>Name</th><th>Type</th><th>Area m&#178;</th><th>H</th><th>&#128100;</th><th>WC</th><th>ACH</th><th>Cooling</th><th>OK</th><th class='no-print'></th></tr></thead>"+
+      "<tbody id='ac-body'></tbody></table></div>"+
+      "<div style='padding:10px 16px;background:var(--g100);border-top:1px solid var(--g200);display:flex;gap:6px;flex-wrap:wrap' class='no-print' id='ac-quick'></div></div>"+
+    "<div class='card' id='ac-results' style='display:none'>"+
+      "<div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='ac-resbadge'>&#8212;</span></div>"+
+      "<div class='kpi-row' id='ac-kpi'></div>"+
+      "<div class='tbl-wrap' style='padding:0 0 8px'><table class='result-table'><thead><tr><th>#</th><th>Space</th><th>Area</th><th>Cooling</th><th>Unit</th><th>BTU</th><th>kg</th></tr></thead><tbody id='ac-equip'></tbody><tfoot id='ac-equipfoot'></tfoot></table></div>"+
+    "</div></main>"+
+    "<style>.acseg{padding:0 13px;border:none;background:#fff;color:var(--g700);font-size:12px;font-weight:500;cursor:pointer}.acseg.on{background:var(--navy);color:#fff}.acseg+.acseg{border-left:1.5px solid var(--g300)}"+
+    ".acsup{padding:0 11px;height:32px;border:1.5px solid var(--g300);border-radius:4px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--g700)}.acsup.on{border-color:var(--gold);background:var(--gold-bg);color:var(--navy)}"+
+    ".ti{padding:5px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;width:100%}.ti:focus{outline:none;border-color:var(--navy)}.tin{max-width:56px;text-align:right}</style>";
+}
+
 function calcCabin(c){
   var area=Number(c.area)||0,h=Number(c.h)||2.1,p=Number(c.p)||0,ach=Number(c.ach)||2,wc=!!c.wc;
   var t=TYPES[c.type]||TYPES.other,cli=CLIMATE[S.climate];
   var wm2=S.climate==="med"?t.med:t.trop,vol=area*h;
   var fv=Math.max((vol*ach)/3.6,p*7,area>0?3:0);
-  var wcExt=wc?Math.max(area*4.5,15):0;
-  var dH_d=S.famu?cli.famu.cabin_dH:cli.day.dH;
-  var vH_d=1.29*1.01*fv*dH_d;
-  var base_d=wm2*area,pers=p*150,inst=10*area;
-  var totW_d=base_d+vH_d+pers+inst,totB_d=totW_d*3.41214;
-  var classMin=Math.max(p*7,vol*0.5/3.6);
-  return{area:area,h:h,p:p,ach:ach,wc:wc,wm2:wm2,vol:vol,fv:fv,wcExt:wcExt,base_d:base_d,vH_d:vH_d,pers:pers,inst:inst,totW_d:totW_d,totB_d:totB_d,classMin:classMin};
+  var dH=S.famu?cli.famu.cabin_dH:cli.day.dH;
+  var vH=1.29*1.01*fv*dH,base=wm2*area,pers=p*150,inst=10*area;
+  var totW=base+vH+pers+inst,totB=totW*3.41214;
+  return {area:area,p:p,wm2:wm2,vol:vol,fv:fv,totW:totW,totB:totB};
 }
-function recUnit(btu){
-  var units=SUPS[S.sup].u.slice().sort(function(a,b){return a.b-b.b;});
-  var found=units.filter(function(u){return u.b>=btu;});
-  return found.length?found[0]:units[units.length-1]||{m:"-",b:0,w:0};
+function recUnit(btu){var u=SUPS[S.sup].u.slice().sort(function(a,b){return a.b-b.b;});var f=u.filter(function(x){return x.b>=btu;});return f.length?f[0]:u[u.length-1]||{m:"-",b:0,w:0};}
+function typeOpts(sel){return Object.keys(TYPES).map(function(k){return "<option value='"+k+"'"+(sel===k?" selected":"")+">"+TYPES[k].l+"</option>";}).join("");}
+
+function renderSupBtns(){
+  if(!el("ac-sup"))return;
+  el("ac-sup").innerHTML=Object.keys(SUPS).map(function(k){return "<button class='acsup"+(S.sup===k?" on":"")+"' onclick=\"setSup('"+k+"')\">"+SUPS[k].n+"</button>";}).join("");
+  if(el("ac-quick"))el("ac-quick").innerHTML="<span style='font-size:12px;color:var(--g500)'>Quick add:</span>"+Object.keys(ACP).map(function(k){return "<button class='btn btn-line btn-xs' onclick=\"addPreset('"+k+"')\">"+ACP[k].name+"</button>";}).join("");
 }
-function renderMainContent(){
-  el("main-content").innerHTML=
-    "<div class='card'>"+
-      "<div class='card-hdr'><h2>Spaces &amp; Cabins</h2>"+
-        "<div class='card-hdr-right'><span class='badge' id='cabin-badge'>0 spaces</span>"+
-        "<button class='btn btn-primary btn-sm no-print' onclick='addCabin()'>+ Add Space</button></div></div>"+
-      "<div class='tbl-wrap'><table>"+
-        "<thead><tr><th style='width:32px'>#</th><th>Name</th><th>Type</th><th>Area m²</th><th>H m</th>"+
-        "<th>👤</th><th class='tc'>🚿</th><th>ACH</th>"+
-        "<th>Cooling</th><th class='tc'>OK</th><th class='no-print' style='width:36px'></th></tr></thead>"+
-        "<tbody id='cabin-body'><tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>🚢</div>"+
-        "<p>Click <strong>+ Add Space</strong> or use a quick preset below</p></div></td></tr></tbody>"+
-      "</table></div>"+
-      "<div class='tbl-footer no-print' id='quick-footer'></div>"+
-    "</div>"+
-    "<div class='card' id='energy-cfg-card' style='display:none'>"+
-      "<div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>&#9889; Energy Configuration</h2>"+
-        "<span class='badge badge-gold' id='ecfg-badge'>0 cabins</span></div>"+
-      "<div class='ecfg-row'>"+
-        "<div class='ecfg-block'><h3>Operating Modes</h3>"+
-          "<table class='ecfg-table'><thead><tr><th>Mode</th><th>Hours/day</th><th>Load %</th></tr></thead>"+
-          "<tbody>"+
-            "<tr><td style='color:var(--navy)'>Daytime</td>"+
-              "<td><input class='e-inp' type='number' id='e-d-h' value='12' min='0' max='24' oninput=\"updEng('daytime','h',+this.value)\"><span class='e-unit'>h</span></td>"+
-              "<td><input class='e-inp' type='number' id='e-d-l' value='100' min='0' max='100' oninput=\"updEng('daytime','load',+this.value)\"><span class='e-unit'>%</span></td></tr>"+
-            "<tr><td style='color:var(--gold)'>Silent</td>"+
-              "<td><input class='e-inp' type='number' id='e-s-h' value='8' min='0' max='24' oninput=\"updEng('silent','h',+this.value)\"><span class='e-unit'>h</span></td>"+
-              "<td><input class='e-inp' type='number' id='e-s-l' value='55' min='0' max='100' oninput=\"updEng('silent','load',+this.value)\"><span class='e-unit'>%</span></td></tr>"+
-            "<tr><td style='color:var(--g500)'>Reduced</td>"+
-              "<td><input class='e-inp' type='number' id='e-r-h' value='4' min='0' max='24' oninput=\"updEng('reduced','h',+this.value)\"><span class='e-unit'>h</span></td>"+
-              "<td><input class='e-inp' type='number' id='e-r-l' value='5' min='0' max='100' oninput=\"updEng('reduced','load',+this.value)\"><span class='e-unit'>%</span></td></tr>"+
-          "</tbody></table>"+
-          "<div style='margin-top:10px'>"+
-            "<div class='e-row'><label>Diversity factor</label><input class='e-inp' type='number' id='e-div' value='0.8' min='0.1' max='1.0' step='0.05' oninput=\"S.energy.diversity=+this.value;recalc()\"><span class='e-unit'>0&#8211;1</span></div>"+
-            "<div style='font-size:10px;color:var(--g500);margin-top:2px'>0.7&#8211;0.8 typical &middot; 1.0 = all spaces at full load simultaneously</div>"+
-          "</div>"+
-        "</div>"+
-        "<div class='ecfg-block'><h3>Cost &amp; Fuel</h3>"+
-          "<div class='src-toggle'>"+
-            "<button id='src-gen' class='on' onclick=\"setEngSource('generator')\">Generator</button>"+
-            "<button id='src-shore' onclick=\"setEngSource('shore')\">Shore Power</button>"+
-          "</div>"+
-          "<div id='gen-settings'>"+
-            "<div class='e-row'><label>Fuel consumption</label><input class='e-inp e-inp-w' type='number' id='e-gen' value='0.35' min='0.05' max='2' step='0.01' oninput=\"S.energy.gen_rate=+this.value;recalc()\"><span class='e-unit'>l/kWh</span></div>"+
-            "<div class='e-row'><label>Fuel cost</label><input class='e-inp e-inp-w' type='number' id='e-fuel' value='1.80' min='0' step='0.01' oninput=\"S.energy.fuel_cost=+this.value;recalc()\"><span class='e-unit'>&#8364;/litre</span></div>"+
-          "</div>"+
-          "<div id='shore-settings' style='display:none'>"+
-            "<div class='e-row'><label>Shore rate</label><input class='e-inp e-inp-w' type='number' id='e-shore' value='0.25' min='0' step='0.01' oninput=\"S.energy.shore_rate=+this.value;recalc()\"><span class='e-unit'>&#8364;/kWh</span></div>"+
-          "</div>"+
-        "</div>"+
-        "<div class='ecfg-block'><h3>Passage Planning</h3>"+
-          "<div class='e-row'><label>Passage length</label><input class='e-inp e-inp-w' type='number' id='e-pass' value='7' min='1' max='365' oninput=\"S.energy.passage_days=+this.value;recalc()\"><span class='e-unit'>days</span></div>"+
-          "<div style='margin-top:14px;padding:12px;background:var(--g100);border-radius:var(--r2);font-size:11px;color:var(--g500);line-height:1.7'>"+
-            "<strong style='color:var(--navy);display:block;margin-bottom:3px'>Runtime presets</strong>"+
-            "Standard: 12h / 8h / 4h<br>Full Day: 16h / 6h / 2h<br>Night Only: 4h / 10h / 10h<br>Unoccupied: 0h / 2h / 22h"+
-          "</div>"+
-        "</div>"+
-      "</div>"+
-      "<div class='section-sep'>Per-Cabin Runtime</div>"+
-      "<div class='tbl-wrap'><table class='rt-table'>"+
-        "<thead><tr><th>Space</th><th>Preset</th><th>Daytime h</th><th>Silent h</th><th>Reduced h</th><th>Total h/day</th><th>kWh/day (est.)</th></tr></thead>"+
-        "<tbody id='rt-body'></tbody>"+
-      "</table></div>"+
-    "</div>"+
-    "<div class='card' id='results-card' style='display:none'>"+
-      "<div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='res-badge'>&#8212;</span></div>"+
-      "<div class='kpi-row' id='kpi-row'></div>"+
-      "<div class='section-sep'>Equipment Selection</div>"+
-      "<div class='tbl-wrap'><table class='result-table'>"+
-        "<thead><tr><th>#</th><th>Space</th><th>Type</th><th>Area</th><th>Cooling Need</th><th>Unit</th><th>Unit BTU</th><th>Weight</th></tr></thead>"+
-        "<tbody id='equip-body'></tbody><tfoot id='equip-foot'></tfoot>"+
-      "</table></div>"+
-      "<div class='section-sep'>Humidity (ISO 7547)</div>"+
-      "<div id='humidity-section'></div>"+
-      "<div class='section-sep'>Energy Consumption</div>"+
-      "<div id='energy-results'></div>"+
-      "<div class='acc-hdr' onclick='toggleAcc(this)'><h3>Technical Details (ISO 7547)</h3><span class='chevron'>&#9662;</span></div>"+
-      "<div class='acc-body'><div class='inner'><div class='tbl-wrap'><table class='result-table'>"+
-        "<thead><tr><th>#</th><th>Space</th><th>W/m²</th><th>Base W</th><th>Vent W</th><th>Persons W</th><th>Install W</th><th>Total W</th><th>Total BTU</th></tr></thead>"+
-        "<tbody id='tech-body'></tbody><tfoot id='tech-foot'></tfoot>"+
-      "</table></div></div></div>"+
-      "<div class='acc-hdr' onclick='toggleAcc(this)'><h3>Ventilation Compliance</h3><span class='chevron'>&#9662;</span></div>"+
-      "<div class='acc-body'><div class='inner'><div class='tbl-wrap'><table class='result-table'>"+
-        "<thead><tr><th>#</th><th>Space</th><th>Vol m³</th><th>ACH</th><th>Flow l/s</th><th>Class Min l/s</th><th>WC Ext l/s</th><th>Status</th></tr></thead>"+
-        "<tbody id='vent-body'></tbody>"+
-      "</table></div></div></div>"+
-      "<div class='acc-hdr' onclick='toggleAcc(this)'><h3>Design Conditions (ISO 7547)</h3><span class='chevron'>&#9662;</span></div>"+
-      "<div class='acc-body'><div class='inner'><div class='tbl-wrap'><table class='result-table' style='max-width:640px'>"+
-        "<thead><tr><th>Parameter</th><th>Value</th><th>Reference</th></tr></thead>"+
-        "<tbody id='cond-body'></tbody>"+
-      "</table></div></div></div>"+
-    "</div>";
-  var qhtml="<span style='font-size:12px;color:var(--g500)'>Quick add:</span>";
-  Object.keys(PRESETS).forEach(function(k){qhtml+="<button class='btn btn-sm' style='background:var(--g100)' onclick=\"addPreset('"+k+"')\">"+PRESETS[k].name+"</button>";});
-  el("quick-footer").innerHTML=qhtml;
-}
-function syncEnergyCfg(){
-  var e=S.energy;
-  if(el("e-d-h")){el("e-d-h").value=e.daytime.h;el("e-d-l").value=e.daytime.load;}
-  if(el("e-s-h")){el("e-s-h").value=e.silent.h;el("e-s-l").value=e.silent.load;}
-  if(el("e-r-h")){el("e-r-h").value=e.reduced.h;el("e-r-l").value=e.reduced.load;}
-  if(el("e-div"))el("e-div").value=e.diversity;
-  if(el("e-gen"))el("e-gen").value=e.gen_rate;
-  if(el("e-fuel"))el("e-fuel").value=e.fuel_cost;
-  if(el("e-shore"))el("e-shore").value=e.shore_rate;
-  if(el("e-pass"))el("e-pass").value=e.passage_days;
-  setEngSource(e.source,true);
-}
-function updEng(mode,field,val){S.energy[mode][field]=val;recalc();}
-function setEngSource(src,silent){
-  S.energy.source=src;
-  if(el("src-gen"))el("src-gen").classList.toggle("on",src==="generator");
-  if(el("src-shore"))el("src-shore").classList.toggle("on",src==="shore");
-  if(el("gen-settings"))el("gen-settings").style.display=src==="generator"?"":"none";
-  if(el("shore-settings"))el("shore-settings").style.display=src==="shore"?"":"none";
-  if(!silent)recalc();
-}
-function updateRTTable(){
-  if(!el("rt-body"))return;
-  var html="";
-  S.cabins.forEach(function(c){
-    var rt=c.rt||{preset:"std",d:S.energy.daytime.h,s:S.energy.silent.h,r:S.energy.reduced.h};
-    if(!c.rt)c.rt=rt;
-    var totH=rt.d+rt.s+rt.r;
-    var warn=totH!==24?"<span style='color:var(--amber);font-size:10px'> &#9888; "+totH+"h</span>":"";
-    var cr=calcCabin(c),eng=calcCabinEng(c,cr);
-    var kwhDay=eng?f1(eng.daily*S.energy.diversity):"-";
-    var popts=Object.keys(RT_PRESETS).map(function(k){return"<option value='"+k+"'"+(rt.preset===k?" selected":"")+">"+RT_PRESETS[k].l+"</option>";}).join("");
-    html+=
-      "<tr id='rtr-"+c.id+"'>"+
-      "<td><strong>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:c.type))+"</strong></td>"+
-      "<td><select class='preset-sel' onchange='setCabinPreset("+c.id+",this.value)'>"+popts+"</select></td>"+
-      "<td><input class='rt-inp' type='number' value='"+rt.d+"' min='0' max='24' oninput='updCabinRT("+c.id+",\"d\",+this.value)'></td>"+
-      "<td><input class='rt-inp' type='number' value='"+rt.s+"' min='0' max='24' oninput='updCabinRT("+c.id+",\"s\",+this.value)'></td>"+
-      "<td><input class='rt-inp' type='number' value='"+rt.r+"' min='0' max='24' oninput='updCabinRT("+c.id+",\"r\",+this.value)'></td>"+
-      "<td style='font-weight:700;color:var(--navy)'>"+totH+"h"+warn+"</td>"+
-      "<td style='font-weight:600;color:var(--navy)'>"+kwhDay+" kWh</td>"+
-      "</tr>";
-  });
-  el("rt-body").innerHTML=html||"<tr><td colspan='7' style='text-align:center;color:var(--g500);padding:16px'>No spaces added yet</td></tr>";
-  if(el("ecfg-badge"))el("ecfg-badge").textContent=S.cabins.length+(S.cabins.length===1?" cabin":" cabins");
-}
-function setCabinPreset(id,preset){
-  var c=S.cabins.find(function(c){return c.id===id;});if(!c)return;
-  var p=RT_PRESETS[preset]||RT_PRESETS.std;
-  c.rt={preset:preset,d:p.d,s:p.s,r:p.r};recalc();
-}
-function updCabinRT(id,field,val){
-  var c=S.cabins.find(function(c){return c.id===id;});if(!c)return;
-  if(!c.rt)c.rt={preset:"std",d:12,s:8,r:4};
-  c.rt[field]=val;c.rt.preset="cust";recalc();
-}
-function typeOptions(sel){return Object.keys(TYPES).map(function(k){return"<option value='"+k+"'"+(sel===k?" selected":"")+">"+TYPES[k].l+"</option>";}).join("");}
+function setSup(k){S.sup=k;renderSupBtns();acSave();recalc();}
+function setClimate(c,q){S.climate=c;if(el("ac-bmed")){el("ac-bmed").classList.toggle("on",c==="med");el("ac-btrop").classList.toggle("on",c==="trop");}if(!q){acSave();recalc();}}
+function setFAMU(v,q){S.famu=v;if(el("ac-bfn")){el("ac-bfn").classList.toggle("on",!v);el("ac-bfy").classList.toggle("on",v);}if(!q){acSave();recalc();}}
+
 function appendRow(c){
-  if(el("r"+c.id))return;
-  var er=el("empty-row");if(er)er.remove();
-  if(!c.rt)c.rt={preset:"std",d:S.energy.daytime.h,s:S.energy.silent.h,r:S.energy.reduced.h};
-  var tr=document.createElement("tr");tr.id="r"+c.id;
-  tr.innerHTML=
-    "<td class='rn' style='color:var(--g500);font-weight:600'>-</td>"+
-    "<td><input class='ti ti-name' type='text' value='"+esc(c.name||"")+"' placeholder=\"e.g. Owner's Cabin\" oninput=\"upd("+c.id+",'name',this.value)\"></td>"+
-    "<td><select class='ti ti-type' onchange='updType("+c.id+",this.value)'>"+typeOptions(c.type)+"</select></td>"+
-    "<td><input class='ti ti-num' type='number' value='"+(c.area||"")+"' min='1' max='500' step='0.5' oninput=\"upd("+c.id+",'area',+this.value)\"></td>"+
-    "<td><input class='ti ti-num' type='number' value='"+(c.h||2.1)+"' min='1.5' max='4' step='0.1' oninput=\"upd("+c.id+",'h',+this.value)\"></td>"+
-    "<td><input class='ti ti-num' type='number' value='"+(c.p||0)+"' min='0' max='30' oninput=\"upd("+c.id+",'p',+this.value)\"></td>"+
-    "<td class='tc'><input type='checkbox' "+(c.wc?"checked":"")+" onchange=\"upd("+c.id+",'wc',this.checked)\"></td>"+
-    "<td><input class='ti ti-num' type='number' value='"+(c.ach||2)+"' id='ach"+c.id+"' min='0' max='20' step='0.5' oninput=\"upd("+c.id+",'ach',+this.value)\"></td>"+
-    "<td id='cn"+c.id+"' style='font-weight:600;white-space:nowrap;color:var(--navy)'>-</td>"+
-    "<td class='tc' id='st"+c.id+"'><span class='pill p-dim'>-</span></td>"+
-    "<td class='no-print'><button class='icon-btn' onclick='removeRow("+c.id+")'>&#10005;</button></td>";
-  el("cabin-body").appendChild(tr);
+  if(el("acr"+c.id))return;
+  var tr=document.createElement("tr");tr.id="acr"+c.id;
+  tr.innerHTML="<td class='rn' style='color:var(--g500);font-weight:600'>-</td>"+
+    "<td><input class='ti' style='min-width:120px' value='"+esc(c.name||"")+"' oninput=\"upd("+c.id+",'name',this.value)\"></td>"+
+    "<td><select class='ti' style='min-width:150px' onchange='updType("+c.id+",this.value)'>"+typeOpts(c.type)+"</select></td>"+
+    "<td><input class='ti tin' type='number' value='"+(c.area||"")+"' oninput=\"upd("+c.id+",'area',+this.value)\"></td>"+
+    "<td><input class='ti tin' type='number' value='"+(c.h||2.1)+"' step='0.1' oninput=\"upd("+c.id+",'h',+this.value)\"></td>"+
+    "<td><input class='ti tin' type='number' value='"+(c.p||0)+"' oninput=\"upd("+c.id+",'p',+this.value)\"></td>"+
+    "<td style='text-align:center'><input type='checkbox' "+(c.wc?"checked":"")+" onchange=\"upd("+c.id+",'wc',this.checked)\"></td>"+
+    "<td><input class='ti tin' type='number' value='"+(c.ach||2)+"' step='0.5' id='acach"+c.id+"' oninput=\"upd("+c.id+",'ach',+this.value)\"></td>"+
+    "<td id='accn"+c.id+"' style='font-weight:600;white-space:nowrap'>-</td>"+
+    "<td id='acst"+c.id+"'><span class='pill p-dim'>-</span></td>"+
+    "<td class='no-print'><button class='btn btn-line btn-xs' onclick='removeRow("+c.id+")'>&#10005;</button></td>";
+  el("ac-body").appendChild(tr);
 }
-function renderCabins(){
-  var tbody=el("cabin-body");tbody.innerHTML="";
-  if(!S.cabins.length){tbody.innerHTML="<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>🚢</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";}
-  else{S.cabins.forEach(function(c){appendRow(c);});updateRowNums();}
-  updateBadge();
-}
-function addCabin(data){
-  var id=S.nid++;
-  var c=data?Object.assign({},data,{id:id}):{id:id,name:"",type:"guest",area:"",h:2.1,p:2,wc:true,ach:2.0};
-  c.rt={preset:"std",d:S.energy.daytime.h,s:S.energy.silent.h,r:S.energy.reduced.h};
-  S.cabins.push(c);appendRow(c);updateRowNums();updateBadge();recalc();
-}
-function addPreset(key){addCabin(Object.assign({},PRESETS[key]));}
-function removeRow(id){
-  S.cabins=S.cabins.filter(function(c){return c.id!==id;});
-  var row=el("r"+id);if(row)row.remove();
-  if(!S.cabins.length){
-    el("cabin-body").innerHTML="<tr id='empty-row'><td colspan='11'><div class='empty'><div class='icon'>🚢</div><p>Click <strong>+ Add Space</strong> to begin</p></div></td></tr>";
-    el("results-card").style.display="none";el("energy-cfg-card").style.display="none";
-  }
-  updateRowNums();updateBadge();recalc();
-}
-function updateRowNums(){S.cabins.forEach(function(c,i){var cell=document.querySelector("#r"+c.id+" .rn");if(cell)cell.textContent=i+1;});}
-function updateBadge(){var n=S.cabins.length;var b=el("cabin-badge");if(b)b.textContent=n+(n===1?" space":" spaces");}
-function upd(id,field,val){var c=S.cabins.find(function(c){return c.id===id;});if(c){c[field]=val;recalc();}}
-function updType(id,type){
-  var c=S.cabins.find(function(c){return c.id===id;});if(!c)return;
-  c.type=type;var achEl=el("ach"+id);
-  if(achEl&&TYPES[type]){achEl.value=TYPES[type].ach;c.ach=TYPES[type].ach;}
-  recalc();
-}
+function renderCabins(){var t=el("ac-body");if(!t)return;t.innerHTML="";S.cabins.forEach(function(c){appendRow(c);});rowNums();badge();}
+function addCabin(d){var id=S.nid++;var c=d?Object.assign({},d,{id:id}):{id:id,name:"",type:"guest",area:"",h:2.1,p:2,wc:true,ach:2.0};S.cabins.push(c);appendRow(c);rowNums();badge();acSave();recalc();}
+function addPreset(k){addCabin(Object.assign({},ACP[k]));}
+function removeRow(id){S.cabins=S.cabins.filter(function(c){return c.id!==id;});var r=el("acr"+id);if(r)r.remove();rowNums();badge();acSave();recalc();}
+function rowNums(){S.cabins.forEach(function(c,i){var e=document.querySelector("#acr"+c.id+" .rn");if(e)e.textContent=i+1;});}
+function badge(){if(el("ac-badge"))el("ac-badge").textContent=S.cabins.length+(S.cabins.length===1?" space":" spaces");}
+function upd(id,f,v){var c=S.cabins.find(function(c){return c.id===id;});if(c){c[f]=v;acSave();recalc();}}
+function updType(id,t){var c=S.cabins.find(function(c){return c.id===id;});if(!c)return;c.type=t;var a=el("acach"+id);if(a&&TYPES[t]){a.value=TYPES[t].ach;c.ach=TYPES[t].ach;}acSave();recalc();}
+
 function recalc(){
-  if(!S.cabins.length){el("results-card").style.display="none";el("energy-cfg-card").style.display="none";return;}
-  el("energy-cfg-card").style.display="";el("results-card").style.display="";
-  var rows=S.cabins.map(function(c,i){
-    var cr=calcCabin(c),unit=recUnit(cr.totB_d);
-    var ok=unit.b>=cr.totB_d,margin=unit.b?(unit.b-cr.totB_d)/cr.totB_d*100:0;
-    var eng=calcCabinEng(c,cr);
-    var cnEl=el("cn"+c.id);if(cnEl)cnEl.textContent=f1(cr.totW_d/1000)+" kW";
-    var stEl=el("st"+c.id);
-    if(stEl)stEl.innerHTML=unit.b?(ok?"<span class='pill p-ok'>&#10003; +"+Math.round(margin)+"%</span>":"<span class='pill p-err'>&#10007; "+Math.round(margin)+"%</span>"):"<span class='pill p-dim'>-</span>";
-    return{c:c,cr:cr,unit:unit,ok:ok,margin:margin,eng:eng};
-  });
-  var totW=rows.reduce(function(s,r){return s+r.cr.totW_d;},0);
-  var totB=rows.reduce(function(s,r){return s+r.cr.totB_d;},0);
-  var totInst=rows.reduce(function(s,r){return s+r.unit.b;},0);
-  var totKg=rows.reduce(function(s,r){return s+r.unit.w;},0);
-  var cop=Number(el("cop").value)||3;
-  var totEkW=(totInst/3412)/cop;
-  var div=S.energy.diversity;
-  var rawEd=0,rawEs=0,rawEr=0;
-  rows.forEach(function(r){if(r.eng){rawEd+=r.eng.day_d;rawEs+=r.eng.day_s;rawEr+=r.eng.day_r;}});
-  var totEd=rawEd*div,totEs=rawEs*div,totEr=rawEr*div,totEt=(rawEd+rawEs+rawEr)*div;
-  var totEpass=totEt*S.energy.passage_days;
-  var totCostD=calcCost(totEt),totCostP=calcCost(totEpass);
-  var totFuelD=calcFuel(totEt),totFuelP=calcFuel(totEpass);
-  el("res-badge").textContent=f0(Math.round(totB))+" BTU · "+f1(totW/1000)+" kW";
-  renderKPIs(totW,totB,totInst,totKg,totEt,totEkW,rows.length);
-  renderEquip(rows,totB,totInst,totKg);
-  renderHumidity();
-  renderEnergyResults(rows,totEd,totEs,totEr,totEt,totEpass,totCostD,totCostP,totFuelD,totFuelP);
-  renderTech(rows,totW,totB);renderVent(rows);renderConditions();
-  updateRTTable();
+  if(!el("ac-results"))return;
+  if(!S.cabins.length){el("ac-results").style.display="none";return;}
+  el("ac-results").style.display="";
+  var rows=S.cabins.map(function(c){var cr=calcCabin(c);var u=recUnit(cr.totB);var ok=u.b>=cr.totB;return {c:c,cr:cr,u:u,ok:ok};});
+  rows.forEach(function(r){var cn=el("accn"+r.c.id);if(cn)cn.textContent=f1(r.cr.totW/1000)+" kW";var st=el("acst"+r.c.id);if(st)st.innerHTML=r.u.b?(r.ok?"<span class='pill p-ac'>&#10003;</span>":"<span class='pill p-dim'>&#10007;</span>"):"<span class='pill p-dim'>-</span>";});
+  var totW=rows.reduce(function(s,r){return s+r.cr.totW;},0);
+  var totB=rows.reduce(function(s,r){return s+r.cr.totB;},0);
+  var totInst=rows.reduce(function(s,r){return s+r.u.b;},0);
+  var totKg=rows.reduce(function(s,r){return s+r.u.w;},0);
+  var cop=Number(el("ac-cop").value)||3;var eKW=(totInst/3412)/cop;
+  el("ac-resbadge").textContent=f0(totB)+" BTU";
+  el("ac-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Cooling Need</div><div class='kpi-v'>"+f1(totW/1000)+"</div><div class='kpi-u'>kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Installed</div><div class='kpi-v'>"+f0(Math.round(totInst/1000))+"k</div><div class='kpi-u'>BTU/h</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Compressor Elec</div><div class='kpi-v'>"+f1(eKW)+"</div><div class='kpi-u'>kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Weight</div><div class='kpi-v'>"+f1(totKg)+"</div><div class='kpi-u'>kg</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Spaces</div><div class='kpi-v'>"+rows.length+"</div><div class='kpi-u'>cabins</div></div>";
+  el("ac-equip").innerHTML=rows.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td><strong>"+esc(r.c.name||TYPES[r.c.type].l)+"</strong></td><td>"+f1(r.cr.area)+" m&#178;</td><td>"+f1(r.cr.totW/1000)+" kW</td><td><strong>"+r.u.m+"</strong></td><td>"+(r.u.b?f0(r.u.b):"-")+"</td><td>"+(r.u.w||"-")+"</td></tr>";}).join("");
+  el("ac-equipfoot").innerHTML="<tr><td colspan='3'>TOTAL</td><td>"+f1(totW/1000)+" kW</td><td></td><td>"+f0(totInst)+"</td><td>"+f1(totKg)+"</td></tr>";
+  // stash totals for consumer hand-off
+  S._tot={btu:totInst,eKW:eKW};
 }
-function renderKPIs(totW,totB,totInst,totKg,totEt,totEkW,n){
-  el("kpi-row").innerHTML=
-    mkKpi("Cooling Need",f1(totW/1000),"kW")+mkKpi("BTU/h Needed",f0(Math.round(totB/1000))+"k","BTU/h")+
-    mkKpi("Installed",f0(Math.round(totInst/1000))+"k","BTU/h")+mkKpi("Electrical",f1(totEkW),"kW full load")+
-    mkKpi("Weight",f1(totKg),"kg total")+mkKpi("Daily Energy",f1(totEt),"kWh/day")+
-    mkKpi("AC Zones",String(n),"spaces")+mkKpi("Supplier",SUPS[S.sup].n,"selected");
+
+/* ---- Consumer hand-off: AC -> Electrical ---- */
+function sendACtoElectrical(){
+  if(!S.cabins.length){alert("Add cabins first.");return;}
+  recalc();
+  var cop=Number(el("ac-cop").value)||3;
+  var compKW=(S._tot.btu/3412)/cop;            // total compressor electrical
+  var swKW=Math.max(0.5,compKW*0.06);          // seawater pump approx (linked to AC) 
+  var circKW=Math.max(0.5,compKW*0.10);        // chilled-water circulation pump
+  var fanKW=Math.max(0.2,S.cabins.length*0.15);// total fan-coils
+  var list=[
+    {source:"AC",name:"AC compressor(s)",bus:"AC",pcs:1,kw:+compKW.toFixed(2),day:65,eve:65,night:35},
+    {source:"AC",name:"Seawater pump (AC)",bus:"AC",pcs:1,kw:+swKW.toFixed(2),day:100,eve:100,night:100},
+    {source:"AC",name:"Circulation pump (AC)",bus:"AC",pcs:1,kw:+circKW.toFixed(2),day:100,eve:100,night:100},
+    {source:"AC",name:"Fan-coils",bus:"INV",pcs:S.cabins.length,kw:+(fanKW/Math.max(1,S.cabins.length)).toFixed(3),day:70,eve:70,night:40}
+  ];
+  addConsumers(list);
+  alert("Sent "+list.length+" AC consumers to the Electrical load balance.");
 }
-function mkKpi(l,v,u){return"<div class='kpi'><div class='kpi-l'>"+l+"</div><div class='kpi-v'>"+v+"</div><div class='kpi-u'>"+u+"</div></div>";}
-function renderEquip(rows,totB,totInst,totKg){
-  el("equip-body").innerHTML=rows.map(function(r,i){
-    var c=r.c,cr=r.cr,unit=r.unit,ok=r.ok,margin=r.margin;
-    var pill=unit.b?(ok?"<span class='pill p-ok'>&#10003; +"+Math.round(margin)+"%</span>":"<span class='pill p-err'>&#10007; undersize</span>"):"<span class='pill p-dim'>-</span>";
-    return"<tr><td>"+(i+1)+"</td><td><strong>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:c.type))+"</strong></td>"+
-      "<td>"+(TYPES[c.type]?TYPES[c.type].l:c.type)+"</td><td>"+f1(cr.area)+" m&#178;</td>"+
-      "<td>"+f1(cr.totW_d/1000)+" kW<br><span style='font-size:11px;color:var(--g500)'>"+f0(Math.round(cr.totB_d))+" BTU</span></td>"+
-      "<td><strong>"+unit.m+"</strong></td><td>"+(unit.b?f0(unit.b)+" BTU":"-")+"</td><td>"+(unit.w?unit.w+" kg":"-")+"</td></tr>";
-  }).join("");
-  el("equip-foot").innerHTML="<tr><td colspan='4'><strong>TOTAL</strong></td><td><strong>"+f1(totB/1000)+" kW / "+f0(Math.round(totB))+" BTU</strong></td><td></td><td><strong>"+f0(totInst)+" BTU</strong></td><td><strong>"+f1(totKg)+" kg</strong></td></tr>";
-}
-function renderHumidity(){
-  var cli=CLIMATE[S.climate],dH=S.famu?cli.famu.cabin_dH:cli.day.dH,h=cli.humidity;
-  el("humidity-section").innerHTML="<div class='humidity-section'><strong>Humidity Targets (ISO 7547) &#8212; "+cli.label+"</strong><div class='humidity-row'>"+
-    mkHCell("Daytime",h.day.min+"&#8211;"+h.day.max+"% RH","&#916;H = "+f1(dH)+" kJ/kg")+
-    mkHCell("Silent/Night",h.sil.min+"&#8211;"+h.sil.max+"% RH","&#916;H = "+f1(cli.sil.dH)+" kJ/kg")+
-    mkHCell("Standby",h.red.min+"&#8211;"+h.red.max+"% RH","Minimal load")+"</div></div>";
-}
-function mkHCell(l,v,u){return"<div class='humidity-cell'><div class='humidity-label'>"+l+"</div><div class='humidity-val'>"+v+"</div><div class='humidity-unit'>"+u+"</div></div>";}
-function renderEnergyResults(rows,totEd,totEs,totEr,totEt,totEpass,totCostD,totCostP,totFuelD,totFuelP){
-  var div=S.energy.diversity,isFuel=S.energy.source==="generator",src=isFuel?"Generator":"Shore Power";
-  var html="<div class='eng-sum-grid'>"+
-    mkEngKpi("","Daily Energy",f1(totEt),"kWh/day (div "+div+")")+
-    mkEngKpi("gold","Passage Energy",f0(Math.round(totEpass)),"kWh / "+S.energy.passage_days+" days")+
-    mkEngKpi("green","Daily Cost",fmtCost(totCostD),src)+
-    mkEngKpi("green","Passage Cost",fmtCost(totCostP),src);
-  if(isFuel){html+=mkEngKpi("fuel","Daily Fuel",f1(totFuelD)+" L","@ "+S.energy.gen_rate+" l/kWh")+mkEngKpi("fuel","Passage Fuel",f1(totFuelP)+" L",S.energy.passage_days+" days");}
-  html+="</div>";
-  html+="<div class='section-sep'>Per-Cabin Breakdown</div><div class='tbl-wrap'><table class='eng-cabin-tbl'><thead><tr>"+
-    "<th>#</th><th>Space</th><th>Runtime</th><th>Elec kW</th>"+
-    "<th>Day kWh</th><th>Silent kWh</th><th>Red kWh</th><th>Total/day</th><th>Cost/day</th>"+
-    "<th>Pass kWh</th><th>Pass cost</th>"+(isFuel?"<th>Fuel/day</th>":"")+
-    "</tr></thead><tbody>";
-  var sumD=0,sumP=0,sumCD=0,sumCP=0,sumFD=0;
-  rows.forEach(function(r,i){
-    var c=r.c,eng=r.eng;
-    if(!eng){html+="<tr><td>"+(i+1)+"</td><td colspan='10' style='color:var(--g500)'>No unit assigned</td></tr>";return;}
-    var rt=c.rt||{preset:"std",d:12,s:8,r:4};
-    var preset=RT_PRESETS[rt.preset]||RT_PRESETS.std;
-    var eD=eng.daily*div,eP=eng.passage*div,cD=calcCost(eD),cP=calcCost(eP),fD=calcFuel(eD);
-    sumD+=eD;sumP+=eP;sumCD+=cD;sumCP+=cP;sumFD+=fD;
-    html+="<tr>"+
-      "<td>"+(i+1)+"</td>"+
-      "<td><strong>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:c.type))+"</strong></td>"+
-      "<td><span class='pill p-dim'>"+preset.l+"</span><span style='font-size:10px;color:var(--g500);margin-left:4px'>"+rt.d+"h/"+rt.s+"h/"+rt.r+"h</span></td>"+
-      "<td>"+f2(eng.eKW)+"</td>"+
-      "<td>"+f1(eng.day_d*div)+"</td><td>"+f1(eng.day_s*div)+"</td><td>"+f1(eng.day_r*div)+"</td>"+
-      "<td><strong>"+f1(eD)+"</strong></td><td>"+fmtCost(cD)+"</td>"+
-      "<td>"+f1(eP)+"</td><td>"+fmtCost(cP)+"</td>"+
-      (isFuel?"<td>"+f1(fD)+" L</td>":"")+
-      "</tr>";
-  });
-  html+="<tr style='background:var(--navy2);color:#fff;font-weight:600'>"+
-    "<td colspan='7'>TOTAL (diversity "+div+")</td>"+
-    "<td>"+f1(sumD)+" kWh</td><td>"+fmtCost(sumCD)+"</td>"+
-    "<td>"+f1(sumP)+" kWh</td><td>"+fmtCost(sumCP)+"</td>"+
-    (isFuel?"<td>"+f1(sumFD)+" L</td>":"")+
-    "</tr></tbody></table></div>";
-  var maxBar=Math.max(totEd,0.1);
-  html+="<div class='energy-section'>"+
-    "<div style='font-size:12px;color:var(--g500);margin-bottom:12px'>System breakdown &#183; Diversity "+div+" applied &#183; COP "+(el("cop")?el("cop").value:"3.0")+"</div>"+
-    mkEBar("Daytime ("+S.energy.daytime.h+"h, "+S.energy.daytime.load+"%)","e-bar-day",100,f1(totEd)+" kWh",f1(totEd))+
-    mkEBar("Silent ("+S.energy.silent.h+"h, "+S.energy.silent.load+"%)","e-bar-sil",Math.round(totEs/maxBar*100),f1(totEs)+" kWh",f1(totEs))+
-    mkEBar("Reduced ("+S.energy.reduced.h+"h, "+S.energy.reduced.load+"%)","e-bar-red",Math.round(totEr/maxBar*100),f1(totEr)+" kWh",f1(totEr))+
-    "<div class='e-bar-row' style='margin-top:8px;border-top:1px solid var(--g200);padding-top:8px'>"+
-    "<div class='e-bar-label' style='font-weight:700'>Daily Total</div><div></div>"+
-    "<div class='e-bar-val' style='font-weight:700;color:var(--navy)'>"+f1(totEt)+" kWh</div></div></div>";
-  el("energy-results").innerHTML=html;
-}
-function mkEngKpi(cls,l,v,u){return"<div class='eng-kpi"+(cls?" "+cls:"")+"'><div class='eng-kpi-l'>"+l+"</div><div class='eng-kpi-v'>"+v+"</div><div class='eng-kpi-u'>"+u+"</div></div>";}
-function mkEBar(label,cls,pct,dataLabel,val){return"<div class='e-bar-row'><div class='e-bar-label'>"+label+"</div><div class='e-bar-track'><div class='e-bar-fill "+cls+"' style='width:"+pct+"%' data-label='"+dataLabel+"'></div></div><div class='e-bar-val'>"+val+" kWh</div></div>";}
-function renderTech(rows,totW,totB){
-  el("tech-body").innerHTML=rows.map(function(r,i){var c=r.c,cr=r.cr;return"<tr><td>"+(i+1)+"</td><td>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:"Space"))+"</td><td>"+cr.wm2+" W/m&#178;</td><td>"+f0(Math.round(cr.base_d))+"</td><td>"+f0(Math.round(cr.vH_d))+"</td><td>"+f0(cr.pers)+"</td><td>"+f0(cr.inst)+"</td><td><strong>"+f0(Math.round(cr.totW_d))+"</strong></td><td>"+f0(Math.round(cr.totB_d))+"</td></tr>";}).join("");
-  el("tech-foot").innerHTML="<tr><td colspan='7'>TOTAL</td><td>"+f0(Math.round(totW))+" W</td><td>"+f0(Math.round(totB))+" BTU</td></tr>";
-}
-function renderVent(rows){
-  el("vent-body").innerHTML=rows.map(function(r,i){var c=r.c,cr=r.cr,ok=cr.fv>=cr.classMin;return"<tr><td>"+(i+1)+"</td><td>"+esc(c.name||(TYPES[c.type]?TYPES[c.type].l:"Space"))+"</td><td>"+f1(cr.vol)+"</td><td>"+(c.ach||2)+"</td><td><strong>"+f1(cr.fv)+"</strong></td><td>"+f1(cr.classMin)+"</td><td>"+(cr.wcExt?f1(cr.wcExt):"-")+"</td><td>"+(ok?"<span class='pill p-ok'>&#10003; OK</span>":"<span class='pill p-err'>&#10007; FAIL</span>")+"</td></tr>";}).join("");
-}
-function renderConditions(){
-  var cli=CLIMATE[S.climate],cop=el("cop").value||3,e=S.energy;
-  el("cond-body").innerHTML=
-    "<tr><td>Climate zone</td><td>"+cli.label+"</td><td>ISO 7547</td></tr>"+
-    "<tr><td>Daytime design</td><td>"+cli.day.desc+", &#916;H="+cli.day.dH+" kJ/kg</td><td>ISO 7547</td></tr>"+
-    "<tr><td>Silent design</td><td>"+cli.sil.desc+", &#916;H="+cli.sil.dH+" kJ/kg</td><td>ISO 7547</td></tr>"+
-    "<tr><td>FAMU</td><td>"+(S.famu?"Yes &#8212; cabin &#916;H="+cli.famu.cabin_dH+", central &#916;H="+cli.famu.central_dH+" kJ/kg":"No &#8212; fan-coil handles full outdoor load")+"</td><td>Design</td></tr>"+
-    "<tr><td>Person heat</td><td>150 W/person</td><td>ISO 7547</td></tr>"+
-    "<tr><td>Installation heat</td><td>10 W/m&#178;</td><td>ISO 7547</td></tr>"+
-    "<tr><td>Min fresh air</td><td>7 l/s/person</td><td>Class rules</td></tr>"+
-    "<tr><td>WC extraction</td><td>4.5 l/s/m&#178; (min 15 l/s)</td><td>ISO 7547</td></tr>"+
-    "<tr><td>Modes</td><td>Daytime "+e.daytime.h+"h@"+e.daytime.load+"% / Silent "+e.silent.h+"h@"+e.silent.load+"% / Reduced "+e.reduced.h+"h@"+e.reduced.load+"%</td><td>Design</td></tr>"+
-    "<tr><td>Diversity factor</td><td>"+e.diversity+"</td><td>Design</td></tr>"+
-    "<tr><td>COP</td><td>"+cop+"</td><td>Input</td></tr>";
-}
-function toggleAcc(hdr){hdr.classList.toggle("open");if(hdr.nextElementSibling)hdr.nextElementSibling.classList.toggle("open");}
-function setClimate(c){S.climate=c;el("btn-med").classList.toggle("on",c==="med");el("btn-trop").classList.toggle("on",c==="trop");recalc();}
-function setFAMU(v){S.famu=v;el("btn-famu-n").classList.toggle("on",!v);el("btn-famu-y").classList.toggle("on",v);recalc();}
-function setSup(sup){S.sup=sup;renderSupplierButtons();recalc();}
-function renderSupplierButtons(){el("sup-pick").innerHTML=Object.keys(SUPS).map(function(k){return"<button class='sup-btn"+(S.sup===k?" on":"")+"' onclick=\"setSup('"+k+"')\">"+SUPS[k].n+"</button>";}).join("");}
-var modalSup="VECO";
-function openSupplierModal(){modalSup=S.sup;renderSupModalTabs();renderSupplierEditor();el("sup-overlay").classList.add("show");el("sup-modal").classList.add("show");}
-function closeSupplierModal(){el("sup-overlay").classList.remove("show");el("sup-modal").classList.remove("show");saveSuppliersToStorage();renderSupplierButtons();recalc();}
-function renderSupModalTabs(){el("sup-modal-tabs").innerHTML=Object.keys(SUPS).map(function(k){return"<button class='sup-btn"+(k===modalSup?" on":"")+"' onclick=\"switchSupTab('"+k+"')\">"+SUPS[k].n+"</button>";}).join("");el("modal-sup-name").textContent=SUPS[modalSup].n;}
-function switchSupTab(k){modalSup=k;renderSupModalTabs();renderSupplierEditor();}
-function renderSupplierEditor(){el("sup-edit-body").innerHTML=SUPS[modalSup].u.slice().sort(function(a,b){return a.b-b.b;}).map(function(u,i){return"<tr><td><input type='text' value='"+esc(u.m)+"' class='sup-inp' onchange=\"SUPS['"+modalSup+"'].u["+i+"].m=this.value\"></td><td><input type='number' value='"+u.b+"' class='sup-inp' onchange=\"SUPS['"+modalSup+"'].u["+i+"].b=+this.value\"></td><td><input type='number' value='"+u.w+"' class='sup-inp' onchange=\"SUPS['"+modalSup+"'].u["+i+"].w=+this.value\"></td><td class='no-print'><button class='icon-btn' onclick=\"SUPS['"+modalSup+"'].u.splice("+i+",1);renderSupplierEditor()\">&#10005;</button></td></tr>";}).join("");}
-function addSupplierUnit(){var m=el("new-model").value.trim(),b=Number(el("new-btu").value),w=Number(el("new-kg").value);if(!m||!b){alert("Enter model name and BTU/h");return;}SUPS[modalSup].u.push({m:m,b:b,w:w});SUPS[modalSup].u.sort(function(a,b){return a.b-b.b;});["new-model","new-btu","new-kg"].forEach(function(id){el(id).value="";});renderSupplierEditor();}
-function exportSupplierCSV(){var rows=["model,btu,weight"].concat(SUPS[modalSup].u.map(function(u){return u.m+","+u.b+","+u.w;}));var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows.join("\n")],{type:"text/csv"}));a.download=SUPS[modalSup].n+"_catalog.csv";a.click();}
-function importSupplierData(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(evt){try{var data;if(file.name.endsWith(".json"))data=JSON.parse(evt.target.result);else{var lines=evt.target.result.trim().split("\n");var hdr=lines[0].toLowerCase().split(",").map(function(h){return h.trim();});data=lines.slice(1).map(function(ln){var v=ln.split(",").map(function(x){return x.trim();});var o={};hdr.forEach(function(h,i){o[h]=v[i];});return o;});}if(Array.isArray(data)){SUPS[modalSup].u=data.map(function(r){return{m:r.model||r.name||r.m||"",b:Number(r.btu||r.capacity||r.b)||0,w:Number(r.weight||r.w)||0};});SUPS[modalSup].u.sort(function(a,b){return a.b-b.b;});renderSupplierEditor();alert("Imported "+SUPS[modalSup].u.length+" units!");}}catch(err){alert("Import error: "+err.message);}};reader.readAsText(file);e.target.value="";}
-function saveSuppliersToStorage(){localStorage.setItem("ac_suppliers",JSON.stringify(SUPS));}
-function loadSuppliersFromStorage(){var s=localStorage.getItem("ac_suppliers");if(s){try{SUPS=JSON.parse(s);}catch(e){}}}
+
 function exportExcel(){
-  if(!window.XLSX){alert("Excel library loading, please wait.");return;}
-  var wb=XLSX.utils.book_new();
-  var m=S.project,cli=CLIMATE[S.climate],cop=Number(el("cop").value)||3,e=S.energy;
-  var info=[["Baltic Yachts AC Cooling Calculator v4.0 (ISO 7547)"],["Yacht",m.yacht,"","Date",m.date],["Project",m.proj,"","By",m.by],["Climate",cli.label,"","FAMU",S.famu?"Yes":"No"],["Supplier",SUPS[S.sup].n,"","COP",cop],[],["#","Space","Type","Area m2","Persons","W/m2","Cooling W","BTU/h","Unit","Unit BTU","Weight kg","OK?"]];
-  var rows1=S.cabins.map(function(c,i){var cr=calcCabin(c),u=recUnit(cr.totB_d);return[i+1,c.name||(TYPES[c.type]?TYPES[c.type].l:c.type),TYPES[c.type]?TYPES[c.type].l:c.type,cr.area,cr.p,cr.wm2,Math.round(cr.totW_d),Math.round(cr.totB_d),u.m,u.b||0,u.w||0,u.b>=cr.totB_d?"OK":"FAIL"];});
-  var totW=S.cabins.reduce(function(s,c){return s+calcCabin(c).totW_d;},0);
-  var totB=S.cabins.reduce(function(s,c){return s+calcCabin(c).totB_d;},0);
-  rows1.push([],["","","TOTAL","","","",Math.round(totW),Math.round(totB)]);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(info.concat(rows1)),"Cooling Loads");
-  var isFuel=e.source==="generator";
-  var eh=[["#","Space","Preset","Day h","Silent h","Red h","Elec kW","Day kWh","Sil kWh","Red kWh","Total/day","Cost/day","Pass kWh","Pass cost"].concat(isFuel?["Fuel/day L","Fuel/pass L"]:[])];
-  eh.push(["Config:","Day "+e.daytime.h+"h@"+e.daytime.load+"%","Sil "+e.silent.h+"h@"+e.silent.load+"%","Red "+e.reduced.h+"h@"+e.reduced.load+"%","Diversity "+e.diversity,"Source "+e.source,"Passage "+e.passage_days+"d"]);
-  var sumK=0,sumC=0,sumF=0;
-  S.cabins.forEach(function(c,i){
-    var cr=calcCabin(c),eng=calcCabinEng(c,cr);
-    if(!eng){eh.push([i+1,c.name,"","","","","","","","","No unit","","",""]);return;}
-    var rt=c.rt||{preset:"std",d:e.daytime.h,s:e.silent.h,r:e.reduced.h};
-    var div=e.diversity;
-    var eD=Number((eng.daily*div).toFixed(2)),eP=Number((eng.passage*div).toFixed(2));
-    var cD=Number(calcCost(eD).toFixed(2)),cP=Number(calcCost(eP).toFixed(2));
-    var fD=Number(calcFuel(eD).toFixed(2)),fP=Number(calcFuel(eP).toFixed(2));
-    sumK+=eD;sumC+=cD;sumF+=fD;
-    var row=[i+1,c.name||(TYPES[c.type]?TYPES[c.type].l:c.type),(RT_PRESETS[rt.preset]||RT_PRESETS.std).l,rt.d,rt.s,rt.r,Number(eng.eKW.toFixed(3)),Number((eng.day_d*div).toFixed(2)),Number((eng.day_s*div).toFixed(2)),Number((eng.day_r*div).toFixed(2)),eD,cD,eP,cP];
-    if(isFuel)row.push(fD,fP);
-    eh.push(row);
-  });
-  var tot=["","TOTAL","","","","","","","","",Number(sumK.toFixed(2)),Number(sumC.toFixed(2)),"",""];
-  if(isFuel)tot.push(Number(sumF.toFixed(2)),"");
-  eh.push(tot);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(eh),"Energy");
-  var vh=[["#","Space","Vol m3","ACH","Flow l/s","Class Min l/s","WC Ext l/s","OK?"]];
-  S.cabins.forEach(function(c,i){var cr=calcCabin(c);vh.push([i+1,c.name||(TYPES[c.type]?TYPES[c.type].l:c.type),Number(cr.vol.toFixed(1)),c.ach||2,Number(cr.fv.toFixed(1)),Number(cr.classMin.toFixed(1)),cr.wcExt?Number(cr.wcExt.toFixed(1)):"N/A",cr.fv>=cr.classMin?"OK":"FAIL"]);});
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(vh),"Ventilation");
-  var yacht=m.yacht||"AC_Calc";
-  try{XLSX.writeFile(wb,"Baltic_AC_"+yacht.replace(/[^a-z0-9]/gi,"_")+".xlsx");}
-  catch(err){var out=XLSX.write(wb,{bookType:"xlsx",type:"array"});var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out],{type:"application/octet-stream"}));a.download="Baltic_AC_"+yacht.replace(/[^a-z0-9]/gi,"_")+".xlsx";a.click();}
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var wb=XLSX.utils.book_new();var m=PROJECT.meta;
+  var info=[["Baltic Yachts AC Cooling (ISO 7547)"],["Yacht",m.yacht,"Project",m.proj],["Climate",CLIMATE[S.climate].label,"FAMU",S.famu?"Yes":"No"],[],["#","Space","Type","Area m2","W/m2","Cooling W","BTU","Unit","Unit BTU","kg"]];
+  S.cabins.forEach(function(c,i){var cr=calcCabin(c);var u=recUnit(cr.totB);info.push([i+1,c.name||TYPES[c.type].l,TYPES[c.type].l,cr.area,cr.wm2,Math.round(cr.totW),Math.round(cr.totB),u.m,u.b,u.w]);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(info),"AC Loads");
+  XLSX.writeFile(wb,"Baltic_AC_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
-function exportPDF(){
-  if(!window.html2pdf){window.print();return;}
-  var resultEl=el("results-card");
-  var bodies=document.querySelectorAll(".acc-body");
-  var hdrs=document.querySelectorAll(".acc-hdr");
-  bodies.forEach(function(b){b.classList.add("open");});
-  hdrs.forEach(function(h){h.classList.add("open");});
-  var yacht=(S.project.yacht||"report").replace(/[^a-z0-9]/gi,"_");
-  html2pdf().set({margin:10,filename:"Baltic_AC_"+yacht+"_"+S.project.date+".pdf",image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true,logging:false},jsPDF:{orientation:"landscape",unit:"mm",format:"a4"}}).from(resultEl).save().then(function(){bodies.forEach(function(b){b.classList.remove("open");});hdrs.forEach(function(h){h.classList.remove("open");});});
-}
+
+
+/* ---------- PWA ---------- */
 function makeIcon(sz){
   var c=document.createElement("canvas");c.width=c.height=sz;
   var g=c.getContext("2d"),s=sz,r=s/5;
-  g.fillStyle="#1a2744";
-  g.beginPath();g.moveTo(r,0);g.lineTo(s-r,0);g.quadraticCurveTo(s,0,s,r);
-  g.lineTo(s,s-r);g.quadraticCurveTo(s,s,s-r,s);
-  g.lineTo(r,s);g.quadraticCurveTo(0,s,0,s-r);
+  g.fillStyle="#1a2744";g.beginPath();g.moveTo(r,0);g.lineTo(s-r,0);g.quadraticCurveTo(s,0,s,r);
+  g.lineTo(s,s-r);g.quadraticCurveTo(s,s,s-r,s);g.lineTo(r,s);g.quadraticCurveTo(0,s,0,s-r);
   g.lineTo(0,r);g.quadraticCurveTo(0,0,r,0);g.closePath();g.fill();
   g.fillStyle="#0d1b2a";g.fillRect(0,s*0.61,s,s);
   g.strokeStyle="rgba(201,169,110,0.5)";g.lineWidth=Math.max(1,s/80);
   for(var w=0;w<3;w++){g.beginPath();for(var x=0;x<=s;x+=2){var y=s*0.64+w*s*0.04+Math.sin((x/s*6+w*2)*Math.PI)*s*0.015;x===0?g.moveTo(x,y):g.lineTo(x,y);}g.stroke();}
   g.fillStyle="#c9a96e";g.beginPath();g.ellipse(s*0.5,s*0.625,s*0.24,s*0.036,0,0,Math.PI*2);g.fill();
   var mx=s*0.475,mw=Math.max(2,s/55);g.fillStyle="#c9a96e";g.fillRect(mx,s*0.17,mw,s*0.45);
-  g.beginPath();g.moveTo(mx+mw/2,s*0.18);g.lineTo(mx+mw/2,s*0.62);g.lineTo(s*0.18,s*0.62);g.closePath();g.fillStyle="#c9a96e";g.fill();
+  g.beginPath();g.moveTo(mx+mw/2,s*0.18);g.lineTo(mx+mw/2,s*0.62);g.lineTo(s*0.18,s*0.62);g.closePath();g.fill();
   g.beginPath();g.moveTo(mx+mw/2,s*0.27);g.lineTo(mx+mw/2,s*0.62);g.lineTo(s*0.80,s*0.62);g.closePath();g.fillStyle="#e0c899";g.fill();
   return c;
 }
 var _deferredPrompt=null;
 function setupPWA(){
-  var ic=document.getElementById("pwa-icon");
-  if(ic){var ctx=ic.getContext("2d");ctx.drawImage(makeIcon(40),0,0);}
+  var ic=el("pwa-icon");if(ic)ic.getContext("2d").drawImage(makeIcon(40),0,0);
   var al=document.querySelector("link[rel='apple-touch-icon']")||document.createElement("link");
-  al.rel="apple-touch-icon";al.href=makeIcon(192).toDataURL("image/png");
-  document.head.appendChild(al);
-  var i192=makeIcon(192).toDataURL("image/png");
-  var i512=makeIcon(512).toDataURL("image/png");
-  var mfst={name:"AC Cooling Calculator",short_name:"AC Calc",description:"Baltic Yachts Engineering",
-    start_url:"./",display:"standalone",orientation:"any",
-    background_color:"#1a2744",theme_color:"#1a2744",
-    icons:[{src:i192,sizes:"192x192",type:"image/png",purpose:"any maskable"},
-           {src:i512,sizes:"512x512",type:"image/png",purpose:"any maskable"}]};
-  var ml=document.getElementById("pwa-manifest")||document.createElement("link");
-  ml.rel="manifest";ml.id="pwa-manifest";
-  ml.href=URL.createObjectURL(new Blob([JSON.stringify(mfst)],{type:"application/manifest+json"}));
-  if(!document.getElementById("pwa-manifest"))document.head.appendChild(ml);
-  if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("./sw.js").catch(function(){});
-  }
-  window.addEventListener("beforeinstallprompt",function(e){
-    e.preventDefault();_deferredPrompt=e;
-    if(!localStorage.getItem("pwa-dismissed")){
-      var b=document.getElementById("pwa-banner");
-      if(b)b.style.display="flex";
-    }
-  });
+  al.rel="apple-touch-icon";al.href=makeIcon(192).toDataURL("image/png");document.head.appendChild(al);
+  var mfst={name:"Baltic Yachts Engineering Suite",short_name:"BY Engineering",start_url:"./",display:"standalone",background_color:"#1a2744",theme_color:"#1a2744",icons:[{src:makeIcon(192).toDataURL("image/png"),sizes:"192x192",type:"image/png",purpose:"any maskable"},{src:makeIcon(512).toDataURL("image/png"),sizes:"512x512",type:"image/png",purpose:"any maskable"}]};
+  var ml=el("pwa-manifest");ml.href=URL.createObjectURL(new Blob([JSON.stringify(mfst)],{type:"application/manifest+json"}));
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(function(){});
+  window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();_deferredPrompt=e;if(!localStorage.getItem("pwa-dismissed")){el("pwa-banner").style.display="flex";}});
   window.addEventListener("appinstalled",function(){_deferredPrompt=null;dismissPWA();});
   var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
-  var isStandalone=("standalone" in navigator)&&navigator.standalone;
-  if(isIOS&&!isStandalone&&!localStorage.getItem("ios-dismissed")){
-    document.getElementById("ios-hint").style.display="block";
-  }
+  if(isIOS&&!(("standalone" in navigator)&&navigator.standalone)&&!localStorage.getItem("ios-dismissed"))el("ios-hint").style.display="block";
 }
 function installPWA(){if(_deferredPrompt){_deferredPrompt.prompt();_deferredPrompt.userChoice.then(function(){_deferredPrompt=null;dismissPWA();});}}
-function dismissPWA(){localStorage.setItem("pwa-dismissed","1");var b=document.getElementById("pwa-banner");if(b)b.style.display="none";}
-function dismissIOS(){localStorage.setItem("ios-dismissed","1");document.getElementById("ios-hint").style.display="none";}
-window.addEventListener("DOMContentLoaded",function(){ init(); setupPWA(); });
+function dismissPWA(){localStorage.setItem("pwa-dismissed","1");el("pwa-banner").style.display="none";}
+function dismissIOS(){localStorage.setItem("ios-dismissed","1");el("ios-hint").style.display="none";}
+
+/* ---------- Boot ---------- */
+window.addEventListener("DOMContentLoaded",function(){
+  loadActive();updateChip();setupPWA();
+  if(!location.hash)location.hash="#/home";
+  renderRoute();
+});
 </script>
 </body>
 </html>
