@@ -12,6 +12,8 @@
 <meta name="theme-color" content="#1a2744">
 <link rel="manifest" id="pwa-manifest">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -585,7 +587,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.36 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.40 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -635,81 +637,285 @@ var ROUTES={
   summary:{view:"view-summary",crumb:[["Home","home"],["Sammanställning",null]]}
 };
 function go(r){location.hash="#/"+r;}
-/* ---------- Overview exports: Excel + Word ---------- */
+/* ---------- Overview exports: Excel + Word (engineering deliverable) ---------- */
+var BY_NAVY="1A2744",BY_GOLD="C9A96E",BY_WHITE="FFFFFF",BY_INK="22272F",BY_MUT="6B7280",BY_HAIR="E2E6EC",BY_SOFT="F4F6F9";
+function _txt(id){var e=el(id);return e?(e.textContent||"").trim():"";}
+function _kpis(id){var e=el(id);if(!e)return [];return Array.prototype.slice.call(e.querySelectorAll(".kpi")).map(function(k){
+  var l=k.querySelector(".kpi-l"),v=k.querySelector(".kpi-v"),u=k.querySelector(".kpi-u");
+  return {label:l?l.textContent.trim():"",value:v?v.textContent.trim():"",unit:u?u.textContent.trim():""};});}
+function _rowByLabel(prefix){
+  var trs=document.querySelectorAll("tr");
+  for(var i=0;i<trs.length;i++){var tds=trs[i].querySelectorAll("td");if(tds.length<2)continue;
+    var t=(tds[0].textContent||"").trim();
+    if(t.toLowerCase().indexOf(prefix.toLowerCase())===0){
+      var strong=trs[i].querySelector("strong");if(!strong)continue;
+      var sp=strong.parentNode?strong.parentNode.querySelector("span"):null;
+      return {item:t,model:strong.textContent.trim(),detail:sp?sp.textContent.trim():""};}}
+  return null;}
+function _acUnits(){var b=el("equip-body");if(!b)return [];
+  return Array.prototype.slice.call(b.querySelectorAll("tr")).map(function(tr){var td=tr.querySelectorAll("td");if(td.length<7)return null;
+    var sel=td[5].querySelector("select");var model=sel?(sel.options[sel.selectedIndex]?sel.options[sel.selectedIndex].text:""):(td[5].textContent||"").trim();
+    return {space:(td[1].textContent||"").trim(),model:model,cap:(td[6].textContent||"").trim()};}).filter(Boolean);}
 function summaryData(){
   ["mountAC","mountERV","mountBilge","mountSW","mountWater","mountThr","mountElec"].forEach(function(fn){try{if(typeof window[fn]==="function")window[fn]();}catch(e){}});
   var m=(PROJECT&&PROJECT.meta)||{};
-  function txt(id){var e=el(id);return e?(e.textContent||"").trim():"";}
-  function kpis(id){var e=el(id); if(!e)return []; return Array.prototype.slice.call(e.querySelectorAll(".kpi")).map(function(k){
-    var l=k.querySelector(".kpi-l"),v=k.querySelector(".kpi-v"),u=k.querySelector(".kpi-u");
-    return {label:l?l.textContent.trim():"",value:v?v.textContent.trim():"",unit:u?u.textContent.trim():""};
-  });}
   var discs=[
-    {name:"Air Conditioning",badge:txt("res-badge"),rows:kpis("kpi-row")},
-    {name:"Engine Room Ventilation",badge:txt("erv-badge"),rows:kpis("erv-kpi")},
-    {name:"Bilge",badge:txt("bil-badge"),rows:kpis("bil-kpi")},
-    {name:"Seawater Cooling",badge:txt("sw-badge"),rows:kpis("sw-kpi")},
-    {name:"Water & Waste Water",badge:txt("wat-badge"),rows:kpis("wat-kpi")},
-    {name:"Thruster",badge:txt("thr-badge"),rows:kpis("thr-kpi")},
-    {name:"Electrical Load Balance",badge:txt("elec-badge"),rows:kpis("elec-kpi")}
+    {name:"Air Conditioning",ref:"ISO 7547",badge:_txt("res-badge"),rows:_kpis("kpi-row")},
+    {name:"Engine Room Ventilation",ref:"ISO 8861",badge:_txt("erv-badge"),rows:_kpis("erv-kpi")},
+    {name:"Bilge",ref:"RINA / DNV-GL",badge:_txt("bil-badge"),rows:_kpis("bil-kpi")},
+    {name:"Seawater Cooling",ref:"Manifold sizing",badge:_txt("sw-badge"),rows:_kpis("sw-kpi")},
+    {name:"Water & Waste Water",ref:"MEPC 157(55)",badge:_txt("wat-badge"),rows:_kpis("wat-kpi")},
+    {name:"Thruster",ref:"Wind + accel",badge:_txt("thr-badge"),rows:_kpis("thr-kpi")},
+    {name:"Electrical Load Balance",ref:"Aggregated",badge:_txt("elec-badge"),rows:_kpis("elec-kpi")}
   ];
-  if(PROJECT.elec&&PROJECT.elec.hv&&PROJECT.elec.hv.on) discs.push({name:"HV DC Bus",badge:"",rows:kpis("hv-kpi")});
-  return {meta:m,discs:discs,consumers:(PROJECT.consumers)||[],rules:((typeof activeRules==="function")?activeRules():[])};
+  if(PROJECT.elec&&PROJECT.elec.hv&&PROJECT.elec.hv.on) discs.push({name:"HV DC Bus",ref:"Electric / hybrid",badge:"",rows:_kpis("hv-kpi")});
+  /* selected equipment */
+  var equip=[]; function grp(name,rows){rows=rows.filter(Boolean);if(rows.length)equip.push({group:name,rows:rows});}
+  var ac=[]; try{ if(typeof S!=="undefined"){
+    ac.push({item:"Supplier",model:(typeof SUPS!=="undefined"&&SUPS[S.sup]&&SUPS[S.sup].n)||S.sup||"—",detail:""});
+    var cb=_txt("chiller-badge"); if(cb&&cb!=="—") ac.push({item:"Chilled-water plant",model:cb,detail:""});
+    ac.push({item:"Fresh-air make-up (FAMU)",model:(S.famu?"Active":"Not used"),detail:""});
+    _acUnits().forEach(function(u){ if(u.model&&u.model.indexOf("Auto")!==0) ac.push({item:u.space,model:u.model,detail:u.cap}); });
+  }}catch(e){} grp("Air Conditioning",ac);
+  grp("Engine Room Ventilation",[_rowByLabel("Supply blower"),_rowByLabel("Exhaust blower")]);
+  grp("Bilge",[_rowByLabel("Bilge pump")]);
+  grp("Water & Waste Water",[_rowByLabel("Fresh-water pump")]);
+  /* electrical equipment from state */
+  try{ var s=elecState(),ee=[];
+    if(+s.gen.gensQty>0) ee.push({item:"Generator(s)",model:s.gen.gensQty+" × "+s.gen.gensKw+" kW",detail:(s.gen.gensQty*s.gen.gensKw)+" kW total"});
+    if(+s.gen.shoreQty>0) ee.push({item:"Shore power",model:s.gen.shoreQty+" × "+s.gen.shoreKw+" kW",detail:""});
+    if(+s.gen.invQty>0) ee.push({item:"Inverter(s)",model:s.gen.invQty+" × "+s.gen.invKw+" kW",detail:""});
+    ee.push({item:"House battery bank",model:s.batt.v+" V · "+s.batt.banks+" × "+s.batt.kwhEach+" kWh",detail:(s.batt.banks*s.batt.kwhEach)+" kWh ("+s.batt.usable+"% usable)"});
+    if(s.charge&&s.charge.chgModel) ee.push({item:"Charger / combi",model:(s.charge.chgQty>1?s.charge.chgQty+" × ":"")+String(s.charge.chgModel).replace(/ \(\d.*$/,""),detail:""});
+    if(s.hv&&s.hv.on) ee.push({item:"HV battery (propulsion)",model:s.hv.v+" V · "+s.hv.banks+" × "+s.hv.kwhEach+" kWh",detail:(s.hv.banks*s.hv.kwhEach)+" kWh"});
+    grp("Electrical",ee);
+  }catch(e){}
+  return {meta:m,discs:discs,equip:equip,consumers:(PROJECT.consumers)||[],rules:((typeof activeRules==="function")?activeRules():[])};
 }
-function summaryExcel(){
-  if(!window.XLSX){alert("Excel library is still loading — try again in a moment (it loads from the web on first use).");return;}
-  var d=summaryData(), wb=XLSX.utils.book_new();
-  var a=[["Baltic Yachts — Project Overview"],
-    ["Yacht",d.meta.yacht||""],["Project no.",d.meta.proj||""],["Type",d.meta.type||""],
-    ["Class",d.meta.cls||""],["Flag",d.meta.flag||""],["Calculated by",d.meta.by||""],["Revision",d.meta.rev||""],[]];
+
+/* ===================== WORD (.doc) ===================== */
+function _dxWord(){
+  var D=docx;
+  var NAVY="1A2744",GOLD="C9A96E",INK="22272F",MUT="6B7280",HAIR="E2E6EC",SOFT="F4F6F9",BODY="Calibri",HEAD="Cambria";
+  var d=summaryData(), m=d.meta;
+  var AL=D.AlignmentType, BS=D.BorderStyle, WT=D.WidthType;
+  function tr(text,o){o=o||{};return new D.TextRun({text:String(text==null?"":text),bold:!!o.bold,italics:!!o.italic,size:Math.round((o.size||10)*2),color:o.color||INK,font:o.font||BODY,characterSpacing:o.sp});}
+  function para(runs,o){o=o||{};var b={};
+    if(o.bb)b.bottom={style:BS.SINGLE,size:o.bb,color:o.bc||GOLD,space:o.bs||3};
+    if(o.bt)b.top={style:BS.SINGLE,size:o.bt,color:o.bc||HAIR,space:o.bs||4};
+    return new D.Paragraph({children:runs,alignment:o.align,spacing:{before:(o.before||0)*20,after:(o.after||0)*20,line:252},border:(o.bb||o.bt)?b:undefined,tabStops:o.tabs});}
+  function _nb(){var n={style:BS.NONE,size:0,color:"FFFFFF"};return {top:n,bottom:n,left:n,right:n,insideHorizontal:n,insideVertical:n};}
+  function cell(children,o){o=o||{};var borders={};
+    if(o.bottom)borders.bottom={style:BS.SINGLE,size:o.bottom,color:o.bColor||HAIR};
+    if(o.top)borders.top={style:BS.SINGLE,size:o.top,color:o.bColor||NAVY};
+    return new D.TableCell({children:children,shading:o.fill?{type:D.ShadingType.CLEAR,fill:o.fill,color:"auto"}:undefined,borders:borders,width:o.w?{size:o.w,type:WT.DXA}:undefined,margins:{top:30,bottom:30,left:90,right:90}});}
+  function dataTable(headers,rows,widths,numeric,total,boldFirst){
+    function isR(i){return numeric&&numeric.indexOf(i)>=0;}
+    var rs=[new D.TableRow({children:headers.map(function(h,i){return cell([new D.Paragraph({alignment:isR(i)?AL.RIGHT:AL.LEFT,spacing:{before:0,after:0},children:[tr(h,{size:8.5,bold:true,color:"FFFFFF"})]})],{fill:NAVY,w:widths[i]});})})];
+    rows.forEach(function(row){rs.push(new D.TableRow({children:row.map(function(v,i){var bf=(boldFirst&&i===1);
+      return cell([new D.Paragraph({alignment:isR(i)?AL.RIGHT:AL.LEFT,spacing:{before:0,after:0},children:[tr(v,{size:9.5,bold:bf,color:bf?NAVY:INK})]})],{bottom:4,w:widths[i]});})}));});
+    if(total){rs.push(new D.TableRow({children:total.map(function(v,i){
+      return cell([new D.Paragraph({alignment:isR(i)?AL.RIGHT:AL.LEFT,spacing:{before:0,after:0},children:[tr(v,{size:9.5,bold:true,color:NAVY})]})],{top:8,bColor:NAVY,fill:SOFT,w:widths[i]});})}));}
+    return new D.Table({rows:rs,width:{size:100,type:WT.PERCENTAGE},columnWidths:widths,borders:_nb()});}
+  function heading(text,ref){var runs=[tr(text,{size:13,bold:true,color:NAVY,font:HEAD})];
+    if(ref)runs.push(tr("\t"+ref,{size:8.5,color:MUT}));
+    return para(runs,{before:14,after:3,bb:6,bc:GOLD,tabs:[{type:D.TabStopType.RIGHT,position:9600}]});}
+  var C=[];
+  C.push(para([],{before:54}));
+  C.push(para([tr("BALTIC",{size:40,bold:true,color:GOLD,font:HEAD,sp:60})],{align:AL.CENTER}));
+  C.push(para([tr("",{size:2})],{align:AL.CENTER,before:2,after:2,bb:6,bc:GOLD}));
+  C.push(para([tr("Y A C H T S",{size:13,color:NAVY,font:HEAD,sp:80})],{align:AL.CENTER}));
+  C.push(para([],{before:54}));
+  C.push(para([tr("ENGINEERING CALCULATION SUMMARY",{size:13,bold:true,color:NAVY,font:HEAD,sp:40})],{align:AL.CENTER,after:4}));
+  C.push(para([tr(m.yacht||"Project",{size:30,bold:true,color:NAVY,font:HEAD})],{align:AL.CENTER,before:6,after:2}));
+  C.push(para([tr([m.type,"Class "+(m.cls||"—"),"Flag "+(m.flag||"—")].filter(Boolean).join("   ·   "),{size:12,color:MUT})],{align:AL.CENTER}));
+  C.push(para([],{before:18}));
+  var pr=[["Project No.",m.proj],["Revision",m.rev],["Date",m.date],["Prepared by",m.by]];
+  C.push(new D.Table({alignment:AL.CENTER,width:{size:55,type:WT.PERCENTAGE},columnWidths:[2600,3600],borders:_nb(),rows:pr.map(function(p){return new D.TableRow({children:[
+    cell([new D.Paragraph({alignment:AL.RIGHT,spacing:{before:10,after:10},children:[tr(String(p[0]).toUpperCase(),{size:8.5,color:MUT})]})],{w:2600}),
+    cell([new D.Paragraph({spacing:{before:10,after:10},children:[tr(p[1]||"—",{size:11,bold:true,color:NAVY})]})],{w:3600})]});})}));
+  C.push(para([],{before:90}));
+  C.push(para([tr("Baltic Yachts Ltd  ·  Confidential  ·  Preliminary engineering estimates — verify against the applicable class society, flag administration and manufacturer documentation before use.",{size:7.5,color:MUT})],{align:AL.CENTER,before:4,bt:4,bc:HAIR}));
+  C.push(new D.Paragraph({children:[new D.PageBreak()]}));
+  C.push(heading("Revision History","Document control"));
+  C.push(dataTable(["Rev","Date","Description","Prepared","Checked","Approved"],[[m.rev||"A",m.date||"—","Initial issue",m.by||"—","—","—"]],[900,1500,3500,1300,1100,1300]));
+  var eqmap={}; d.equip.forEach(function(g){eqmap[g.group]=g.rows;});
   d.discs.forEach(function(dc){
-    a.push([dc.name, dc.badge||""]);
-    a.push(["","Parameter","Value","Unit"]);
-    if(dc.rows.length) dc.rows.forEach(function(r){a.push(["",r.label,r.value,r.unit]);});
-    else a.push(["","(no data entered)","",""]);
-    a.push([]);
+    C.push(heading(dc.name,(dc.ref||"")+(dc.badge?("   ·   "+dc.badge):"")));
+    if(dc.rows.length)C.push(dataTable(["Parameter","Value","Unit"],dc.rows.map(function(r){return [r.label,r.value,r.unit];}),[4900,2500,2200],[1]));
+    var eq=eqmap[dc.name]||eqmap[dc.name.replace(" Load Balance","")];
+    if(eq&&eq.length){C.push(para([tr("SELECTED EQUIPMENT",{size:8,bold:true,color:GOLD})],{before:6,after:1}));
+      C.push(dataTable(["Item","Selection","Rating"],eq.map(function(x){return [x.item,x.model,x.detail||""];}),[3200,3500,2900],null,null,true));}
   });
-  a.push([(typeof disclaimerLine==="function")?disclaimerLine():""]);
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(a), "Overview");
-  var c=[["Source","Consumer","Bus","Qty","kW each","Installed kW"]];
-  d.consumers.forEach(function(x){c.push([x.source||"",x.name||"",x.bus||"",(+x.pcs||0),(+x.kw||0),(+x.pcs||0)*(+x.kw||0)]);});
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(c), "Consumers");
-  var r=[["Code","Requirement","Source"]];
-  d.rules.forEach(function(x){r.push([x.code||"",x.req||"",x.src||""]);});
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(r), "Rules");
-  var fn="Baltic_Overview_"+((d.meta.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
-  try{XLSX.writeFile(wb,fn);}catch(e){var o=XLSX.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
+  if(d.consumers.length){var tot=0;d.consumers.forEach(function(c){tot+=(+c.pcs||0)*(+c.kw||0);});
+    C.push(heading("Electrical Load Schedule",d.consumers.length+" consumers"));
+    C.push(dataTable(["Source","Consumer","Bus","Qty","kW ea","Installed kW"],d.consumers.map(function(x){return [x.source,x.name,x.bus,(+x.pcs||0),(+x.kw||0),((+x.pcs||0)*(+x.kw||0)).toFixed(2)];}),[1500,3000,1000,800,1200,2000],[3,4,5],["Total installed","","","","",tot.toFixed(2)]));}
+  if(d.rules.length){C.push(heading("Applicable Class & Flag Rules",(m.cls||"—")+" / "+(m.flag||"—")));
+    C.push(dataTable(["Code","Requirement","Source"],d.rules.map(function(x){return [x.code,x.req,x.src];}),[2600,5000,2000]));}
+  var footer=new D.Footer({children:[new D.Paragraph({alignment:AL.CENTER,border:{top:{style:BS.SINGLE,size:4,color:HAIR,space:6}},children:[
+    tr("Baltic Yachts  ·  "+(m.yacht||"")+"  ·  Engineering Calculation Summary        Page ",{size:7.5,color:MUT}),
+    new D.TextRun({children:[D.PageNumber.CURRENT],size:15,color:MUT,font:BODY})]})]});
+  return new D.Document({styles:{default:{document:{run:{font:BODY,size:20,color:INK}}}},
+    sections:[{properties:{page:{margin:{top:960,bottom:1140,left:1080,right:1080}},titlePage:true},footers:{default:footer},children:C}]});
 }
 function summaryWord(){
-  var d=summaryData();
+  try{
+    if(typeof docx==="undefined"||!docx||!docx.Document){ return summaryWordHTML(); }
+    var m=(PROJECT&&PROJECT.meta)||{}, fn="Baltic_Overview_"+((m.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".docx";
+    docx.Packer.toBlob(_dxWord()).then(function(blob){safeDL(blob,fn);}).catch(function(e){try{summaryWordHTML();}catch(_){}});
+  }catch(e){ try{summaryWordHTML();}catch(_){} }
+}
+function summaryWordHTML(){
+  var d=summaryData(); var m=d.meta;
   function E(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Baltic Overview</title>";
-  h+="<style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#1a2744}h1{font-size:18pt}h2{font-size:13pt;color:#1a2744;border-bottom:1px solid #c9a96e;padding-bottom:3px;margin-top:18px}table{border-collapse:collapse;width:100%;margin:6px 0}td,th{border:1px solid #ccc;padding:4px 7px;font-size:10pt;text-align:left}th{background:#1a2744;color:#fff}.muted{color:#666;font-size:8pt}</style></head><body>";
-  h+="<h1>Baltic Yachts &ndash; Project Overview</h1>";
-  h+="<table><tr><th>Yacht</th><td>"+E(d.meta.yacht)+"</td><th>Project</th><td>"+E(d.meta.proj)+"</td></tr>"+
-     "<tr><th>Type</th><td>"+E(d.meta.type)+"</td><th>Class</th><td>"+E(d.meta.cls)+"</td></tr>"+
-     "<tr><th>Flag</th><td>"+E(d.meta.flag)+"</td><th>By</th><td>"+E(d.meta.by)+"</td></tr>"+
-     "<tr><th>Revision</th><td>"+E(d.meta.rev)+"</td><th>Date</th><td>"+E(d.meta.date||"")+"</td></tr></table>";
+  var NV="#1a2744",GD="#c9a96e",MUT="#6b7280",HAIR="#e2e6ec",INK="#22272f";
+  var h="<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Baltic Yachts — Engineering Calculation Summary</title>";
+  h+="<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->";
+  h+="<style>";
+  h+="@page Section1{size:21cm 29.7cm;margin:1.6cm 1.7cm 1.7cm 1.7cm;mso-footer:f1;mso-header-margin:1cm;mso-footer-margin:1cm}div.Section1{page:Section1}";
+  h+="body{font-family:'Segoe UI',Calibri,Arial,sans-serif;font-size:10pt;color:"+INK+";margin:0}";
+  h+="p{margin:0}";
+  h+=".serif{font-family:Georgia,'Times New Roman',serif}";
+  h+=".mast{font-family:Georgia,'Times New Roman',serif;font-size:23pt;font-weight:700;color:"+GD+";letter-spacing:6pt;line-height:1}";
+  h+=".mast2{font-family:Georgia,'Times New Roman',serif;font-size:8.5pt;color:"+NV+";letter-spacing:9pt}";
+  h+=".doctitle{font-family:Georgia,serif;font-size:19pt;color:"+NV+";font-weight:700;margin:14pt 0 1pt}";
+  h+=".ptl{font-size:9.5pt;color:"+MUT+"}";
+  h+="h2{font-family:Georgia,serif;font-size:12.5pt;color:"+NV+";font-weight:700;margin:17pt 0 4pt;padding-bottom:3pt;border-bottom:0.75pt solid "+GD+"}";
+  h+="h2 .rf{font-family:'Segoe UI',Arial,sans-serif;font-size:8.5pt;font-weight:400;color:"+MUT+";float:right;padding-top:5pt}";
+  h+="table.t{border-collapse:collapse;width:100%;margin:3pt 0 2pt}";
+  h+="table.t th{background:"+NV+";color:#fff;font-size:8.5pt;font-weight:700;text-align:left;padding:4pt 8pt;letter-spacing:.3pt}";
+  h+="table.t th.r,table.t td.r{text-align:right}";
+  h+="table.t td{border-bottom:0.5pt solid "+HAIR+";padding:3.5pt 8pt;font-size:9.5pt;vertical-align:top}";
+  h+="table.t tr.tot td{border-top:1pt solid "+NV+";font-weight:700;background:#f4f6f9}";
+  h+=".cap{font-size:8pt;font-weight:700;letter-spacing:1pt;text-transform:uppercase;color:"+GD+";margin:9pt 0 1pt}";
+  h+="table.kv{border-collapse:collapse;margin:6pt 0}";
+  h+="table.kv td{padding:1.5pt 16pt 1.5pt 0;font-size:10pt;border:none;vertical-align:top}";
+  h+="table.kv .k{color:"+MUT+";font-size:8pt;text-transform:uppercase;letter-spacing:.6pt}";
+  h+="table.kv .v{font-weight:700;color:"+NV+"}";
+  h+=".kf{border-collapse:collapse;width:100%;margin:8pt 0 2pt}";
+  h+=".kf td{border:0.5pt solid "+HAIR+";padding:7pt 10pt;width:20%;vertical-align:top}";
+  h+=".kf .l{font-size:7.5pt;text-transform:uppercase;letter-spacing:.6pt;color:"+MUT+"}";
+  h+=".kf .n{font-size:15pt;font-weight:700;color:"+NV+";font-family:Georgia,serif}";
+  h+=".kf .u{font-size:8pt;color:"+MUT+"}";
+  h+="p.f1{font-size:7.5pt;color:"+MUT+"}";
+  h+="</style></head><body><div class=Section1>";
+  /* masthead */
+  h+="<table style='width:100%;border-collapse:collapse'><tr>"+
+     "<td style='border:none;vertical-align:top;padding:0'><div class='mast'>BALTIC</div><div style='border-top:0.75pt solid "+GD+";width:150pt;margin:2pt 0 2pt'></div><div class='mast2'>YACHTS</div></td>"+
+     "<td style='border:none;vertical-align:top;text-align:right;padding:0'>"+
+       "<table class='kv' style='margin-left:auto'>"+
+       "<tr><td class='k'>Document</td><td class='v'>Engineering Calculation Summary</td></tr>"+
+       "<tr><td class='k'>Project</td><td class='v'>"+E(m.proj||"—")+"</td></tr>"+
+       "<tr><td class='k'>Revision</td><td class='v'>"+E(m.rev||"—")+"</td></tr>"+
+       "<tr><td class='k'>Date</td><td class='v'>"+E(m.date||"—")+"</td></tr>"+
+       "<tr><td class='k'>Prepared by</td><td class='v'>"+E(m.by||"—")+"</td></tr>"+
+       "</table></td></tr></table>";
+  h+="<div style='border-top:1.5pt solid "+NV+";margin:8pt 0 0'></div>";
+  h+="<div class='doctitle'>"+E(m.yacht||"Project")+"</div>";
+  h+="<div class='ptl'>"+E([m.type,("Class "+(m.cls||"—")),("Flag "+(m.flag||"—"))].filter(Boolean).join("  &middot;  "))+"</div>";
+  /* key figures */
+  function kf(label,kpiId,idx){var ks=_kpisFrom(d,kpiId);var k=ks[idx];return k?("<td><div class='l'>"+E(label)+"</div><div class='n'>"+E(k.value)+"</div><div class='u'>"+E(k.unit)+"</div></td>"):"<td><div class='l'>"+E(label)+"</div><div class='n'>—</div><div class='u'></div></td>";}
+  function _kpisFrom(dd,name){var x=dd.discs.filter(function(z){return z.name===name;})[0];return x?x.rows:[];}
+  h+="<div class='cap'>Key figures</div><table class='kf'><tr>"+
+     kf("Cooling load","Air Conditioning",0)+kf("Electrical peak","Electrical Load Balance",1)+kf("Generator cap.","Electrical Load Balance",2)+kf("Battery usable","Electrical Load Balance",4)+kf("ER supply air","Engine Room Ventilation",0)+
+     "</tr></table>";
+  /* equipment map for lookup */
+  var eqmap={}; d.equip.forEach(function(g){eqmap[g.group]=g.rows;});
   d.discs.forEach(function(dc){
-    h+="<h2>"+E(dc.name)+(dc.badge?(" &mdash; "+E(dc.badge)):"")+"</h2>";
-    if(dc.rows.length){ h+="<table><tr><th>Parameter</th><th>Value</th><th>Unit</th></tr>";
-      dc.rows.forEach(function(r){h+="<tr><td>"+E(r.label)+"</td><td>"+E(r.value)+"</td><td>"+E(r.unit)+"</td></tr>";});
-      h+="</table>";
-    } else h+="<p class='muted'>No data entered.</p>";
+    h+="<h2>"+E(dc.name)+"<span class='rf'>"+E(dc.ref||"")+(dc.badge?("  &middot;  "+E(dc.badge)):"")+"</span></h2>";
+    if(dc.rows.length){ h+="<table class='t'><tr><th style='width:52%'>Parameter</th><th class='r' style='width:30%'>Value</th><th style='width:18%'>Unit</th></tr>";
+      dc.rows.forEach(function(r){h+="<tr><td>"+E(r.label)+"</td><td class='r'>"+E(r.value)+"</td><td>"+E(r.unit)+"</td></tr>";}); h+="</table>";
+    } else h+="<p style='color:"+MUT+";font-size:9pt'>No data entered.</p>";
+    var eq=eqmap[dc.name]||eqmap[dc.name.replace(" Load Balance","")];
+    if(eq&&eq.length){ h+="<div class='cap'>Selected equipment</div><table class='t'><tr><th style='width:34%'>Item</th><th style='width:38%'>Selection</th><th style='width:28%'>Rating</th></tr>";
+      eq.forEach(function(x){h+="<tr><td>"+E(x.item)+"</td><td style='font-weight:600'>"+E(x.model)+"</td><td>"+E(x.detail||"")+"</td></tr>";}); h+="</table>"; }
   });
-  if(d.consumers.length){
-    h+="<h2>Electrical consumers ("+d.consumers.length+")</h2><table><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>Qty</th><th>kW each</th><th>Installed kW</th></tr>";
-    d.consumers.forEach(function(x){h+="<tr><td>"+E(x.source)+"</td><td>"+E(x.name)+"</td><td>"+E(x.bus)+"</td><td>"+(+x.pcs||0)+"</td><td>"+(+x.kw||0)+"</td><td>"+((+x.pcs||0)*(+x.kw||0)).toFixed(2)+"</td></tr>";});
-    h+="</table>";
+  if(d.consumers.length){ var tot=0; d.consumers.forEach(function(c){tot+=(+c.pcs||0)*(+c.kw||0);});
+    h+="<h2>Electrical Load Schedule<span class='rf'>"+d.consumers.length+" consumers</span></h2>";
+    h+="<table class='t'><tr><th>Source</th><th>Consumer</th><th>Bus</th><th class='r'>Qty</th><th class='r'>kW ea</th><th class='r'>Installed kW</th></tr>";
+    d.consumers.forEach(function(x){h+="<tr><td>"+E(x.source)+"</td><td>"+E(x.name)+"</td><td>"+E(x.bus)+"</td><td class='r'>"+(+x.pcs||0)+"</td><td class='r'>"+(+x.kw||0)+"</td><td class='r'>"+((+x.pcs||0)*(+x.kw||0)).toFixed(2)+"</td></tr>";});
+    h+="<tr class='tot'><td colspan='5'>Total installed</td><td class='r'>"+tot.toFixed(2)+"</td></tr></table>";
   }
-  if(d.rules.length){
-    h+="<h2>Class &amp; Flag rules ("+E(d.meta.cls||"")+" / "+E(d.meta.flag||"")+")</h2><table><tr><th>Code</th><th>Requirement</th><th>Source</th></tr>";
-    d.rules.forEach(function(x){h+="<tr><td>"+E(x.code)+"</td><td>"+E(x.req)+"</td><td>"+E(x.src)+"</td></tr>";});
-    h+="</table>";
+  if(d.rules.length){ h+="<h2>Applicable Class &amp; Flag Rules<span class='rf'>"+E(m.cls||"—")+" / "+E(m.flag||"—")+"</span></h2>";
+    h+="<table class='t'><tr><th style='width:26%'>Code</th><th style='width:56%'>Requirement</th><th style='width:18%'>Source</th></tr>";
+    d.rules.forEach(function(x){h+="<tr><td>"+E(x.code)+"</td><td>"+E(x.req)+"</td><td>"+E(x.src)+"</td></tr>";}); h+="</table>";
   }
-  h+="<p class='muted'>"+E((typeof disclaimerLine==="function")?disclaimerLine():"")+"<br>Created by Mikael Strengell, Head of Engineering, Baltic Yachts.</p></body></html>";
-  var fn="Baltic_Overview_"+((d.meta.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".doc";
+  h+="<div style='border-top:0.5pt solid "+HAIR+";margin-top:16pt;padding-top:6pt'><p class='f1'>"+E((typeof disclaimerLine==="function")?disclaimerLine():"")+"</p><p class='f1' style='margin-top:3pt'>Baltic Yachts Ltd &middot; Confidential &middot; Created by Mikael Strengell, Head of Engineering.</p></div>";
+  h+="<div style='mso-element:footer' id='f1'><p class='f1' style='text-align:center'>Baltic Yachts &middot; "+E(m.yacht||"")+" &middot; Engineering Calculation Summary</p></div>";
+  h+="</div></body></html>";
+  var fn="Baltic_Overview_"+((m.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".doc";
   safeDL(new Blob(["﻿"+h],{type:"application/msword"}), fn);
+}
+
+/* ===================== EXCEL (.xlsx) ===================== */
+function _bd(c){return {style:"thin",color:{rgb:c||BY_HAIR}};}
+function summaryExcel(){
+  if(!window.XLSX){alert("Excel library is still loading — try again in a moment (it loads from the web on first use).");return;}
+  var d=summaryData(),m=d.meta,wb=XLSX.utils.book_new();
+  var ST={
+    mast:{font:{name:"Cambria",sz:20,bold:true,color:{rgb:BY_GOLD}},alignment:{vertical:"center"}},
+    mast2:{font:{name:"Cambria",sz:9,color:{rgb:BY_NAVY}},alignment:{vertical:"center"}},
+    doctitle:{font:{name:"Cambria",sz:16,bold:true,color:{rgb:BY_NAVY}},alignment:{vertical:"center"}},
+    ptl:{font:{name:"Calibri",sz:10,color:{rgb:BY_MUT}}},
+    cap:{font:{name:"Calibri",sz:8,bold:true,color:{rgb:BY_GOLD}}},
+    k:{font:{name:"Calibri",sz:9,color:{rgb:BY_MUT}}},
+    v:{font:{name:"Calibri",sz:11,bold:true,color:{rgb:BY_NAVY}}},
+    h2:{font:{name:"Cambria",sz:12,bold:true,color:{rgb:BY_NAVY}},border:{bottom:{style:"thin",color:{rgb:BY_GOLD}}},alignment:{vertical:"center"}},
+    h2r:{font:{name:"Calibri",sz:9,color:{rgb:BY_MUT}},border:{bottom:{style:"thin",color:{rgb:BY_GOLD}}},alignment:{horizontal:"right",vertical:"center"}},
+    th:{font:{name:"Calibri",sz:9,bold:true,color:{rgb:BY_WHITE}},fill:{fgColor:{rgb:BY_NAVY}},alignment:{vertical:"center"},border:{bottom:_bd(BY_NAVY)}},
+    thr:{font:{name:"Calibri",sz:9,bold:true,color:{rgb:BY_WHITE}},fill:{fgColor:{rgb:BY_NAVY}},alignment:{horizontal:"right",vertical:"center"}},
+    c:{font:{name:"Calibri",sz:10,color:{rgb:BY_INK}},border:{bottom:_bd()},alignment:{vertical:"center"}},
+    cb:{font:{name:"Calibri",sz:10,bold:true,color:{rgb:BY_NAVY}},border:{bottom:_bd()},alignment:{vertical:"center"}},
+    cr:{font:{name:"Calibri",sz:10,color:{rgb:BY_INK}},border:{bottom:_bd()},alignment:{horizontal:"right",vertical:"center"}},
+    tot:{font:{name:"Calibri",sz:10,bold:true,color:{rgb:BY_NAVY}},fill:{fgColor:{rgb:BY_SOFT}},border:{top:{style:"thin",color:{rgb:BY_NAVY}}}},
+    totr:{font:{name:"Calibri",sz:10,bold:true,color:{rgb:BY_NAVY}},fill:{fgColor:{rgb:BY_SOFT}},border:{top:{style:"thin",color:{rgb:BY_NAVY}}},alignment:{horizontal:"right"}},
+    foot:{font:{name:"Calibri",sz:8,italic:true,color:{rgb:BY_MUT}},alignment:{wrapText:true,vertical:"top"}}
+  };
+  var M=[],merges=[],rowh=[];
+  function R(cells){M.push(cells);return M.length-1;}
+  function blank(){M.push([]);}
+  var r=R([{v:"BALTIC",s:ST.mast},{v:"",s:ST.mast},{v:"Engineering Calculation Summary",s:{font:{name:"Calibri",sz:9,bold:true,color:{rgb:BY_NAVY}},alignment:{horizontal:"right",vertical:"center"}}},{v:"",s:ST.mast},{v:"",s:ST.mast},{v:"",s:ST.mast}]); rowh[r]={hpt:26}; merges.push({s:{r:r,c:2},e:{r:r,c:5}});
+  r=R([{v:"Y A C H T S",s:ST.mast2},null,{v:"Rev "+(m.rev||"—")+"   ·   "+(m.date||"—"),s:{font:{name:"Calibri",sz:9,color:{rgb:BY_MUT}},alignment:{horizontal:"right"}}},null,null,null]); merges.push({s:{r:r,c:2},e:{r:r,c:5}});
+  blank();
+  r=R([{v:(m.yacht||"Project"),s:ST.doctitle}]); rowh[r]={hpt:22}; merges.push({s:{r:r,c:0},e:{r:r,c:5}});
+  r=R([{v:[m.type,("Class "+(m.cls||"—")),("Flag "+(m.flag||"—")),("Project "+(m.proj||"—")),("By "+(m.by||"—"))].filter(Boolean).join("    ·    "),s:ST.ptl}]); merges.push({s:{r:r,c:0},e:{r:r,c:5}});
+  blank();
+  function sectionHead(title,right){var rr=R([{v:title,s:ST.h2},{s:ST.h2},{s:ST.h2},{v:right||"",s:ST.h2r},{s:ST.h2r},{s:ST.h2r}]);rowh[rr]={hpt:20};merges.push({s:{r:rr,c:0},e:{r:rr,c:2}});merges.push({s:{r:rr,c:3},e:{r:rr,c:5}});}
+  function thRow(a,b,c){R([{v:a,s:ST.th},{v:b,s:ST.thr},{v:c,s:ST.th},{v:"",s:ST.th},{v:"",s:ST.th},{v:"",s:ST.th}]);}
+  var eqmap={}; d.equip.forEach(function(g){eqmap[g.group]=g.rows;});
+  d.discs.forEach(function(dc){
+    sectionHead(dc.name,(dc.ref||"")+(dc.badge?("   ·   "+dc.badge):""));
+    thRow("Parameter","Value","Unit");
+    if(dc.rows.length) dc.rows.forEach(function(x){R([{v:x.label,s:ST.c},{v:x.value,s:ST.cr},{v:x.unit,s:ST.c},{v:"",s:ST.c},{v:"",s:ST.c},{v:"",s:ST.c}]);});
+    else R([{v:"No data entered",s:ST.c}]);
+    var eq=eqmap[dc.name]||eqmap[dc.name.replace(" Load Balance","")];
+    if(eq&&eq.length){ R([{v:"SELECTED EQUIPMENT",s:ST.cap}]);
+      R([{v:"Item",s:ST.th},{v:"Selection",s:ST.th},{v:"Rating",s:ST.th},{v:"",s:ST.th},{v:"",s:ST.th},{v:"",s:ST.th}]);
+      eq.forEach(function(x){R([{v:x.item,s:ST.c},{v:x.model,s:ST.cb},{v:x.detail||"",s:ST.c},{v:"",s:ST.c},{v:"",s:ST.c},{v:"",s:ST.c}]);});
+    }
+    blank();
+  });
+  if(d.consumers.length){ sectionHead("Electrical Load Schedule",d.consumers.length+" consumers");
+    R([{v:"Source",s:ST.th},{v:"Consumer",s:ST.th},{v:"Bus",s:ST.th},{v:"Qty",s:ST.thr},{v:"kW ea",s:ST.thr},{v:"Installed kW",s:ST.thr}]);
+    var tot=0; d.consumers.forEach(function(x){var inst=(+x.pcs||0)*(+x.kw||0);tot+=inst;R([{v:x.source||"",s:ST.c},{v:x.name||"",s:ST.c},{v:x.bus||"",s:ST.c},{v:(+x.pcs||0),s:ST.cr},{v:(+x.kw||0),s:ST.cr,z:"0.00"},{v:inst,s:ST.cr,z:"0.00"}]);});
+    R([{v:"Total installed",s:ST.tot},{v:"",s:ST.tot},{v:"",s:ST.tot},{v:"",s:ST.tot},{v:"",s:ST.tot},{v:tot,s:ST.totr,z:"0.00"}]); blank();
+  }
+  if(d.rules.length){ sectionHead("Applicable Class & Flag Rules",(m.cls||"—")+" / "+(m.flag||"—"));
+    R([{v:"Code",s:ST.th},{v:"Requirement",s:ST.th},{v:"Source",s:ST.th},{v:"",s:ST.th},{v:"",s:ST.th},{v:"",s:ST.th}]);
+    d.rules.forEach(function(x){R([{v:x.code||"",s:ST.c},{v:x.req||"",s:ST.c},{v:x.src||"",s:ST.c},{v:"",s:ST.c},{v:"",s:ST.c},{v:"",s:ST.c}]);}); blank();
+  }
+  r=R([{v:(typeof disclaimerLine==="function")?disclaimerLine():"",s:ST.foot}]); merges.push({s:{r:r,c:0},e:{r:r,c:5}}); rowh[r]={hpt:46};
+  /* build worksheet */
+  var ws={},maxC=6;
+  for(var ri=0;ri<M.length;ri++){var row=M[ri]||[];for(var ci=0;ci<row.length;ci++){var cell=row[ci];if(cell==null)continue;var ref=XLSX.utils.encode_cell({r:ri,c:ci}),num=(typeof cell.v==="number");ws[ref]={v:(cell.v==null?"":cell.v),t:num?"n":"s"};if(cell.s)ws[ref].s=cell.s;if(cell.z)ws[ref].z=cell.z;}}
+  ws["!ref"]=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(0,M.length-1),c:maxC-1}});
+  ws["!cols"]=[{wch:26},{wch:30},{wch:14},{wch:8},{wch:11},{wch:14}];
+  ws["!merges"]=merges; ws["!rows"]=rowh;
+  ws["!sheetView"]=[{showGridLines:false}];
+  XLSX.utils.book_append_sheet(wb,ws,"Engineering Summary");
+  if(wb.Workbook&&wb.Workbook.Sheets){} 
+  var fn="Baltic_Overview_"+((m.yacht||"project").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
+  try{XLSX.writeFile(wb,fn);}catch(e){var o=XLSX.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
 }
 
 /* ---------- Sammanställning / Project Overview ---------- */
