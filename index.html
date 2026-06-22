@@ -1,3 +1,5 @@
+**index.html**
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -225,6 +227,8 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
   <div class="crumbs" id="crumbs"></div>
   <div class="nav-right">
     <div class="proj-chip" onclick="openProjModal()"><span class="dot"></span><span id="chip-name" class="muted">No project</span></div>
+    <button class="btn btn-sm no-print" onclick="go('classflag')" title="Class & flag guide" style="background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.28)">&#9878; Class &amp; Flag</button>
+    <button class="btn btn-sm no-print" onclick="go('howto')" title="How to use this app" style="background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.28)">? Help</button>
     <button class="btn btn-gold btn-sm no-print" onclick="window.print()">&#128438;</button>
   </div>
 </div>
@@ -236,6 +240,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
   <div class="hero">
     <h1>Engineering Calculation Suite</h1>
     <p>Select a discipline to begin. All calculations link to the active project.</p>
+    <p style="margin-top:10px"><a onclick="go('howto')" style="color:var(--gold);cursor:pointer;font-weight:600;font-size:13px">&#128214; New here? Read &ldquo;How to use this app&rdquo; &rarr;</a></p>
   </div>
   <div class="cat-grid">
     <div class="cat" onclick="go('systems')">
@@ -259,7 +264,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
       <p>Load balance &mdash; aggregates consumers from every calculation</p>
     </div>
   </div>
-  <div class="card" id="home-projects" style="margin-top:22px"><div class="card-hdr"><h2>Projects</h2><div style="display:flex;gap:8px" class="no-print"><button class="btn btn-line btn-sm" onclick="saveCurrentProject()">&#128190; Save current</button><button class="btn btn-gold btn-sm" onclick="toggleNewProject()">+ Create Project</button></div></div><div id="new-project-form" style="display:none;padding:16px 20px;border-bottom:1px solid var(--g200)"><div class="field-row"><div class="field"><label>Yacht Name</label><input id="np-yacht" placeholder="e.g. B175"></div><div class="field"><label>Project No.</label><input id="np-proj" placeholder="B175-01"></div></div><div class="field-row"><div class="field"><label>Type</label><select id="np-type"><option>Sailing Yacht</option><option>Motor Yacht</option></select></div><div class="field"><label>Class Society</label><select id="np-cls"><option>DNV GL</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>ABS</option><option>Other</option></select></div><div class="field"><label>Flag (additional rule book)</label><select id="np-flag"><option value="">&mdash; none &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div></div><div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="createProjectFromHome()">Create Project</button></div></div><div id="home-proj-list" style="padding:14px 20px"></div></div>
+  <div class="card" id="home-projects" style="margin-top:22px"><div class="card-hdr"><h2>Projects</h2><div style="display:flex;gap:8px" class="no-print"><button class="btn btn-line btn-sm" onclick="saveCurrentProject()">&#128190; Save current</button><button class="btn btn-gold btn-sm" onclick="toggleNewProject()">+ Create Project</button></div></div><div id="new-project-form" style="display:none;padding:16px 20px;border-bottom:1px solid var(--g200)"><div class="field-row"><div class="field"><label>Yacht Name</label><input id="np-yacht" placeholder="e.g. B175"></div><div class="field"><label>Project No.</label><input id="np-proj" placeholder="B175-01"></div></div><div class="field-row"><div class="field"><label>Type</label><select id="np-type"><option>Sailing Yacht</option><option>Motor Yacht</option><option>Catamaran</option></select></div><div class="field"><label>Class Society</label><select id="np-cls"><option>DNV GL</option><option>RINA</option><option>Bureau Veritas (BV)</option><option>ABS</option><option>Other</option></select></div><div class="field"><label>Flag (additional rule book)</label><select id="np-flag"><option value="">&mdash; none &mdash;</option><optgroup label="Red Ensign Group"><option>United Kingdom</option><option>Cayman Islands</option><option>Gibraltar</option><option>Bermuda</option><option>Isle of Man</option><option>British Virgin Islands</option><option>Jersey</option><option>Guernsey</option><option>Falkland Islands</option><option>St Helena</option><option>Anguilla</option><option>Montserrat</option><option>Turks & Caicos Islands</option></optgroup><optgroup label="Other"><option>Malta</option><option>Other</option></optgroup></select></div></div><div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="createProjectFromHome()">Create Project</button></div></div><div id="home-proj-list" style="padding:14px 20px"></div></div>
   <div class="card" id="home-rules" style="margin-top:22px"></div>
 </main>
 </div>
@@ -327,28 +332,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 </div>
 
 <!-- ===== VIEW: ELECTRICAL ===== -->
-<div class="view" id="view-electrical">
-<main>
-  <div class="page-head">
-    <div><h2>Electrical Load Balance</h2><p>Consumers aggregated from all calculations. Day / Evening / Night demand per bus.</p></div>
-    <button class="btn btn-line btn-sm no-print" onclick="clearConsumers()">&#128465; Clear all</button>
-  </div>
-  <div class="card">
-    <div class="kpi-row" id="elec-kpi"></div>
-  </div>
-  <div class="card">
-    <div class="card-hdr"><h2>Consumers</h2><span class="badge badge-gold" id="elec-count">0</span></div>
-    <div class="tbl-wrap">
-      <table class="result-table">
-        <thead><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>pcs</th><th>kW ea</th><th>Total kW</th><th>Day kW</th><th>Eve kW</th><th>Night kW</th><th class="no-print"></th></tr></thead>
-        <tbody id="elec-body"></tbody>
-        <tfoot id="elec-foot"></tfoot>
-      </table>
-    </div>
-  </div>
-  <div id="elec-empty"></div>
-</main>
-</div>
+<div class="view" id="view-electrical"></div>
 
 <!-- ===== VIEW: INTERIOR ===== -->
 <div class="view" id="view-interior"><main>
@@ -361,6 +345,176 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
   <div class="empty"><div class="icon">&#128295;</div><h3>Mechanical &mdash; coming soon</h3>
   <p>Steering, hydraulics and deck machinery calculations will live here.</p></div>
 </main></div>
+
+<!-- ===== VIEW: HOW TO USE (user guide) ===== -->
+<div class="view" id="view-howto"><main>
+  <div class="page-head">
+    <div><h2>How to use this app</h2><p>What the Engineering Suite does, how the pages work together, and what it can&rsquo;t do yet.</p></div>
+  </div>
+
+  <!-- What it is -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>What it is</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      The Baltic Yachts Engineering Suite is a single web-app that gathers the early-stage system
+      calculations for a yacht in one place. Every calculation is tied to an <strong>active project</strong>,
+      and the consumers each system creates (pumps, fans, compressors&hellip;) are collected automatically
+      into a single <strong>Electrical Load Balance</strong>. It runs in any modern browser, works offline once
+      loaded, and can be installed as an app on a phone, tablet or desktop.
+      <div style="margin-top:12px;font-size:13px;color:var(--g500)">Created by <strong style="color:var(--navy)">Mikael Strengell</strong>, Head of Engineering, Baltic Yachts.</div>
+    </div>
+  </div>
+
+  <!-- Getting started -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>Getting started in 4 steps</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      <ol style="margin:0 0 0 18px;display:grid;gap:10px">
+        <li><strong>Create a project.</strong> On the Home page open <em>Projects &rarr; + Create Project</em> and
+        enter the yacht name, project number, type, class society and (optionally) flag. The active project is
+        shown in the chip at the top-right of every page.</li>
+        <li><strong>Open a discipline.</strong> Pick a tile &mdash; <em>Systems</em> (AC, Seawater, Bilge,
+        Engine-room Ventilation, Water &amp; Waste, Engine/Thruster) or <em>Electrical</em>.</li>
+        <li><strong>Fill in the inputs.</strong> Each calculator sizes its equipment and lists the electrical
+        consumers it produces.</li>
+        <li><strong>Check the Electrical Load Balance.</strong> It automatically totals the consumers from every
+        calculation so you see the whole-boat picture in one place.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- The pages -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>The pages</h2></div>
+    <div class="tbl-wrap">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr>
+          <th style="background:var(--g100);padding:9px 12px;text-align:left;text-transform:uppercase;font-size:10px;letter-spacing:.6px;color:var(--g500)">Page</th>
+          <th style="background:var(--g100);padding:9px 12px;text-align:left;text-transform:uppercase;font-size:10px;letter-spacing:.6px;color:var(--g500)">What it does</th>
+          <th style="background:var(--g100);padding:9px 12px;text-align:left;text-transform:uppercase;font-size:10px;letter-spacing:.6px;color:var(--g500)">Reference</th>
+        </tr></thead>
+        <tbody style="color:var(--g700)">
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Air Conditioning</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Cabin cooling loads &amp; unit selection from a supplier catalogue (Dometic / Webasto). Optional Fresh-Air Make-Up (FAMU) sizes a central air handler. Feeds cooling power into Electrical.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">ISO 7547</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Seawater Cooling</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Sums cooling flow and sizes the seawater inlet / manifold.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Manifold sizing</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Bilge</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Bilge pipe &amp; pump sizing.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">RINA / DNV-GL</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Engine-room Ventilation</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Combustion + heat-loss airflow and supply/exhaust fan sizing.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">ISO 8861</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Water &amp; Waste Water</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Fresh-water, grey/black tank balance and discharge rate.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">MEPC 157(55)</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Engine &rarr; Thruster</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Bow / stern thruster sizing &amp; power from a wind + acceleration balance. (Propeller opens an external workbook.)</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Wind + accel</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Electrical Load Balance</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Aggregates every consumer created by the calculations above into a whole-boat load picture.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Auto-aggregated</td></tr>
+          <tr><td style="padding:8px 12px"><strong>Class &amp; Flag Rules</strong></td><td style="padding:8px 12px">Editable rule framework per class society / flag, with import &amp; export.</td><td style="padding:8px 12px">Editable</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Saving & data -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>Saving &amp; your data</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      <ul style="margin:0 0 0 18px;display:grid;gap:8px">
+        <li>Projects are saved <strong>in this browser, on this device</strong> (local storage). Use
+        <em>Save current</em> on Home to store your work, and switch between saved projects from the same list.</li>
+        <li>Because data lives in the browser, it is <strong>not shared between devices or colleagues</strong>, and
+        clearing the browser&rsquo;s site data will remove saved projects. Keep important cases backed up.</li>
+        <li>Use the <strong>print</strong> button (top-right) to produce a PDF / paper copy of any page.</li>
+        <li><strong>Install it as an app:</strong> your browser may offer &ldquo;Install&rdquo; / &ldquo;Add to Home
+        Screen&rdquo;. Once installed it opens full-screen and works offline.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Limitations -->
+  <div class="card" style="margin-bottom:16px;border:1px solid var(--gold2)">
+    <div class="card-hdr" style="background:var(--gold-bg)"><h2>Current limitations</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      <ul style="margin:0 0 0 18px;display:grid;gap:8px">
+        <li><strong>Preliminary estimates only.</strong> Results, equipment selections and rule compliance must be
+        independently checked by a qualified engineer against the applicable class society, flag administration and
+        manufacturer documentation before use.</li>
+        <li><strong>Not every discipline is built yet.</strong> Interior (joinery, weights, furnishing) and
+        Mechanical (steering, hydraulics, deck machinery) are placeholders. The Propeller calculation currently
+        opens an external Excel workbook rather than running in-app.</li>
+        <li><strong>The electrical supplier library is still being expanded.</strong> AC consumers feed the load
+        balance automatically; charger / inverter / combi units, 24 V&ndash;48 V and high-voltage (800 V) battery
+        options are being added.</li>
+        <li><strong>Catalogue &amp; rule data are starting points.</strong> AC unit catalogues, FAMU data and the
+        class/flag rule sets should be verified against the latest manufacturer datasheets and the governing rules
+        for your project.</li>
+        <li><strong>Single-user, local data.</strong> No cloud sync, version history or multi-user editing &mdash;
+        each browser holds its own copy.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="font-size:12px;color:var(--g500);padding:0 4px 8px">
+    Found something confusing or missing? Note it down and we&rsquo;ll fold it into the next version.
+  </div>
+</main></div>
+
+<!-- ===== VIEW: CLASS & FLAG (guide) ===== -->
+<div class="view" id="view-classflag"><main>
+  <div class="page-head">
+    <div><h2>Class &amp; Flag</h2><p>How classification societies and flag administrations shape a Baltic project &mdash; and how the Suite applies their rules.</p></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>The two rule sets</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      Every yacht is engineered to two overlapping sets of requirements:
+      <ul style="margin:10px 0 0 18px;display:grid;gap:10px">
+        <li><strong>Class society</strong> &mdash; an independent body that sets and verifies the technical standards for the design, construction and survey of the hull, machinery and systems. Class covers <em>how the boat is engineered</em>.</li>
+        <li><strong>Flag state (flag administration)</strong> &mdash; the country the yacht is registered under. It sets the statutory requirements (safety, pollution prevention, manning, certification) layered <em>on top of</em> class. Flag covers <em>how the boat is operated and certified</em>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>Class societies in the Suite</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      Pick the society when you create a project. The calculation pages tag their outputs with that society&rsquo;s rule references (for example, bilge pipe sizing to RINA / DNV&#8209;GL).
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">DNV GL</span>
+        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">RINA</span>
+        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Bureau Veritas (BV)</span>
+        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">ABS</span>
+        <span style="background:var(--gold-bg);color:#7a5c1e;border:1px solid var(--gold2);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Lloyd&rsquo;s Register (LR)</span>
+        <span style="background:var(--g100);color:var(--g500);border:1px solid var(--g200);font-size:12px;font-weight:600;padding:4px 11px;border-radius:99px">Other</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>Flag states in the Suite</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      The flag adds its own rule book on top of class. The Suite groups flags the way their rules align:
+      <div style="margin-top:12px"><strong style="color:var(--navy)">Red Ensign Group</strong> &mdash; British registries sharing the UK / Large Yacht Code (LY3) framework:</div>
+      <div style="font-size:13px;color:var(--g500);margin-top:4px">United Kingdom &middot; Cayman Islands &middot; Gibraltar &middot; Bermuda &middot; Isle of Man &middot; British Virgin Islands &middot; Jersey &middot; Guernsey &middot; Falkland Islands &middot; St Helena &middot; Anguilla &middot; Montserrat &middot; Turks &amp; Caicos Islands</div>
+      <div style="margin-top:12px"><strong style="color:var(--navy)">Malta</strong> &mdash; common EU flag with its own commercial yacht code.</div>
+      <div style="margin-top:8px"><strong style="color:var(--navy)">Other / international</strong> &mdash; any flag outside the groups above; the standard rule set applies.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><h2>How the Suite applies them</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      <ul style="margin:0 0 0 18px;display:grid;gap:8px">
+        <li>Setting the <strong>class</strong> and <strong>flag</strong> on a project assembles the active rule set: <em>class rules + flag rules + always‑applicable standards</em>.</li>
+        <li>The active rule set is shown on the <a onclick="go('home')" style="color:var(--gold);cursor:pointer;font-weight:600">Home</a> page for the open project, grouped by system (air conditioning, ventilation, bilge, water, electrical&hellip;).</li>
+        <li>Use <strong>Manage Rules</strong> on Home to add, edit, import or export rules, so the framework tracks the exact references your projects rely on.</li>
+      </ul>
+      <div style="margin-top:12px"><button class="btn btn-gold btn-sm" onclick="go('home')">&#127968; Go to Home &amp; rules</button></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;border:1px solid var(--gold2)">
+    <div class="card-hdr" style="background:var(--gold-bg)"><h2>Important</h2></div>
+    <div style="padding:16px 20px;font-size:14px;line-height:1.6;color:var(--g700)">
+      The rule references in the Suite are a <strong>reference aid</strong> to keep calculations traceable &mdash; they do not replace the governing class and flag rule books, which must be checked by a qualified engineer for each project.
+    </div>
+  </div>
+</main></div>
+
+
 
 <!-- ===== VIEW: AC (the full calculator module) ===== -->
 <div class="view" id="view-ac"></div>
@@ -424,7 +578,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.24 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.33 &middot; ISO 7547 / 8861 &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -468,7 +622,9 @@ var ROUTES={
   bilge:{view:"view-bilge",crumb:[["Home","home"],["Systems","systems"],["Bilge",null]]},
   seawater:{view:"view-seawater",crumb:[["Home","home"],["Systems","systems"],["Seawater Cooling",null]]},
   water:{view:"view-water",crumb:[["Home","home"],["Systems","systems"],["Water & Waste Water",null]]},
-  thruster:{view:"view-thruster",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Thruster",null]]}
+  thruster:{view:"view-thruster",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Thruster",null]]},
+  howto:{view:"view-howto",crumb:[["Home","home"],["How to use this app",null]]},
+  classflag:{view:"view-classflag",crumb:[["Home","home"],["Class & Flag",null]]}
 };
 function go(r){location.hash="#/"+r;}
 function renderRoute(){
@@ -492,7 +648,7 @@ function renderRoute(){
   if(r==="seawater"){mountSW();}
   if(r==="water"){mountWater();}
   if(r==="thruster"){mountThr();}
-  if(r==="electrical"){renderElectrical();}
+  if(r==="electrical"){mountElec();}
   if(r==="home"){if(typeof renderHomeProjects==="function")renderHomeProjects();if(typeof renderHomeRules==="function")renderHomeRules();}
   window.scrollTo(0,0);
 }
@@ -622,7 +778,7 @@ function renderElectrical(){
 var AC_MOUNTED=false;
 /* ===== AC MODULE (restored full engine from v2.0, 18 June) ===== */
 function acHTML(){ return `<main>
-  <div class="page-head"><div><h2>Air Conditioning</h2><p>ISO 7547 cooling load, unit selection, ventilation compliance &amp; energy.</p></div>
+  <div class="page-head"><div><h2>Air Conditioning</h2><p>ISO 7547 cooling load, unit selection, ventilation compliance &amp; energy.</p><p style="font-size:12px;color:#667085;margin-top:6px;max-width:820px;line-height:1.55"><strong style="color:#1a2744">How it&rsquo;s calculated:</strong> each space&rsquo;s cooling load = floor area &times; a heat-gain figure (W/m&sup2;) for that space type and climate, plus fresh-air, people (150 W each) and installation heat. Design conditions follow ISO 7547 (summer +35&deg;C &rarr; +27&deg;C). A fan-coil is selected to cover each space, and fresh-air ventilation is checked against the rule minimum.</p></div>
     <div style="display:flex;gap:8px" class="no-print">
       <button class="btn btn-line btn-sm" onclick="exportWord()">&#11015; Word</button>
       <button class="btn btn-line btn-sm" onclick="exportExcel()">&#11015; Excel</button>
@@ -660,6 +816,7 @@ function acHTML(){ return `<main>
       <button class="sup-btn" onclick="setSup('WEBASTO',this)">Webasto</button>
       <button class="sup-btn" onclick="setSup('OTHER',this)">Other</button>
     </div>
+    <div class="banner banner-blue" style="margin-top:8px;font-size:11px"><i>&#9432;</i><div><strong>BlueCool accessories</strong> (Webasto): CAN-Bus / My&nbsp;Touch control, silent blocks &amp; vibration absorbers &mdash; mounting / control items with negligible electrical load (not added as consumers).</div></div>
   </div>
 
   <div class="sb-group">
@@ -948,15 +1105,13 @@ let SUPS = {
     {m:'AU24DC', b:24000, w:20.9}
   ]},
   WEBASTO:{n:'Webasto',u:[
-    {m:'AH-CO05', b:4500,  w:5.0},
-    {m:'AH-CO06', b:6000,  w:7.5},
-    {m:'AH-CO09', b:9000,  w:9.0},
-    {m:'AH-CO12', b:12000, w:9.5},
-    {m:'AH-CO16', b:16000, w:12.5},
-    {m:'AH-CO20', b:20000, w:14.0},
-    {m:'AH-CO24', b:24000, w:25.0},
-    {m:'AH-CO30', b:30000, w:24.0},
-    {m:'AH-CO48', b:48000, w:40.0}
+    {m:'BlueCool A4 (AH-CO4)',   b:4000,  w:6},
+    {m:'BlueCool A6 (AH-CO6)',   b:6000,  w:7},
+    {m:'BlueCool A9 (AH-CO9)',   b:9000,  w:9},
+    {m:'BlueCool A12 (AH-CO12)', b:12000, w:10},
+    {m:'BlueCool A18 (AH-CO18)', b:18000, w:12},
+    {m:'BlueCool A24 (AH-CO24)', b:24000, w:16},
+    {m:'BlueCool A36 (AH-CO36)', b:36000, w:21}
   ]},
   OTHER:{n:'Other',u:[
     {m:'Custom-3k',  b:3000,  w:0},
@@ -1528,7 +1683,7 @@ function exportExcel() {
   const totB=sum(S.cabins.map(c=>({v:calcCabin(c).totB_d})),r=>r.v);
   rows.push([]);
   rows.push(['','','TOTAL','','','',Math.round(totW),Math.round(totB)]);
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([...info,...rows]), 'Cooling Loads');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([...info,...rows,[],[disclaimerLine()]]), 'Cooling Loads');
 
   // Sheet 2: Energy
   const eh = [['#','Space','Unit BTU','Installed kW','Elec kW','Daytime kWh','Silent kWh','Reduced kWh','Daily kWh']];
@@ -1537,7 +1692,7 @@ function exportExcel() {
     eh.push([i+1,c.name||TYPES[c.type]?.l,u.b,+(u.b/3412).toFixed(2),+e.eKW.toFixed(2),
       +e.day.toFixed(2),+e.sil.toFixed(2),+e.red.toFixed(2),+e.tot.toFixed(2)]);
   });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eh), 'Energy');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(eh.concat([[],[disclaimerLine()]])), 'Energy');
 
   // Sheet 3: Ventilation
   const vh=[['#','Space','Vol m³','ACH','Flow l/s','Min l/s','Design l/s','WC Ext l/s','OK?']];
@@ -1548,7 +1703,7 @@ function exportExcel() {
       +cr.fv.toFixed(1),cr.wcExt?+cr.wcExt.toFixed(1):'N/A',
       cr.fv>=cr.classMin?'OK':'FAIL']);
   });
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(vh), 'Ventilation');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(vh.concat([[],[disclaimerLine()]])), 'Ventilation');
 
   try{XLSX.writeFile(wb, `Baltic_AC_${m.yacht.replace(/[^a-z0-9]/gi,'_')||'Calc'}.xlsx`);}catch(e){const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});safeDL(new Blob([wbout],{type:'application/octet-stream'}),`Baltic_AC.xlsx`);}
 }
@@ -1632,7 +1787,7 @@ function exportWord() {
   <button class="btn-install" onclick="installPWA()">Install</button>
   <button class="btn-dismiss" onclick="dismissBanner()">✕</button>
 </div>
-
+<p style="margin-top:24px;padding:10px 12px;border:1px solid #c9a96e;background:#fdf6ec;font-size:10px;color:#344054;line-height:1.5">&#9888; ${disclaimerLine()}</p>
 </body></html>`;
 
   const blob = new Blob(['﻿', doc], {type:'application/msword'});
@@ -1653,7 +1808,27 @@ let CHILLERS = [
   {m:'DC50 (variable speed)',kw:14,cop:3.0,w:48},
   {m:'DC65 (variable speed)',kw:19,cop:3.0,w:55},
   {m:'DC90 (variable speed)',kw:26,cop:3.0,w:0},
-  {m:'DC130 (variable speed)',kw:38,cop:3.0,w:120}
+  {m:'DC130 (variable speed)',kw:38,cop:3.0,w:120},
+  // BlueCool C-Series (Webasto) seawater chillers — COP from datasheet (cool kW / 230V*A)
+  {m:'BlueCool C16 M',kw:4.7,cop:3.9,w:34},
+  {m:'BlueCool C20 M',kw:5.8,cop:3.4,w:37},
+  {m:'BlueCool C27 M',kw:7.9,cop:3.9,w:45},
+  {m:'BlueCool C32 T',kw:9.4,cop:3.9,w:65},
+  {m:'BlueCool C40 T',kw:11.7,cop:3.4,w:70},
+  {m:'BlueCool C55 T',kw:16.1,cop:4.0,w:86},
+  {m:'BlueCool C81 R',kw:23.7,cop:3.8,w:119},
+  {m:'BlueCool C108 Q',kw:31.7,cop:3.9,w:173},
+  // BlueCool S-Series (Webasto) self-contained DX plants
+  {m:'BlueCool S8',kw:2.4,cop:3.5,w:20},
+  {m:'BlueCool S10',kw:2.9,cop:3.8,w:22},
+  {m:'BlueCool S13',kw:3.8,cop:3.1,w:27},
+  {m:'BlueCool S16',kw:4.7,cop:3.4,w:31},
+  {m:'BlueCool S20',kw:5.9,cop:3.5,w:34},
+  {m:'BlueCool S27',kw:7.9,cop:3.9,w:46},
+  // BlueCool V-Series (Webasto) inverter / variable-speed seawater chillers (COP at full load)
+  {m:'BlueCool V50 M (inverter)',kw:14.6,cop:4.2,w:62},
+  {m:'BlueCool V64 T (inverter)',kw:18.7,cop:3.4,w:105},
+  {m:'BlueCool V77 T (inverter)',kw:22.6,cop:3.7,w:110}
 ];
 function addSupplier(){
   const name=prompt('New supplier / make name:'); if(!name) return;
@@ -1764,12 +1939,15 @@ function mountAC(){
 }
 function sendACtoElectrical(){
   if(!S.cabins.length){ alert("Add at least one space first."); return; }
-  var totB=0;
-  S.cabins.forEach(function(c){ var cr=calcCabin(c); var u=getUnit(c,cr.totB_d); totB+=u.b||cr.totB_d; });
-  var coolKW=totB/3412.14;            // installed cooling kW (BTU/h -> kW)
-  var elecKW=coolKW/3.0;              // electrical input at COP 3.0
-  addConsumers([{source:"Air Conditioning",name:"AC compressors + fan-coils",bus:"AC",pcs:1,kw:+elecKW.toFixed(2),day:100,eve:90,night:70}]);
-  alert("Sent AC electrical load ("+elecKW.toFixed(1)+" kW @ COP 3.0) to the Electrical load balance.");
+  var list=[], totB=0;
+  S.cabins.forEach(function(c){ var cr=calcCabin(c); var u=getUnit(c,cr.totB_d); totB+=u.b||cr.totB_d;
+    list.push({source:"AC",name:(c.name||"Space")+" fan-coil"+(u.m?" ("+u.m+")":""),bus:"INV",pcs:1,kw:0.1,day:50,eve:50,night:40}); });
+  var coolKW=totB/3412.14, chKw=coolKW/3.0;     // chiller compressor electrical at COP 3.0
+  list.push({source:"AC",name:"AC chiller (compressors)",bus:"AC",pcs:1,kw:+chKw.toFixed(2),day:75,eve:65,night:38});
+  list.push({source:"AC",name:"AC seawater pump",bus:"AC",pcs:1,kw:0.95,day:100,eve:100,night:100});
+  list.push({source:"AC",name:"AC circulation pump",bus:"AC",pcs:1,kw:0.95,day:100,eve:100,night:100});
+  addConsumers(list);
+  alert("Sent "+list.length+" AC consumers (per-space fan-coils on inverter bus + chiller + pumps). Fan-coil powers are nominal 0.1 kW — adjust on the Electrical page.");
 }
 
 var ERV_MOUNTED=false;
@@ -1801,7 +1979,7 @@ function ervField(k,label,unit,step){
 }
 function ervHTML(){
   return "<main>"+
-   "<div class='page-head'><div><h2>Engine Room Ventilation</h2><p>ISO 8861 &mdash; combustion air + heat-loss air. Supply &amp; exhaust fans feed Electrical.</p></div>"+
+   "<div class='page-head'><div><h2>Engine Room Ventilation</h2><p>ISO 8861 &mdash; combustion air + heat-loss air. Supply &amp; exhaust fans feed Electrical.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> airflow = air for engine/genset combustion + air to carry away their heat (ISO 8861: q<sub>h</sub> = &Sigma;&Phi; / (&rho;&middot;c&middot;&Delta;t), with &Delta;t &le; 12.5 K, minus 40% of the combustion air). The supply is never below 1.5 &times; the combustion air.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
        "<button class='btn btn-line btn-sm' onclick='ervExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='ervToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
@@ -1930,7 +2108,7 @@ function ervExcel(){
     ["Grille area",+r.A.toFixed(3),"m2",+(r.A*10000).toFixed(0),"cm2"],
     ["Duct diameter",+r.Dduct.toFixed(0),"mm"],
     ["Supply fan",+r.fanIn.toFixed(2),"kW"],["Exhaust fan",+r.fanOut.toFixed(2),"kW"]];
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"ER Ventilation");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a.concat([[],[disclaimerLine()]])),"ER Ventilation");
   XLSX.writeFile(wb,"Baltic_ERVent_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
@@ -1956,7 +2134,7 @@ function bilSet(k,v){ var s=bilState(); s[k]=(k==="rule")?v:Number(v); saveActiv
 function mountBilge(){ if(BIL_MOUNTED){bilFill();bilCalc();return;} el("view-bilge").innerHTML=bilHTML(); BIL_MOUNTED=true; bilFill(); renderBranches(); bilCalc(); }
 function bilHTML(){
   return "<main>"+
-   "<div class='page-head'><div><h2>Bilge System</h2><p>Bilge pipe &amp; pump sizing per RINA / DNV. Bilge pump feeds Electrical.</p></div>"+
+   "<div class='page-head'><div><h2>Bilge System</h2><p>Bilge pipe &amp; pump sizing per RINA / DNV. Bilge pump feeds Electrical.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> the bilge main bore follows the class formula d = 25 + 1.68&middot;&radic;(L(B+D)) mm (DNV / RINA), and each bilge pump must move water through it at &ge; 2 m/s.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
        "<button class='btn btn-line btn-sm' onclick='bilExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='bilToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
@@ -2040,7 +2218,7 @@ function bilExcel(){
     ["RESULTS"],["Main pipe dia",+r.d.toFixed(1),"mm"],["Pump capacity",+r.Qm3h.toFixed(2),"m3/h",+r.Qlmin.toFixed(0),"l/min",+r.Qls.toFixed(2),"l/s"],["Pump electrical",+r.pumpKW.toFixed(2),"kW"],[],
     ["BRANCH PIPES"],["Compartment","L1 (m)","Branch d (mm)"]];
   s.branches.forEach(function(b){a.push([b.name,b.L1,+branchDia(b.L1).toFixed(1)]);});
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Bilge");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a.concat([[],[disclaimerLine()]])),"Bilge");
   XLSX.writeFile(wb,"Baltic_Bilge_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
@@ -2060,7 +2238,7 @@ function swSet(k,v){ swState()[k]=Number(v); saveActive(); swCalc(); }
 function mountSW(){ if(SW_MOUNTED){swFill();renderSWItems();swCalc();return;} el("view-seawater").innerHTML=swHTML(); SW_MOUNTED=true; swFill(); renderSWItems(); swCalc(); }
 function swHTML(){
   return "<main>"+
-   "<div class='page-head'><div><h2>Seawater Cooling</h2><p>Sum of cooling flows &amp; inlet pipe dimensioning. Seawater pump feeds Electrical.</p></div>"+
+   "<div class='page-head'><div><h2>Seawater Cooling</h2><p>Sum of cooling flows &amp; inlet pipe dimensioning. Seawater pump feeds Electrical.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> the sea-water inlet pipe is sized from the total cooling-water flow and a maximum pipe velocity. Main engine and generators are cooled by their own engine-driven pumps.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
        "<button class='btn btn-line btn-sm' onclick='swExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='swToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
@@ -2129,7 +2307,7 @@ function swExcel(){
   a.push(["TOTAL qtot",r.qtot,"l/min"],[],
     ["RESULTS"],["Total flow",+r.Qm3s.toFixed(4),"m3/s"],["Vmax",s.vmax,"m/s"],
     ["Inlet pipe dia",+r.di.toFixed(1),"mm"],["Seawater pump",+r.pumpKW.toFixed(2),"kW"]);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Seawater");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a.concat([[],[disclaimerLine()]])),"Seawater");
   XLSX.writeFile(wb,"Baltic_Seawater_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
@@ -2228,7 +2406,7 @@ function watSelToilet(){
 }
 function watHTML(){
   return "<main>"+
-   "<div class='page-head'><div><h2>Water &amp; Waste Water</h2><p>Daily demand, tank balance &amp; holding-tank check. Discharge rate per MEPC 157(55).</p></div>"+
+   "<div class='page-head'><div><h2>Water &amp; Waste Water</h2><p>Daily demand, tank balance &amp; holding-tank check. Discharge rate per MEPC 157(55).</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> daily fresh-water demand from the consumer list sizes the tanks and watermaker; waste water is checked against the treatment plant; the legal overboard discharge rate follows MEPC 157(55): Drmax = 0.00926 &middot; V &middot; D &middot; B.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
        "<button class='btn btn-line btn-sm' onclick='watExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='watToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
@@ -2397,7 +2575,7 @@ function watExcel(){
     ["Recommended sludge tank",+r.sludgeReq.toFixed(0),"l"],["Sludge tank installed",w.sludgeTank,"l"],[],
     ["DISCHARGE - MEPC 157(55)"],["V",w.vKn,"kn"],["D",w.draft,"m"],["B",w.beam,"m"],
     ["Drmax",+r.drM3h.toFixed(3),"m3/h"],["Drmax",+r.drLh.toFixed(1),"l/h"],["Drmax",+r.drLpm.toFixed(1),"lpm"]);
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Water & Waste");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a.concat([[],[disclaimerLine()]])),"Water & Waste");
   XLSX.writeFile(wb,"Baltic_WaterWaste_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
@@ -2469,7 +2647,7 @@ function thrSelConfig(){ var w=thrState();
 }
 function thrHTML(){
   return "<main>"+
-   "<div class='page-head'><div><h2>Bow / Stern Thruster</h2><p>Wind, rotation &amp; acceleration force balance &rarr; required thrust &amp; power. Feeds Electrical.</p></div>"+
+   "<div class='page-head'><div><h2>Bow / Stern Thruster</h2><p>Wind, rotation &amp; acceleration force balance &rarr; required thrust &amp; power. Feeds Electrical.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> wind (with height gradient), the vessel&rsquo;s own turning motion and the acceleration force are balanced about the pivot point to find the side thrust required, then converted to thruster power &mdash; shown across a range of wind speeds.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
        "<button class='btn btn-line btn-sm' onclick='thrExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='thrToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
@@ -2536,7 +2714,7 @@ function thrExcel(){
     ["AR",w.AR,"AH",w.AH,"AL",w.AL],[],
     ["Wind m/s","Bow thrust kN","Bow kW","Stern thrust kN","Stern kW","Total kW"]];
   rows.forEach(function(r){a.push([r.wind,+(r.btN/1000).toFixed(2),+r.btkW.toFixed(1),+(r.bsN/1000).toFixed(2),+r.bskW.toFixed(1),+r.totkW.toFixed(1)]);});
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Thruster");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a.concat([[],[disclaimerLine()]])),"Thruster");
   XLSX.writeFile(wb,"Baltic_Thruster_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
@@ -2618,9 +2796,9 @@ function renderHomeRules(){
   var title=ynm?("&#9875; Active Project &mdash; "+esc(ynm)):"No active project";
   var sub=ynm
     ?(esc(PROJECT.meta.proj||"")+(PROJECT.meta.type?" &middot; "+esc(PROJECT.meta.type):"")+" &nbsp;|&nbsp; Class <strong style='color:var(--navy)'>"+esc(cls)+"</strong> &nbsp;|&nbsp; Flag <strong style='color:var(--navy)'>"+esc(flag)+"</strong> ("+flagGroupLabel(fg)+")")
-    :"Create or open a project below to set the class &amp; flag and apply the rules.";
+    :"Create or open a project below to set the class &amp; flag and apply the rules. <a onclick=\"go('classflag')\" style='color:var(--gold);cursor:pointer;font-weight:600'>What are class &amp; flag?</a>";
   var html="<div class='card-hdr'><h2>"+title+"</h2>"+
-    "<div style='display:flex;gap:6px' class='no-print'>"+(ynm?"<button class='btn btn-gold btn-sm' onclick='saveCurrentProject()'>&#128190; Save version</button>":"")+"<button class='btn btn-line btn-sm' onclick='openRulesEditor()'>&#9881; Manage Rules</button></div></div>"+
+    "<div style='display:flex;gap:6px' class='no-print'>"+(ynm?"<button class='btn btn-gold btn-sm' onclick='saveCurrentProject()'>&#128190; Save version</button>":"")+"<button class='btn btn-line btn-sm' onclick=\"go('classflag')\">&#9878; Class &amp; Flag guide</button><button class='btn btn-line btn-sm' onclick='openRulesEditor()'>&#9881; Manage Rules</button></div></div>"+
     "<div style='padding:10px 20px 4px;font-size:12px;color:var(--g500)'>"+sub+"</div>"+
     "<div style='padding:8px 20px 16px'>";
   order.forEach(function(s){ if(!bySys[s])return;
@@ -2853,6 +3031,297 @@ function bilPumpSet(v){ if(typeof bilState==="function"){bilState().pumpSel=v; i
 function ervSupFanSet(v){ if(typeof ervState==="function"){ervState().supFan=v; if(typeof ervSave==="function")ervSave(); if(typeof ervCalc==="function")ervCalc();} }
 function ervExhFanSet(v){ if(typeof ervState==="function"){ervState().exhFan=v; if(typeof ervSave==="function")ervSave(); if(typeof ervCalc==="function")ervCalc();} }
 function watFwPumpSet(v){ if(typeof watState==="function"){watState().fwPump=v; if(typeof saveActive==="function")saveActive(); if(typeof watCalc==="function")watCalc();} }
+
+function disclaimerLine(){ return "DISCLAIMER: Preliminary engineering estimates only - all calculations, equipment selections and class/flag rule compliance must be independently verified by a qualified engineer against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for results, decisions, errors or omissions arising from use of this tool."; }
+
+/* ================================================================
+   ELECTRICAL LOAD BALANCE  (full)  — v0.26
+   Generation (gensets / shore / inverters) + battery bank +
+   consumers per bus (24V / 48V / 230 AC / Inverter) with
+   Day / Evening / Night load factors. Modern card UX.
+   ================================================================ */
+var ELEC_BUSES=[{k:"24V",l:"24 V DC"},{k:"48V",l:"48 V DC"},{k:"AC",l:"230/400 V AC"},{k:"INV",l:"230 V Inverter"}];
+function busLabel(k){ for(var i=0;i<ELEC_BUSES.length;i++) if(ELEC_BUSES[i].k===k) return ELEC_BUSES[i].l; return k; }
+function elecNormBus(b){ if(!b)return"AC"; b=String(b).toUpperCase(); if(b.indexOf("24")>=0)return"24V"; if(b.indexOf("48")>=0)return"48V"; if(b.indexOf("INV")>=0)return"INV"; return"AC"; }
+function elecState(){
+  if(!PROJECT.elec) PROJECT.elec={gen:{gensQty:2,gensKw:35,shoreQty:1,shoreKw:50,invQty:3,invKw:3.5},batt:{v:24,banks:4,kwhEach:6,usable:90}};
+  var g=PROJECT.elec.gen,d={gensQty:2,gensKw:35,shoreQty:1,shoreKw:50,invQty:3,invKw:3.5};
+  for(var k in d){if(g[k]===undefined)g[k]=d[k];}
+  var bd={v:24,banks:4,kwhEach:6,usable:90}; for(var k2 in bd){if(PROJECT.elec.batt[k2]===undefined)PROJECT.elec.batt[k2]=bd[k2];}
+  if(!PROJECT.elec.hv) PROJECT.elec.hv={on:0,v:750,banks:2,kwhEach:80,usable:90,shoreQty:2,shoreKw:30,genQty:2,genKw:129,propKw:130,regen:20,hotelKw:60,hydKw:120};
+  var hvd={on:0,v:750,banks:2,kwhEach:80,usable:90,shoreQty:2,shoreKw:30,genQty:2,genKw:129,propKw:130,regen:20,hotelKw:60,hydKw:120}; for(var k3 in hvd){if(PROJECT.elec.hv[k3]===undefined)PROJECT.elec.hv[k3]=hvd[k3];}
+  if(!PROJECT.elec.charge) PROJECT.elec.charge={chgModel:"",chgQty:1,battModel:"",battCount:4};
+  var cdf={chgModel:"",chgQty:1,battModel:"",battCount:4}; for(var k4 in cdf){if(PROJECT.elec.charge[k4]===undefined)PROJECT.elec.charge[k4]=cdf[k4];}
+  if(!PROJECT.consumers)PROJECT.consumers=[];
+  return PROJECT.elec;
+}
+function elecGenSet(k,v){ elecState().gen[k]=Number(v); saveActive(); elecCalc(); }
+function elecBattSet(k,v){ elecState().batt[k]=Number(v); saveActive(); elecCalc(); }
+function elecConSet(id,k,v){ var c=PROJECT.consumers.filter(function(x){return x.id===id;})[0]; if(!c)return; c[k]=(k==="name"||k==="bus")?v:Number(v); saveActive(); elecCalc(); }
+function elecAddConsumer(){ PROJECT.consumers.push({id:"e"+(PROJECT.consumers.length)+"_"+Math.round(performance.now()),source:"Manual",name:"New consumer",bus:"AC",pcs:1,kw:0,day:0,eve:0,night:0}); saveActive(); elecRenderConsumers(); elecCalc(); }
+function elecDelConsumer(id){ PROJECT.consumers=PROJECT.consumers.filter(function(x){return x.id!==id;}); saveActive(); elecRenderConsumers(); elecCalc(); }
+function elecClear(){ if(!confirm("Remove ALL consumers from the load balance?"))return; PROJECT.consumers=[]; saveActive(); elecRenderConsumers(); elecCalc(); }
+
+function mef(pfx,k,label,unit){ return "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+label+"</label><div style='display:flex;align-items:center;gap:6px'><input id='"+pfx+"-"+k+"' type='number' step='any' oninput=\""+pfx+"Set('"+k+"',this.value)\" style='width:80px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>"; }
+
+
+/* ---- Mastervolt / Victron charge & convert catalog (manufacturer data 2026) ---- */
+var ELEC_COMBIS=[
+  {b:'Mastervolt',m:'Mass Combi Ultra 12/3000-150',v:12,invW:3000,chgA:150},
+  {b:'Mastervolt',m:'Mass Combi Ultra 24/3500-100',v:24,invW:3500,chgA:100},
+  {b:'Mastervolt',m:'Mass Combi Ultra 48/3500-50',v:48,invW:3500,chgA:50},
+  {b:'Victron',m:'Quattro 24/5000/120',v:24,invW:4000,chgA:120},
+  {b:'Victron',m:'Quattro 48/5000/70',v:48,invW:4000,chgA:70},
+  {b:'Victron',m:'Quattro 48/8000/110',v:48,invW:6500,chgA:110},
+  {b:'Victron',m:'Quattro 48/10000/140',v:48,invW:8000,chgA:140},
+  {b:'Victron',m:'Quattro 48/15000/200',v:48,invW:12000,chgA:200},
+  {b:'Victron',m:'MultiPlus-II 24/3000/70',v:24,invW:2400,chgA:70},
+  {b:'Victron',m:'MultiPlus-II 48/5000/70',v:48,invW:4000,chgA:70},
+  {b:'Victron',m:'MultiPlus-II 48/8000/110',v:48,invW:6500,chgA:110}
+];
+var ELEC_CHARGERS=[
+  {b:'Mastervolt',m:'Mass 24/25',v:24,a:25},
+  {b:'Mastervolt',m:'Mass 24/50',v:24,a:50},
+  {b:'Mastervolt',m:'Mass 24/75',v:24,a:75},
+  {b:'Mastervolt',m:'Mass 24/100',v:24,a:100},
+  {b:'Mastervolt',m:'Mass 48/25',v:48,a:25},
+  {b:'Mastervolt',m:'Mass 48/50',v:48,a:50},
+  {b:'Mastervolt',m:'ChargeMaster Plus 12/100-3',v:12,a:100},
+  {b:'Mastervolt',m:'ChargeMaster Plus 24/100-3',v:24,a:100},
+  {b:'Victron',m:'Skylla-i 24/100',v:24,a:100},
+  {b:'Victron',m:'Skylla-IP44 24/60',v:24,a:60}
+];
+var ELEC_INVERTERS=[
+  {b:'Mastervolt',m:'Mass Sine 24/3500',v:24,w:3500},
+  {b:'Mastervolt',m:'Mass Sine 48/3500',v:48,w:3500},
+  {b:'Victron',m:'Phoenix 24/3000',v:24,w:2400},
+  {b:'Victron',m:'Phoenix 48/5000',v:48,w:4000}
+];
+var ELEC_BATTS=[
+  {b:'Mastervolt',m:'MLI Ultra 24/5000',v:24,ah:180,kwh:5.0,w:58},
+  {b:'Mastervolt',m:'MLI Ultra 24/6000',v:24,ah:230,kwh:6.0,w:47},
+  {b:'Victron',m:'Lithium NG 25.6V/100Ah',v:24,ah:100,kwh:2.56,w:0},
+  {b:'Victron',m:'Lithium NG 25.6V/200Ah',v:24,ah:200,kwh:5.12,w:0},
+  {b:'Victron',m:'Lithium NG 25.6V/300Ah',v:24,ah:300,kwh:7.68,w:0},
+  {b:'Victron',m:'Lithium NG 51.2V/100Ah',v:48,ah:100,kwh:5.12,w:0},
+  {b:'Victron',m:'Lithium NG 51.2V/200Ah',v:48,ah:200,kwh:10.24,w:0}
+];
+function elecChargeSources(){
+  return ELEC_CHARGERS.map(function(c){return {label:c.b+' '+c.m,v:c.v,a:c.a,kind:'Charger'};})
+    .concat(ELEC_COMBIS.map(function(c){return {label:c.b+' '+c.m,v:c.v,a:c.chgA,kind:'Combi'};}));
+}
+function elecChgOptsHTML(sel){
+  return "<option value=''>&mdash; select &mdash;</option>"+elecChargeSources().map(function(o){return "<option"+(o.label===sel?" selected":"")+">"+esc(o.label)+" ("+o.v+"V/"+o.a+"A)</option>";}).join("");
+}
+function elecBattOptsHTML(sel){
+  return "<option value=''>&mdash; select &mdash;</option>"+ELEC_BATTS.map(function(b){var k=b.b+' '+b.m;return "<option"+(k===sel?" selected":"")+">"+esc(k)+" ("+b.kwh+" kWh)</option>";}).join("");
+}
+function elecChargeCalc(){
+  var s=elecState(),key=s.charge.chgModel,qty=+s.charge.chgQty||0;
+  var src=elecChargeSources().filter(function(o){return o.label+" ("+o.v+"V/"+o.a+"A)"===key||o.label===key;})[0];
+  var dcKw=src?src.v*src.a/1000*qty:0, acKw=dcKw/0.92;
+  var bankUsable=(+s.batt.banks||0)*(+s.batt.kwhEach||0)*((+s.batt.usable||0)/100);
+  var rechargeH=dcKw>0?bankUsable/(dcKw*0.85):0;
+  return {label:key||'—',src:src,dcKw:dcKw,acKw:acKw,bankUsable:bankUsable,rechargeH:rechargeH,qty:qty};
+}
+function applyBattCat(){
+  var s=elecState();var bt=ELEC_BATTS.filter(function(b){return (b.b+' '+b.m+' ('+b.kwh+' kWh)')===s.charge.battModel||(b.b+' '+b.m)===s.charge.battModel;})[0];
+  if(!bt){alert('Pick a battery from the catalog first.');return;}
+  s.batt.v=bt.v;s.batt.banks=+s.charge.battCount||1;s.batt.kwhEach=bt.kwh;
+  saveActive();elecFill();elecCalc();
+}
+function elecHvSet(k,v){ elecState().hv[k]=(k==='on')?(v?1:0):Number(v); saveActive(); elecCalc(); }
+function elecChgSet(k,v){ elecState().charge[k]=(k==='chgModel'||k==='battModel')?v:Number(v); saveActive(); elecCalc(); }
+function elecAddChargingLoad(){
+  var c=elecChargeCalc(); if(!c.dcKw){alert('Select a charger or combi first.');return;}
+  addConsumers([{source:'Charging',name:String(c.label).replace(/ \(\d+V.*$/,'')+' (charging)',bus:'AC',pcs:1,kw:+c.acKw.toFixed(2),day:30,eve:20,night:60}]);
+  if(typeof elecRenderConsumers==='function')elecRenderConsumers(); elecCalc();
+  alert('Added charger AC load ('+c.acKw.toFixed(2)+' kW) to the load balance.');
+}
+function elecCatalogTableHTML(){
+  function rows(list,cols){return list.map(function(x){return "<tr>"+cols.map(function(c){return "<td style='padding:4px 8px;border-bottom:1px solid var(--g100)'>"+esc(String(c(x)))+"</td>";}).join("")+"</tr>";}).join("");}
+  var h="<details style='margin-top:6px'><summary style='cursor:pointer;font-size:12px;font-weight:600;color:var(--navy)'>Reference catalogue (Mastervolt / Victron)</summary>";
+  h+="<div style='font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g500);margin:8px 0 2px'>Combis (inverter/charger)</div><table style='width:100%;border-collapse:collapse;font-size:12px'><tr><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Model</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>V</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Inverter W</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Charger A</th></tr>"+rows(ELEC_COMBIS,[function(x){return x.b+' '+x.m;},function(x){return x.v;},function(x){return x.invW;},function(x){return x.chgA;}])+"</table>";
+  h+="<div style='font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g500);margin:10px 0 2px'>Chargers</div><table style='width:100%;border-collapse:collapse;font-size:12px'><tr><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Model</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>V</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>A</th></tr>"+rows(ELEC_CHARGERS,[function(x){return x.b+' '+x.m;},function(x){return x.v;},function(x){return x.a;}])+"</table>";
+  h+="<div style='font-size:10px;font-weight:700;text-transform:uppercase;color:var(--g500);margin:10px 0 2px'>Batteries (24/48 V Li)</div><table style='width:100%;border-collapse:collapse;font-size:12px'><tr><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Model</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>V</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>Ah</th><th style='text-align:left;padding:4px 8px;color:var(--g500)'>kWh</th></tr>"+rows(ELEC_BATTS,[function(x){return x.b+' '+x.m;},function(x){return x.v;},function(x){return x.ah;},function(x){return x.kwh;}])+"</table>";
+  h+="<div style='font-size:11px;color:var(--g500);margin-top:8px'>Reference data &mdash; verify against current manufacturer datasheets. Victron continuous power shown for VA models. 800 V high-voltage packs are propulsion/hybrid system batteries (outside the 12&ndash;48 V Mastervolt/Victron range).</div></details>";
+  return h;
+}
+function mountElec(){ el("view-electrical").innerHTML=elecHTML(); elecFill(); elecRenderConsumers(); elecCalc(); }
+function elecHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Electrical Load Balance</h2><p>Generation, battery &amp; consumers across 24 V / 48 V / 230 V AC / inverter buses, with day / evening / night load factors.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> each consumer&rsquo;s demand = quantity &times; power &times; load-factor for the Day / Evening (at sea) / Night (silent) conditions, summed per bus. Generators are sized on the AC-bus peak, inverters on the inverter-bus peak, and battery autonomy on the night DC + inverter load.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='elecExcel()'>&#11015; Excel</button><button class='btn btn-line btn-sm' onclick='elecClear()'>&#128465; Clear</button></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Power Generation</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:24px;flex-wrap:wrap'>"+
+       "<div><div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px'>Generators</div><div style='display:flex;gap:14px'>"+mef("elecGen","gensQty","Qty","×")+mef("elecGen","gensKw","Power each","kW")+"</div></div>"+
+       "<div><div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px'>Shore power</div><div style='display:flex;gap:14px'>"+mef("elecGen","shoreQty","Qty","×")+mef("elecGen","shoreKw","Power each","kW")+"</div></div>"+
+       "<div><div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px'>Inverters</div><div style='display:flex;gap:14px'>"+mef("elecGen","invQty","Qty","×")+mef("elecGen","invKw","Power each","kW")+"</div></div>"+
+     "</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Battery Bank</h2></div>"+
+     "<div style='padding:16px 20px'>"+
+       "<div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px'>House bank (DC)</div>"+
+       "<div style='display:flex;gap:20px;flex-wrap:wrap'>"+mef("elecBatt","v","System","V")+mef("elecBatt","banks","Banks","×")+mef("elecBatt","kwhEach","Capacity each","kWh")+mef("elecBatt","usable","Usable","%")+"</div>"+
+     "</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>HV DC Bus &mdash; electric / hybrid</h2><label style='font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--g700)' class='no-print'><input type='checkbox' id='elecHv-on' onchange=\"elecHvSet('on',this.checked?1:0)\"> enable</label></div>"+
+     "<div style='padding:16px 20px'>"+
+       "<p style='font-size:12px;color:var(--g500);margin-bottom:12px;max-width:880px;line-height:1.55'>Baltic HVDC philosophy (e.g. CAT&nbsp;100 / B117): a ~750&nbsp;V DC bus where gensets and shore chargers feed the HV battery banks, electric propulsion runs off the bus with regeneration, and hotel power is produced by DC&rarr;AC inverters. Enable to size the HV side; leave off for conventional AC yachts (e.g. B121).</p>"+
+       "<div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px'>HV bus &amp; battery</div>"+
+       "<div style='display:flex;gap:18px;flex-wrap:wrap'>"+mef("elecHv","v","Bus voltage","V")+mef("elecHv","banks","Batt banks","×")+mef("elecHv","kwhEach","kWh each","kWh")+mef("elecHv","usable","Usable","%")+"</div>"+
+       "<div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px'>Sources on the DC bus</div>"+
+       "<div style='display:flex;gap:18px;flex-wrap:wrap'>"+mef("elecHv","genQty","DC gensets","×")+mef("elecHv","genKw","kW each","kW")+mef("elecHv","shoreQty","Shore chargers","×")+mef("elecHv","shoreKw","kW each","kW")+"</div>"+
+       "<div style='font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px'>Loads on the DC bus</div>"+
+       "<div style='display:flex;gap:18px;flex-wrap:wrap'>"+mef("elecHv","propKw","Propulsion","kW")+mef("elecHv","regen","Regen","%")+mef("elecHv","hotelKw","Hotel inverters","kW")+mef("elecHv","hydKw","Electric hydraulics","kW")+"</div>"+
+       "<div class='kpi-row' id='hv-kpi' style='padding:14px 0 0'></div>"+
+       "<div id='hv-checks' style='padding-top:4px'></div>"+
+     "</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Charge &amp; Convert &mdash; Mastervolt / Victron</h2></div>"+
+     "<div style='padding:16px 20px'>"+
+       "<div style='display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end'>"+
+         "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Charger / combi</label><select id='elecChg-chgModel' onchange=\"elecChgSet('chgModel',this.value)\" style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:230px'></select></div>"+
+         mef("elecChg","chgQty","Qty","×")+
+       "</div>"+
+       "<div id='charge-calc' style='margin-top:12px'></div>"+
+       "<div style='border-top:1px solid var(--g200);margin:14px 0'></div>"+
+       "<div style='display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end'>"+
+         "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>House battery (catalogue)</label><select id='elecChg-battModel' onchange=\"elecChgSet('battModel',this.value)\" style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:230px'></select></div>"+
+         mef("elecChg","battCount","Count","×")+
+         "<button class='btn btn-line btn-sm no-print' onclick='applyBattCat()'>Apply to house bank</button>"+
+       "</div>"+
+       "<div id='batt-cat-info' style='margin-top:8px;font-size:12px;color:var(--g500)'></div>"+
+       "<div style='margin-top:12px'>"+elecCatalogTableHTML()+"</div>"+
+     "</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Consumers</h2><button class='btn btn-primary btn-sm no-print' onclick='elecAddConsumer()'>+ Add consumer</button></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>Qty</th><th>kW ea</th><th>Installed</th><th>Day %</th><th>Eve %</th><th>Night %</th><th>Day kW</th><th>Eve kW</th><th>Night kW</th><th class='no-print'></th></tr></thead><tbody id='elec-body'></tbody><tfoot id='elec-foot'></tfoot></table></div></div>"+
+
+   "<div class='card' id='elec-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Load Balance Summary</h2><span class='badge badge-gold' id='elec-badge'>-</span></div>"+
+     "<div class='kpi-row' id='elec-kpi'></div>"+
+     "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Bus</th><th>Installed kW</th><th>Day kW</th><th>Evening kW</th><th>Night kW</th></tr></thead><tbody id='elec-sum'></tbody></table></div>"+
+     "<div id='elec-checks' style='padding:14px 20px'></div>"+
+   "</div></main>"+
+   "<style>.eci{padding:4px 6px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px}.eci:focus{outline:none;border-color:var(--navy)}</style>";
+}
+function elecFill(){ var s=elecState();
+  ["gensQty","gensKw","shoreQty","shoreKw","invQty","invKw"].forEach(function(k){var e=el("elecGen-"+k);if(e)e.value=s.gen[k];});
+  ["v","banks","kwhEach","usable"].forEach(function(k){var e=el("elecBatt-"+k);if(e)e.value=s.batt[k];});
+  ["v","banks","kwhEach","usable","shoreQty","shoreKw","genQty","genKw","propKw","regen","hotelKw","hydKw"].forEach(function(k){var e=el("elecHv-"+k);if(e)e.value=s.hv[k];});
+  var _hv=el("elecHv-on"); if(_hv)_hv.checked=!!s.hv.on;
+  ["chgQty","battCount"].forEach(function(k){var e=el("elecChg-"+k);if(e)e.value=s.charge[k];});
+  var _cm=el("elecChg-chgModel"); if(_cm)_cm.innerHTML=elecChgOptsHTML(s.charge.chgModel);
+  var _bm=el("elecChg-battModel"); if(_bm)_bm.innerHTML=elecBattOptsHTML(s.charge.battModel);
+}
+function elecDemand(c,cond){ return (+c.pcs||0)*(+c.kw||0)*((+c[cond]||0)/100); }
+function elecRenderConsumers(){
+  var body=el("elec-body"); if(!body)return;
+  var cs=PROJECT.consumers||[];
+  if(!cs.length){ body.innerHTML="<tr><td colspan='13'><div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Add consumers manually, or use “Send to Electrical” from the AC, Bilge, Ventilation, Water and Thruster modules.</p></div></td></tr>"; return; }
+  cs.forEach(function(c){ if(!c.bus)c.bus=elecNormBus(c.bus); });
+  body.innerHTML=cs.map(function(c){
+    var inst=(+c.pcs||0)*(+c.kw||0);
+    var busOpts=ELEC_BUSES.map(function(b){return "<option value='"+b.k+"'"+(c.bus===b.k?" selected":"")+">"+b.l+"</option>";}).join("");
+    return "<tr>"+
+      "<td style='color:var(--g500)'>"+esc(c.source||"Manual")+"</td>"+
+      "<td><input class='eci' value='"+esc(c.name||"")+"' oninput=\"elecConSet('"+c.id+"','name',this.value)\" style='min-width:150px'></td>"+
+      "<td><select class='eci' onchange=\"elecConSet('"+c.id+"','bus',this.value)\">"+busOpts+"</select></td>"+
+      "<td><input class='eci' type='number' value='"+(c.pcs||0)+"' oninput=\"elecConSet('"+c.id+"','pcs',+this.value)\" style='width:50px'></td>"+
+      "<td><input class='eci' type='number' value='"+(c.kw||0)+"' oninput=\"elecConSet('"+c.id+"','kw',+this.value)\" style='width:64px'></td>"+
+      "<td>"+f2(inst)+"</td>"+
+      "<td><input class='eci' type='number' value='"+(c.day||0)+"' oninput=\"elecConSet('"+c.id+"','day',+this.value)\" style='width:48px'></td>"+
+      "<td><input class='eci' type='number' value='"+(c.eve||0)+"' oninput=\"elecConSet('"+c.id+"','eve',+this.value)\" style='width:48px'></td>"+
+      "<td><input class='eci' type='number' value='"+(c.night||0)+"' oninput=\"elecConSet('"+c.id+"','night',+this.value)\" style='width:48px'></td>"+
+      "<td id='ed"+c.id+"'>—</td><td id='ee"+c.id+"'>—</td><td id='en"+c.id+"'>—</td>"+
+      "<td class='no-print'><button class='btn btn-line btn-xs' onclick=\"elecDelConsumer('"+c.id+"')\">&#10005;</button></td></tr>";
+  }).join("");
+}
+function elecCalc(){
+  if(!el("elec-results"))return;
+  var s=elecState(),cs=PROJECT.consumers||[];
+  var inst={"24V":0,"48V":0,"AC":0,"INV":0}, day={"24V":0,"48V":0,"AC":0,"INV":0}, eve=JSON.parse('{"24V":0,"48V":0,"AC":0,"INV":0}'), night=JSON.parse('{"24V":0,"48V":0,"AC":0,"INV":0}');
+  cs.forEach(function(c){ var b=c.bus||elecNormBus(c.bus);
+    inst[b]=(inst[b]||0)+(+c.pcs||0)*(+c.kw||0);
+    day[b]=(day[b]||0)+elecDemand(c,"day"); eve[b]=(eve[b]||0)+elecDemand(c,"eve"); night[b]=(night[b]||0)+elecDemand(c,"night");
+    var ed=el("ed"+c.id); if(ed)ed.textContent=f2(elecDemand(c,"day")); var ee=el("ee"+c.id); if(ee)ee.textContent=f2(elecDemand(c,"eve")); var en=el("en"+c.id); if(en)en.textContent=f2(elecDemand(c,"night"));
+  });
+  function tot(o){return o["24V"]+o["48V"]+o["AC"]+o["INV"];}
+  var genAC=(+s.gen.gensQty||0)*(+s.gen.gensKw||0);
+  var invCap=(+s.gen.invQty||0)*(+s.gen.invKw||0);
+  var battUsable=(+s.batt.banks||0)*(+s.batt.kwhEach||0)*((+s.batt.usable||0)/100);
+  var peak=Math.max(tot(day),tot(eve),tot(night));
+  // summary table
+  function r(b){return "<tr><td>"+busLabel(b)+"</td><td>"+f2(inst[b])+"</td><td>"+f2(day[b])+"</td><td>"+f2(eve[b])+"</td><td>"+f2(night[b])+"</td></tr>";}
+  el("elec-sum").innerHTML=r("24V")+r("48V")+r("AC")+r("INV")+
+    "<tr style='background:var(--navy2);color:#fff;font-weight:600'><td>TOTAL</td><td>"+f2(tot(inst))+"</td><td>"+f2(tot(day))+"</td><td>"+f2(tot(eve))+"</td><td>"+f2(tot(night))+"</td></tr>";
+  el("elec-badge").textContent=f1(peak)+" kW peak demand";
+  // ---- HV battery + Charge & Convert ----
+  var sHV=s.hv||{};
+  var hvUsable=sHV.on?(+sHV.banks||0)*(+sHV.kwhEach||0)*((+sHV.usable||0)/100):0;
+  var hvGen=(+sHV.genQty||0)*(+sHV.genKw||0);
+  var hvShore=(+sHV.shoreQty||0)*(+sHV.shoreKw||0);
+  var hvPropNet=(+sHV.propKw||0)*(1-(+sHV.regen||0)/100);
+  var hvSilent=(+sHV.hotelKw||0)+(+sHV.hydKw||0);
+  var hvPeak=(+sHV.propKw||0)+(+sHV.hotelKw||0)+(+sHV.hydKw||0);
+  var hvSilentAut=hvSilent>0?hvUsable/hvSilent:0;
+  var hvPropEnd=hvPropNet>0?hvUsable/hvPropNet:0;
+  var hvShoreRe=hvShore>0?hvUsable/hvShore:0;
+  var cc=elecChargeCalc();
+  // KPIs
+  el("elec-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Installed total</div><div class='kpi-v'>"+f1(tot(inst))+"</div><div class='kpi-u'>kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Peak demand</div><div class='kpi-v'>"+f1(peak)+"</div><div class='kpi-u'>kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Generator capacity</div><div class='kpi-v'>"+f0(genAC)+"</div><div class='kpi-u'>kW ("+s.gen.gensQty+"×"+s.gen.gensKw+")</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Inverter capacity</div><div class='kpi-v'>"+f1(invCap)+"</div><div class='kpi-u'>kW</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Battery usable</div><div class='kpi-v'>"+f1(battUsable)+"</div><div class='kpi-u'>kWh</div></div>"+
+    (sHV.on?("<div class='kpi'><div class='kpi-l'>HV battery usable</div><div class='kpi-v'>"+f1(hvUsable)+"</div><div class='kpi-u'>kWh @ "+f0(sHV.v)+"V</div></div>"):"")+
+    (cc.dcKw?("<div class='kpi'><div class='kpi-l'>House recharge</div><div class='kpi-v'>"+f1(cc.rechargeH)+"</div><div class='kpi-u'>h @ "+f1(cc.dcKw)+" kW</div></div>"):"");
+  var _cp=el("charge-calc"); if(_cp){ _cp.innerHTML= cc.dcKw ? ("<div style='font-size:13px;line-height:1.7;background:var(--bg);border-radius:6px;padding:10px 12px'><strong>"+esc(cc.label)+"</strong> &times;"+cc.qty+" &rarr; charge power <strong>"+f1(cc.dcKw)+" kW DC</strong> (&asymp; "+f1(cc.acKw)+" kW AC draw when charging). House bank usable "+f1(cc.bankUsable)+" kWh &rarr; bulk recharge &asymp; <strong>"+f1(cc.rechargeH)+" h</strong>. <button class='btn btn-line btn-xs no-print' onclick='elecAddChargingLoad()'>+ Add charging load to consumers</button></div>") : "<div style='font-size:12px;color:var(--g500)'>Select a charger or combi above to size charge power and recharge time.</div>"; }
+  var _bi=el("batt-cat-info"); if(_bi){ var _bt=ELEC_BATTS.filter(function(b){return (b.b+' '+b.m)===s.charge.battModel;})[0]; _bi.innerHTML=_bt?("Selected: "+esc(_bt.b+' '+_bt.m)+" &mdash; "+_bt.v+" V, "+_bt.ah+" Ah, "+_bt.kwh+" kWh"+(_bt.w?", "+_bt.w+" kg":"")+" each &middot; &times;"+(+s.charge.battCount||0)+" = <strong>"+f1((+s.charge.battCount||0)*_bt.kwh)+" kWh</strong> total."):""; }
+  // checks
+  function chk(label,demand,cap,unit){ var ok=cap>=demand-1e-6; var m=cap?((cap-demand)/cap*100):0;
+    return "<div style='padding:6px 0;border-bottom:1px solid var(--g100);font-size:13px;display:flex;justify-content:space-between'><span>"+label+"</span><span><strong>"+f1(demand)+"</strong> / "+f1(cap)+" "+unit+" "+(ok?"<span class='pill p-ok'>OK "+f0(m)+"% spare</span>":"<span class='pill p-err'>OVER</span>")+"</span></div>"; }
+  // AC bus peak vs generators ; INV peak vs inverters ; night DC+INV autonomy
+  // ---- HV DC bus card render ----
+  function _kp(l,v,u){return "<div class='kpi'><div class='kpi-l'>"+l+"</div><div class='kpi-v'>"+v+"</div><div class='kpi-u'>"+u+"</div></div>";}
+  var _hk=el("hv-kpi");
+  if(_hk){ _hk.innerHTML= sHV.on ? (
+      _kp("HV usable",f1(hvUsable),"kWh @ "+f0(sHV.v)+"V")+
+      _kp("DC genset cap.",f0(hvGen),"kW ("+sHV.genQty+"×"+sHV.genKw+")")+
+      _kp("Silent autonomy",f1(hvSilentAut),"h (hotel+hyd "+f0(hvSilent)+"kW)")+
+      _kp("Propulsion endur.",f1(hvPropEnd),"h @ "+f0(hvPropNet)+"kW net")+
+      _kp("Shore recharge",f1(hvShoreRe),"h ("+f0(hvShore)+"kW)")
+    ) : "<div style='font-size:12px;color:var(--g500);padding:4px 0'>HV DC bus disabled &mdash; conventional AC architecture (gensets &rarr; AC bus).</div>"; }
+  var _hc=el("hv-checks");
+  if(_hc){ _hc.innerHTML= sHV.on ? (
+      chk("DC gensets vs HV bus peak (prop + hotel + hyd)",hvPeak,hvGen,"kW")+
+      "<div style='font-size:11px;color:var(--g500);margin-top:6px'>Silent/electric autonomy = HV usable &divide; (hotel + hydraulic) with gensets off. Propulsion endurance uses net draw after "+f0(+sHV.regen||0)+"% regeneration. Hotel-inverter load also appears on the AC bus below.</div>"
+    ) : ""; }
+  var acPeak=Math.max(day["AC"],eve["AC"],night["AC"]);
+  var invPeak=Math.max(day["INV"],eve["INV"],night["INV"]);
+  var nightLoad=night["24V"]+night["48V"]+night["INV"];
+  var autonomy=nightLoad>0?battUsable/nightLoad:0;
+  el("elec-checks").innerHTML=
+    chk("AC bus peak vs generator(s)",acPeak,genAC,"kW")+
+    chk("Inverter bus peak vs inverters",invPeak,invCap,"kW")+
+    "<div style='padding:6px 0;border-bottom:1px solid var(--g100);font-size:13px;display:flex;justify-content:space-between'><span>Battery autonomy (night DC+INV)</span><span><strong>"+f1(autonomy)+" h</strong> at "+f1(nightLoad)+" kW from "+f1(battUsable)+" kWh</span></div>"+
+    "<div style='font-size:11px;color:var(--g500);margin-top:8px'>Diversity (load %) applied per consumer for Day / Evening (at sea) / Night (silent) conditions. Generators sized on the AC-bus peak; inverters on the inverter-bus peak; battery autonomy on the night DC + inverter load.</div>";
+}
+function elecExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=elecState(),cs=PROJECT.consumers||[],m=PROJECT.meta,wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Electrical Load Balance"],["Yacht",m.yacht,"Project",m.proj],[],
+    ["GENERATION"],["Generators",s.gen.gensQty,"x",s.gen.gensKw,"kW"],["Shore power",s.gen.shoreQty,"x",s.gen.shoreKw,"kW"],["Inverters",s.gen.invQty,"x",s.gen.invKw,"kW"],
+    ["BATTERY",s.batt.v+"V",s.batt.banks+" banks x "+s.batt.kwhEach+" kWh, usable "+s.batt.usable+"%"],[],
+    ["Source","Consumer","Bus","Qty","kW ea","Installed","Day%","Eve%","Night%","Day kW","Eve kW","Night kW"]];
+  cs.forEach(function(c){a.push([c.source||"Manual",c.name,busLabel(c.bus),c.pcs,c.kw,(+c.pcs*+c.kw),c.day,c.eve,c.night,+elecDemand(c,"day").toFixed(2),+elecDemand(c,"eve").toFixed(2),+elecDemand(c,"night").toFixed(2)]);});
+  a.push([],[disclaimerLine()]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Load Balance");
+  XLSX.writeFile(wb,"Baltic_LoadBalance_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
+function renderElectrical(){ var v=el("view-electrical"); if(!v)return; if(v.querySelector("#elec-body")){ elecRenderConsumers(); elecCalc(); } else { mountElec(); } }
 
 /* ---------- PWA ---------- */
 function makeIcon(sz){
