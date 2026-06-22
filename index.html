@@ -244,8 +244,8 @@ footer strong{color:var(--gold)}
       <div class="t-ic">&#128167;</div>
       <div><h3>Bilge</h3><p>Bilge pipe &amp; pump sizing</p><div class="ref">RINA / DNV-GL</div></div>
     </div>
-    <div class="tile disabled">
-      <span class="tag tag-soon">Soon</span>
+    <div class="tile" onclick="go('ervent')">
+      <span class="tag tag-live">Live</span>
       <div class="t-ic">&#127786;</div>
       <div><h3>Engine Room Ventilation</h3><p>Combustion + heat-loss airflow, fan sizing</p><div class="ref">ISO 8861</div></div>
     </div>
@@ -323,6 +323,9 @@ footer strong{color:var(--gold)}
 <!-- ===== VIEW: AC (the full calculator module) ===== -->
 <div class="view" id="view-ac"></div>
 
+<!-- ===== VIEW: ENGINE ROOM VENTILATION ===== -->
+<div class="view" id="view-ervent"></div>
+
 <!-- ===== PROJECT MODAL ===== -->
 <div class="overlay" id="proj-overlay" onclick="closeProjModal()"></div>
 <div class="modal" id="proj-modal">
@@ -362,19 +365,20 @@ footer strong{color:var(--gold)}
 <div id="ios-hint"><button onclick="dismissIOS()">&#10005;</button>
   <p>To install: tap <strong>Share &#9633;&#8593;</strong> in Safari, then <strong>Add to Home Screen</strong></p></div>
 
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.5 (shell) &middot; ISO 7547 / 8861 &middot; RINA / DNV-GL</footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.6 &middot; ISO 7547 / 8861 &middot; RINA / DNV-GL</footer>
 
 <script>
 /* ================================================================
-   BALTIC YACHTS ENGINEERING SUITE  v0.5 (shell)
+   BALTIC YACHTS ENGINEERING SUITE  v0.6
    Single-file SPA. Shared PROJECT + CONSUMERS store.
-   Modules: AC (live) + placeholders. Electrical aggregates consumers.
+   Modules: AC, Engine Room Ventilation (ISO 8861). Electrical aggregates consumers.
    ================================================================ */
 
 function el(id){return document.getElementById(id);}
 function f0(n){return Math.round(Number(n)).toLocaleString("en-GB");}
 function f1(n){return Number(n).toFixed(1);}
 function f2(n){return Number(n).toFixed(2);}
+function f3(n){return Number(n).toFixed(3);}
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 
 /* ---------- Shared project + consumers ---------- */
@@ -401,7 +405,8 @@ var ROUTES={
   electrical:{view:"view-electrical",crumb:[["Home","home"],["Electrical",null]]},
   interior:{view:"view-interior",crumb:[["Home","home"],["Interior",null]]},
   mechanical:{view:"view-mechanical",crumb:[["Home","home"],["Mechanical",null]]},
-  ac:{view:"view-ac",crumb:[["Home","home"],["Systems","systems"],["Air Conditioning",null]]}
+  ac:{view:"view-ac",crumb:[["Home","home"],["Systems","systems"],["Air Conditioning",null]]},
+  ervent:{view:"view-ervent",crumb:[["Home","home"],["Systems","systems"],["Engine Room Ventilation",null]]}
 };
 function go(r){location.hash="#/"+r;}
 function renderRoute(){
@@ -420,6 +425,7 @@ function renderRoute(){
   }
   el("crumbs").innerHTML=ch;
   if(r==="ac"){mountAC();}
+  if(r==="ervent"){mountERV();}
   if(r==="electrical"){renderElectrical();}
   window.scrollTo(0,0);
 }
@@ -468,6 +474,7 @@ function loadProjectShell(i){
   if(!PROJECT.consumers)PROJECT.consumers=[];
   saveActive();
   if(typeof acSyncFromProject==="function")acSyncFromProject();
+  if(typeof ERV_MOUNTED!=="undefined"&&ERV_MOUNTED){ervFill();ervCalc();}
   closeProjModal();
   alert("Loaded \""+PROJECT.meta.yacht+"\".");
 }
@@ -481,6 +488,7 @@ function newProjectShell(){
   PROJECT={meta:{yacht:"",proj:"",type:"Sailing Yacht",by:"Mikael Strengell",rev:"",cls:"Lloyd's Register (LRS)",date:new Date().toISOString().split("T")[0]},consumers:[]};
   saveActive();
   if(typeof acResetModule==="function")acResetModule();
+  if(typeof ERV_MOUNTED!=="undefined"&&ERV_MOUNTED){ervFill();ervCalc();}
   openProjModal();
 }
 
@@ -509,7 +517,7 @@ function renderElectrical(){
   el("elec-count").textContent=cs.length;
   if(!cs.length){
     body.innerHTML="";foot.innerHTML="";
-    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Try the Air Conditioning module &mdash; it can push the seawater pump, circulation pump and fan-coils into this load balance.</p></div>";
+    emp.innerHTML="<div class='empty'><div class='icon'>&#9889;</div><h3>No consumers yet</h3><p>Run a Systems calculation and send its electrical consumers here. Try the Air Conditioning or Engine Room Ventilation modules &mdash; they push pumps and fans into this load balance.</p></div>";
     el("elec-kpi").innerHTML="";
     return;
   }
@@ -660,7 +668,6 @@ function recalc(){
     "<div class='kpi'><div class='kpi-l'>Spaces</div><div class='kpi-v'>"+rows.length+"</div><div class='kpi-u'>cabins</div></div>";
   el("ac-equip").innerHTML=rows.map(function(r,i){return "<tr><td>"+(i+1)+"</td><td><strong>"+esc(r.c.name||TYPES[r.c.type].l)+"</strong></td><td>"+f1(r.cr.area)+" m&#178;</td><td>"+f1(r.cr.totW/1000)+" kW</td><td><strong>"+r.u.m+"</strong></td><td>"+(r.u.b?f0(r.u.b):"-")+"</td><td>"+(r.u.w||"-")+"</td></tr>";}).join("");
   el("ac-equipfoot").innerHTML="<tr><td colspan='3'>TOTAL</td><td>"+f1(totW/1000)+" kW</td><td></td><td>"+f0(totInst)+"</td><td>"+f1(totKg)+"</td></tr>";
-  // stash totals for consumer hand-off
   S._tot={btu:totInst,eKW:eKW};
 }
 
@@ -669,10 +676,10 @@ function sendACtoElectrical(){
   if(!S.cabins.length){alert("Add cabins first.");return;}
   recalc();
   var cop=Number(el("ac-cop").value)||3;
-  var compKW=(S._tot.btu/3412)/cop;            // total compressor electrical
-  var swKW=Math.max(0.5,compKW*0.06);          // seawater pump approx (linked to AC) 
-  var circKW=Math.max(0.5,compKW*0.10);        // chilled-water circulation pump
-  var fanKW=Math.max(0.2,S.cabins.length*0.15);// total fan-coils
+  var compKW=(S._tot.btu/3412)/cop;
+  var swKW=Math.max(0.5,compKW*0.06);
+  var circKW=Math.max(0.5,compKW*0.10);
+  var fanKW=Math.max(0.2,S.cabins.length*0.15);
   var list=[
     {source:"AC",name:"AC compressor(s)",bus:"AC",pcs:1,kw:+compKW.toFixed(2),day:65,eve:65,night:35},
     {source:"AC",name:"Seawater pump (AC)",bus:"AC",pcs:1,kw:+swKW.toFixed(2),day:100,eve:100,night:100},
@@ -692,6 +699,160 @@ function exportExcel(){
   XLSX.writeFile(wb,"Baltic_AC_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
 }
 
+/* ================================================================
+   ENGINE ROOM VENTILATION MODULE  (ISO 8861)  -> #view-ervent
+   ================================================================ */
+var ERV_MOUNTED=false;
+function ervDefaults(){return{
+  ro:1.13, c:1.01, tout:35, dt:12.5,
+  pdp:405, ddp:4.6,
+  pdg:75, pgel:55, eta:94, ngen:2, ddg:9.4404,
+  mad:0.002,
+  fel:0, fex:0, ft:0, fo:0,
+  fdp:350, feff:60,
+  vg:3, vd:10, vfd:10
+};}
+function ervState(){ if(!PROJECT.erv)PROJECT.erv=ervDefaults(); return PROJECT.erv; }
+function ervSave(){ saveActive(); }
+function E(id){return el("erv-"+id);}
+function ervSet(k,v){ ervState()[k]=Number(v); ervSave(); ervCalc(); }
+
+function mountERV(){
+  if(ERV_MOUNTED){ervFill();ervCalc();return;}
+  el("view-ervent").innerHTML=ervHTML();
+  ERV_MOUNTED=true; ervFill(); ervCalc();
+}
+function ervField(k,label,unit,step){
+  return "<div style='display:flex;flex-direction:column;gap:3px'>"+
+    "<label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>"+label+"</label>"+
+    "<div style='display:flex;align-items:center;gap:6px'>"+
+    "<input id='erv-"+k+"' type='number' step='"+(step||"any")+"' oninput=\"ervSet('"+k+"',this.value)\" style='width:90px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'>"+
+    "<span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>";
+}
+function ervHTML(){
+  return "<main>"+
+   "<div class='page-head'><div><h2>Engine Room Ventilation</h2><p>ISO 8861 &mdash; combustion air + heat-loss air. Supply &amp; exhaust fans feed Electrical.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-line btn-sm' onclick='ervExcel()'>&#11015; Excel</button>"+
+       "<button class='btn btn-gold btn-sm' onclick='ervToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Design Conditions</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       ervField("tout","Outside temp","&deg;C")+ervField("dt","Max temp rise &Delta;t","&deg;C")+
+       ervField("ro","Air density &rho;","kg/m&#179;")+ervField("c","Heat coeff c","kJ/kgK")+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Max ER temp</label>"+
+       "<div id='erv-ertemp' style='font-size:18px;font-weight:700;color:var(--navy);padding-top:4px'>-</div></div>"+
+     "</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Main Engine</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       ervField("pdp","Max power Pdp","kW")+ervField("ddp","Heat rejection Ddp","%")+
+       ervField("mad","Air req. mad","kg/kWs","0.0001")+"</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Generator Set(s)</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       ervField("ngen","Quantity running","pcs","1")+ervField("pdg","Engine power Pdg (ea)","kW")+
+       ervField("pgel","Electric power (ea)","kW")+ervField("eta","Alternator eff. &eta;","%")+
+       ervField("ddg","Heat rejection Ddg","%")+"</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Additional Heat Emissions</h2><span style='font-size:11px;color:var(--g500)'>optional</span></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       ervField("fel","Electrical install. &Phi;el","kW")+ervField("fex","Exhaust system &Phi;ex","kW")+
+       ervField("ft","Hot tanks &Phi;t","kW")+ervField("fo","Other &Phi;o","kW")+"</div></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Fan &amp; Duct Design</h2></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
+       ervField("fdp","Fan static pressure","Pa")+ervField("feff","Fan efficiency","%")+
+       ervField("vg","Grille velocity","m/s")+ervField("vd","Duct velocity","m/s")+
+       ervField("vfd","Fire damper velocity","m/s")+"</div></div>"+
+   "<div class='card' id='erv-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Results</h2><span class='badge badge-gold' id='erv-badge'>-</span></div>"+
+     "<div class='kpi-row' id='erv-kpi'></div>"+
+     "<div class='section' style='padding:0 20px 6px'></div>"+
+     "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Symbol</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='erv-tbl'></tbody></table></div>"+
+   "</div></main>";
+}
+function ervFill(){
+  var s=ervState();
+  ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd"].forEach(function(k){ if(E(k))E(k).value=s[k]; });
+}
+function ervCompute(){
+  var s=ervState();
+  var ertemp=s.tout+s.dt;
+  var qdp=(s.pdp*s.mad)/s.ro;
+  var qdg=(s.pdg*s.mad)/s.ro;
+  var Qc=qdp+s.ngen*qdg;
+  var q15=Qc*1.5;
+  var Fdp=s.pdp*(s.ddp/100);
+  var Fdg=s.pdg*(s.ddg/100);
+  var Fg=s.pgel*(1-s.eta/100);
+  var sumF=Fdp + s.ngen*(Fdg+Fg) + s.fel + s.fex + s.ft + s.fo;
+  var Qh=sumF/(s.ro*s.c*s.dt) - 0.4*Qc;
+  if(Qh<0)Qh=0;
+  var Qin=Qc+Qh;
+  var Qout=Qh;
+  var A=Qin/s.vg;
+  var Dduct=Math.sqrt((Qin/s.vd)/Math.PI)*2*1000;
+  var Afd=Qin/s.vfd;
+  var fanIn=Qin*s.fdp/((s.feff/100)*1000);
+  var fanOut=Qout*s.fdp/((s.feff/100)*1000);
+  return {ertemp:ertemp,qdp:qdp,qdg:qdg,Qc:Qc,q15:q15,Fdp:Fdp,Fdg:Fdg,Fg:Fg,sumF:sumF,Qh:Qh,Qin:Qin,Qout:Qout,A:A,Dduct:Dduct,Afd:Afd,fanIn:fanIn,fanOut:fanOut};
+}
+function ervCalc(){
+  if(!E("results"))return;
+  var r=ervCompute();
+  if(E("ertemp"))E("ertemp").textContent=f1(r.ertemp)+" °C";
+  E("badge").textContent=f1(r.Qin*3600)+" m³/h supply";
+  E("kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Supply Air Qin</div><div class='kpi-v'>"+f2(r.Qin)+"</div><div class='kpi-u'>m³/s &middot; "+f0(r.Qin*3600)+" m³/h</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Exhaust Air Qout</div><div class='kpi-v'>"+f2(r.Qout)+"</div><div class='kpi-u'>m³/s &middot; "+f0(r.Qout*3600)+" m³/h</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Combustion Qc</div><div class='kpi-v'>"+f2(r.Qc)+"</div><div class='kpi-u'>m³/s</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Heat-loss Qh</div><div class='kpi-v'>"+f2(r.Qh)+"</div><div class='kpi-u'>m³/s</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Supply Fan</div><div class='kpi-v'>"+f2(r.fanIn)+"</div><div class='kpi-u'>kW elec</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Exhaust Fan</div><div class='kpi-v'>"+f2(r.fanOut)+"</div><div class='kpi-u'>kW elec</div></div>";
+  function row(q,sym,v,u,ref){return "<tr><td>"+q+"</td><td>"+sym+"</td><td><strong>"+v+"</strong></td><td>"+u+"</td><td style='color:var(--g500)'>"+ref+"</td></tr>";}
+  E("tbl").innerHTML=
+    row("Max engine room temp","t<sub>er</sub>",f1(r.ertemp),"°C","t<sub>out</sub> + Δt")+
+    row("Combustion air, propulsion","q<sub>dp</sub>",f3(r.qdp),"m³/s","P<sub>dp</sub> × mad / ρ")+
+    row("Combustion air, per genset","q<sub>dg</sub>",f3(r.qdg),"m³/s","P<sub>dg</sub> × mad / ρ")+
+    row("Total combustion air","Q<sub>c</sub>",f3(r.Qc),"m³/s","q<sub>dp</sub> + N·q<sub>dg</sub>")+
+    row("Combustion + 50% margin","q",f3(r.q15),"m³/s","Q<sub>c</sub> × 1.5 (ISO 8861)")+
+    row("Heat, propulsion engine","Φ<sub>dp</sub>",f1(r.Fdp),"kW","P<sub>dp</sub> × D<sub>dp</sub>")+
+    row("Heat, genset engine (ea)","Φ<sub>dg</sub>",f1(r.Fdg),"kW","P<sub>dg</sub> × D<sub>dg</sub>")+
+    row("Heat, electrical generator (ea)","Φ<sub>g</sub>",f1(r.Fg),"kW","P<sub>el</sub> × (1-η)")+
+    row("Total heat emission","ΣΦ",f1(r.sumF),"kW","sum of all Φ")+
+    row("Heat-loss airflow","Q<sub>h</sub>",f3(r.Qh),"m³/s","ΣΦ / (ρ·c·Δt) - 0.4Q<sub>c</sub>")+
+    row("Required supply air","Q<sub>in</sub>",f3(r.Qin)+" / "+f0(r.Qin*3600),"m³/s / m³/h","Q<sub>c</sub> + Q<sub>h</sub>")+
+    row("Required exhaust air","Q<sub>out</sub>",f3(r.Qout)+" / "+f0(r.Qout*3600),"m³/s / m³/h","Q<sub>h</sub>")+
+    row("Grille cross section","A",f3(r.A)+" / "+f0(r.A*10000),"m² / cm²","Q<sub>in</sub> / v<sub>grille</sub>")+
+    row("Duct hydraulic diameter","Ø",f0(r.Dduct),"mm","√(Q<sub>in</sub>/v<sub>duct</sub>/π)×2")+
+    row("Fire damper cross section","A<sub>fd</sub>",f3(r.Afd)+" / "+f0(r.Afd*10000),"m² / cm²","Q<sub>in</sub> / v<sub>damper</sub>")+
+    row("Supply fan electrical","P<sub>sup</sub>",f2(r.fanIn),"kW","Q<sub>in</sub>·Δp / η")+
+    row("Exhaust fan electrical","P<sub>exh</sub>",f2(r.fanOut),"kW","Q<sub>out</sub>·Δp / η");
+}
+function ervToElectrical(){
+  var r=ervCompute();
+  var list=[
+    {source:"ER Vent",name:"Engine room supply fan",bus:"AC",pcs:1,kw:+r.fanIn.toFixed(2),day:100,eve:100,night:60},
+    {source:"ER Vent",name:"Engine room exhaust fan",bus:"AC",pcs:1,kw:+r.fanOut.toFixed(2),day:100,eve:100,night:60}
+  ];
+  addConsumers(list);
+  alert("Sent supply & exhaust fans ("+f2(r.fanIn+r.fanOut)+" kW) to the Electrical load balance.");
+}
+function ervExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=ervState(),r=ervCompute(),m=PROJECT.meta,wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Engine Room Ventilation (ISO 8861)"],["Yacht",m.yacht,"Project",m.proj],[],
+    ["INPUTS"],["Outside temp",s.tout,"C"],["Max temp rise dt",s.dt,"C"],["Air density",s.ro,"kg/m3"],["Heat coeff c",s.c,"kJ/kgK"],
+    ["Main engine Pdp",s.pdp,"kW"],["Ddp",s.ddp,"%"],["mad",s.mad,"kg/kWs"],
+    ["Gensets running",s.ngen,"pcs"],["Genset engine Pdg",s.pdg,"kW"],["Genset electric",s.pgel,"kW"],["Eta",s.eta,"%"],["Ddg",s.ddg,"%"],
+    ["Phi el/ex/t/o",s.fel+"/"+s.fex+"/"+s.ft+"/"+s.fo,"kW"],
+    ["Fan dP",s.fdp,"Pa"],["Fan eff",s.feff,"%"],[],
+    ["RESULTS"],["Max ER temp",+r.ertemp.toFixed(1),"C"],
+    ["Combustion air Qc",+r.Qc.toFixed(3),"m3/s"],["Qc x1.5",+r.q15.toFixed(3),"m3/s"],
+    ["Total heat emission",+r.sumF.toFixed(1),"kW"],["Heat-loss air Qh",+r.Qh.toFixed(3),"m3/s"],
+    ["Supply air Qin",+r.Qin.toFixed(3),"m3/s",+(r.Qin*3600).toFixed(0),"m3/h"],
+    ["Exhaust air Qout",+r.Qout.toFixed(3),"m3/s",+(r.Qout*3600).toFixed(0),"m3/h"],
+    ["Grille area",+r.A.toFixed(3),"m2",+(r.A*10000).toFixed(0),"cm2"],
+    ["Duct diameter",+r.Dduct.toFixed(0),"mm"],
+    ["Supply fan",+r.fanIn.toFixed(2),"kW"],["Exhaust fan",+r.fanOut.toFixed(2),"kW"]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"ER Ventilation");
+  XLSX.writeFile(wb,"Baltic_ERVent_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx");
+}
 
 /* ---------- PWA ---------- */
 function makeIcon(sz){
