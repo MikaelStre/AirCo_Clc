@@ -404,7 +404,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
           <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Air Conditioning</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Cabin cooling loads &amp; unit selection from a supplier catalogue (Dometic / Webasto). Optional Fresh-Air Make-Up (FAMU) sizes a central air handler. Feeds cooling power into Electrical.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">ISO 7547</td></tr>
           <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Seawater Cooling</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Sums cooling flow and sizes the seawater inlet / manifold.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Manifold sizing</td></tr>
           <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Bilge</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Bilge pipe &amp; pump sizing.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">RINA / DNV-GL</td></tr>
-          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Engine-room Ventilation</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Combustion + heat-loss airflow and supply/exhaust fan sizing.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">ISO 8861</td></tr>
+          <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Engine-room Ventilation</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Combustion + heat-loss airflow and supply/exhaust fan sizing. Produces a <strong>fan duty spec sheet</strong> (flow, static, air temperature &amp; density per fan) and recommends the Baltic <strong>AxiEco 48&nbsp;V DC &ldquo;fan wall&rdquo;</strong> (ebm-papst AxiEco 200) &mdash; fan count for supply &amp; exhaust plus the supporting fire dampers, demister and differential-pressure controller. Word export for FanScout / suppliers.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">ISO 8861</td></tr>
           <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Water &amp; Waste Water</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Fresh-water, grey/black tank balance and discharge rate.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">MEPC 157(55)</td></tr>
           <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Engine &rarr; Thruster</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Bow / stern thruster sizing &amp; power from a wind + acceleration balance.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Wind + accel</td></tr>
           <tr><td style="padding:8px 12px;border-bottom:1px solid var(--g100)"><strong>Engine &rarr; Propeller</strong></td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Hull resistance (Delft series / Froude) &rarr; Wageningen B-series propeller matching &rarr; engine power curve. Predicts boat speed, RPM, thrust, slip, open-water efficiency, fuel &amp; range, with a cavitation check, the prop-shaft diameter (ABYC / GL / DNV), engine &amp; propeller libraries you can extend, click-to-zoom charts and Word / Excel export.</td><td style="padding:8px 12px;border-bottom:1px solid var(--g100)">Delft DSYHS · B-series</td></tr>
@@ -597,7 +597,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.51 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; Wageningen B-series &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.54 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; Wageningen B-series &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -2354,8 +2354,44 @@ function ervDefaults(){return{
   mad:0.002,
   fel:0, fex:0, ft:0, fo:0,
   fdp:350, feff:60,
-  vg:3, vd:10, vfd:10
+  vg:3, vd:10, vfd:10,
+  alt:0, sound:75, supQty:1, exhQty:1, volt:"3~ 400 V 50 Hz", margin:10, perFan:1500
 };}
+/* Baltic engine-room ventilation philosophy: a "fan wall" of small AxiEco 200 48 V DC EC fans */
+var AXIECO200={code:"ebm-papst AxiEco 200 · VWLH200CKLXS",v:"48 V DC",w:500,mass:1.5};
+function ervFanWall(){
+  var s=ervState(), r=ervCompute(), mg=1+(+s.margin||0)/100, pf=Math.max(200,+s.perFan||1500);
+  var supFlow=r.Qin*3600*mg, exhFlow=r.Qout*3600*mg;
+  var nSup=Math.max(1,Math.ceil(supFlow/pf)), nExh=Math.max(1,Math.ceil(exhFlow/pf));
+  return {pf:pf,supFlow:supFlow,exhFlow:exhFlow,nSup:nSup,nExh:nExh,total:nSup+nExh,kw:(nSup+nExh)*AXIECO200.w/1000,r:r};
+}
+function ervSetTxt(k,v){ ervState()[k]=v; ervSave(); ervCalc(); }
+function airRho(t){ return 1.293*273.15/(273.15+(+t||0)); } /* dry-air density at temp t°C, sea level */
+/* ebm-papst AxiEco EC axial fans (catalogue 2022-04): q=free-air max m³/h, p=max static Pa */
+var AXIECO=[
+  {code:"AxiEco Protect 300 · VWT0300CSLES",size:300,q:3000,p:73,kw:0.61,db:62,v:"1~ 230 V"},
+  {code:"AxiEco Perform 300 · VWT0300CSNGS",size:300,q:3000,p:340,kw:1.50,db:77,v:"1~ 230 V"},
+  {code:"AxiEco Protect 350 · VWT0350CSLFS",size:350,q:4000,p:63,kw:0.54,db:59,v:"1~ 230 V"},
+  {code:"AxiEco Perform 350 · VMA0350CSNGS",size:350,q:4000,p:165,kw:1.40,db:66,v:"1~ 230 V"},
+  {code:"AxiEco Perform 350 · VMA0350CSPGS",size:350,q:4000,p:340,kw:1.40,db:66,v:"1~ 230 V"},
+  {code:"AxiEco Perform 400 · VWT0400CSNGS",size:400,q:6000,p:165,kw:1.30,db:65,v:"1~ 230 V"},
+  {code:"AxiEco Perform 400 · VWT0400CTPMS",size:400,q:6000,p:1126,kw:1.73,db:83,v:"3~ 400 V"},
+  {code:"AxiEco Perform 450 · VMA0450CSPKS",size:450,q:8000,p:477,kw:2.09,db:69,v:"1~ 230 V"},
+  {code:"AxiEco Perform 450 · VWT0450CTRHS",size:450,q:8000,p:996,kw:1.54,db:80,v:"3~ 400 V"},
+  {code:"AxiEco Perform 500 · VWT0500CSPMS",size:500,q:12000,p:617,kw:2.71,db:75,v:"1~ 230 V"},
+  {code:"AxiEco Perform 500 · VWT0500CTRNS",size:500,q:12000,p:1577,kw:2.52,db:84,v:"3~ 400 V"}
+];
+/* pick smallest AxiEco fan (per fan) meeting flow & static; returns {fan, n, note} */
+function axiSuggest(flow,stat){
+  var best=null;
+  for(var n=1;n<=4;n++){
+    var per=flow/n;
+    var cands=AXIECO.filter(function(f){return f.q>=per&&f.p>=stat;});
+    cands.sort(function(a,b){return (a.size-b.size)||(a.db-b.db)||(a.kw-b.kw);});
+    if(cands.length){ return {fan:cands[0],n:n,per:per,note:(n>1?(n+" units in parallel"):"single unit")}; }
+  }
+  return null; /* duty beyond this catalogue range */
+}
 function ervState(){ if(!PROJECT.erv)PROJECT.erv=ervDefaults(); return PROJECT.erv; }
 function ervSave(){ saveActive(); }
 function E(id){return el("erv-"+id);}
@@ -2377,6 +2413,7 @@ function ervHTML(){
   return "<main>"+
    "<div class='page-head'><div><h2>Engine Room Ventilation</h2><p>ISO 8861 &mdash; combustion air + heat-loss air. Supply &amp; exhaust fans feed Electrical.</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> airflow = air for engine/genset combustion + air to carry away their heat (ISO 8861: q<sub>h</sub> = &Sigma;&Phi; / (&rho;&middot;c&middot;&Delta;t), with &Delta;t &le; 12.5 K, minus 40% of the combustion air). The supply is never below 1.5 &times; the combustion air.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-line btn-sm' onclick='ervFanWord()'>&#128462; Fan duty sheet</button>"+
        "<button class='btn btn-line btn-sm' onclick='ervExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='ervToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
    "<div class='card'><div class='card-hdr'><h2>Design Conditions</h2></div>"+
@@ -2408,11 +2445,20 @@ function ervHTML(){
      "<div class='kpi-row' id='erv-kpi'></div>"+
      "<div class='section' style='padding:0 20px 6px'></div>"+
      "<div class='tbl-wrap'><table class='result-table'><thead><tr><th>Quantity</th><th>Symbol</th><th>Value</th><th>Unit</th><th>Reference</th></tr></thead><tbody id='erv-tbl'></tbody></table></div>"+
+   "</div>"+
+   "<div class='card' id='erv-fanspec-card'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Fan Duty Spec Sheet</h2><span class='badge badge-gold'>for FanScout / supplier</span></div>"+
+     "<div style='padding:14px 20px;display:flex;gap:18px;flex-wrap:wrap' class='no-print'>"+
+       ervField("supQty","Supply fans","×","1")+ervField("exhQty","Exhaust fans","×","1")+
+       ervField("margin","Selection margin","%","1")+ervField("perFan","AxiEco/fan flow","m³/h","10")+ervField("alt","Altitude","m","1")+ervField("sound","Max sound","dB(A)","1")+
+       "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g500)'>Power supply</label><input id='erv-volt' onchange=\"ervSetTxt('volt',this.value)\" style='width:140px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'></div>"+
+     "</div>"+
+     "<div id='erv-fanspec' style='padding:0 20px 18px'></div>"+
    "</div></main>";
 }
 function ervFill(){
   var s=ervState();
-  ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd"].forEach(function(k){ if(E(k))E(k).value=s[k]; });
+  ["ro","c","tout","dt","pdp","ddp","pdg","pgel","eta","ngen","ddg","mad","fel","fex","ft","fo","fdp","feff","vg","vd","vfd","alt","sound","supQty","exhQty","margin","perFan"].forEach(function(k){ if(E(k))E(k).value=s[k]; });
+  if(E("volt"))E("volt").value=s.volt;
 }
 function ervCompute(){
   var s=ervState();
@@ -2476,16 +2522,92 @@ function ervCalc(){
     (typeof equipSelRow==="function"?equipSelRow("Supply blower (Gianneschi)",GIANNESCHI_FANS,(ervState().supFan||""),r.Qin*3600,"fan","ervSupFanSet",3):"")+
     (typeof equipSelRow==="function"?equipSelRow("Exhaust blower (Gianneschi)",GIANNESCHI_FANS,(ervState().exhFan||""),r.Qout*3600,"fan","ervExhFanSet",3):"")+
     row("Exhaust fan electrical","P<sub>exh</sub>",f2(r.fanOut),"kW","Q<sub>out</sub>·Δp / η");
+  if(typeof ervFanSpec==="function")ervFanSpec();
 }
 function f3(n){return Number(n).toFixed(3);}
+function ervFanSpecData(){
+  var s=ervState(), r=ervCompute(), mg=1+(+s.margin||0)/100, exhT=r.ertemp;
+  return {basis:r, margin:s.margin, alt:s.alt, sound:s.sound, volt:s.volt, fans:[
+    {svc:"Supply (intake)",qty:Math.max(1,Math.round(s.supQty)),Qh:r.Qin*3600*mg,Qs:r.Qin*mg,esp:s.fdp,temp:s.tout,rho:airRho(s.tout)},
+    {svc:"Exhaust (extract)",qty:Math.max(1,Math.round(s.exhQty)),Qh:r.Qout*3600*mg,Qs:r.Qout*mg,esp:s.fdp,temp:exhT,rho:airRho(exhT)}
+  ]};
+}
+function ervFanSpec(){
+  var host=el("erv-fanspec"); if(!host)return; var d=ervFanSpecData(), r=d.basis;
+  var rows=d.fans.map(function(f){var per=f.Qh/f.qty;
+    return "<tr><td><strong>"+f.svc+"</strong></td><td>"+f.qty+"</td><td><strong>"+f0(per)+"</strong>"+(f.qty>1?" <span style='color:var(--g500)'>(&times;"+f.qty+" = "+f0(f.Qh)+")</span>":"")+"</td><td>"+f2(f.Qs/f.qty)+"</td><td>"+f0(f.esp)+"</td><td>"+f1(f.temp)+"</td><td>"+f3(f.rho)+"</td></tr>";}).join("");
+  /* Baltic "fan wall" — AxiEco 200 48 V DC EC fans (engine-room ventilation philosophy) */
+  var fw=ervFanWall();
+  var wallRows=
+    "<tr><td><strong>Supply &ldquo;fan wall&rdquo;</strong></td><td><strong>"+fw.nSup+" &times;</strong></td><td>"+esc(AXIECO200.code)+"</td><td>"+f0(fw.pf)+" m&#179;/h ea</td><td>"+f0(fw.nSup*fw.pf)+" m&#179;/h</td><td>"+f1(fw.nSup*AXIECO200.w/1000)+" kW &middot; "+AXIECO200.v+"</td></tr>"+
+    "<tr><td><strong>Exhaust &ldquo;fan wall&rdquo;</strong></td><td><strong>"+fw.nExh+" &times;</strong></td><td>"+esc(AXIECO200.code)+"</td><td>"+f0(fw.pf)+" m&#179;/h ea</td><td>"+f0(fw.nExh*fw.pf)+" m&#179;/h</td><td>"+f1(fw.nExh*AXIECO200.w/1000)+" kW &middot; "+AXIECO200.v+"</td></tr>";
+  /* larger single-fan AC alternative */
+  var sug=d.fans.map(function(f){
+    var s=axiSuggest(f.Qh,f.esp);
+    if(!s)return "<tr><td>"+f.svc+"</td><td colspan='5' style='color:var(--g500)'>beyond the AxiEco 300&ndash;500 AC range &mdash; use the fan wall above.</td></tr>";
+    return "<tr><td>"+f.svc+"</td><td>"+s.n+" &times;</td><td>"+esc(s.fan.code)+"</td><td>"+f0(s.fan.q)+" m&#179;/h</td><td>"+f0(s.fan.p)+" Pa</td><td>"+f2(s.fan.kw)+" kW &middot; "+f0(s.fan.db)+" dB(A) &middot; "+esc(s.fan.v)+"</td></tr>";
+  }).join("");
+  host.innerHTML=
+    "<table class='result-table' style='font-size:12px'><thead><tr><th>Service</th><th>Qty</th><th>Flow / fan m&#179;/h</th><th>m&#179;/s</th><th>Ext. static Pa</th><th>Air &deg;C</th><th>&rho; kg/m&#179;</th></tr></thead><tbody>"+rows+"</tbody></table>"+
+    "<div style='font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin:16px 0 4px'>Recommended &mdash; Baltic AxiEco fan wall (48&nbsp;V DC)</div>"+
+    "<table class='result-table' style='font-size:12px'><thead><tr><th>Wall</th><th>Fans</th><th>Model</th><th>Flow / fan</th><th>Wall flow</th><th>Power &middot; supply</th></tr></thead><tbody>"+wallRows+"</tbody></table>"+
+    "<div style='font-size:12px;color:var(--g700);margin:8px 0 2px;line-height:1.7'>Total <strong>"+fw.total+" fans</strong> ("+fw.nSup+" supply + "+fw.nExh+" exhaust) &middot; installed power <strong>"+f1(fw.kw)+" kW</strong> on the 48&nbsp;V DC bus. Per-fan design flow "+f0(fw.pf)+" m&#179;/h at the engine-room operating point (modulated by a differential-pressure controller, 0&ndash;50&nbsp;Pa). The fan wall is the Baltic standard: small redundant EC fans in a grille matrix, slightly pressurising the engine room.</div>"+
+    "<div style='font-size:11px;color:var(--g700);margin:8px 0 2px'><strong>Supporting equipment (per philosophy):</strong> Fire dampers A60, AISI 316, 72&nbsp;&deg;C thermal fuse (C.E.M. FD-A60) &middot; single-stage droplet separator / demister (ALUPRO WS-N) &middot; PT100 temperature-control module (Pixsys 2000) &middot; differential-pressure controller 0&ndash;50&nbsp;Pa (Arthur Grillo DPC200-EP50).</div>"+
+    "<div style='font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g500);margin:14px 0 4px'>Alternative &mdash; single larger AxiEco (AC)</div>"+
+    "<table class='result-table' style='font-size:12px'><thead><tr><th>Service</th><th>Units</th><th>Model</th><th>Max flow</th><th>Max static</th><th>Power / sound / supply</th></tr></thead><tbody>"+sug+"</tbody></table>"+
+    "<div style='font-size:11px;color:var(--g500);margin:6px 0 2px'>Fan counts assume each AxiEco 200 delivers ~"+f0(fw.pf)+" m&#179;/h at the duty (adjust &ldquo;Per-fan flow&rdquo; to the FanScout operating point). <strong>Confirm the operating point on the fan curve in FanScout.</strong></div>"+
+    "<div style='font-size:12px;color:var(--g700);margin-top:10px;line-height:1.7'>"+
+      "<strong>Basis (ISO 8861):</strong> supply "+f0(r.Qin*3600)+" m&#179;/h, exhaust "+f0(r.Qout*3600)+" m&#179;/h, combustion air "+f3(r.Qc)+" m&#179;/s, max engine-room temp "+f1(r.ertemp)+" &deg;C. Selection margin +"+f0(d.margin)+"&#37; applied to the flows above. "+
+      "Altitude "+f0(d.alt)+" m &middot; max sound "+f0(d.sound)+" dB(A) &middot; supply "+esc(d.volt)+"."+
+      "<br><strong>Note:</strong> exhaust air is hot ("+f1(d.fans[1].temp)+" &deg;C &rarr; &rho; "+f3(d.fans[1].rho)+" kg/m&#179;) &mdash; select the extract fan at that temperature and confirm the operating point on the fan curve at the stated static pressure.</div>";
+}
+function ervFanWord(){
+  if(!window.docx){alert("Word library loading.");return;}
+  var D=docx, d=ervFanSpecData(), r=d.basis, m=PROJECT.meta||{};
+  var NAVY="1A2744",GOLD="C9A96E",INK="22272F";
+  function P(runs,o){o=o||{};return new D.Paragraph({children:runs,spacing:{before:(o.before||0)*20,after:(o.after||0)*20},alignment:o.align,border:o.bb?{bottom:{style:D.BorderStyle.SINGLE,size:8,color:GOLD,space:3}}:undefined});}
+  function T(t,o){o=o||{};return new D.TextRun({text:String(t==null?"":t),bold:!!o.b,italics:!!o.i,size:Math.round((o.sz||10)*2),color:o.c||INK,font:"Calibri"});}
+  function cell(txt,o){o=o||{};return new D.TableCell({shading:o.fill?{type:D.ShadingType.CLEAR,fill:o.fill,color:"auto"}:undefined,margins:{top:30,bottom:30,left:80,right:80},children:[new D.Paragraph({alignment:o.align||D.AlignmentType.LEFT,children:[T(txt,{b:o.b,sz:9,c:o.c})]})]});}
+  var body=[];
+  body.push(P([T("Engine-Room Fan Duty Specification",{b:true,sz:18,c:NAVY})],{after:2}));
+  body.push(P([T((m.yacht?m.yacht+"  ·  ":"")+(m.proj?"Project "+m.proj+"  ·  ":"")+"Baltic Yachts  ·  ISO 8861",{c:GOLD,sz:10,b:true})],{after:8,bb:true}));
+  var hd=["Service","Qty","Flow / fan (m³/h)","(m³/s)","Ext. static (Pa)","Air temp (°C)","Density (kg/m³)"];
+  var trs=[new D.TableRow({tableHeader:true,children:hd.map(function(h){return cell(h,{b:true,c:"FFFFFF",fill:NAVY,align:D.AlignmentType.CENTER});})})];
+  d.fans.forEach(function(f){trs.push(new D.TableRow({children:[
+    cell(f.svc,{b:true}),cell(f.qty,{align:D.AlignmentType.CENTER}),cell(f0(f.Qh/f.qty),{align:D.AlignmentType.CENTER}),cell(f2(f.Qs/f.qty),{align:D.AlignmentType.CENTER}),cell(f0(f.esp),{align:D.AlignmentType.CENTER}),cell(f1(f.temp),{align:D.AlignmentType.CENTER}),cell(f3(f.rho),{align:D.AlignmentType.CENTER})
+  ]}));});
+  body.push(new D.Table({width:{size:100,type:D.WidthType.PERCENTAGE},rows:trs}));
+  var fw=ervFanWall();
+  body.push(P([T("Recommended — Baltic AxiEco fan wall (48 V DC)",{b:true,sz:11,c:NAVY})],{before:10,after:3}));
+  body.push(P([T("Supply wall:  ",{b:true,sz:9}),T(fw.nSup+" × "+AXIECO200.code+" ("+AXIECO200.v+", "+AXIECO200.w+" W)",{sz:9,c:INK}),T("  → "+f0(fw.nSup*fw.pf)+" m³/h",{sz:9,c:"4A5160"})],{after:1}));
+  body.push(P([T("Exhaust wall:  ",{b:true,sz:9}),T(fw.nExh+" × "+AXIECO200.code+" ("+AXIECO200.v+", "+AXIECO200.w+" W)",{sz:9,c:INK}),T("  → "+f0(fw.nExh*fw.pf)+" m³/h",{sz:9,c:"4A5160"})],{after:1}));
+  body.push(P([T("Total: ",{b:true,sz:9}),T(fw.total+" fans · "+f1(fw.kw)+" kW on the 48 V DC bus · per-fan design flow "+f0(fw.pf)+" m³/h · differential-pressure control 0–50 Pa.",{sz:9})],{after:3}));
+  body.push(P([T("Supporting equipment: ",{b:true,sz:9}),T("Fire dampers A60 AISI 316 72 °C fuse (C.E.M. FD-A60) · droplet separator/demister (ALUPRO WS-N) · PT100 temperature-control module (Pixsys 2000) · differential-pressure controller 0–50 Pa (Arthur Grillo DPC200-EP50).",{sz:9,c:"4A5160"})],{after:4}));
+  body.push(P([T("Selection requirements",{b:true,sz:11,c:NAVY})],{before:8,after:3}));
+  [["Total supply air (ISO 8861)",f0(r.Qin*3600)+" m³/h ("+f3(r.Qin)+" m³/s)"],
+   ["Total exhaust air",f0(r.Qout*3600)+" m³/h ("+f3(r.Qout)+" m³/s)"],
+   ["Combustion air included",f3(r.Qc)+" m³/s"],
+   ["Max engine-room temperature",f1(r.ertemp)+" °C"],
+   ["Selection margin applied","+"+f0(d.margin)+" % on flow"],
+   ["External static pressure (design)",f0(ervState().fdp)+" Pa"],
+   ["Altitude",f0(d.alt)+" m"],
+   ["Max sound level",f0(d.sound)+" dB(A)"],
+   ["Power supply",d.volt],
+   ["Fan type","EC axial / centrifugal, marine duty"]
+  ].forEach(function(kv){ body.push(P([T(kv[0]+":  ",{b:true,sz:9}),T(kv[1],{sz:9})],{after:1})); });
+  body.push(P([T("Notes: ",{b:true,sz:9}),T("Extract fan handles hot engine-room air at "+f1(d.fans[1].temp)+" °C (ρ "+f3(d.fans[1].rho)+" kg/m³) — select for that medium temperature and confirm the operating point on the manufacturer fan curve at the stated static pressure. Supply fan draws ambient air at "+f1(d.fans[0].temp)+" °C. Duct/grille losses to be added to the external static pressure as the routing is finalised.",{sz:9,c:"4A5160"})],{before:6}));
+  body.push(P([T(disclaimerLine(),{i:true,sz:7,c:"6B7280"})],{before:10}));
+  var doc=new D.Document({sections:[{children:body}]});
+  D.Packer.toBlob(doc).then(function(blob){ safeDL(blob,"Baltic_FanDutySpec_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".docx"); });
+}
 function ervToElectrical(){
-  var r=ervCompute();
+  var fw=ervFanWall();
   var list=[
-    {source:"ER Vent",name:"Engine room supply fan",bus:"AC",pcs:1,kw:+r.fanIn.toFixed(2),day:100,eve:100,night:60},
-    {source:"ER Vent",name:"Engine room exhaust fan",bus:"AC",pcs:1,kw:+r.fanOut.toFixed(2),day:100,eve:100,night:60}
+    {source:"ER Vent",name:"ER supply fan wall ("+fw.nSup+"× AxiEco 200)",bus:"48V",pcs:1,kw:+(fw.nSup*AXIECO200.w/1000).toFixed(2),day:100,eve:100,night:60},
+    {source:"ER Vent",name:"ER exhaust fan wall ("+fw.nExh+"× AxiEco 200)",bus:"48V",pcs:1,kw:+(fw.nExh*AXIECO200.w/1000).toFixed(2),day:100,eve:100,night:60}
   ];
   addConsumers(list);
-  alert("Sent supply & exhaust fans ("+f2(r.fanIn+r.fanOut)+" kW) to the Electrical load balance.");
+  alert("Sent the AxiEco fan walls ("+fw.total+" fans · "+f1(fw.kw)+" kW, 48 V DC) to the Electrical load balance.");
 }
 function ervExcel(){
   if(!window.XLSX){alert("Excel library loading.");return;}
@@ -3454,6 +3576,91 @@ function elecState(){
 function elecGenSet(k,v){ elecState().gen[k]=Number(v); saveActive(); elecCalc(); }
 function elecBattSet(k,v){ elecState().batt[k]=Number(v); saveActive(); elecCalc(); }
 function elecConSet(id,k,v){ var c=PROJECT.consumers.filter(function(x){return x.id===id;})[0]; if(!c)return; c[k]=(k==="name"||k==="bus")?v:Number(v); saveActive(); elecCalc(); }
+/* Quick-add consumer library (ref: Electrical Load balance 2, B107C-01) */
+var ELEC_REF=[
+  {n:"Air compressor",q:1,kw:1.5,d:5.0,e:5.0,ni:1.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Bilge pump, Gianneschi BMA-S 40/140B",q:2,kw:2.2,d:1.0,e:1.0,ni:1.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Electrical filling pump, Marco UP3",q:2,kw:0.12,d:0.0,e:0.0,ni:0.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Fire pump, Gianneschi BMA-S 40/140B",q:2,kw:2.2,d:1.0,e:1.0,ni:1.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Fuel transfer pump, CEM CE22",q:2,kw:0.55,d:5.0,e:5.0,ni:1.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Fuel transfer pump, CEM gear 5, 230V 1850W",q:2,kw:1.85,d:2.0,e:2.0,ni:2.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Hydraulic backup pump (Check voltage)",q:1,kw:5.0,d:0.0,e:0.0,ni:0.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Oil Change Pump, Marko OCS6, 24V 180W",q:2,kw:0.18,d:0.0,e:0.0,ni:0.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Transfer/discharge pump, Giann. MV44G-230V 550W",q:2,kw:0.55,d:1.0,e:1.0,ni:1.0,b:"AC",c:"Pumps & machinery"},
+  {n:"Graywater pump, SFA SaniMarin",q:9,kw:0.35,d:5.0,e:5.0,ni:2.0,b:"AC",c:"Water & sanitation"},
+  {n:"Hot water circ. Pump, Vortex BWO 230V 34W",q:2,kw:0.034,d:100.0,e:100.0,ni:100.0,b:"AC",c:"Water & sanitation"},
+  {n:"Toilets Planus relax 230V 600W",q:7,kw:0.6,d:5.0,e:5.0,ni:1.0,b:"AC",c:"Water & sanitation"},
+  {n:"Waste water unit Hamann HL0125, 2,1kW 400V",q:1,kw:2.1,d:25.0,e:25.0,ni:10.0,b:"AC",c:"Water & sanitation"},
+  {n:"Water heater, Quick BK3, 2x2x3 kW 230V",q:2,kw:6.0,d:2.0,e:2.0,ni:2.0,b:"AC",c:"Water & sanitation"},
+  {n:"Water pressure pump, Gianneschi 2 Jet 4B",q:2,kw:0.75,d:5.0,e:5.0,ni:1.0,b:"AC",c:"Water & sanitation"},
+  {n:"Water sterilization unit",q:1,kw:0.05,d:30.0,e:30.0,ni:1.0,b:"AC",c:"Water & sanitation"},
+  {n:"Watermaker, Idromar MC3J 2x3kW 230V",q:2,kw:3.0,d:30.0,e:30.0,ni:1.0,b:"AC",c:"Water & sanitation"},
+  {n:"Air con circ. pump Iwaki ~750W 230V",q:2,kw:0.75,d:100.0,e:100.0,ni:100.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Air con seawater pumps Iwaki ~550W 230V",q:2,kw:0.55,d:100.0,e:100.0,ni:100.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Air cond Climma DC50 4x50kBTU 400V 4kW",q:4,kw:4.0,d:80.0,e:80.0,ni:40.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 13J 230V 235W",q:5,kw:0.235,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 17EJ 230V 355W (+1kW)",q:2,kw:0.355,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 17EJ 230V 355W (+2kW)",q:2,kw:0.355,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 17SJ 230V 355W",q:1,kw:0.355,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 24SJ 230V 470W",q:4,kw:0.47,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 3J 230V 56W",q:2,kw:0.056,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 4,5J 230V 125W",q:2,kw:0.125,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 7J 230V 125W",q:4,kw:0.125,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Fan coil Meva 9 230V 235W",q:1,kw:0.235,d:60.0,e:60.0,ni:30.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Tech cool circ. pump Iwaki ~370W 230V",q:2,kw:0.37,d:100.0,e:100.0,ni:100.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Tech cool seawater pump Iwaki 750W 230V",q:2,kw:0.75,d:100.0,e:100.0,ni:100.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"Tech cool unit Climma Compact MC7EFRCU 7kBTU 230V 900W",q:2,kw:0.9,d:50.0,e:50.0,ni:25.0,b:"AC",c:"HVAC / Air-con"},
+  {n:"E.R. extraction fan ebmpapst W3G350 500W",q:4,kw:0.5,d:75.0,e:75.0,ni:25.0,b:"AC",c:"Ventilation"},
+  {n:"Exhaust air fan ruck EM100L 230V 53W",q:2,kw:0.053,d:75.0,e:75.0,ni:25.0,b:"AC",c:"Ventilation"},
+  {n:"Exhaust air fan ruck EM160L 230V 160W",q:2,kw:0.16,d:75.0,e:75.0,ni:25.0,b:"AC",c:"Ventilation"},
+  {n:"Galley extraction fan Miele 230V 300W",q:1,kw:0.3,d:20.0,e:40.0,ni:1.0,b:"AC",c:"Ventilation"},
+  {n:"Supply air fan ruck EM160L 230V 160W",q:2,kw:0.16,d:75.0,e:75.0,ni:25.0,b:"AC",c:"Ventilation"},
+  {n:"Convection oven, H 7890 BP",q:1,kw:5.6,d:15.0,e:20.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Cooking top, KW 7999 FL",q:1,kw:10.8,d:15.0,e:20.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Dishwasher, PFD 104 SCVi XXL",q:1,kw:2.1,d:10.0,e:20.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Dyer, PDR 910 1,1kW",q:2,kw:1.1,d:20.0,e:25.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Freezer top loaded, TBD",q:3,kw:0.3,d:80.0,e:80.0,ni:50.0,b:"AC",c:"Galley & appliances"},
+  {n:"Fridge full height, K 7797 C R",q:1,kw:0.276,d:60.0,e:60.0,ni:40.0,b:"AC",c:"Galley & appliances"},
+  {n:"Fridge undercounter, K 31222 Ui",q:3,kw:0.3,d:80.0,e:80.0,ni:50.0,b:"AC",c:"Galley & appliances"},
+  {n:"Fridge wine, KWT 6722 iS-1",q:1,kw:0.345,d:60.0,e:60.0,ni:40.0,b:"AC",c:"Galley & appliances"},
+  {n:"Galley outlets",q:1,kw:2.0,d:20.0,e:20.0,ni:5.0,b:"AC",c:"Galley & appliances"},
+  {n:"Hot water tap 1,6kW",q:1,kw:1.6,d:10.0,e:15.0,ni:5.0,b:"AC",c:"Galley & appliances"},
+  {n:"Ice maker, IM-30 CNE-HC",q:1,kw:0.23,d:40.0,e:40.0,ni:20.0,b:"AC",c:"Galley & appliances"},
+  {n:"Integrated coffee machine, CVA 7840",q:1,kw:1.45,d:10.0,e:20.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Microwave",q:1,kw:0.9,d:5.0,e:5.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Speed oven, H 7840 BM 4kW",q:1,kw:4.0,d:15.0,e:20.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Washing machine, Miele web 385 2,3kW",q:1,kw:2.3,d:20.0,e:25.0,ni:1.0,b:"AC",c:"Galley & appliances"},
+  {n:"Exterior lights",q:1,kw:0.5,d:5.0,e:70.0,ni:10.0,b:"AC",c:"Lighting"},
+  {n:"Interior lights ceiling spot lights",q:1,kw:2.0,d:20.0,e:70.0,ni:10.0,b:"AC",c:"Lighting"},
+  {n:"Interior lights rope lights",q:1,kw:2.0,d:20.0,e:70.0,ni:10.0,b:"AC",c:"Lighting"},
+  {n:"Machinery lights",q:1,kw:0.2,d:30.0,e:70.0,ni:10.0,b:"AC",c:"Lighting"},
+  {n:"Mast lights",q:1,kw:0.3,d:5.0,e:70.0,ni:30.0,b:"24V",c:"Lighting"},
+  {n:"Nav lights",q:4,kw:0.1,d:20.0,e:50.0,ni:50.0,b:"24V",c:"Lighting"},
+  {n:"Accomodation outlets",q:1,kw:2.0,d:20.0,e:20.0,ni:10.0,b:"AC",c:"Electrical & electronics"},
+  {n:"Anti condensation heaters Generators PM machine",q:2,kw:0.13,d:50.0,e:50.0,ni:50.0,b:"AC",c:"Electrical & electronics"},
+  {n:"Anti condensation heaters Hotel transformer CHECK",q:2,kw:0.13,d:1.0,e:1.0,ni:1.0,b:"AC",c:"Electrical & electronics"},
+  {n:"Anti condensation heaters Propulsion PM machine",q:2,kw:0.13,d:80.0,e:80.0,ni:80.0,b:"AC",c:"Electrical & electronics"},
+  {n:"Entertainment",q:1,kw:1.0,d:40.0,e:40.0,ni:5.0,b:"INV",c:"Electrical & electronics"},
+  {n:"NavCom",q:1,kw:1.0,d:50.0,e:50.0,ni:25.0,b:"INV",c:"Electrical & electronics"},
+  {n:"Network",q:1,kw:1.0,d:50.0,e:50.0,ni:25.0,b:"INV",c:"Electrical & electronics"},
+  {n:"PLC Control panels max 300W",q:8,kw:0.3,d:40.0,e:40.0,ni:20.0,b:"AC",c:"Electrical & electronics"},
+  {n:"Technical spaces outlets",q:1,kw:2.0,d:5.0,e:5.0,ni:1.0,b:"AC",c:"Electrical & electronics"}
+];
+
+function elecQuickPickHTML(){
+  var groups={};
+  ELEC_REF.forEach(function(c,i){ if(!groups[c.c])groups[c.c]=[]; groups[c.c].push({i:i,c:c}); });
+  var order=["Pumps & machinery","Water & sanitation","HVAC / Air-con","Ventilation","Galley & appliances","Lighting","Electrical & electronics","Other"];
+  var html="<option value=''>+ Quick add from library&hellip;</option>";
+  order.forEach(function(cat){ if(!groups[cat])return; html+="<optgroup label='"+esc(cat)+"'>"+groups[cat].map(function(o){return "<option value='"+o.i+"'>"+esc(o.c.n+" — "+o.c.q+"×"+o.c.kw+" kW")+"</option>";}).join("")+"</optgroup>"; });
+  return "<select class='no-print' onchange='elecQuickAdd(this.value);this.value=\"\"' style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;max-width:240px'>"+html+"</select>";
+}
+function elecQuickAdd(v){
+  if(v===""||v==null)return; var c=ELEC_REF[+v]; if(!c)return;
+  PROJECT.consumers.push({id:"e"+PROJECT.consumers.length+"_"+Math.round(performance.now()),source:"Library",name:c.n,bus:c.b,pcs:c.q,kw:c.kw,day:c.d,eve:c.e,night:c.ni});
+  saveActive(); elecRenderConsumers(); elecCalc();
+}
+
 function elecAddConsumer(){ PROJECT.consumers.push({id:"e"+(PROJECT.consumers.length)+"_"+Math.round(performance.now()),source:"Manual",name:"New consumer",bus:"AC",pcs:1,kw:0,day:0,eve:0,night:0}); saveActive(); elecRenderConsumers(); elecCalc(); }
 function elecDelConsumer(id){ PROJECT.consumers=PROJECT.consumers.filter(function(x){return x.id!==id;}); saveActive(); elecRenderConsumers(); elecCalc(); }
 function elecClear(){ if(!confirm("Remove ALL consumers from the load balance?"))return; PROJECT.consumers=[]; saveActive(); elecRenderConsumers(); elecCalc(); }
@@ -3592,7 +3799,7 @@ function elecHTML(){
        "<div style='margin-top:12px'>"+elecCatalogTableHTML()+"</div>"+
      "</div></div>"+
 
-   "<div class='card'><div class='card-hdr'><h2>Consumers</h2><button class='btn btn-primary btn-sm no-print' onclick='elecAddConsumer()'>+ Add consumer</button></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Consumers</h2><div style='display:flex;gap:8px;align-items:center' class='no-print'>"+elecQuickPickHTML()+"<button class='btn btn-primary btn-sm' onclick='elecAddConsumer()'>+ Add consumer</button></div></div>"+
      "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Source</th><th>Consumer</th><th>Bus</th><th>Qty</th><th>kW ea</th><th>Installed</th><th>Day %</th><th>Eve %</th><th>Night %</th><th>Day kW</th><th>Eve kW</th><th>Night kW</th><th class='no-print'></th></tr></thead><tbody id='elec-body'></tbody><tfoot id='elec-foot'></tfoot></table></div></div>"+
 
    "<div class='card' id='elec-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Load Balance Summary</h2><span class='badge badge-gold' id='elec-badge'>-</span></div>"+
