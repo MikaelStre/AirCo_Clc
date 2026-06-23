@@ -597,7 +597,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.54 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; Wageningen B-series &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.56 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; Wageningen B-series &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -1210,8 +1210,10 @@ function acHTML(){ return `<main>
       <button class="sup-btn on" onclick="setSup('VECO',this)">VECO</button>
       <button class="sup-btn" onclick="setSup('DOMETIC',this)">Dometic</button>
       <button class="sup-btn" onclick="setSup('WEBASTO',this)">Webasto</button>
+      <button class="sup-btn" onclick="setSup('MARIX',this)">Mar-IX</button>
       <button class="sup-btn" onclick="setSup('OTHER',this)">Other</button>
     </div>
+    <div class="banner banner-blue" style="margin-top:8px;font-size:11px"><i>&#9432;</i><div><strong>Mar-IX</strong> (modular variable-speed chillers, EC fan coils, fresh-air/FAMU): brand placeholder &mdash; capacities follow the standard BTU steps and the project cooling load. Replace the model codes (and add weights / power) from the Mar-IX datasheet when available.</div></div>
     <div class="banner banner-blue" style="margin-top:8px;font-size:11px"><i>&#9432;</i><div><strong>BlueCool accessories</strong> (Webasto): CAN-Bus / My&nbsp;Touch control, silent blocks &amp; vibration absorbers &mdash; mounting / control items with negligible electrical load (not added as consumers).</div></div>
   </div>
 
@@ -1508,6 +1510,16 @@ let SUPS = {
     {m:'BlueCool A18 (AH-CO18)', b:18000, w:12},
     {m:'BlueCool A24 (AH-CO24)', b:24000, w:16},
     {m:'BlueCool A36 (AH-CO36)', b:36000, w:21}
+  ]},
+  MARIX:{n:'Mar-IX',u:[
+    {m:'Mar-IX FCU (4k)',  b:4000,  w:0},
+    {m:'Mar-IX FCU (6k)',  b:6000,  w:0},
+    {m:'Mar-IX FCU (9k)',  b:9000,  w:0},
+    {m:'Mar-IX FCU (12k)', b:12000, w:0},
+    {m:'Mar-IX FCU (16k)', b:16000, w:0},
+    {m:'Mar-IX FCU (18k)', b:18000, w:0},
+    {m:'Mar-IX FCU (24k)', b:24000, w:0},
+    {m:'Mar-IX FCU (36k)', b:36000, w:0}
   ]},
   OTHER:{n:'Other',u:[
     {m:'Custom-3k',  b:3000,  w:0},
@@ -2834,6 +2846,40 @@ function swExcel(){
    Source of truth: Baltic Yachts "Water & Wastewater tank balance.xlsx"
    (M.Strengell). Discharge per MEPC 157(55): Drmax = 0.00926 * V * D * B.
    ================================================================ */
+/* Watermaker selection — web-sourced (capacity L/h, power kW where published, voltage). Verify against current datasheets. */
+var WATERMAKERS=[
+  {b:"Idromar",m:"MC1J",lph:65,kw:null,v:"AC 230/400 V"},
+  {b:"Idromar",m:"MC3J",lph:180,kw:null,v:"AC 230/400 V"},
+  {b:"Idromar",m:"MC5S",lph:250,kw:4.0,v:"AC 230/400 V"},
+  {b:"Idromar",m:"MC9S",lph:375,kw:6.0,v:"AC 230/400 V"},
+  {b:"Idromar",m:"MC12S",lph:500,kw:6.0,v:"AC 230/400 V"},
+  {b:"Idromar",m:"MC15S",lph:625,kw:9.0,v:"AC 230/400 V"},
+  {b:"Spectra",m:"Ventura 150C",lph:24,kw:0.15,v:"12/24 V DC"},
+  {b:"Spectra",m:"Cape Horn 330",lph:56,kw:0.24,v:"12/24 V DC"},
+  {b:"Spectra",m:"Newport 400C",lph:64,kw:0.29,v:"12/24 V DC"},
+  {b:"HEM (Evac)",m:"20/500",lph:80,kw:null,v:"AC"},
+  {b:"HEM (Evac)",m:"20/900",lph:140,kw:null,v:"AC"},
+  {b:"HEM (Evac)",m:"20/1300",lph:200,kw:null,v:"AC"},
+  {b:"HEM (Evac)",m:"25/1600",lph:250,kw:null,v:"AC"},
+  {b:"HEM (Evac)",m:"30/2400",lph:375,kw:null,v:"AC"},
+  {b:"HEM (Evac)",m:"30/3400",lph:540,kw:null,v:"AC"},
+  {b:"HEM (Evac)",m:"30/4000",lph:625,kw:null,v:"AC"},
+  {b:"Sea Recovery",m:"Aqua Whisper DX (low)",lph:71,kw:null,v:"AC"},
+  {b:"Sea Recovery",m:"Aqua Whisper DX (mid)",lph:142,kw:null,v:"AC"},
+  {b:"Sea Recovery",m:"Aqua Whisper DX (high)",lph:284,kw:null,v:"AC"},
+  {b:"FCI",m:"Aquamiser+ 250",lph:39,kw:null,v:"AC 3~"},
+  {b:"FCI",m:"Max-Q+ 1850",lph:292,kw:null,v:"AC 3~"},
+  {b:"FCI",m:"Neptune+ 3400",lph:536,kw:8.2,v:"AC 3~ 220/380/460 V"}
+];
+function watWmPickHTML(){
+  var groups={},order=[];
+  WATERMAKERS.forEach(function(w,i){ if(!groups[w.b]){groups[w.b]=[];order.push(w.b);} groups[w.b].push({i:i,w:w}); });
+  var html="<option value=''>&mdash; select model &mdash;</option>";
+  order.forEach(function(b){ html+="<optgroup label='"+esc(b)+"'>"+groups[b].map(function(o){var k=(o.w.kw!=null?o.w.kw+" kW":"kW n/a");return "<option value='"+o.i+"'>"+esc(o.w.m+" — "+o.w.lph+" L/h · "+k)+"</option>";}).join("")+"</optgroup>"; });
+  return "<select id='wat-wmSel' onchange='watSelWM(this.value)' style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;min-width:260px'>"+html+"</select>";
+}
+function watSelWM(i){ if(i===""||i==null)return; var wm=WATERMAKERS[+i]; if(!wm)return; var w=watState(); w.wmRate=wm.lph; if(wm.kw!=null)w.elec.wm=wm.kw; w.wmSel=String(i); saveActive(); watFill(); watCalc();
+  var info=el("wat-wm-info"); if(info)info.innerHTML="Selected <strong>"+esc(wm.b+" "+wm.m)+"</strong> &mdash; "+wm.lph+" L/h, "+(wm.kw!=null?wm.kw+" kW":"<span style='color:#c0392b'>power not published &mdash; enter the kW manually</span>")+", "+esc(wm.v)+". Verify on the manufacturer datasheet."; }
 function watDefaults(){return{
   persons:14, toiletType:"Tecma/Planus",
   flushrate:8, tecma:3.5, vacuum:1.2, sf:1.5,
@@ -2944,7 +2990,8 @@ function watHTML(){
        "<div style='font-size:12px;color:var(--g500);align-self:center'>Deckwashing (separate, excluded from per-person)</div>"+
        modField("wat","deckC","Deckwash duration","h")+modField("wat","deckF","Deckwash flow","l/min")+"</div></div>"+
 
-   "<div class='card'><div class='card-hdr'><h2>Fresh Water Tank Balance</h2></div>"+
+   "<div class='card'><div class='card-hdr'><h2>Fresh Water Tank Balance</h2><div style='display:flex;gap:8px;align-items:center' class='no-print'><span style='font-size:12px;color:var(--g500)'>Watermaker:</span>"+watWmPickHTML()+"</div></div>"+
+     "<div id='wat-wm-info' style='padding:8px 20px 0;font-size:11px;color:var(--g500)'></div>"+
      "<div style='padding:16px 20px;display:flex;gap:20px;flex-wrap:wrap'>"+
        modField("wat","tankVol","Water tanks total","l")+
        modField("wat","wmRate","Watermaker output","l/h")+
@@ -2990,6 +3037,7 @@ function watHTML(){
 function watFill(){ var w=watState();
   ["persons","flushrate","tecma","vacuum","sf","deckC","deckF","tankVol","wmRate","wmRun","fwAuton","treatCap","units","treatRun","wasteTank","wasteSF","sludgePct","sludgeDays","sludgeSF","sludgeTank","vKn","draft","beam"].forEach(function(k){var e=el("wat-"+k);if(e)e.value=w[k];});
   ["fwp","wm","stp","dis"].forEach(function(k){var e=el("wat-e-"+k);if(e)e.value=w.elec[k];});
+  var sel=el("wat-wmSel"); if(sel&&w.wmSel!=null)sel.value=w.wmSel;
 }
 function renderWatCons(){
   var w=watState(),t=el("wat-cons"); if(!t)return;
