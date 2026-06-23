@@ -346,6 +346,9 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <!-- ===== VIEW: PROPELLER ===== -->
 <div class="view" id="view-propeller"></div>
 
+<!-- ===== VIEW: FRESHWATER ===== -->
+<div class="view" id="view-freshwater"></div>
+
 <!-- ===== VIEW: MECHANICAL ===== -->
 <div class="view" id="view-mechanical"><main>
   <div class="empty"><div class="icon">&#128295;</div><h3>Mechanical &mdash; coming soon</h3>
@@ -597,7 +600,7 @@ main{max-width:1440px;margin:0 auto;padding:20px 24px;display:grid;gap:16px}#vie
 <div id="app-disclaimer" style="background:var(--gold-bg);border-top:2px solid var(--gold);color:var(--g700);font-size:11.5px;line-height:1.55;padding:12px 24px;text-align:center">
   <strong>&#9888; Disclaimer:</strong> This application provides <strong>preliminary engineering estimates only</strong>. All calculations, equipment selections and class / flag rule compliance <strong>must be independently checked and verified by a qualified engineer</strong> against the applicable class society, flag administration and manufacturer documentation before use. Baltic Yachts Ltd accepts no liability for any results, decisions, errors or omissions arising from the use of this tool.
 </div>
-<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.56 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; Wageningen B-series &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
+<footer><strong>Baltic Yachts Ltd</strong> &mdash; Engineering Suite v0.57 &middot; ISO 7547 / 8861 &middot; Delft DSYHS &middot; Wageningen B-series &middot; MEPC 157(55) &middot; IMO MEPC.227(64) &middot; RINA / DNV-GL<br><span style="font-size:11px;color:var(--g500)">Created by <strong>Mikael Strengell</strong>, Head of Engineering &middot; Baltic Yachts</span></footer>
 
 <script>
 /* ================================================================
@@ -641,6 +644,7 @@ var ROUTES={
   bilge:{view:"view-bilge",crumb:[["Home","home"],["Systems","systems"],["Bilge",null]]},
   seawater:{view:"view-seawater",crumb:[["Home","home"],["Systems","systems"],["Seawater Cooling",null]]},
   water:{view:"view-water",crumb:[["Home","home"],["Systems","systems"],["Water & Waste Water",null]]},
+  freshwater:{view:"view-freshwater",crumb:[["Home","home"],["Systems","systems"],["Water & Waste Water","water"],["Freshwater P&ID",null]]},
   thruster:{view:"view-thruster",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Thruster",null]]},
   propeller:{view:"view-propeller",crumb:[["Home","home"],["Systems","systems"],["Engine","engine"],["Propeller",null]]},
   howto:{view:"view-howto",crumb:[["Home","home"],["How to use this app",null]]},
@@ -1040,6 +1044,7 @@ function renderRoute(){
   if(r==="water"){mountWater();}
   if(r==="thruster"){mountThr();}
   if(r==="propeller"){mountProp();}
+  if(r==="freshwater"){mountFW();}
   if(r==="electrical"){mountElec();}
   if(r==="interior"){mountInterior();}
   if(r==="summary"){renderSummary();}
@@ -2972,6 +2977,7 @@ function watHTML(){
   return "<main>"+
    "<div class='page-head'><div><h2>Water &amp; Waste Water</h2><p>Daily demand, tank balance &amp; holding-tank check. Discharge rate per MEPC 157(55).</p><p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:820px;line-height:1.55'><strong style='color:var(--navy)'>How it&rsquo;s calculated:</strong> daily fresh-water demand from the consumer list sizes the tanks and watermaker; waste water is checked against the treatment plant; the legal overboard discharge rate follows MEPC 157(55): Drmax = 0.00926 &middot; V &middot; D &middot; B.</p></div>"+
      "<div style='display:flex;gap:8px' class='no-print'>"+
+       "<button class='btn btn-primary btn-sm' onclick=\"go('freshwater')\">&#128167; Freshwater P&amp;ID &rarr;</button>"+
        "<button class='btn btn-line btn-sm' onclick='watExcel()'>&#11015; Excel</button>"+
        "<button class='btn btn-gold btn-sm' onclick='watToElectrical()'>&#9889; Send to Electrical</button></div></div>"+
 
@@ -5040,6 +5046,225 @@ function propWord(){
     var doc=new D.Document({sections:[{properties:{page:{size:{orientation:D.PageOrientation.LANDSCAPE}}},children:body}]});
     D.Packer.toBlob(doc).then(function(blob){ safeDL(blob,"Baltic_Propeller_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".docx"); });
   });
+}
+
+/* ===================== FRESHWATER SYSTEM — sizing + P&ID ===================== */
+/* Equipment library — from the Baltic freshwater drawings & selection sheets */
+var FW_EQUIP={
+  pump:[ "Headhunter Mach5 0.75 kW 230 V 76 L/min","Headhunter Booster Silent 5M 230 V","Headhunter X-Caliber 4.5 bar","DAB Booster Silent 5M","Gianneschi Jet 4 B group","CEM GDE-MG/2 EPC","X-Caliber XR124" ],
+  heater:[ "Surejust 75 L horiz. single-coil 3 kW 240 V","Surejust 75 L horiz. single-coil 2 kW 240 V","Quick Nautic Boiler B3 family","Akvaterm water heater family" ],
+  prv:[ "Goetze 683 DN32 1\"","ORAS 4330 DN25/DN32","Honeywell Home PRV","Flamco Presco PRV PN25","Burkert motorised valve" ],
+  mixing:[ "ESBE VTA323 DN20","ESBE VTA321","Danfoss MTCV DN15 (thermostatic balancing)" ],
+  circ:[ "Grundfos ALPHA2 25-60 N","Vortex BWO 155 R","Danfoss MTCV DN15 loop" ],
+  filter:[ "WatMan FP3 + ACT carbon (NCP10, 10µm)","Octomarine Slimline 5-stage (drinking)","Idromar GEM carbon filtration","Charcoal FP3 + cartridge" ],
+  steril:[ "Brännström SilSter 168","Idromar SH5000 UV","HEM SI-5P / SCI-5P silver/copper","Idromar SilSter 168" ],
+  expHot:[ "Zilmet INOX-PRO Z8 (8 L) 3/4\"","Zilmet INOX-PRO Z200 (2 L) 1/2\"","Zilmet INOX-PRO (custom)" ],
+  expCold:[ "Gianneschi cold-water expansion tank","Zilmet INOX-PRO (cold)","Pulsation damper (pump-mounted)" ],
+  tank:[ "BY integrated composite tank 1000 L","BY integrated composite tank (twin port/stbd)","BY integrated composite (custom)" ],
+  wm:[ "Idromar MC7S 350 L/h 400 V","FCI MQM1826+APC.DP12","HEM H20/1300","Schenker Zen Twin 300","Spot Zero Gen 3 2000 GPD","Idromar MC4 Duplex","none" ]
+};
+var FW_FIXTYPES=[
+  {t:"Basin / faucet",f:12},{t:"Shower",f:12},{t:"Galley faucet",f:12},{t:"Bath filler",f:18},
+  {t:"WC fill",f:6},{t:"Dishwasher",f:3},{t:"Washing machine",f:6},{t:"Deck wash",f:20},{t:"Other",f:10}
+];
+var FW_DEF={
+  level:"standard",
+  fixtures:[],
+  divPct:40, residual:3.0, staticH:3, pipeLen:60, pipeID:20, pipeC:140,
+  heaterVol:75, tCold:15, tHot:60, pSys:2.5, pSafe:6.0,
+  pOn:2.5, pOff:3.5, starts:30,
+  selPump:"Headhunter Booster Silent 5M 230 V", selHeater:"Surejust 75 L horiz. single-coil 3 kW 240 V",
+  selPRV:"Goetze 683 DN32 1\"", selMix:"ESBE VTA323 DN20", selCirc:"Grundfos ALPHA2 25-60 N",
+  selFilter:"WatMan FP3 + ACT carbon (NCP10, 10µm)", selSteril:"Brännström SilSter 168",
+  selExpHot:"Zilmet INOX-PRO Z8 (8 L) 3/4\"", selExpCold:"Gianneschi cold-water expansion tank",
+  selTank:"BY integrated composite tank 1000 L", selWM:"Idromar MC7S 350 L/h 400 V",
+  pumpRatedLpm:76, pumpRatedBar:4.5
+};
+function fwState(){ if(!PROJECT.fw)PROJECT.fw=JSON.parse(JSON.stringify(FW_DEF)); for(var k in FW_DEF){if(PROJECT.fw[k]===undefined)PROJECT.fw[k]=FW_DEF[k];} if(!Array.isArray(PROJECT.fw.fixtures))PROJECT.fw.fixtures=[]; return PROJECT.fw; }
+function fwSet(k,v){ var s=fwState(); s[k]=(k==="level"||k.indexOf("sel")===0)?v:(Number(v)); if(isNaN(s[k])&&k!=="level"&&k.indexOf("sel")!==0)s[k]=0; saveActive(); fwCalc(); }
+function fwRhoT(t){ return 1000*(1-(t+288.9414)/(508929.2*(t+68.12963))*Math.pow(t-3.9863,2)); } /* water density kg/m³ */
+/* aggregate spaces from AC + Interior */
+function fwAggSpaces(){
+  var out=[],seen={};
+  try{ if(typeof S!=="undefined"&&S.cabins){S.cabins.forEach(function(c){var n=c.name||c.type||"Cabin";if(!seen[n]){seen[n]=1;out.push({name:n,src:"AC"});}});} }catch(e){}
+  try{ if(PROJECT.intMat&&PROJECT.intMat.cabins){PROJECT.intMat.cabins.forEach(function(c){if(c.name&&!seen[c.name]){seen[c.name]=1;out.push({name:c.name,src:"Interior"});}});} }catch(e){}
+  (fwState().manualSpaces||[]).forEach(function(n){if(!seen[n]){seen[n]=1;out.push({name:n,src:"Manual"});}});
+  return out;
+}
+function fwAddManualSpace(){ var n=prompt("Name of the space:"); if(!n)return; var s=fwState(); if(!s.manualSpaces)s.manualSpaces=[]; s.manualSpaces.push(n); saveActive(); mountFW(); }
+function fwSeedFixtures(){ var sp=fwAggSpaces(); if(!sp.length){alert("No spaces found — add cabins in Air Conditioning / Interior, or add a manual space.");return;} var s=fwState();
+  sp.forEach(function(p){ var bath=/bath|head|shower|wc/i.test(p.name), gal=/galley/i.test(p.name);
+    s.fixtures.push({id:fwNid(),space:p.name,type:gal?"Galley faucet":"Basin / faucet",qty:1,flow:12});
+    if(bath||!gal)s.fixtures.push({id:fwNid(),space:p.name,type:"Shower",qty:1,flow:12});
+  });
+  saveActive(); mountFW();
+}
+function fwNid(){ return "fx"+fwState().fixtures.length+"_"+Math.round(performance.now()); }
+function fwAddFix(){ var s=fwState(); var sp=fwAggSpaces(); s.fixtures.push({id:fwNid(),space:sp.length?sp[0].name:"",type:"Basin / faucet",qty:1,flow:12}); saveActive(); fwRenderFix(); fwCalc(); }
+function fwFixSet(id,k,v){ var f=fwState().fixtures.filter(function(x){return x.id===id;})[0]; if(!f)return; if(k==="type"){f.type=v;var ft=FW_FIXTYPES.filter(function(t){return t.t===v;})[0]; if(ft&&(!f.flow||f.flowAuto!==false)){f.flow=ft.f;}} else if(k==="space"){f.space=v;} else {f[k]=Number(v); if(k==="flow")f.flowAuto=false;} saveActive(); fwRenderFix(); fwCalc(); }
+function fwFixDel(id){ fwState().fixtures=fwState().fixtures.filter(function(x){return x.id!==id;}); saveActive(); fwRenderFix(); fwCalc(); }
+function fwCompute(){
+  var s=fwState(), fx=s.fixtures;
+  var connected=fx.reduce(function(a,f){return a+(+f.qty||0)*(+f.flow||0);},0); /* L/min */
+  var design=connected*(+s.divPct||0)/100; /* peak design flow L/min */
+  /* pump head */
+  var Qm3s=design/60/1000, d=Math.max(0.006,s.pipeID/1000), area=Math.PI/4*d*d, vel=area>0?Qm3s/area:0;
+  var hf=(design>0)?10.67*s.pipeLen*Math.pow(Qm3s,1.852)/(Math.pow(s.pipeC,1.852)*Math.pow(d,4.87)):0; /* Hazen-Williams head loss, m */
+  var headM=(+s.staticH||0)+(+s.residual||0)*10.197+hf;
+  var pressBar=headM*0.0980665;
+  /* thermal expansion vessel (hot) */
+  var e=Math.max(0,fwRhoT(s.tCold)/fwRhoT(s.tHot)-1);
+  var dV=(+s.heaterVol||0)*e;
+  var afHot=1-(s.pSys+1.013)/(s.pSafe+1.013);
+  var vExpHot=afHot>0?dV/afHot:0;
+  /* cold accumulator (anti-cycle, fixed-speed) */
+  var Q=design>0?design:(+s.pumpRatedLpm||0);
+  var Vd=(s.starts>0)?Q/(4*(s.starts/60)):0;
+  var afCold=1-(s.pOn+1.013)/(s.pOff+1.013);
+  var vAcc=afCold>0?Vd/afCold:0;
+  return {connected:connected,design:design,vel:vel,hf:hf,headM:headM,pressBar:pressBar,e:e,dV:dV,vExpHot:vExpHot,Vd:Vd,vAcc:vAcc};
+}
+function mountFW(){ el("view-freshwater").innerHTML=fwHTML(); fwFill(); fwRenderFix(); fwCalc(); }
+function fwField(k,label,unit,w){ return "<div style='display:flex;flex-direction:column;gap:3px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g500)'>"+label+"</label><div style='display:flex;align-items:center;gap:6px'><input id='fw-"+k+"' type='number' step='any' oninput=\"fwSet('"+k+"',this.value)\" style='width:"+(w||80)+"px;padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px;text-align:right'><span style='font-size:11px;color:var(--g500)'>"+unit+"</span></div></div>"; }
+function fwSel(k,opts){ var s=fwState(); return "<div style='display:flex;flex-direction:column;gap:3px;min-width:230px'><label style='font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g500)'>"+k.label+"</label><select onchange=\"fwSet('"+k.key+"',this.value)\" style='padding:6px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:13px'>"+opts.map(function(o){return "<option"+(o===s[k.key]?" selected":"")+">"+esc(o)+"</option>";}).join("")+"</select></div>"; }
+function fwHTML(){
+  var s=fwState();
+  return "<main>"+
+   "<div class='page-head'><div><h2>Freshwater System &amp; P&amp;ID</h2><p>Build the freshwater system from the Baltic module library, size the pressure pump &amp; expansion vessels from the fixtures, and generate a P&amp;ID.</p>"+
+     "<p style='font-size:12px;color:var(--g500);margin-top:6px;max-width:880px;line-height:1.55'><strong style='color:var(--navy)'>Baltic philosophy:</strong> modular system (shore &middot; pump skid &middot; hot-water loop &middot; watermaker &middot; tanks) in three levels &mdash; Core / Standard / Premium. Non-negotiables: thermostatic HW mixing (ESBE VTA323), HW circulation (Grundfos + Danfoss MTCV), composite tanks, shore PRV + filtration.</p></div>"+
+     "<div style='display:flex;gap:8px' class='no-print'><button class='btn btn-line btn-sm' onclick='fwPID_PDF()'>&#128462; P&amp;ID PDF</button><button class='btn btn-line btn-sm' onclick='fwExcel()'>&#11015; Excel</button></div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Spaces &amp; Fixtures</h2><div style='display:flex;gap:6px' class='no-print'><button class='btn btn-line btn-xs' onclick='fwAddManualSpace()'>+ Space</button><button class='btn btn-line btn-xs' onclick='fwSeedFixtures()'>Seed from spaces</button><button class='btn btn-primary btn-sm' onclick='fwAddFix()'>+ Fixture</button></div></div>"+
+     "<div id='fw-spaces' style='padding:8px 20px 0;font-size:12px;color:var(--g500)'></div>"+
+     "<div class='tbl-wrap'><table class='result-table' style='font-size:12px'><thead><tr><th>Space</th><th>Fixture</th><th>Qty</th><th>Flow L/min</th><th>Total L/min</th><th class='no-print'></th></tr></thead><tbody id='fw-fix'></tbody></table></div>"+
+     "<div style='padding:10px 20px;font-size:11px;color:var(--g500)'>Spaces are pulled from Air Conditioning + Interior (plus manual). Faucets &amp; showers default to <strong>12 L/min</strong> &mdash; override per fixture.</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Pump Sizing</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+
+     fwField("divPct","Simultaneity","%",70)+fwField("residual","Residual press.","bar")+fwField("staticH","Static lift","m")+fwField("pipeLen","Pipe length","m")+fwField("pipeID","Pipe ID","mm")+fwField("pipeC","Hazen-W. C","")+
+     "<div style='align-self:center'>"+fwSel({key:"selPump",label:"Pressure pump"},FW_EQUIP.pump)+"</div>"+
+     fwField("pumpRatedLpm","Pump rated","L/min")+fwField("pumpRatedBar","Pump rated","bar")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Expansion Vessels</h2></div><div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+
+     fwField("heaterVol","Water heater vol","L")+fwField("tCold","Cold temp","°C")+fwField("tHot","Hot temp","°C")+fwField("pSys","System press.","bar")+fwField("pSafe","Safety set","bar")+
+     "<div style='width:100%;height:0'></div>"+
+     fwField("pOn","Pump cut-in","bar")+fwField("pOff","Pump cut-out","bar")+fwField("starts","Max starts","/h")+"</div></div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Equipment Modules</h2><select onchange=\"fwSet('level',this.value)\" class='no-print' style='padding:4px 8px;border:1.5px solid var(--g300);border-radius:4px;font-size:12px'><option value='core'"+(s.level==="core"?" selected":"")+">Core</option><option value='standard'"+(s.level==="standard"?" selected":"")+">Standard</option><option value='premium'"+(s.level==="premium"?" selected":"")+">Premium</option></select></div>"+
+     "<div style='padding:16px 20px;display:flex;gap:18px;flex-wrap:wrap'>"+
+       fwSel({key:"selTank",label:"Tanks"},FW_EQUIP.tank)+fwSel({key:"selWM",label:"Watermaker"},FW_EQUIP.wm)+fwSel({key:"selHeater",label:"Water heater"},FW_EQUIP.heater)+fwSel({key:"selMix",label:"Thermostatic mixing"},FW_EQUIP.mixing)+fwSel({key:"selCirc",label:"HW circulation"},FW_EQUIP.circ)+fwSel({key:"selPRV",label:"Shore PRV"},FW_EQUIP.prv)+fwSel({key:"selFilter",label:"Filtration"},FW_EQUIP.filter)+fwSel({key:"selSteril",label:"Sterilizer / hygiene"},FW_EQUIP.steril)+fwSel({key:"selExpHot",label:"HW expansion vessel"},FW_EQUIP.expHot)+fwSel({key:"selExpCold",label:"Cold expansion / damper"},FW_EQUIP.expCold)+
+     "</div></div>"+
+
+   "<div class='card' id='fw-results'><div class='card-hdr' style='background:var(--navy)'><h2 style='color:#fff'>Sizing Results</h2><span class='badge badge-gold' id='fw-badge'>-</span></div>"+
+     "<div class='kpi-row' id='fw-kpi'></div>"+
+     "<div id='fw-checks' style='padding:14px 20px'></div>"+
+   "</div>"+
+
+   "<div class='card'><div class='card-hdr'><h2>Freshwater P&amp;ID</h2><span style='font-size:11px;color:var(--g500)' class='no-print'>generated from your selection</span></div>"+
+     "<div id='fw-pid' style='padding:16px 12px;overflow:auto'></div></div>"+
+   "</main>";
+}
+function fwFill(){ var s=fwState(); ["divPct","residual","staticH","pipeLen","pipeID","pipeC","heaterVol","tCold","tHot","pSys","pSafe","pOn","pOff","starts","pumpRatedLpm","pumpRatedBar"].forEach(function(k){var e=el("fw-"+k);if(e)e.value=s[k];}); var sp=el("fw-spaces"); if(sp){var a=fwAggSpaces();sp.innerHTML="<strong>"+a.length+" spaces</strong> "+a.map(function(p){return esc(p.name)+" <span style='opacity:.6'>("+p.src+")</span>";}).join(" &middot; ");} }
+function fwRenderFix(){ var b=el("fw-fix"); if(!b)return; var s=fwState(),sp=fwAggSpaces();
+  if(!s.fixtures.length){ b.innerHTML="<tr><td colspan='6'><div class='empty'><div class='icon'>&#128688;</div><h3>No fixtures yet</h3><p>Click <strong>Seed from spaces</strong> to auto-add a basin + shower per cabin, or <strong>+ Fixture</strong>.</p></div></td></tr>"; return; }
+  var spOpts=function(sel){var opts=sp.map(function(p){return p.name;}); if(sel&&opts.indexOf(sel)<0)opts.unshift(sel); return opts.map(function(n){return "<option"+(n===sel?" selected":"")+">"+esc(n)+"</option>";}).join("");};
+  b.innerHTML=s.fixtures.map(function(f){var tot=(+f.qty||0)*(+f.flow||0);
+    return "<tr>"+
+     "<td><select class='mci' onchange=\"fwFixSet('"+f.id+"','space',this.value)\">"+spOpts(f.space)+"</select></td>"+
+     "<td><select class='mci' onchange=\"fwFixSet('"+f.id+"','type',this.value)\">"+FW_FIXTYPES.map(function(t){return "<option"+(t.t===f.type?" selected":"")+">"+t.t+"</option>";}).join("")+"</select></td>"+
+     "<td><input class='mci' type='number' value='"+(f.qty||0)+"' oninput=\"fwFixSet('"+f.id+"','qty',this.value)\" style='width:52px'></td>"+
+     "<td><input class='mci' type='number' value='"+(f.flow||0)+"' oninput=\"fwFixSet('"+f.id+"','flow',this.value)\" style='width:64px'></td>"+
+     "<td><strong>"+f1(tot)+"</strong></td>"+
+     "<td class='no-print'><button class='btn btn-line btn-xs' onclick=\"fwFixDel('"+f.id+"')\">&#10005;</button></td></tr>";
+  }).join("");
+}
+function fwCalc(){ if(!el("fw-results"))return; var s=fwState(), r=fwCompute();
+  el("fw-badge").textContent=f1(r.design)+" L/min design";
+  var pumpOK=s.pumpRatedLpm>=r.design&&s.pumpRatedBar>=r.pressBar;
+  el("fw-kpi").innerHTML=
+    "<div class='kpi'><div class='kpi-l'>Connected flow</div><div class='kpi-v'>"+f0(r.connected)+"</div><div class='kpi-u'>L/min</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Design flow</div><div class='kpi-v'>"+f1(r.design)+"</div><div class='kpi-u'>L/min @ "+f0(s.divPct)+"%</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Required head</div><div class='kpi-v'>"+f1(r.pressBar)+"</div><div class='kpi-u'>bar ("+f0(r.headM)+" m)</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Pipe velocity</div><div class='kpi-v'>"+f1(r.vel)+"</div><div class='kpi-u'>m/s</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>HW expansion vessel</div><div class='kpi-v'>"+f1(r.vExpHot)+"</div><div class='kpi-u'>L (Δ"+f1(r.dV)+" L)</div></div>"+
+    "<div class='kpi'><div class='kpi-l'>Cold accumulator</div><div class='kpi-v'>"+f0(r.vAcc)+"</div><div class='kpi-u'>L (anti-cycle)</div></div>";
+  el("fw-checks").innerHTML=
+    "<div style='font-size:13px;display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--g100)'><span>Selected pump vs duty</span><span><strong>"+f1(s.pumpRatedLpm)+"</strong> L/min · "+f1(s.pumpRatedBar)+" bar "+(pumpOK?"<span class='pill p-ok'>OK</span>":"<span class='pill p-err'>under duty "+f1(r.design)+" L/min / "+f1(r.pressBar)+" bar</span>")+"</span></div>"+
+    "<div style='font-size:11px;color:var(--g500);margin-top:8px;line-height:1.6'><strong>Hot-water expansion vessel</strong> sized on "+f0(s.heaterVol)+" L heated "+f0(s.tCold)+"&rarr;"+f0(s.tHot)+"&deg;C (expansion "+f1(r.e*100)+"%), pre-charge "+f1(s.pSys)+" bar, safety "+f1(s.pSafe)+" bar &rarr; <strong>"+f1(r.vExpHot)+" L</strong> (use the next standard size, e.g. "+esc(s.selExpHot)+"). "+
+    "Required head = static "+f0(s.staticH)+" m + residual "+f1(s.residual)+" bar + friction "+f1(r.hf)+" m over "+f0(s.pipeLen)+" m of DN"+f0(s.pipeID)+" (Hazen-Williams C="+f0(s.pipeC)+"). "+
+    "The cold accumulator size assumes a fixed-speed pump limited to "+f0(s.starts)+" starts/h; Baltic's variable-speed Headhunter pumps need only a small pulsation/expansion tank ("+esc(s.selExpCold)+"). Preliminary &mdash; verify against the system drawing.</div>";
+  var pid=el("fw-pid"); if(pid)pid.innerHTML=fwPIDsvg();
+}
+function fwPIDsvg(){
+  var s=fwState(),r=fwCompute(),m=PROJECT.meta||{};
+  var W=1080,H=560,NAVY="#1a2744",GOLD="#c9a96e",BLUE="#2f6fb0",RED="#c0392b";
+  function box(x,y,w,h,fill,stroke){return "<rect x='"+x+"' y='"+y+"' width='"+w+"' height='"+h+"' rx='5' fill='"+(fill||'#fff')+"' stroke='"+(stroke||NAVY)+"' stroke-width='1.3'/>";}
+  function lbl(x,y,t,o){o=o||{};return "<text x='"+x+"' y='"+y+"' font-size='"+(o.sz||10)+"' fill='"+(o.c||'#22272f')+"' text-anchor='"+(o.a||'start')+"'"+(o.b?" font-weight='700'":"")+">"+esc(t)+"</text>";}
+  function pipe(x1,y1,x2,y2,c,w){return "<line x1='"+x1+"' y1='"+y1+"' x2='"+x2+"' y2='"+y2+"' stroke='"+(c||BLUE)+"' stroke-width='"+(w||2)+"'/>";}
+  function comp(x,y,w,title,model,o){o=o||{};var h=o.h||40;return box(x,y,w,h,o.fill,o.stroke)+lbl(x+w/2,y+15,title,{a:'middle',b:true,sz:10,c:o.tc||NAVY})+lbl(x+w/2,y+29,(model||"").slice(0,o.cut||30),{a:'middle',sz:8,c:'#5a6472'})+(o.tag?lbl(x+w/2,y+(h-5),o.tag,{a:'middle',sz:8,c:GOLD,b:true}):"");}
+  var g="<svg xmlns='http://www.w3.org/2000/svg' width='"+W+"' height='"+H+"' viewBox='0 0 "+W+" "+H+"' style='background:#fff;border:1px solid #e2e6ec;border-radius:8px;min-width:1080px'>";
+  g+=lbl(20,26,"FRESHWATER SYSTEM — P&ID",{b:true,sz:15,c:NAVY})+lbl(20,42,(m.yacht?m.yacht+"   ·   ":"")+(m.proj?"Project "+m.proj+"   ·   ":"")+"Level: "+s.level.toUpperCase()+"   ·   Baltic Yachts",{sz:10,c:GOLD});
+  /* tanks */
+  g+=comp(30,90,150,"Freshwater Tank (P)",s.selTank,{cut:26,fill:'#eef4fb'});
+  g+=comp(30,150,150,"Freshwater Tank (S)",s.selTank,{cut:26,fill:'#eef4fb'});
+  /* watermaker -> tanks */
+  g+=comp(30,250,150,"Watermaker",s.selWM,{cut:26,fill:'#f3f6f9'});
+  g+=pipe(105,250,105,190,BLUE);
+  /* shore module */
+  g+=comp(30,330,150,"Shore + PRV + filter",s.selPRV+" / "+s.selFilter,{cut:30,fill:'#f3f6f9',h:46});
+  g+=pipe(180,353,210,353,BLUE)+pipe(210,353,210,170,BLUE)+pipe(210,170,210,130,BLUE);
+  /* pump + accumulator */
+  g+=pipe(180,120,250,120,BLUE)+pipe(180,180,250,180,BLUE);
+  g+=comp(250,120,160,"Pressure Pump ×2",s.selPump,{cut:30,fill:'#fff7ec',stroke:GOLD,tag:f1(s.pumpRatedLpm)+" L/min · "+f1(s.pumpRatedBar)+" bar",h:52});
+  g+=comp(250,200,160,"Cold accumulator",s.selExpCold,{cut:30,fill:'#f3f6f9',tag:"~"+f0(r.vAcc)+" L calc"});
+  g+=pipe(410,146,470,146,BLUE)+pipe(330,172,330,200,BLUE);
+  /* manifold */
+  g+=box(470,90,40,300,'#fff',NAVY)+lbl(490,80,"COLD MANIFOLD",{a:'middle',sz:9,b:true,c:NAVY});
+  g+=pipe(490,146,490,90,BLUE);
+  /* water heater + mixing + hw expansion */
+  g+=comp(560,100,170,"Water Heater",s.selHeater,{cut:32,fill:'#fdecec',stroke:RED,tag:f0(s.heaterVol)+" L",h:52});
+  g+=comp(560,180,170,"HW Expansion vessel",s.selExpHot,{cut:32,tag:"need "+f1(r.vExpHot)+" L"});
+  g+=comp(560,250,170,"Thermostatic mixing",s.selMix,{cut:32});
+  g+=comp(560,320,170,"HW circulation",s.selCirc,{cut:32});
+  g+=pipe(510,126,560,126,BLUE);
+  g+=pipe(645,152,645,180,RED);
+  g+=pipe(645,232,645,250,RED)+pipe(645,302,645,320,RED);
+  /* hot manifold */
+  g+=box(770,90,40,300,'#fff',RED)+lbl(790,80,"HOT MANIFOLD",{a:'middle',sz:9,b:true,c:RED});
+  g+=pipe(730,276,770,276,RED);
+  g+=pipe(810,360,560,360,RED)+pipe(560,360,560,355,RED); /* circ return */
+  /* fixtures */
+  var fxByType={}; fwState().fixtures.forEach(function(f){fxByType[f.type]=(fxByType[f.type]||0)+(+f.qty||0);});
+  var fy=110; g+=lbl(870,80,"FIXTURES",{a:'middle',sz:9,b:true,c:NAVY});
+  Object.keys(fxByType).slice(0,7).forEach(function(t){ g+=box(850,fy,200,30,'#fafbfc',NAVY)+lbl(860,fy+19,t+"  ×"+fxByType[t],{sz:9})+pipe(810,fy+15,850,fy+15,BLUE); fy+=38; });
+  if(!Object.keys(fxByType).length){g+=box(850,110,200,30,'#fafbfc',NAVY)+lbl(950,129,"(add fixtures)",{a:'middle',sz:9,c:'#5a6472'});}
+  /* design flow note */
+  g+=lbl(20,H-14,"Design flow "+f1(r.design)+" L/min @ "+f0(s.divPct)+"% simultaneity · required "+f1(r.pressBar)+" bar · HW expansion "+f1(r.vExpHot)+" L · "+(s.selSteril)+" · "+(s.selMix),{sz:9,c:'#5a6472'});
+  g+="<text x='"+(W-20)+"' y='"+(H-14)+"' font-size='8' fill='#9aa3af' text-anchor='end'>Preliminary — generated by Baltic Engineering Suite</text>";
+  g+="</svg>"; return g;
+}
+function fwPID_PDF(){
+  var el2=el("fw-pid"); if(!el2){alert("Open the Freshwater page first.");return;}
+  if(typeof html2pdf==="undefined"){ window.print(); return; }
+  var m=PROJECT.meta||{};
+  var wrap=document.createElement("div"); wrap.style.padding="10px"; wrap.innerHTML=fwPIDsvg();
+  html2pdf().set({margin:6,filename:"Baltic_Freshwater_PID_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".pdf",image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a3'}}).from(wrap).save();
+}
+function fwExcel(){
+  if(!window.XLSX){alert("Excel library loading.");return;}
+  var s=fwState(),r=fwCompute(),m=PROJECT.meta||{},wb=XLSX.utils.book_new();
+  var a=[["Baltic Yachts - Freshwater System"],["Yacht",m.yacht,"Project",m.proj,"Level",s.level],[],
+    ["FIXTURES"],["Space","Fixture","Qty","Flow L/min","Total L/min"]];
+  s.fixtures.forEach(function(f){a.push([f.space,f.type,+f.qty||0,+f.flow||0,(+f.qty||0)*(+f.flow||0)]);});
+  a.push([],["SIZING"],["Connected flow L/min",+r.connected.toFixed(1)],["Design flow L/min",+r.design.toFixed(1),"@ "+s.divPct+"%"],
+    ["Required head bar",+r.pressBar.toFixed(2),"("+Math.round(r.headM)+" m)"],["Pipe velocity m/s",+r.vel.toFixed(2)],
+    ["HW expansion vessel L",+r.vExpHot.toFixed(1)],["Cold accumulator L",+r.vAcc.toFixed(0)],[],
+    ["EQUIPMENT"],["Tanks",s.selTank],["Watermaker",s.selWM],["Pump",s.selPump+"  ("+s.pumpRatedLpm+" L/min, "+s.pumpRatedBar+" bar)"],
+    ["Water heater",s.selHeater],["Thermostatic mixing",s.selMix],["HW circulation",s.selCirc],["Shore PRV",s.selPRV],
+    ["Filtration",s.selFilter],["Sterilizer",s.selSteril],["HW expansion",s.selExpHot],["Cold expansion",s.selExpCold]);
+  a.push([],[disclaimerLine()]);
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),"Freshwater");
+  var fn="Baltic_Freshwater_"+((m.yacht||"calc").replace(/[^a-z0-9]/gi,"_"))+".xlsx";
+  try{XLSX.writeFile(wb,fn);}catch(e){var o=XLSX.write(wb,{bookType:"xlsx",type:"array"});safeDL(new Blob([o],{type:"application/octet-stream"}),fn);}
 }
 
 /* ---------- PWA ---------- */
